@@ -1,4 +1,4 @@
-package io.github.c3pr.core;
+package io.github.c3pr;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,4 +9,5 @@ public class C3prApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(C3prApplication.class, args);
 	}
+
 }
