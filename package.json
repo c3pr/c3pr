@@ -1,0 +1,28 @@
+{
+  "name": "c3pr-agent",
+  "version": "1.0.0",
+  "description": "C3PR Container agents\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[DA\u001b[3~\u001b[\u001b[F",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c3pr/c3pr-agent.git"
+  },
+  "keywords": [
+    "c3pr",
+    "tool",
+    "agent"
+  ],
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/c3pr/c3pr-agent/issues"
+  },
+  "homepage": "https://github.com/c3pr/c3pr-agent#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2"
+  }
+}
