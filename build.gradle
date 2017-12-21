@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.0.M5'
+		springBootVersion = '2.0.0.M7'
 	}
 	repositories {
 		mavenCentral()
@@ -37,7 +37,7 @@ dependencies {
 
 // This task specifies the version and type (ALL) of the generated gradle-wrapper (when "gradle wrapper" is executed)
 task wrapper(type: Wrapper) {
-	gradleVersion = '4.2'
+	gradleVersion = '4.4.1'
 	//noinspection UnnecessaryQualifiedReference
 	distributionType = org.gradle.api.tasks.wrapper.Wrapper.DistributionType.ALL
 }
