@@ -3,6 +3,7 @@ buildscript {
 		springBootVersion = '2.0.0.M7'
 	}
 	repositories {
+        mavenLocal()
 		mavenCentral()
 		maven { url "https://repo.spring.io/snapshot" }
 		maven { url "https://repo.spring.io/milestone" }
@@ -13,7 +14,6 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
@@ -22,6 +22,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 9
 
 repositories {
+    mavenLocal()
 	mavenCentral()
 	maven { url "https://repo.spring.io/snapshot" }
 	maven { url "https://repo.spring.io/milestone" }
