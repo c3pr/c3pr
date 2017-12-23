@@ -2,7 +2,6 @@ const clone = require('git-clone');
 const mkdirp = require('mkdirp');
 const path = require('path');
 const fs = require('fs');
-const exec = require('child_process').exec;
 
 const CLONES_DIR = path.resolve(process.env.CLONES_DIR || '/tmp');
 
@@ -48,12 +47,6 @@ module.exports = async function (request) {
     // clones at "CLONES_DIR/SHA", e.g. "./tmp/59b20b8d5c6ff8d09518454d4dd8b7b30f095ab5"
     await gitClone(repoURL, cloneFOLDER, gitSHA);
 
-    exec('ls -la', {
-        cwd: cloneFOLDER
-    }, function(error, stdout, stderr) {
-        console.error(error);
-        console.log(stdout);
-        console.error(stderr);
-    });
+    return cloneFOLDER;
 
 };

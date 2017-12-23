@@ -1,3 +1,4 @@
+const exec = require('child_process').exec;
 const cloner = require("./cloner");
 
 const request = {
@@ -16,5 +17,18 @@ const request = {
 };
 
 if (request.repository.type === "git") {
-    cloner(request);
+    (async () => {
+        const cloneFOLDER = await cloner(request);
+
+        console.log('Done cloning at ' + cloneFOLDER);
+
+        exec('ls -la', {
+            cwd: cloneFOLDER
+        }, function(error, stdout, stderr) {
+            console.error('Error: ', error);
+            console.log('stdout: ', stdout);
+            console.error('stderr: ', stderr);
+        });
+
+    })();
 }
