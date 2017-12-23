@@ -20,9 +20,11 @@
   "bugs": {
     "url": "https://github.com/c3pr/c3pr-agent/issues"
   },
-  "homepage": "https://github.com/c3pr/c3pr-agent#readme",
+  "homepage": "https://github.com/c3pr/c3pr-agent",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "git-clone": "^0.1.0",
+    "mkdirp": "^0.5.1"
   }
 }
