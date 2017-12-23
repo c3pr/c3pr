@@ -16,19 +16,30 @@ const request = {
 
 };
 
+function sh(command, options) {
+    return new Promise((resolve => {
+        exec(command, options, function (error, stdout, stderr) {
+            resolve({error, stdout, stderr});
+        });
+    }))
+}
+
 if (request.repository.type === "git") {
     (async () => {
+
         const cloneFOLDER = await cloner(request);
 
         console.log('Done cloning at ' + cloneFOLDER);
 
-        exec('ls -la', {
-            cwd: cloneFOLDER
-        }, function(error, stdout, stderr) {
-            console.error('Error: ', error);
-            console.log('stdout: ', stdout);
-            console.error('stderr: ', stderr);
-        });
+        let {error, stdout, stderr} = await sh('ls -la', {cwd: cloneFOLDER});
+        console.error('Error: ', error);
+        console.log('stdout: ', stdout);
+        console.error('stderr: ', stderr);
+
+        ({error, stdout, stderr} = await sh('walkmod apply', {cwd: cloneFOLDER}));
+        console.error('Error: ', error);
+        console.log('stdout: ', stdout);
+        console.error('stderr: ', stderr);
 
     })();
 }
