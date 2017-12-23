@@ -1,6 +1,13 @@
 # c3pr-agent
 C3PR agent for tool containers.
 
+# Running
+
+```bash
+npm install
+npm start
+```
+
 
 ## TASKS:
 
