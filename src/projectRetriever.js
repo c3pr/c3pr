@@ -36,7 +36,12 @@ if (request.repository.type === "git") {
         console.log('stdout: ', stdout);
         console.error('stderr: ', stderr);
 
-        ({error, stdout, stderr} = await sh('walkmod apply', {cwd: cloneFOLDER}));
+        ({error, stdout, stderr} = await sh('walkmod apply sonar:StringCheckOnLeft', {cwd: cloneFOLDER}));
+        console.error('Error: ', error);
+        console.log('stdout: ', stdout);
+        console.error('stderr: ', stderr);
+
+        ({error, stdout, stderr} = await sh('git diff > /c3pr/changes.patch', {cwd: cloneFOLDER}));
         console.error('Error: ', error);
         console.log('stdout: ', stdout);
         console.error('stderr: ', stderr);
