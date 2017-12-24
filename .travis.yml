@@ -1,13 +1,20 @@
 language: java
-
 jdk:
-  - oraclejdk9
+- oraclejdk9
 
-# https://docs.travis-ci.com/user/languages/java/#Caching
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+
+# Configured using https://docs.travis-ci.com/user/deployment/heroku/ -> travis setup heroku (after travis login and heroku login)
+deploy:
+  provider: heroku
+  api_key:
+    secure: kjn7av7PTBcDv6MjnHrfVYIVyAEuEY28VBxLMcCrXXqwnCgPwFBZ7cZIzxtUgD/eSLBQ8iy7b8CDn8tmbiK1gP0j8Fjb07E0ke1t+tJp+V3ECfTJAM33kr3HJVt40COlx0+1Aq7L95fZs8TvKwGSCejbfK2h4ayI6CFT2f9XsswXsUTA/IPXftAi4yAz37B5fS8zZiavXrjGlgOQCG9Ahy8pqBYT/DrswMKPwBR9W7uOEg7CVbynCGa5IGQW1PrIW+XqgyIfFNxM4CD9VIXC08uF3HU+YjWD35ZbVAvLfFIQr8+45U71Y+PXcpQHkRzklCTkheA8fpQn50mXm2fTW4Fvct72yRFa9phh502y//VWPY3qZqQDjZblK7yD18B9x4sc6lGHW/sfUSV0En5sMPg+7vLAHpHl1qXwa0HXT6oni9px/RTAAKiqi8RWCZB+XVwZjKpiaEzY25rsK5f8K+OUmLCbi8san2uD/Zbh0Ed06s0R4rxVZyzMSwKiptIwQD/VgqVbySaDuweu/vT3yDd0gWUL1/Ucbxymfcyjm2H9spXt3gHPtIZfZ2KsVbjpUOOQArKaP34UpV3ISZ0E7RiixxnBF5+a5Zh5iuLiezKnj8U4UHE3rCHqG1yEjQAb9SP0oe53E9EeUEz39PIR2V0odDZf6q9HwmSa/U2/QQ4=
+  app: c3pr
+  on:
+    repo: c3pr/c3pr
