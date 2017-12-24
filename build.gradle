@@ -32,6 +32,11 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-web')
+
+	testRuntime('org.junit.platform:junit-platform-launcher:1.0.2')
+	testCompile('org.junit.jupiter:junit-jupiter-api:5.0.2')
+	testRuntime('org.junit.jupiter:junit-jupiter-engine:5.0.2')
+	testCompile('org.junit.vintage:junit-vintage-engine:4.12.2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
