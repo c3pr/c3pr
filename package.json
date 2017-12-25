@@ -1,0 +1,23 @@
+{
+  "name": "c3pr-adapter-github",
+  "version": "1.0.0",
+  "description": "C3PR Repository Adapter for GitHub",
+  "main": "]",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c3pr/c3pr-adapter-github.git"
+  },
+  "keywords": [
+    "c3pr",
+    "github"
+  ],
+  "author": "acdcjunior",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/c3pr/c3pr-adapter-github/issues"
+  },
+  "homepage": "https://github.com/c3pr/c3pr-adapter-github#readme"
+}
