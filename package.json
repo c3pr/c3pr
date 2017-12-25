@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/c3pr/c3pr-adapter-github/issues"
   },
-  "homepage": "https://github.com/c3pr/c3pr-adapter-github#readme"
+  "homepage": "https://github.com/c3pr/c3pr-adapter-github#readme",
+  "dependencies": {
+    "github-webhook-handler": "^0.7.1",
+    "http": "0.0.0"
+  }
 }
