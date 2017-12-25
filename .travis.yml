@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+- '8'
+
+# https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#Caching-with-npm
+cache:
+  directories:
+  - node_modules
+
+# generated via "travis setup heroku" | after "travis login" and "heroku login" @ https://github.com/acdcjunior/docker-heroku-travis
+deploy:
+  provider: heroku
+  api_key:
+    secure: k3TOJU6X43g5O9SqBSXmDDK+qwYCHEm0iPG0Af8zNzRV2c4lbzGQo5pzPWoWiZZ6lWSwn34D1loIbNelB4suOcFDRnUHhwgxyzLoc1Oa8vAn8ZoW1jDwtmNso3VjcQKjw085GLiEbP9HnoFYk9weYHUFEpHcVxQVAtRANJNISQqv2sW6sQw7C/dKsu/ZoWigsXIKndCg5/0s3kjF9gadS+03qibC4TCt2nlYtzZ9VmaxrIzLzg2QifF6Q3Ih694bEFKAx9WG12B26szlqL4J5Nu9LjZbHVJU6ogJF+TCFLlp3AA5Pk8Bxccu/OKbYZTj5AHb9P2znk0i8Hhu5ARAIZrJ2kwwZSi6dLoUhakNJiVJi/gZ92ptU5+TfyEdfzHV7iCa7veASmrkCC47DLrzusTE1fhUV28/bvRYYafaVJEFdOpREefC3O4qyT7h5g6Luro55vYb652hi8H5p8ePE+LbQjYsXx4mT7j+LMOMN2fVRUUJlgVs+4ZSN9NXjh1bTng8ip4+vctkUW+k1wGHmi0Wt9M1PaLM5pylhJDT11JONaNXCnXY16o525f3Lq9GS6X3eWKawIFvJy+g0rW4t5DKH32qRpoOQ8sp2bTrpMjj0o1cNhfWvqRVzlDnbgtuMK9bso0Nq1tqmKGxk5Ee5wA07aNGvu4IOwQ4Qjcy4lM=
+  app: c3pr-github
+  on:
+    repo: c3pr/c3pr-adapter-github
