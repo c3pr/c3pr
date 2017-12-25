@@ -7,3 +7,5 @@ C3PR Repository Adapter for GitHub
 # Deployment
 
 Currently deployed at https://c3pr-github.herokuapp.com/webhook
+
+Logs available at (requires login) https://dashboard.heroku.com/apps/c3pr-github/logs
