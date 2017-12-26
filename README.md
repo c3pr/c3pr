@@ -4,6 +4,10 @@
 
 C3PR Repository Adapter for GitHub
 
+# GitHub app
+
+The GitHub app is created at https://github.com/apps/c3pr
+
 # Deployment
 
 Currently deployed at https://c3pr-github.herokuapp.com/webhook
