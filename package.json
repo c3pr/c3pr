@@ -23,6 +23,7 @@
   "dependencies": {
     "express": "^4.16.2",
     "github-webhook-handler": "^0.7.1",
-    "octonode": "^0.9.1"
+    "octonode": "^0.9.1",
+    "uuid": "^3.2.1"
   }
 }
