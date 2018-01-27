@@ -20,3 +20,5 @@ githubWebhookHandler.on('issues', function (event) {
         event.payload.issue.number,
         event.payload.issue.title)
 });
+
+module.exports = githubWebhookHandler;
