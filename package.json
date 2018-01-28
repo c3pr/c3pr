@@ -1,0 +1,25 @@
+{
+  "name": "c3pr",
+  "version": "1.0.0",
+  "description": "C3PR Main Bot",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo no tests yet"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c3pr/c3pr.git"
+  },
+  "keywords": [
+    "c3pr"
+  ],
+  "author": "acdcjunior",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/c3pr/c3pr/issues"
+  },
+  "homepage": "https://github.com/c3pr/c3pr",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}

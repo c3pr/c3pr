@@ -1,0 +1,15 @@
+{
+  "agents": [
+    {
+      "name": "walkmod-sonar:StringCheckOnLeft",
+      "extensions": ["java"],
+      "agent": "http://some-server-running-docker.com:5000/c3pr",
+      "arguments": {
+        "comment": "this 'arguments' field is optional and has meaning only to the agent.",
+        "rules": [
+          "sonar:StringCheckOnLeft"
+        ]
+      }
+    }
+  ]
+}

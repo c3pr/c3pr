@@ -1,16 +1,13 @@
-language: java
-jdk:
-- oraclejdk9
+language: node_js
+node_js:
+- '8'
 
-before_cache:
-- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+# https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#Caching-with-npm
 cache:
   directories:
-  - "$HOME/.gradle/caches/"
-  - "$HOME/.gradle/wrapper/"
+  - node_modules
 
-# Configured using https://docs.travis-ci.com/user/deployment/heroku/ -> travis setup heroku (after travis login and heroku login)
+# generated via "travis setup heroku" | after "travis login" and "heroku login" @ https://github.com/acdcjunior/docker-heroku-travis
 deploy:
   provider: heroku
   api_key:
