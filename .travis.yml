@@ -7,11 +7,11 @@ cache:
   directories:
   - node_modules
 
-# generated via "travis setup heroku" | after "travis login" and "heroku login" @ https://github.com/acdcjunior/docker-heroku-travis
+# generated via "travis setup heroku" | after "travis login --github-token TOKEN" and "heroku login" @ https://github.com/acdcjunior/docker-heroku-travis
 deploy:
   provider: heroku
   api_key:
-    secure: k3TOJU6X43g5O9SqBSXmDDK+qwYCHEm0iPG0Af8zNzRV2c4lbzGQo5pzPWoWiZZ6lWSwn34D1loIbNelB4suOcFDRnUHhwgxyzLoc1Oa8vAn8ZoW1jDwtmNso3VjcQKjw085GLiEbP9HnoFYk9weYHUFEpHcVxQVAtRANJNISQqv2sW6sQw7C/dKsu/ZoWigsXIKndCg5/0s3kjF9gadS+03qibC4TCt2nlYtzZ9VmaxrIzLzg2QifF6Q3Ih694bEFKAx9WG12B26szlqL4J5Nu9LjZbHVJU6ogJF+TCFLlp3AA5Pk8Bxccu/OKbYZTj5AHb9P2znk0i8Hhu5ARAIZrJ2kwwZSi6dLoUhakNJiVJi/gZ92ptU5+TfyEdfzHV7iCa7veASmrkCC47DLrzusTE1fhUV28/bvRYYafaVJEFdOpREefC3O4qyT7h5g6Luro55vYb652hi8H5p8ePE+LbQjYsXx4mT7j+LMOMN2fVRUUJlgVs+4ZSN9NXjh1bTng8ip4+vctkUW+k1wGHmi0Wt9M1PaLM5pylhJDT11JONaNXCnXY16o525f3Lq9GS6X3eWKawIFvJy+g0rW4t5DKH32qRpoOQ8sp2bTrpMjj0o1cNhfWvqRVzlDnbgtuMK9bso0Nq1tqmKGxk5Ee5wA07aNGvu4IOwQ4Qjcy4lM=
-  app: c3pr-github
+    secure: WnTkMlY9hgTjlfmu4gXbBrTB9uvBxrAV3Aymirz0EmIE7zcJPFDgtLKJrmNJxu+JnTxYMxwBZ7GM9rBTliL2CniFpG67K5z1kiNkiagC4kRly6du2qLRQK4WJsde0rLNmLruo0kQjRatLIfsQzEixre16Mls/xl48gJyaHfCpoozmhedBBia6W/a+C9HiBwzA9DO4xSQAYufPhcn3ggtWlscaNpMpKWRq1BIqUkb/h0yIWm5pGAdUDz8lpW7y5C718hAyYrfMCEFGND2IOJulVSWkEyQ5/9FGOv5Bys5Ze/P/G6CGSZFC2YKoWwI0wtcsiMBNfiNONgRh55lx3/Ub6xRXha3dKBEu3ZGGF/bkFWFlmg9RYp2T09LIAG7BtBDXFY0r8rn+8zHcSerZjmn6I7BUf47nqE/L6Mntv+RTlVEMT4ucswCQc20IYPIFid3Le6in9z9FGEz4nRCLQ9JvKJR6wITHbTGXgWCBQu40HehhwtEYqQ2vYBKUlSxtyEXXd+02xjYyZBZDqbg0xFP12ojOlvLGoBC1+Iz/dy4/Qmm0wRR10DOb3LAK4Pf3U6WtG4fk13Y/aN94RiyXtzZi3eSgyKAMTA26yAw273AameqQtuPuH3eROe5F+wceZshd8JPzXSJbJvI0FClqRjoSZK2dij4dp7CIxB6n4Tnoto=
+  app: c3pr-adapter-github
   on:
     repo: c3pr/c3pr-adapter-github
