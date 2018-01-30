@@ -1,9 +1,7 @@
 const expect = require('chai').expect;
 
-const app = require('rewire')('./extractExtensionsInChangeset.js');
-
-const extractExtensionsInChangeset = require("./extractExtensionsInChangeset");
-const extractExtension = app.__get__('extractExtension');
+const extractExtensionsInChangeset = require("./extractExtensionsInChangeset").extractExtensionsInChangeset;
+const extractExtension = require("./extractExtensionsInChangeset").extractExtension;
 
 describe('extractExtension', function () {
     it('should extract extension', function () {
