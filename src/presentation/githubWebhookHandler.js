@@ -13,7 +13,7 @@ githubWebhookHandler.on('push', function (event) {
         event.payload.ref);
 
     console.log('\n----------------\n');
-    console.dir(event.payload);
+    console.log(JSON.stringify(event.payload, null, 2));
     console.log('\n----------------\n');
 });
 
