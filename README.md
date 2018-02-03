@@ -8,3 +8,10 @@ Core service for C3PR.
 # Notes
 
 Currently deployed at https://c3pr.herokuapp.com/actuator
+
+
+# Endpoints
+
+    /changes
+    
+A repo adapter should POST to this URL when notifying from changes.

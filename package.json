@@ -4,7 +4,7 @@
   "description": "C3PR Main Bot",
   "scripts": {
     "start": "node src/index.js",
-    "test": "echo no tests yet"
+    "test": "mocha src/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,13 @@
   },
   "homepage": "https://github.com/c3pr/c3pr",
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {
+    "@types/sinon-chai": "^2.7.29",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0",
+    "sinon": "^4.2.2"
   }
 }
