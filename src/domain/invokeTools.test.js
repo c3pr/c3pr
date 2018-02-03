@@ -2,18 +2,16 @@ process.env.NODE_ENV = 'test';
 
 const invokeTools = require('./invokeTools');
 const sinon = require('sinon');
-const chai = require('chai');
-const should = chai.should();
+require('chai').should();
 const request = require('request');
 const toolAgents = require('./toolAgents');
+const RESPONSE_OK = {statusCode: 200, headers: {'content-type': 'application/json'}};
 
-const base = 'http://localhost:1337';
 
-const response200 = {statusCode: 200, headers: {'content-type': 'application/json'}};
 
 
 describe('invokeTools', () => {
-    let responseBody;
+
     const pushedChange = {
         changeset: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js'],
         repository: {
@@ -26,6 +24,11 @@ describe('invokeTools', () => {
         {name: "one", extensions: ["java"], agentURL: "http://one", arguments: {rule: "one"}},
         {name: "two", extensions: ["js"], agentURL: "http://two", arguments: {rule: "two"}}
     ];
+
+
+
+
+    let responseBody;
     beforeEach(() => {
         responseBody = {
             that: 'is it!'
@@ -38,7 +41,7 @@ describe('invokeTools', () => {
     });
 
     it('should issue a post to each tool with extensions on changeset files', () => {
-        this.post.yields(null, response200, JSON.stringify(responseBody));
+        this.post.yields(null, RESPONSE_OK, JSON.stringify(responseBody));
 
         invokeTools(pushedChange);
 
