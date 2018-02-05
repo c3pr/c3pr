@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.static('resources/public'));
 
-require('./changeReceivedController')(app);
+require('./changesController')(app);
 
 // The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
