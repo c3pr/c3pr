@@ -4,11 +4,11 @@
   "description": "C3PR Repository Adapter for GitHub",
   "scripts": {
     "start": "node src/index.js",
-    "test": "echo no tests yet"
+    "test": "mocha src/**/*.test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/c3pr/c3pr-adapter-github.git"
+    "url": "git+https://github.com/c3pr/c3pr-repo-github.git"
   },
   "keywords": [
     "c3pr",
@@ -17,9 +17,9 @@
   "author": "acdcjunior",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/c3pr/c3pr-adapter-github/issues"
+    "url": "https://github.com/c3pr/c3pr-repo-github/issues"
   },
-  "homepage": "https://github.com/c3pr/c3pr-adapter-github",
+  "homepage": "https://github.com/c3pr/c3pr-repo-github",
   "dependencies": {
     "express": "^4.16.2",
     "github-webhook-handler": "^0.7.1",
