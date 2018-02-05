@@ -4,10 +4,11 @@
 
 Core service for C3PR.
 
+Check the app at https://github.com/apps/c3pr.
 
 # Notes
 
-Currently deployed at https://c3pr.herokuapp.com/actuator
+Currently deployed at https://c3pr.herokuapp.com/
 
 
 # Endpoints
