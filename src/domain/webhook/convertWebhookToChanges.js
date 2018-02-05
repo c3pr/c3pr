@@ -1,5 +1,5 @@
 
-function handleWebhook(webhookPayload) {
+function convertWebhookToChanges(webhookPayload) {
     const changeset = new Set();
     webhookPayload.commits.forEach(commit => {
         commit.added.forEach(added => changeset.add(added));
@@ -17,4 +17,4 @@ function handleWebhook(webhookPayload) {
     }
 }
 
-module.exports = handleWebhook;
+module.exports = convertWebhookToChanges;
