@@ -1,6 +1,6 @@
 # c3pr-adapter-github
 
-[![Build Status](https://travis-ci.org/c3pr/c3pr-adapter-github.svg?branch=master)](https://travis-ci.org/c3pr/c3pr-adapter-github)
+[![Build Status](https://travis-ci.org/c3pr/c3pr-repo-github.svg?branch=master)](https://travis-ci.org/c3pr/c3pr-adapter-github)
 
 C3PR Repository Adapter for GitHub
 
