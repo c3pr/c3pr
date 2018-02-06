@@ -1,5 +1,5 @@
 const exec = require('child_process').exec;
-const cloner = require("./utils/git/cloner");
+const cloner = require("./cloner");
 
 const request = {
     repository: {

@@ -1,1 +1,1 @@
-require("./projectRetriever");
+require("./presentation/main");
