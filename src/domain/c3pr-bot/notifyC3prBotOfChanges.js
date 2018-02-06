@@ -2,12 +2,17 @@ const request = require('request');
 const config = require('../../config');
 
 function notifyC3prBotOfChanges(changes) {
-    console.log(`>>> Notifying bot ${changes.changeset.length} of changes to ${changes.repository.url}...`);
+    if (!changes.meta.correlationId || changes.meta.schemaName !== "c3pr/c3pr::changes") {
+        const errorMessage = `SKIPPING: Request does not contain required metadata (meta.correlationId and meta.schemaName): ${JSON.stringify(changes)}.`;
+        console.error(errorMessage);
+        return;
+    }
+    console.log(`[${changes.meta.correlationId}] >>> Notifying bot ${changes.changeset.length} of changes to ${changes.repository.url}...`);
     request.post(
         {url: config.c3pr.botChangesUrl, json: true, body: changes},
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
-                console.log(`>>>>>> Error while notifying bot.
+                console.log(`[${changes.meta.correlationId}] >>>>>> Error while notifying bot.
                 * URL: ${config.c3pr.botChangesUrl}
                 * Status: ${response.statusCode}
                 * Error: ${error}
@@ -15,7 +20,7 @@ function notifyC3prBotOfChanges(changes) {
                 -----------------------\n${body}
                 -----------------------\n\n`);
             } else {
-                console.log(`>>> Notified bot ${changes.changeset.length} of changes to ${changes.repository.url}: ${body}`);
+                console.log(`[${changes.meta.correlationId}] >>> Notified bot ${changes.changeset.length} of changes to ${changes.repository.url}: ${body}`);
             }
         }
     );
