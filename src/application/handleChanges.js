@@ -1,6 +1,9 @@
+const toolAgents = require('../toolAgents');
+const invokeTools = require('../domain/invokeTools');
+
 function handleChanges(changes) {
-    console.log("Handle changes invoked for:");
-    console.dir(changes);
+    console.log(`>>> Handling changes invoked for ${changes.repository.url} rev ${changes.repository.revision}...`);
+    invokeTools(toolAgents, changes)
 }
 
 module.exports = handleChanges;

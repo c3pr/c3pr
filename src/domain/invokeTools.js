@@ -1,9 +1,8 @@
 const request = require('request');
-const toolAgents = require('./toolAgents');
 const extractExtensionsInChangeset = require('./extractExtensionsInChangeset').extractExtensionsInChangeset;
 const filterFilesWithExtensions = require('./filterFilesWithExtensions');
 
-function invokeTools(pushedChange) {
+function invokeTools(toolAgents, pushedChange) {
 
     const extensionsInChangeset = extractExtensionsInChangeset(pushedChange.changeset);
 
