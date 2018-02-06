@@ -7,12 +7,17 @@ function convertWebhookToChanges(webhookPayload) {
         commit.removed.forEach(removed => changeset.delete(removed));
     });
 
+    const gitSHA = webhookPayload.after;
     return {
+        meta: {
+            correlationId: gitSHA,
+            schemaName: "c3pr/c3pr::changes"
+        },
         changeset: Array.from(changeset.values()),
         repository: {
             type: "git",
             url: webhookPayload.repository.clone_url,
-            revision: webhookPayload.after
+            revision: gitSHA
         }
     }
 }

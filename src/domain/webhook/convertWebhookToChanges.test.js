@@ -3,6 +3,10 @@ const convertWebhookToChanges = require('./convertWebhookToChanges');
 const webhookRequestExample = require('./webhookRequestExample.json');
 
 const whatBotNeedsToInvokeTools = {
+    meta: {
+        correlationId: "13b7eedacc076e8a16ae565b535fd48edb9a044a",
+        schemaName: "c3pr/c3pr::changes"
+    },
     changeset: ['src/main/resources/second.txt', 'src/main/resources/third.txt'],
     repository: {
         type: "git",
@@ -29,6 +33,10 @@ describe('convertWebhookToChanges', function () {
             ]
         });
         expect(changes).to.deep.equal({
+            meta: {
+                correlationId: "after-hash",
+                schemaName: "c3pr/c3pr::changes"
+            },
             changeset: ['m2', 'm3', 'm1'],
             repository: {
                 type: "git",
