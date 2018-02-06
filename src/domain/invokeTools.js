@@ -12,16 +12,27 @@ function invokeTools(pushedChange) {
 
         applicableToolAgents.forEach((tool) => {
 
-            request.post(tool.agentURL,
+            request.post(
                 {
-                    repository: pushedChange.repository,
-                    files: filterFilesWithExtensions(pushedChange.changeset, tool.extensions),
-                    arguments: tool.arguments
-
+                    url: tool.agentURL,
+                    json: true,
+                    body: {
+                        repository: pushedChange.repository,
+                        files: filterFilesWithExtensions(pushedChange.changeset, tool.extensions),
+                        arguments: tool.arguments
+                    }
                 },
                 function (error, response, body) {
-                    if (!error && response.statusCode === 200) {
-                        console.log(body)
+                    if (error || response.statusCode !== 200) {
+                        console.log(`>>>>>> Error while invoking agent.
+                * URL: ${tool.agentURL}
+                * Status: ${response.statusCode}
+                * Error: ${error}
+                * Body:
+                -----------------------\n${body}
+                -----------------------\n\n`);
+                    } else {
+                        console.log(`>>> Invoked agent ${tool.name} of changes to ${pushedChange.repository}: ${body}`);
                     }
                 }
             );
