@@ -8,8 +8,9 @@ module.exports = function (app) {
             const errorMessage = `Request does not contain required metadata (meta.correlationId and meta.schemaName): ${JSON.stringify(changes)}.`;
             console.error(errorMessage);
             response.status(400).send(errorMessage);
+            return;
         }
-        console.log(`>> changesController: Changes received. ${JSON.stringify(changes)}`);
+        console.log(`[${changes.meta.correlationId}] >> changesController: changes received. ${JSON.stringify(changes)}`);
         handleChanges(changes);
         response.send('Ok, that would be all, thanks.');
     });

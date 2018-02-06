@@ -2,9 +2,9 @@ const request = require('request');
 const extractExtensionsInChangeset = require('./extractExtensionsInChangeset').extractExtensionsInChangeset;
 const filterFilesWithExtensions = require('./filterFilesWithExtensions');
 
-function invokeTools(toolAgents, pushedChange) {
+function invokeTools(toolAgents, changes) {
 
-    const extensionsInChangeset = extractExtensionsInChangeset(pushedChange.changeset);
+    const extensionsInChangeset = extractExtensionsInChangeset(changes.changeset);
 
     extensionsInChangeset.forEach((extension) => {
         const applicableToolAgents = toolAgents.agents.filter(toolAgent => toolAgent.extensions.includes(extension));
@@ -16,14 +16,18 @@ function invokeTools(toolAgents, pushedChange) {
                     url: tool.agentURL,
                     json: true,
                     body: {
-                        repository: pushedChange.repository,
-                        files: filterFilesWithExtensions(pushedChange.changeset, tool.extensions),
+                        meta: {
+                            correlationId: changes.meta.correlationId,
+                            schemaName: "c3pr/c3pr-agent::toolInvocation"
+                        },
+                        repository: changes.repository,
+                        files: filterFilesWithExtensions(changes.changeset, tool.extensions),
                         arguments: tool.arguments
                     }
                 },
                 function (error, response, body) {
                     if (error || response.statusCode !== 200) {
-                        console.log(`>>>>>> Error while invoking agent.
+                        console.log(`[${changes.meta.correlationId}] >>>>>> Error while invoking agent.
                 * URL: ${tool.agentURL}
                 * Status: ${response.statusCode}
                 * Error: ${error}
@@ -31,7 +35,7 @@ function invokeTools(toolAgents, pushedChange) {
                 -----------------------\n${body}
                 -----------------------\n\n`);
                     } else {
-                        console.log(`>>> Invoked agent ${tool.name} of changes to ${pushedChange.repository}: ${body}`);
+                        console.log(`[${changes.meta.correlationId}] >>> Invoked agent ${tool.name} of changes to ${changes.repository.url}: ${JSON.stringify(tool.arguments)}`);
                     }
                 }
             );
