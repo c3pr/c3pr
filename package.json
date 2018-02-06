@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/c3pr/c3pr",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "request": "^2.83.0"
   },

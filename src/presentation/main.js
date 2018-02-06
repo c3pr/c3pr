@@ -1,9 +1,12 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 5001;
 const app = express();
 
 app.use(express.static('resources/public'));
+
+app.use(bodyParser.json());
 
 require('./changesController')(app);
 
