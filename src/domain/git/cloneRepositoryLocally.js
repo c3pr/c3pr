@@ -1,4 +1,3 @@
-const clone = require('git-clone');
 const mkdirp = require('mkdirp');
 const path = require('path');
 const fs = require('fs');
