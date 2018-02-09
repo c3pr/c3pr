@@ -10,11 +10,15 @@ const RESPONSE_OK = {statusCode: 200, headers: {'content-type': 'application/jso
 describe('invokeTools', () => {
 
     const pushedChange = {
+        meta: {
+            correlationId: "4444eedacc076e8a16ae565b535fd48edb9a044a",
+            compatibleSchemas: ["c3pr/c3pr::changes"]
+        },
         changeset: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js'],
         repository: {
             type: "git",
             url: "https://github.com/org/repo.git",
-            revision: "123rev"
+            revision: "4444eedacc076e8a16ae565b535fd48edb9a044a"
         }
     };
     const toolAgents = {
@@ -43,22 +47,32 @@ describe('invokeTools', () => {
         invokeTools(toolAgents, pushedChange);
 
         sinon.assert.calledTwice(this.post);
+
         sinon.assert.calledWith(this.post,
             {
                 url: toolAgents.agents[0].agentURL,
                 json: true,
                 body: {
+                    meta: {
+                        compatibleSchemas: ["c3pr/c3pr-agent::toolInvocation"],
+                        correlationId: "4444eedacc076e8a16ae565b535fd48edb9a044a"
+                    },
                     repository: pushedChange.repository,
                     files: [pushedChange.changeset[0]],
                     arguments: toolAgents.agents[0].arguments
                 }
             }
         );
+
         sinon.assert.calledWith(this.post,
             {
                 url: toolAgents.agents[1].agentURL,
                 json: true,
                 body: {
+                    meta: {
+                        compatibleSchemas: ["c3pr/c3pr-agent::toolInvocation"],
+                        correlationId: "4444eedacc076e8a16ae565b535fd48edb9a044a"
+                    },
                     repository: pushedChange.repository,
                     files: [pushedChange.changeset[1]],
                     arguments: toolAgents.agents[1].arguments
