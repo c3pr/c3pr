@@ -26,7 +26,7 @@ async function invokeToolAtGitRepo(toolInvocation) {
 
     console.log(`${prefix} Done cloning at ${cloneFolder}`);
 
-    await shell(toolInvocation.tool.command, {cwd: cloneFolder}, {stdout: true, prefix});
+    await shell(toolInvocation.command, {cwd: cloneFolder}, {stdout: true, prefix});
 
     return await determineGitDiff(toolInvocation.meta.correlationId, cloneFolder);
 
