@@ -1,7 +1,7 @@
 const mkdirp = require('mkdirp');
 const path = require('path');
 const fs = require('fs');
-const shell = require('../shell');
+const shell = require('../util/shell').shell;
 
 const config = require('../../config');
 
