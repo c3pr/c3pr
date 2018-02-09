@@ -1,0 +1,33 @@
+{
+  "name": "node-git-client",
+  "version": "0.0.1",
+  "description": "Node.js layer above shell git command line",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha src/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c3pr/node-git-client.git"
+  },
+  "keywords": [
+    "git",
+    "client"
+  ],
+  "author": "acdcjunior",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/c3pr/node-git-client/issues"
+  },
+  "homepage": "https://github.com/c3pr/node-git-client#readme",
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/sinon-chai": "^2.7.29",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0",
+    "sinon": "^4.2.2"
+  }
+}
