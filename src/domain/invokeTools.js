@@ -37,7 +37,7 @@ function invokeTools(toolAgents, changes) {
                 -----------------------\n${body}
                 -----------------------\n\n`);
                     } else {
-                        console.log(`[${changes.meta.correlationId}] >>> Invoked agent ${tool.name} of changes to ${changes.repository.url}: ${JSON.stringify(tool.arguments)}`);
+                        console.log(`[${changes.meta.correlationId}] >>> Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool.arguments)}`);
                     }
                 }
             );
