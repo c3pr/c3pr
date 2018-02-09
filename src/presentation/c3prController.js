@@ -15,6 +15,7 @@ module.exports = function (app) {
         }
         console.log(`[${toolInvocation.meta.correlationId}] >> c3prController: toolInvocation received. ${JSON.stringify(toolInvocation)}`);
         handleToolInvocation(toolInvocation);
+
         // echo back request
         response.send(toolInvocation);
     });
