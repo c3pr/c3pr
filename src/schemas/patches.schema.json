@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "correlationId": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
+    "compatible-schemas": ["c3pr/c3pr::patches"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c3pr/sample-project-java-maven.git",
+    "branch": "MY BRANCH",
+    "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
+  },
+  "tool": {
+    "toolId": 3234,
+    "command": "walkmod apply sonar:StringCheckOnLeft",
+    "meta": {
+      "rule": "sonar:StringCheckOnLeft"
+    }
+  },
+  "patch": {
+    "title": "My PR",
+    "body:": "This is the `markdown` body.",
+    "base64Diff": "#*&¨@&¨*#@¨*$"
+  }
+}
