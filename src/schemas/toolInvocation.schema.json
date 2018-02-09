@@ -1,9 +1,7 @@
 {
   "meta": {
     "correlationId": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
-    "schemas": {
-      "c3pr/c3pr-agent::toolInvocation": true
-    }
+    "compatibleSchemas": ["c3pr/c3pr-agent::toolInvocation"]
   },
   "repository": {
     "type": "git",

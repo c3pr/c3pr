@@ -16,9 +16,7 @@ describe('invokeToolAtGitRepo', () => {
         const diff = await invokeToolAtGitRepo({
             "meta": {
                 "correlationId": "30b03c1d8aa6ee670534b80edd0dc39c12644259",
-                "schemas": {
-                    "c3pr/c3pr-agent::toolInvocation": true
-                }
+                "compatibleSchemas": ["c3pr/c3pr-agent::toolInvocation"]
             },
             "repository": {
                 "type": "git",

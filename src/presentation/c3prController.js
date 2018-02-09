@@ -6,9 +6,9 @@ module.exports = function (app) {
         const toolInvocation = request.body;
         if (!toolInvocation.meta ||
             !toolInvocation.meta.correlationId ||
-            !toolInvocation.meta.schemas ||
-            !toolInvocation.meta.schemas["c3pr/c3pr-agent::toolInvocation"]) {
-            const errorMessage = `Request does not contain required metadata (meta.correlationId and meta.schemaName): ${JSON.stringify(toolInvocation)}.`;
+            !toolInvocation.meta.compatibleSchemas ||
+            !toolInvocation.meta.compatibleSchemas.includes("c3pr/c3pr-agent::toolInvocation")) {
+            const errorMessage = `Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(toolInvocation)}.`;
             console.error(errorMessage);
             response.status(400).send(errorMessage);
             return;
