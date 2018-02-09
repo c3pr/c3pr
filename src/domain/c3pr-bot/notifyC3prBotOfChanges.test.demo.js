@@ -6,7 +6,7 @@ const notifyC3prBotOfChanges = require('./notifyC3prBotOfChanges');
 const changes = {
     meta: {
         correlationId: "13b7eedacc076e8a16ae565b535fd48edb9a044a",
-        schemaName: "c3pr/c3pr::changes"
+        compatibleSchemas: ["c3pr/c3pr::changes"]
     },
     changeset: ['src/main/resources/second.java', 'src/main/resources/third.txt'],
     repository: {
