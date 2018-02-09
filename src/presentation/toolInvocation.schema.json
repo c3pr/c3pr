@@ -14,7 +14,10 @@
     "src/main/resources/second.txt",
     "src/main/resources/third.txt"
   ],
-  "arguments": {
-    "rule": "sonar:StringCheckOnLeft"
+  "tool": {
+    "command": "walkmod apply sonar:StringCheckOnLeft",
+    "meta": {
+      "rule": "sonar:StringCheckOnLeft"
+    }
   }
 }
