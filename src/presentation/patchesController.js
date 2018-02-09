@@ -1,4 +1,4 @@
-const handleChanges = require('../application/handleChanges');
+const handlePatches = require('../application/handlePatches');
 
 module.exports = function (app) {
 
@@ -11,7 +11,7 @@ module.exports = function (app) {
             return;
         }
         console.log(`[${patches.meta.correlationId}] >> patchesController: patches received. ${JSON.stringify(patches)}`);
-        handleChanges(patches);
+        handlePatches(patches);
         response.send('Ok, that would be all, thanks.');
     });
 
