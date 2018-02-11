@@ -1,4 +1,3 @@
-const shell = require("../domain/util/shell");
 const invokeToolAtGitRepo = require("../domain/invokeToolAtGitRepo");
 const convertDiffToBase64 = require("../domain/convertDiffToBase64");
 const createPatchesPayload = require("../domain/createPatchesPayload");

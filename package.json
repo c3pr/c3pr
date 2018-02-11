@@ -26,7 +26,7 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "mkdirp": "^0.5.1",
-    "node-git-client": "github:c3pr/node-git-client#0.1.0",
+    "node-git-client": "github:c3pr/node-git-client#0.3.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {

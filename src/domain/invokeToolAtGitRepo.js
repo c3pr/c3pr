@@ -1,6 +1,6 @@
 const cloneRepositoryLocally = require("node-git-client").cloneRepositoryLocally;
 const determineGitDiff = require("node-git-client").determineGitDiff;
-const shell = require("./util/shell").shell;
+const shell = require("node-git-client").shell;
 const uuidv4 = require('uuid/v4');
 
 const config = require('../config');
