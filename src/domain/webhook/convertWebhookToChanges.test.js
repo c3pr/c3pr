@@ -11,7 +11,7 @@ const whatBotNeedsToInvokeTools = {
     repository: {
         type: "git",
         url: "https://github.com/c3pr/sample-project-java-maven.git",
-        branch: "someeee-branchhhh",
+        branch: "master",
         revision: "13b7eedacc076e8a16ae565b535fd48edb9a044a"
     }
 };
@@ -25,6 +25,7 @@ describe('convertWebhookToChanges', function () {
 
     it('more elaborate example', function () {
         const changes = convertWebhookToChanges({
+            ref: "refs/heads/w00t-a-branch",
             after: "after-hash",
             repository: { clone_url: "clone-url" },
             commits: [
@@ -42,7 +43,7 @@ describe('convertWebhookToChanges', function () {
             repository: {
                 type: "git",
                 url: "clone-url",
-                branch: "w000-a-branch",
+                branch: "w00t-a-branch",
                 revision: "after-hash"
             }
         });
