@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/c3pr/node-git-client.svg?branch=master)](https://travis-ci.org/c3pr/node-git-client)
+
 # node-git-client
 
 Node.js layer on top of shell git command line.
