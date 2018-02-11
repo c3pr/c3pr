@@ -22,7 +22,10 @@ function invokeTools(toolAgents, changes) {
                         },
                         repository: changes.repository,
                         files: filterFilesWithExtensions(changes.changeset, tool.extensions),
-                        arguments: tool.arguments
+                        tool: {
+                            command: tool.arguments,
+                            toolMeta: tool.toolMeta
+                        }
                     }
                 },
                 function (error, response, body) {
