@@ -16,8 +16,10 @@ async function handleToolInvocation(toolInvocation) {
 
         return sendPatchToBot(patchesPayload);
     } catch (e) {
-        console.error(`[${toolInvocation.meta.correlationId}] [handleToolInvocation] Error while invoking tool. \n${e}\n\n\n`)
+        console.log(`[${toolInvocation.meta.correlationId}] [handleToolInvocation] Error while invoking tool. \n${e}\n`)
     }
+
+    console.log(`[${toolInvocation.meta.correlationId}] [handleToolInvocation] Tool invocation complete.`);
 
 }
 
