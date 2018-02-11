@@ -26,7 +26,7 @@ describe('determineGitDiff', () => {
         fs.unlinkSync(path.join(cloneFolder, 'README.md'));
         await shell(`echo some-new-file> src/main/java/MyNewClass.java`, {cwd: cloneFolder});
 
-        const diff = await determineGitDiff(`${sha}${localUniqueCorrelationId}`, cloneFolder);
+        const diff = await determineGitDiff(sha, localUniqueCorrelationId, cloneFolder);
         expect(diff).to.be.equal(
 `diff --git a/README.md b/README.md
 deleted file mode 100644

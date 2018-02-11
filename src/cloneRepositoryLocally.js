@@ -3,30 +3,31 @@ const path = require('path');
 const fs = require('fs');
 const shell = require('./shell');
 
-async function createClonesDir(correlationId, cloneDir) {
+async function createClonesDir(prefix, correlationId, cloneDir) {
     return new Promise(resolve => {
         const resolvedClonesDir = path.resolve(cloneDir);
         if (fs.existsSync(resolvedClonesDir)) {
-            console.log(`[${correlationId}] [cloneRepositoryLocally] ${resolvedClonesDir} already exists.`);
+            console.log(`${prefix} ${resolvedClonesDir} already exists.`);
             resolve();
         } else {
-            console.log(`[${correlationId}] [cloneRepositoryLocally] ${resolvedClonesDir} does not exist, creating.`);
+            console.log(`${prefix} ${resolvedClonesDir} does not exist, creating.`);
             mkdirp(resolvedClonesDir, () => {
-                console.log(`[${correlationId}] [cloneRepositoryLocally] Clones dir created at ${resolvedClonesDir}`);
+                console.log(`${prefix} Clones dir created at ${resolvedClonesDir}`);
                 resolve();
             });
         }
     });
 }
 
-async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth) {
-    const correlationId = gitSHA;
-    await createClonesDir(gitSHA, cloneBaseDir);
+async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId) {
+    const prefix = `[${gitSHA}] [${localUniqueCorrelationId}] [cloneRepositoryLocally]`;
 
-    console.log(`[${correlationId}] [cloneRepositoryLocally] Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`);
+    await createClonesDir(prefix, gitSHA, cloneBaseDir);
+
+    console.log(`${prefix} Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`);
 
     // clones that single branch (maybe there is a somewhat slightly faster way of doing this with --mirror, though I feel it probably won't pay off)
-    await shell(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {prefix: `[${correlationId}] [cloneRepositoryLocally]`});
+    await shell(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {prefix});
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //NOTE:
@@ -43,9 +44,9 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
     // right now, though, I feel the constant "cloneDepth" is pretty much enough.
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    await shell(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {prefix: `[${correlationId}] [cloneRepositoryLocally]`});
+    await shell(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {prefix});
 
-    console.log(`[${correlationId}] [cloneRepositoryLocally] Clone/reset completed.`);
+    console.log(`${prefix} Clone/reset completed.`);
 }
 
 async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, url, branch, revision, cloneDepth}) {
@@ -55,7 +56,7 @@ async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, u
     const cloneFolder = path.resolve(path.join(cloneBaseDir, gitSHA, localUniqueCorrelationId));
 
     // clones at "cloneBaseDir/SHA/RANDOMUUID", e.g. "./tmp/59b20b8d5c6ff8d09518454d4dd8b7b30f095ab5/471ff3f9-2ada-48eb-a0f3-3ab70f3f0bdd"
-    await gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth);
+    await gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId);
 
     return cloneFolder;
 
