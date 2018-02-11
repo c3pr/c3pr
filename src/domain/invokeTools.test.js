@@ -23,8 +23,8 @@ describe('invokeTools', () => {
     };
     const toolAgents = {
         agents: [
-            {name: "one", extensions: ["java"], agentURL: "http://one", arguments: {rule: "one"}},
-            {name: "two", extensions: ["js"], agentURL: "http://two", arguments: {rule: "two"}}
+            {name: "one", extensions: ["java"], agentURL: "http://one", command: "one command", toolMeta: {rule: "one"}},
+            {name: "two", extensions: ["js"], agentURL: "http://two", command: "two command", toolMeta: {rule: "two"}}
         ]
     };
 
@@ -59,7 +59,10 @@ describe('invokeTools', () => {
                     },
                     repository: pushedChange.repository,
                     files: [pushedChange.changeset[0]],
-                    arguments: toolAgents.agents[0].arguments
+                    tool: {
+                        command: toolAgents.agents[0].command,
+                        toolMeta: toolAgents.agents[0].toolMeta,
+                    }
                 }
             }
         );
@@ -75,7 +78,10 @@ describe('invokeTools', () => {
                     },
                     repository: pushedChange.repository,
                     files: [pushedChange.changeset[1]],
-                    arguments: toolAgents.agents[1].arguments
+                    tool: {
+                        command: toolAgents.agents[1].command,
+                        toolMeta: toolAgents.agents[1].toolMeta,
+                    }
                 }
             }
         );
