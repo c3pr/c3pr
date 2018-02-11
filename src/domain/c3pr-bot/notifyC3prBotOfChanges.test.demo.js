@@ -1,4 +1,3 @@
-const request = require('request');
 const config = require('../../config');
 
 const notifyC3prBotOfChanges = require('./notifyC3prBotOfChanges');
@@ -12,6 +11,7 @@ const changes = {
     repository: {
         type: "git",
         url: "https://github.com/c3pr/sample-project-java-maven.git",
+        branch: "master",
         revision: "13b7eedacc076e8a16ae565b535fd48edb9a044a"
     }
 };
