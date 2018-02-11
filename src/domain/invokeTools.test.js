@@ -9,7 +9,7 @@ const RESPONSE_OK = {statusCode: 200, headers: {'content-type': 'application/jso
 
 describe('invokeTools', () => {
 
-    const pushedChange = {
+    const changes = {
         meta: {
             correlationId: "4444eedacc076e8a16ae565b535fd48edb9a044a",
             compatibleSchemas: ["c3pr/c3pr::changes"]
@@ -18,6 +18,7 @@ describe('invokeTools', () => {
         repository: {
             type: "git",
             url: "https://github.com/org/repo.git",
+            branch: "my-branch-name",
             revision: "4444eedacc076e8a16ae565b535fd48edb9a044a"
         }
     };
@@ -44,7 +45,7 @@ describe('invokeTools', () => {
     it('should issue a post to each tool with extensions on changeset files', () => {
         this.post.yields(null, RESPONSE_OK, JSON.stringify(responseBody));
 
-        invokeTools(toolAgents, pushedChange);
+        invokeTools(toolAgents, changes);
 
         sinon.assert.calledTwice(this.post);
 
@@ -57,8 +58,8 @@ describe('invokeTools', () => {
                         compatibleSchemas: ["c3pr/c3pr-agent::toolInvocation"],
                         correlationId: "4444eedacc076e8a16ae565b535fd48edb9a044a"
                     },
-                    repository: pushedChange.repository,
-                    files: [pushedChange.changeset[0]],
+                    repository: changes.repository,
+                    files: [changes.changeset[0]],
                     tool: {
                         command: toolAgents.agents[0].command,
                         toolMeta: toolAgents.agents[0].toolMeta,
@@ -76,8 +77,8 @@ describe('invokeTools', () => {
                         compatibleSchemas: ["c3pr/c3pr-agent::toolInvocation"],
                         correlationId: "4444eedacc076e8a16ae565b535fd48edb9a044a"
                     },
-                    repository: pushedChange.repository,
-                    files: [pushedChange.changeset[1]],
+                    repository: changes.repository,
+                    files: [changes.changeset[1]],
                     tool: {
                         command: toolAgents.agents[1].command,
                         toolMeta: toolAgents.agents[1].toolMeta,

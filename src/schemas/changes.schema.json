@@ -7,6 +7,7 @@
   "repository": {
     "type": "git",
     "url": "http://github.com/c3pr/sample-project-java-maven.git",
+    "branch": "master",
     "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
   }
 }
