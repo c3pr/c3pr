@@ -1,33 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 const uuidv4 = require('uuid/v4');
-const sh = require('../../infrastructure/util/sh');
+const shell = require('node-git-client').shell;
 
 const createPullRequest = require("../github/createPullRequest");
 const createForkIfNotExists = require("../github/createForkIfNotExists");
 
 
-
 const STAGE_REPOS_FOLDER = process.env.STAGE_REPOS_FOLDER || '/tmp/';
 
-
-async function shell(command, options) {
-    console.log(`$ ${command}`);
-    let {error, stdout, stderr} = await sh(command, options);
-    if (error) {
-        console.err(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        console.err("COMMAND: " + command);
-        console.err("OPTIONS: " + JSON.stringify(options));
-        console.err("There as an error: " + error);
-        console.err("------------------------------");
-        console.err("STDOUT:");
-        console.err(stdout);
-        console.err("------------------------------");
-        console.err("STDERR:");
-        console.err(stderr);
-        console.err("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-    }
-}
 
 async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, prCommitMessage, prTitle, prBody, patchContent}) {
     const mainRepoCloneUrl = 'https://github.com/' + mainRepoOrgRepo + '.git';
@@ -63,7 +44,7 @@ async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, prCommit
     fs.unlinkSync(patchFilePath);
 
     // ADD and COMMIT CHANGES
-    await shell(`git add -A .`, {cwd: stagingFolder});
+    await shell(`git add -A`, {cwd: stagingFolder});
     await shell(`git commit -m "${prCommitMessage.replace(/"/g, '\\"')}"`, {cwd: stagingFolder});
 
     // add fork repo

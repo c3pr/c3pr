@@ -45,10 +45,12 @@ ghrepo.prs(async (err, prsBefore) => {
         '1hY2VzIik7CiAgICAgfQogCiB9Cg=='
     });
 
+    console.log('Checking if PR was created...');
     ghrepo.prs((err, prsAfter) => {
         assert.equal(prsBefore.length + 1, prsAfter.length);
 
         assert.equal(prsAfter[0].title, newPrTitle);
+        console.log('PR successfully created.');
     });
 
 });
