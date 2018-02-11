@@ -14,7 +14,7 @@ describe('invokeTools', () => {
             correlationId: "4444eedacc076e8a16ae565b535fd48edb9a044a",
             compatibleSchemas: ["c3pr/c3pr::changes"]
         },
-        changeset: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js'],
+        changeset: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js', 'src/boo.txt'],
         repository: {
             type: "git",
             url: "https://github.com/org/repo.git",
@@ -24,7 +24,7 @@ describe('invokeTools', () => {
     };
     const toolAgents = {
         agents: [
-            {name: "one", extensions: ["java"], agentURL: "http://one", command: "one command", toolMeta: {rule: "one"}},
+            {name: "one", extensions: ["java", "js"], agentURL: "http://one", command: "one command", toolMeta: {rule: "one"}},
             {name: "two", extensions: ["js"], agentURL: "http://two", command: "two command", toolMeta: {rule: "two"}}
         ]
     };
@@ -59,7 +59,7 @@ describe('invokeTools', () => {
                         correlationId: "4444eedacc076e8a16ae565b535fd48edb9a044a"
                     },
                     repository: changes.repository,
-                    files: [changes.changeset[0]],
+                    files: [changes.changeset[0], changes.changeset[1]],
                     tool: {
                         command: toolAgents.agents[0].command,
                         toolMeta: toolAgents.agents[0].toolMeta,
