@@ -4,7 +4,7 @@ const determineGitDiff = require('./determineGitDiff');
 const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 const path = require('path');
-const shell = require('./shell').shell;
+const shell = require('./shell');
 
 describe('determineGitDiff', () => {
 

@@ -1,7 +1,7 @@
 const mkdirp = require('mkdirp');
 const path = require('path');
 const fs = require('fs');
-const shell = require('./shell').shell;
+const shell = require('./shell');
 
 async function createClonesDir(correlationId, cloneDir) {
     return new Promise(resolve => {
