@@ -9,14 +9,6 @@ function sh(command, options) {
 }
 
 async function shell(shCommand, shOptions, myOptions = {}) {
-    try {
-        await shellOut(shCommand, shOptions, myOptions)
-    } catch (e) {
-        /* Swallow error, as it has already been printed to console. */
-    }
-}
-
-async function shellOut(shCommand, shOptions, myOptions = {}) {
     console.log(`${(myOptions.prefix || "")} \$ ${shCommand}`);
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (myOptions.stdout) {
@@ -39,6 +31,4 @@ async function shellOut(shCommand, shOptions, myOptions = {}) {
     return stdout;
 }
 
-module.exports = {
-    shell, shellOut
-};
+module.exports = shell;
