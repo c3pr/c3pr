@@ -22,9 +22,9 @@ describe('determineGitDiff', () => {
             cloneDepth: 5
         });
 
-        await shell(`echo some-change >> pom.xml`, {cwd: cloneFolder});
+        await shell(`echo some-change>> pom.xml`, {cwd: cloneFolder});
         fs.unlinkSync(path.join(cloneFolder, 'README.md'));
-        await shell(`echo some-new-file > src/main/java/MyNewClass.java`, {cwd: cloneFolder});
+        await shell(`echo some-new-file> src/main/java/MyNewClass.java`, {cwd: cloneFolder});
 
         const diff = await determineGitDiff(`${sha}${localUniqueCorrelationId}`, cloneFolder);
         expect(diff).to.be.equal(
@@ -38,21 +38,21 @@ index 70f85b5..0000000
 -
 -Example Java+Maven project with issues that could be fixed by static analysis tools.
 diff --git a/pom.xml b/pom.xml
-index ad8bb19..bfe7cd3 100644
+index ad8bb19..b6705f2 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -13,3 +13,4 @@
  	</properties>
  
  </project>
-+some-change 
++some-change
 diff --git a/src/main/java/MyNewClass.java b/src/main/java/MyNewClass.java
 new file mode 100644
-index 0000000..e7df300
+index 0000000..80772dc
 --- /dev/null
 +++ b/src/main/java/MyNewClass.java
 @@ -0,0 +1 @@
-+some-new-file 
++some-new-file
 `);
 
     }).timeout(10 * 1000);
