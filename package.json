@@ -4,7 +4,7 @@
   "description": "C3PR Container agent",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node %NODE_DEBUG_OPTION% src/index.js",
     "test": "mocha src/**/*.test.js"
   },
   "repository": {
