@@ -15,17 +15,17 @@ async function shell(shCommand, shOptions, myOptions = {}) {
         console.log((myOptions.prefix || "") + stdout);
     }
     if (error) {
-        console.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        console.error((myOptions.prefix || "") + "COMMAND: " + shCommand);
-        console.error((myOptions.prefix || "") + "OPTIONS: " + JSON.stringify(shOptions));
-        console.error((myOptions.prefix || "") + "There as an error: " + error);
-        console.error("------------------------------");
-        console.error("STDOUT:");
-        console.error(stdout);
-        console.error("------------------------------");
-        console.error("STDERR:");
-        console.error(stderr);
-        console.error("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        console.log("[ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        console.log((myOptions.prefix || "") + " COMMAND: " + shCommand);
+        console.log((myOptions.prefix || "") + " OPTIONS: " + JSON.stringify(shOptions));
+        console.log((myOptions.prefix || "") + " There as an error: " + error);
+        console.log("------------------------------");
+        console.log(" STDOUT:");
+        console.log(stdout);
+        console.log("------------------------------");
+        console.log(" STDERR:");
+        console.log(stderr);
+        console.log("[/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         throw new Error(error);
     }
     return stdout;

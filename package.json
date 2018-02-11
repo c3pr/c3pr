@@ -1,6 +1,6 @@
 {
   "name": "node-git-client",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Node.js layer above shell git command line",
   "main": "index.js",
   "scripts": {
