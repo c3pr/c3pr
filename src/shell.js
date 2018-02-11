@@ -23,17 +23,17 @@ async function shellOut(shCommand, shOptions, myOptions = {}) {
         console.log((myOptions.prefix || "") + stdout);
     }
     if (error) {
-        console.err(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        console.err((myOptions.prefix || "") + "COMMAND: " + shCommand);
-        console.err((myOptions.prefix || "") + "OPTIONS: " + JSON.stringify(shOptions));
-        console.err((myOptions.prefix || "") + "There as an error: " + error);
-        console.err("------------------------------");
-        console.err("STDOUT:");
-        console.err(stdout);
-        console.err("------------------------------");
-        console.err("STDERR:");
-        console.err(stderr);
-        console.err("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        console.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        console.error((myOptions.prefix || "") + "COMMAND: " + shCommand);
+        console.error((myOptions.prefix || "") + "OPTIONS: " + JSON.stringify(shOptions));
+        console.error((myOptions.prefix || "") + "There as an error: " + error);
+        console.error("------------------------------");
+        console.error("STDOUT:");
+        console.error(stdout);
+        console.error("------------------------------");
+        console.error("STDERR:");
+        console.error(stderr);
+        console.error("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         throw new Error(error);
     }
     return stdout;
