@@ -28,7 +28,7 @@ describe('invokeToolAtGitRepo', () => {
                 "pom.xml"
             ],
             "tool": {
-                "command": "echo \"this-would-be-a-change-executed-via-tool\" >> pom.xml",
+                "command": "echo this-would-be-a-change-executed-via-tool>> pom.xml",
                 "meta": {
                     "rule": "sonar:StringCheckOnLeft"
                 }
@@ -37,14 +37,14 @@ describe('invokeToolAtGitRepo', () => {
 
         expect(diff).to.be.equal(
 `diff --git a/pom.xml b/pom.xml
-index ad8bb19..7452c7a 100644
+index ad8bb19..7db8f5e 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -13,3 +13,4 @@
  	</properties>
  
  </project>
-+"this-would-be-a-change-executed-via-tool" 
++this-would-be-a-change-executed-via-tool
 `);
 
     }).timeout(10 * 1000);
