@@ -30,7 +30,7 @@ function invokeTools(toolAgents, changes) {
                 },
                 function (error, response, body) {
                     if (error || response.statusCode !== 200) {
-                        console.log(`[${changes.meta.correlationId}] >>>>>> Error while invoking agent.
+                        console.log(`[${changes.meta.correlationId}] [invokeTools] >>>>>> Error while invoking agent.
                 * URL: ${tool.agentURL}
                 * Status: ${response.statusCode}
                 * Error: ${error}
@@ -38,7 +38,7 @@ function invokeTools(toolAgents, changes) {
                 -----------------------\n${body}
                 -----------------------\n\n`);
                     } else {
-                        console.log(`[${changes.meta.correlationId}] >>> Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool.arguments)}`);
+                        console.log(`[${changes.meta.correlationId}] [invokeTools] >>> Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool)}`);
                     }
                 }
             );
