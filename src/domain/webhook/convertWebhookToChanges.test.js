@@ -1,12 +1,19 @@
 const expect = require('chai').expect;
+const sinon = require('sinon');
+
 const convertWebhookToChanges = require('./convertWebhookToChanges');
 const webhookRequestExample = require('./webhookRequestExample.json');
+const config = require('../../config');
+
+const now = new Date();
 
 const whatBotNeedsToInvokeTools = {
     meta: {
         correlationId: "13b7eedacc076e8a16ae565b535fd48edb9a044a",
-        compatibleSchemas: ["c3pr/c3pr::changes"]
+        compatibleSchemas: ["c3pr/c3pr::changes"],
+        dates: [{date: now.toISOString(), node: "c3pr-repo-github"}]
     },
+    c3pr: {prUrl: "http://prs/pr"},
     changeset: ['src/main/resources/second.txt', 'src/main/resources/third.txt'],
     repository: {
         type: "git",
@@ -17,6 +24,20 @@ const whatBotNeedsToInvokeTools = {
 };
 
 describe('convertWebhookToChanges', function () {
+
+    let sandbox, clock;
+
+    beforeEach(() => {
+        sandbox = sinon.sandbox.create();
+        clock = sinon.useFakeTimers(now.getTime());
+
+        config.c3pr.prUrl = "http://prs/pr";
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+        clock.restore();
+    });
 
     it('should consolidate changeset and get repo information', function () {
         const changes = convertWebhookToChanges(webhookRequestExample);
@@ -37,8 +58,10 @@ describe('convertWebhookToChanges', function () {
         expect(changes).to.deep.equal({
             meta: {
                 correlationId: "after-hash",
-                compatibleSchemas: ["c3pr/c3pr::changes"]
+                compatibleSchemas: ["c3pr/c3pr::changes"],
+                dates: [{date: now.toISOString(), node: "c3pr-repo-github"}]
             },
+            c3pr: {prUrl: "http://prs/pr"},
             changeset: ['m2', 'm3', 'm1'],
             repository: {
                 type: "git",
