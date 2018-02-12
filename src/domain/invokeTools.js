@@ -20,6 +20,7 @@ function invokeTools(toolAgents, changes) {
                         dates: changes.meta.dates.concat([{node: "c3pr", date: new Date().toISOString(), "schema": "toolInvocation"}])
                     },
                     c3pr: {
+                        prUrl: changes.c3pr.prUrl,
                         changesUrl: config.c3pr.changesUrl
                     },
                     repository: changes.repository,

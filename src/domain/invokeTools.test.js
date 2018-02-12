@@ -18,6 +18,7 @@ describe('invokeTools', () => {
             compatibleSchemas: ["c3pr/c3pr::changes"],
             dates: [{node: "c3pr-repo-github", date: "2018-02-12T14:05:08.893Z", schema: "changes"}]
         },
+        c3pr: {prUrl: "http://c3pr-github.herokuapp.com/pr"},
         changeset: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js', 'src/boo.txt'],
         repository: {
             type: "git",
@@ -73,7 +74,10 @@ describe('invokeTools', () => {
                     correlationId: "4444eedacc076e8a16ae565b535fd48edb9a044a",
                     dates: [{date: "2018-02-12T14:05:08.893Z", node: "c3pr-repo-github", schema: "changes"}, {date: now.toISOString(), node: "c3pr", schema: "toolInvocation"}]
                 },
-                c3pr: { changesUrl: "http://changes-server/changes" },
+                c3pr: {
+                    prUrl: "http://c3pr-github.herokuapp.com/pr",
+                    changesUrl: "http://changes-server/changes"
+                },
                 repository: changes.repository,
                 files: [changes.changeset[0], changes.changeset[1]],
                 tool: toolAgents.agents[0]
@@ -90,7 +94,10 @@ describe('invokeTools', () => {
                     correlationId: "4444eedacc076e8a16ae565b535fd48edb9a044a",
                     dates: [{date: "2018-02-12T14:05:08.893Z", node: "c3pr-repo-github", schema: "changes"}, {date: now.toISOString(), node: "c3pr", schema: "toolInvocation"}]
                 },
-                c3pr: { changesUrl: "http://changes-server/changes" },
+                c3pr: {
+                    prUrl: "http://c3pr-github.herokuapp.com/pr",
+                    changesUrl: "http://changes-server/changes"
+                },
                 repository: changes.repository,
                 files: [changes.changeset[1]],
                 tool: toolAgents.agents[1]
