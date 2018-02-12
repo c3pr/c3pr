@@ -16,6 +16,10 @@ describe('invokeToolAtGitRepo', () => {
                 "correlationId": "30b03c1d8aa6ee670534b80edd0dc39c12644259",
                 "compatibleSchemas": ["c3pr/c3pr-agent::toolInvocation"]
             },
+            "c3pr": {
+                "prUrl": "http://c3pr-github.herokuapp.com/pr",
+                "patchesUrl": "http://c3pr.herokuapp.com/patches"
+            },
             "repository": {
                 "type": "git",
                 "url": "https://github.com/c3pr/sample-project-java-maven.git",

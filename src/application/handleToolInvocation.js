@@ -11,7 +11,7 @@ async function handleToolInvocation(toolInvocation) {
 
         const patchesPayload = createPatchesPayload(toolInvocation, base64GitDiff);
 
-        return sendPatchToBot(patchesPayload);
+        return sendPatchToBot(toolInvocation.c3pr.patchesUrl, patchesPayload);
     } catch (e) {
         console.log(`[${toolInvocation.meta.correlationId}] [handleToolInvocation] Error while invoking tool. \n${e}\n`)
     }
