@@ -15,7 +15,8 @@ function invokeTools(toolAgents, changes) {
                 body: {
                     meta: {
                         correlationId: changes.meta.correlationId,
-                        compatibleSchemas: ["c3pr/c3pr-agent::toolInvocation"]
+                        compatibleSchemas: ["c3pr/c3pr-agent::toolInvocation"],
+                        dates: changes.meta.dates.concat([{node: "c3pr", date: new Date().toISOString(), "schema": "toolInvocation"}])
                     },
                     repository: changes.repository,
                     files: filterFilesWithExtensions(changes.changeset, tool.extensions),

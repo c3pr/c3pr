@@ -1,10 +1,12 @@
 {
   "meta": {
     "correlationId": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
-    "compatibleSchemas": [
-      "c3pr/c3pr::patches"
-    ],
-    "date": "2018-02-09T14:35:42.828Z"
+    "compatibleSchemas": ["c3pr/c3pr::patches"],
+    "dates": [
+      {"node": "c3pr-repo-github", "date": "2018-02-12T14:05:08.893Z", "schema": "changes"},
+      {"node": "c3pr", "date": "2018-02-12T14:05:09.122Z", "schema": "toolInvocation"},
+      {"node": "c3pr-agent", "date": "2018-02-12T14:05:15.431Z", "schema": "patches"}
+    ]
   },
   "repository": {
     "type": "git",
