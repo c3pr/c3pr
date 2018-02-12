@@ -15,5 +15,5 @@ app.get('*', function(req, res){
     res.status(404).send('No C3PR endpoint is listening at the requested location.');
 });
 
-console.log(`App listening at port ${config.c3pr.port}`);
 app.listen(config.c3pr.port);
+console.log(`c3pr now listening at port ${config.c3pr.port}.`);
