@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const config = require('../config');
 
-const PORT = process.env.PORT || 5001;
 const app = express();
 
 app.use(express.static('resources/public'));
@@ -15,4 +15,5 @@ app.get('*', function(req, res){
     res.status(404).send('No C3PR endpoint is listening at the requested location.');
 });
 
-app.listen(PORT);
+console.log(`App listening at port ${config.c3pr.port}`);
+app.listen(config.c3pr.port);

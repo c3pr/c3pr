@@ -20,3 +20,8 @@ Currently deployed at https://c3pr.herokuapp.com/
     /changes
     
 A repo adapter should POST to this URL when notifying from changes.
+
+# Notes
+
+The deployment environment must have the environment variable `C3PR_C3PR_URL` set.
+E.g. `export C3PR_C3PR_URL=http://localhost:5001`
