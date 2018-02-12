@@ -20,10 +20,7 @@ function invokeTools(toolAgents, changes) {
                     },
                     repository: changes.repository,
                     files: filterFilesWithExtensions(changes.changeset, tool.extensions),
-                    tool: {
-                        command: tool.command,
-                        toolMeta: tool.toolMeta
-                    }
+                    tool: tool
                 }
             },
             function (error, response, body) {
