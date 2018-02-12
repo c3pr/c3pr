@@ -43,7 +43,7 @@ describe('invokeTools', () => {
         sandbox = sinon.sandbox.create();
         clock = sinon.useFakeTimers(now.getTime());
 
-        config.c3pr.changesUrl = 'http://changes-server/changes';
+        config.c3pr.patchesUrl = 'http://changes-server/patches';
 
         responseBody = {
             that: 'is it!'
