@@ -76,7 +76,7 @@ describe('invokeTools', () => {
                 },
                 c3pr: {
                     prUrl: "http://c3pr-github.herokuapp.com/pr",
-                    changesUrl: "http://changes-server/changes"
+                    patchesUrl: "http://changes-server/patches"
                 },
                 repository: changes.repository,
                 files: [changes.changeset[0], changes.changeset[1]],
@@ -96,7 +96,7 @@ describe('invokeTools', () => {
                 },
                 c3pr: {
                     prUrl: "http://c3pr-github.herokuapp.com/pr",
-                    changesUrl: "http://changes-server/changes"
+                    patchesUrl: "http://changes-server/patches"
                 },
                 repository: changes.repository,
                 files: [changes.changeset[1]],

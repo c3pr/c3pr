@@ -21,7 +21,7 @@ function invokeTools(toolAgents, changes) {
                     },
                     c3pr: {
                         prUrl: changes.c3pr.prUrl,
-                        changesUrl: config.c3pr.changesUrl
+                        patchesUrl: config.c3pr.patchesUrl
                     },
                     repository: changes.repository,
                     files: filterFilesWithExtensions(changes.changeset, tool.extensions),
