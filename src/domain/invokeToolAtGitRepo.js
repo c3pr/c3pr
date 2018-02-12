@@ -1,5 +1,5 @@
 const cloneRepositoryLocally = require("node-git-client").cloneRepositoryLocally;
-const determineGitDiff = require("node-git-client").determineGitDiff;
+const determineGitDiffBase64 = require("node-git-client").determineGitDiffBase64;
 const shell = require("node-git-client").shell;
 const uuidv4 = require('uuid/v4');
 
@@ -28,7 +28,7 @@ async function invokeToolAtGitRepo(toolInvocation) {
 
     await shell(toolInvocation.tool.command, {cwd: cloneFolder}, {stdout: true, prefix});
 
-    return await determineGitDiff(toolInvocation.meta.correlationId, localUniqueCorrelationId, cloneFolder);
+    return await determineGitDiffBase64(toolInvocation.meta.correlationId, localUniqueCorrelationId, cloneFolder);
 
 }
 

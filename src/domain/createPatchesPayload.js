@@ -1,6 +1,6 @@
 
-function createPatchesPayload(toolInvocation, base64Diff) {
-    console.log(`[createPatchesPayload] called with ${toolInvocation} --- ${base64Diff}`);
+function createPatchesPayload(toolInvocation, base64GitDiff) {
+    console.log(`[createPatchesPayload] called with ${JSON.stringify(toolInvocation)} --- ${base64GitDiff}`);
 
     return 'createPatchesPayload';
 }
