@@ -11,7 +11,8 @@ function convertWebhookToChanges(webhookPayload) {
     return {
         meta: {
             correlationId: gitSHA,
-            compatibleSchemas: ["c3pr/c3pr::changes"]
+            compatibleSchemas: ["c3pr/c3pr::changes"],
+            dates: [{node: 'c3pr-repo-github', date: new Date().toISOString()}]
         },
         changeset: Array.from(changeset.values()),
         repository: {
