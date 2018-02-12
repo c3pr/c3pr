@@ -1,8 +1,22 @@
 
 function createPatchesPayload(toolInvocation, base64GitDiff) {
+
     console.log(`[createPatchesPayload] called with ${JSON.stringify(toolInvocation)} --- ${base64GitDiff}`);
 
-    return 'createPatchesPayload';
+    return {
+        meta: {
+            correlationId: toolInvocation.correlationId,
+            compatibleSchemas: ["c3pr/c3pr::patches"],
+            dates: toolInvocation.meta.dates.concat([{node: "c3pr-agent", date: new Date().toISOString(), "schema": "patches"}])
+        },
+        repository: toolInvocation.repository,
+        tool: toolInvocation.tool,
+        patch: {
+            title: toolInvocation.tool.prTitle,
+            body: toolInvocation.tool.prBody,
+            base64Diff: base64GitDiff
+        }
+    };
 }
 
 module.exports = createPatchesPayload;
