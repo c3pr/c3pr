@@ -8,6 +8,7 @@
     ]
   },
   "c3pr": {
+    "prUrl": "http://c3pr-github.herokuapp.com/pr",
     "changesUrl": "http://c3pr.herokuapp.com/changes"
   },
   "repository": {
