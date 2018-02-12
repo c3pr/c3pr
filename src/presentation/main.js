@@ -9,6 +9,7 @@ app.use(express.static('resources/public'));
 app.use(bodyParser.json());
 
 require('./changesController')(app);
+require('./patchesController')(app);
 
 // The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
