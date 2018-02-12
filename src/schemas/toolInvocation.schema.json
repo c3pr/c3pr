@@ -1,7 +1,11 @@
 {
   "meta": {
     "correlationId": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
-    "compatibleSchemas": ["c3pr/c3pr-agent::toolInvocation"]
+    "compatibleSchemas": ["c3pr/c3pr-agent::toolInvocation"],
+    "dates": [
+      {"node": "c3pr-repo-github", "date": "2018-02-12T14:05:08.893Z", "schema": "changes"},
+      {"node": "c3pr", "date": "2018-02-12T14:05:09.122Z", "schema": "toolInvocation"}
+    ]
   },
   "repository": {
     "type": "git",
