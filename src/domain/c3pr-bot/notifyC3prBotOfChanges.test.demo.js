@@ -7,6 +7,9 @@ const changes = {
         correlationId: "13b7eedacc076e8a16ae565b535fd48edb9a044a",
         compatibleSchemas: ["c3pr/c3pr::changes"]
     },
+    c3pr: {
+        prUrl: "http://localhost:5002/pr"
+    },
     changeset: ['src/main/resources/second.java', 'src/main/resources/third.txt'],
     repository: {
         type: "git",
@@ -15,5 +18,5 @@ const changes = {
         revision: "13b7eedacc076e8a16ae565b535fd48edb9a044a"
     }
 };
-config.c3pr.botChangesUrl = 'http://localhost:5001/changes';
+config.c3pr.changesUrl = 'http://localhost:5001/changes';
 notifyC3prBotOfChanges(changes);

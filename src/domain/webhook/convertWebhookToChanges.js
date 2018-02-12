@@ -1,3 +1,4 @@
+const config = require('../../config');
 
 function convertWebhookToChanges(webhookPayload) {
     const changeset = new Set();
@@ -13,6 +14,9 @@ function convertWebhookToChanges(webhookPayload) {
             correlationId: gitSHA,
             compatibleSchemas: ["c3pr/c3pr::changes"],
             dates: [{node: 'c3pr-repo-github', date: new Date().toISOString()}]
+        },
+        c3pr: {
+            prUrl: config.c3pr.prUrl
         },
         changeset: Array.from(changeset.values()),
         repository: {

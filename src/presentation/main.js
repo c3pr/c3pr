@@ -1,7 +1,7 @@
 const express = require('express');
 const webhookListenerController = require('./webhookListenerController');
+const config = require('../config');
 
-const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(webhookListenerController);
@@ -13,4 +13,5 @@ app.get('*', function(req, res){
     res.send('No C3PR endpoint is listening at the requested location.', 404);
 });
 
-app.listen(PORT);
+console.log(`App listening at port ${config.c3pr.port}`);
+app.listen(config.c3pr.port);

@@ -18,3 +18,8 @@ The GitHub app is created at https://github.com/apps/c3pr
 Currently deployed at https://c3pr-github.herokuapp.com/webhook
 
 Logs available at (requires login) https://dashboard.heroku.com/apps/c3pr-github/logs
+
+# Notes
+
+The deployment environment must have the environment variable `C3PR_REPO_GITHUB_URL` set.
+E.g. `export C3PR_REPO_GITHUB_URL=http://localhost:5002`

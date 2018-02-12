@@ -12,11 +12,11 @@ function notifyC3prBotOfChanges(changes) {
     }
     console.log(`[${changes.meta.correlationId}] >>> Notifying bot ${changes.changeset.length} of changes to ${changes.repository.url}...`);
     request.post(
-        {url: config.c3pr.botChangesUrl, json: true, body: changes},
+        {url: config.c3pr.changesUrl, json: true, body: changes},
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
                 console.log(`[${changes.meta.correlationId}] >>>>>> Error while notifying bot.
-                * URL: ${config.c3pr.botChangesUrl}
+                * URL: ${config.c3pr.changesUrl}
                 * Status: ${response.statusCode}
                 * Error: ${error}
                 * Body:
