@@ -1,3 +1,4 @@
+const os = require("os");
 const C3PR_BOT_BASE_URL = 'https://c3pr.herokuapp.com';
 const PORT = process.env.PORT || 5002;
 
