@@ -5,7 +5,7 @@ function createPatchesPayload(toolInvocation, base64GitDiff) {
 
     return {
         meta: {
-            correlationId: toolInvocation.correlationId,
+            correlationId: toolInvocation.meta.correlationId,
             compatibleSchemas: ["c3pr/c3pr::patches"],
             dates: toolInvocation.meta.dates.concat([{node: "c3pr-agent", date: new Date().toISOString(), "schema": "patches"}])
         },
