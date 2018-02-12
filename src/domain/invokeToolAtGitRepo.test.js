@@ -1,8 +1,6 @@
 const invokeToolAtGitRepo = require('./invokeToolAtGitRepo');
 
 const expect = require('chai').expect;
-const fs = require('fs');
-const path = require('path');
 
 const config = require('../config');
 
@@ -36,6 +34,8 @@ describe('invokeToolAtGitRepo', () => {
         });
 
         expect(diff).to.be.equal(
+// this convertion to base64 only works here because there are no accents (so no ISOvsUTF encoding trouble)
+Buffer.from(
 `diff --git a/pom.xml b/pom.xml
 index ad8bb19..7db8f5e 100644
 --- a/pom.xml
@@ -45,7 +45,7 @@ index ad8bb19..7db8f5e 100644
  
  </project>
 +this-would-be-a-change-executed-via-tool
-`);
+`,).toString('base64'));
 
     }).timeout(10 * 1000);
 
