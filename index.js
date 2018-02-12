@@ -1,5 +1,5 @@
 module.exports = {
     cloneRepositoryLocally: require('./src/cloneRepositoryLocally'),
-    determineGitDiff: require('./src/determineGitDiff'),
+    determineGitDiffBase64: require('./src/determineGitDiffBase64'),
     shell: require('./src/shell')
 };
