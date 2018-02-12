@@ -19,7 +19,7 @@
     "extensions": [
       "java"
     ],
-    "agentURL": "http://localhost:5002/c3pr",
+    "agentURL": "http://localhost:5003/c3pr",
     "command": "walkmod apply sonar:StringCheckOnLeft",
     "toolMeta": {
       "rule": "sonar:StringCheckOnLeft"

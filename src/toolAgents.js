@@ -3,7 +3,7 @@ const toolAgents = {
         {
             toolId: "test-tool",
             extensions: ["java", "xml", "txt", "json"],
-            agentURL: "http://localhost:5002/c3pr",
+            agentURL: "http://localhost:5003/c3pr",
             command: "echo example-test-tool>test-file.txt",
             toolMeta: {}, // unused
             prTitle: "My Test Tool PR Title",
