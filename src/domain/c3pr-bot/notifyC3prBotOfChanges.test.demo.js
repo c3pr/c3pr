@@ -5,7 +5,8 @@ const notifyC3prBotOfChanges = require('./notifyC3prBotOfChanges');
 const changes = {
     meta: {
         correlationId: "13b7eedacc076e8a16ae565b535fd48edb9a044a",
-        compatibleSchemas: ["c3pr/c3pr::changes"]
+        compatibleSchemas: ["c3pr/c3pr::changes"],
+        dates: [{date: new Date().toISOString(), node: "c3pr-repo-github"}]
     },
     c3pr: {
         prUrl: "http://localhost:5002/pr"
