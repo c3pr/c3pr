@@ -1,6 +1,7 @@
 const request = require('request');
 const filterFilesWithExtensions = require('./filterFilesWithExtensions');
 const filterApplicableToolAgents = require('./filterApplicableToolAgents');
+const config = require('../config');
 
 function invokeTools(toolAgents, changes) {
 
@@ -17,6 +18,9 @@ function invokeTools(toolAgents, changes) {
                         correlationId: changes.meta.correlationId,
                         compatibleSchemas: ["c3pr/c3pr-agent::toolInvocation"],
                         dates: changes.meta.dates.concat([{node: "c3pr", date: new Date().toISOString(), "schema": "toolInvocation"}])
+                    },
+                    c3pr: {
+                        changesUrl: config.c3pr.changesUrl
                     },
                     repository: changes.repository,
                     files: filterFilesWithExtensions(changes.changeset, tool.extensions),
