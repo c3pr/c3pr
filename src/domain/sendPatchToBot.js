@@ -16,7 +16,8 @@ function sendPatchToBot(patchesUrl, patchesPayload) {
                 * Status: ${response.statusCode}
                 * Error: ${error}
                 * Body:
-                -----------------------\n${body}
+                -----------------------\n
+                ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`);
             } else {
                 console.log(`[${patchesPayload.meta.correlationId}] [sendPatchToBot] >>> Sent patch to bot at ${patchesUrl}.`);
