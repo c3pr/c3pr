@@ -13,7 +13,7 @@ function sendPatchToBot(patchesUrl, patchesPayload) {
             if (error || response.statusCode !== 200) {
                 console.log(`[${patchesPayload.meta.correlationId}] [sendPatchToBot] >>>>>> Error while sending patch to bot.
                 * URL: ${patchesUrl}
-                * Status: ${response.statusCode}
+                * Status: ${(response || {}).statusCode}
                 * Error: ${error}
                 * Body:
                 -----------------------\n
