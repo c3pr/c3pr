@@ -10,7 +10,7 @@ function handlePrs(prs) {
         prCommitMessage: prs.patch.title,
         prTitle: prs.patch.title,
         prBody: prs.patch.body,
-        patchContent: prs.patch.base64diff
+        patchContent: prs.patch.diffBase64
     });
 }
 
