@@ -1,4 +1,5 @@
-const githubClient = require('octonode').client(process.env.GITHUB_API_TOKEN);
+const config = require('../../config');
+const githubClient = require('octonode').client(config.c3pr.gitHubApiToken);
 
 function createForkIfNotExists(repoName) {
     const ghme = githubClient.me();

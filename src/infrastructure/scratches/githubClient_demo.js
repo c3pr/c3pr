@@ -1,7 +1,7 @@
 var github = require('octonode');
 
-
-var client = github.client(process.env.GITHUB_API_TOKEN);
+const config = require('../../config');
+var client = github.client(config.c3pr.gitHubApiToken);
 
 // client.get('/user', {}, function (err, status, body, headers) {
 //     console.log(body); //json object

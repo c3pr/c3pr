@@ -1,7 +1,7 @@
 const assert = require('assert');
 const createPR = require('./createPR');
-
-const githubClient = require('octonode').client(process.env.GITHUB_API_TOKEN);
+const config = require('../../config');
+const githubClient = require('octonode').client(config.c3pr.gitHubApiToken);
 const ghrepo = githubClient.repo('c3pr/sample-project-java-maven');
 ghrepo.prs(async (err, prsBefore) => {
 
