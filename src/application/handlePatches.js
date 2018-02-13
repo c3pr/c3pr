@@ -6,7 +6,7 @@ function handlePatches(patches) {
 
     const prs = createPrsFromPatches(patches);
 
-    sendPrToRepo(patches.c3pr.prUrl, prs);
+    sendPrToRepo(patches.c3pr.prsUrl, prs);
 }
 
 module.exports = handlePatches;

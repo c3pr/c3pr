@@ -9,7 +9,7 @@
     ]
   },
   "c3pr": {
-    "prUrl": "http://c3pr-github.herokuapp.com/pr"
+    "prsUrl": "http://c3pr-github.herokuapp.com/prs"
   },
   "repository": {
     "type": "git",

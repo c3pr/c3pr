@@ -18,7 +18,7 @@ describe('invokeTools', () => {
             compatibleSchemas: ["c3pr/c3pr::changes"],
             dates: [{node: "c3pr-repo-github", date: "2018-02-12T14:05:08.893Z", schema: "changes"}]
         },
-        c3pr: {prUrl: "http://c3pr-github.herokuapp.com/pr"},
+        c3pr: {prsUrl: "http://c3pr-github.herokuapp.com/prs"},
         changeset: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js', 'src/boo.txt'],
         repository: {
             type: "git",
@@ -75,7 +75,7 @@ describe('invokeTools', () => {
                     dates: [{date: "2018-02-12T14:05:08.893Z", node: "c3pr-repo-github", schema: "changes"}, {date: now.toISOString(), node: "c3pr", schema: "toolInvocation"}]
                 },
                 c3pr: {
-                    prUrl: "http://c3pr-github.herokuapp.com/pr",
+                    prsUrl: "http://c3pr-github.herokuapp.com/prs",
                     patchesUrl: "http://changes-server/patches"
                 },
                 repository: changes.repository,
@@ -95,7 +95,7 @@ describe('invokeTools', () => {
                     dates: [{date: "2018-02-12T14:05:08.893Z", node: "c3pr-repo-github", schema: "changes"}, {date: now.toISOString(), node: "c3pr", schema: "toolInvocation"}]
                 },
                 c3pr: {
-                    prUrl: "http://c3pr-github.herokuapp.com/pr",
+                    prsUrl: "http://c3pr-github.herokuapp.com/prs",
                     patchesUrl: "http://changes-server/patches"
                 },
                 repository: changes.repository,

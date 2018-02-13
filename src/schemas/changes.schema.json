@@ -5,7 +5,7 @@
     "dates": [{"node": "c3pr-repo-github", "date": "2018-02-12T14:05:08.893Z", "schema": "changes"}]
   },
   "c3pr": {
-    "prUrl": "http://c3pr-github.herokuapp.com/pr"
+    "prsUrl": "http://c3pr-github.herokuapp.com/prs"
   },
   "changeset": ["src/main/resources/second.java", "src/main/resources/third.txt"],
   "repository": {
