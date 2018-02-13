@@ -3,7 +3,7 @@ function createPrsFromPatches(patches) {
     return {
         meta: {
             correlationId: patches.meta.correlationId,
-            compatibleSchemas: ["c3pr/c3pr::patches"],
+            compatibleSchemas: ["c3pr/c3pr::prs"],
             dates: patches.meta.dates.concat([{creatorNode: "c3pr", date: new Date().toISOString(), schema: "prs"}])
         },
         repository: patches.repository,
