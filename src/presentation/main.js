@@ -17,3 +17,4 @@ app.get('*', function(req, res){
 
 app.listen(config.c3pr.port);
 console.log(`c3pr-repo-github now listening at port ${config.c3pr.port}.`);
+config.c3pr.print();
