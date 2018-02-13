@@ -6,16 +6,18 @@ function notifyC3prBotOfChanges(changes) {
         !changes.meta.correlationId ||
         !changes.meta.compatibleSchemas ||
         !changes.meta.compatibleSchemas.includes("c3pr/c3pr::changes")) {
-        const errorMessage = `SKIPPING: Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(changes)}.`;
+        const errorMessage = `[notifyC3prBotOfChanges] SKIPPING: Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(changes)}.`;
         console.error(errorMessage);
         return;
     }
-    console.log(`[${changes.meta.correlationId}] >>> Notifying bot ${changes.changeset.length} of changes to ${changes.repository.url}...`);
+
+    const prefix = `[${changes.meta.correlationId}] [notifyC3prBotOfChanges]`;
+    console.log(`${prefix} Notifying bot ${changes.changeset.length} of changes to ${changes.repository.url}...`);
     request.post(
         {url: config.c3pr.changesUrl, json: true, body: changes},
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
-                console.log(`[${changes.meta.correlationId}] >>>>>> Error while notifying bot.
+                console.log(`${prefix} Error while notifying bot.
                 * URL: ${config.c3pr.changesUrl}
                 * Status: ${response.statusCode}
                 * Error: ${error}
@@ -24,7 +26,7 @@ function notifyC3prBotOfChanges(changes) {
                 ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`);
             } else {
-                console.log(`[${changes.meta.correlationId}] >>> Notified bot ${changes.changeset.length} of changes to ${changes.repository.url}: ${JSON.stringify(body)}`);
+                console.log(`${prefix} Notified bot ${changes.changeset.length} of changes to ${changes.repository.url}: ${JSON.stringify(body)}`);
             }
         }
     );
