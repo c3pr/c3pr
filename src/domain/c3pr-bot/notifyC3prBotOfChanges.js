@@ -12,7 +12,7 @@ function notifyC3prBotOfChanges(changes) {
     }
 
     const prefix = `[${changes.meta.correlationId}] [notifyC3prBotOfChanges]`;
-    console.log(`${prefix} Notifying bot ${changes.changeset.length} of changes to ${changes.repository.url}...`);
+    console.log(`${prefix} Notifying ${config.c3pr.changesUrl} of changes to ${changes.repository.url}...`);
     request.post(
         {url: config.c3pr.changesUrl, json: true, body: changes},
         function (error, response, body) {
@@ -26,7 +26,7 @@ function notifyC3prBotOfChanges(changes) {
                 ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`);
             } else {
-                console.log(`${prefix} Notified bot ${changes.changeset.length} of changes to ${changes.repository.url}: ${JSON.stringify(body)}`);
+                console.log(`${prefix} Notified ${config.c3pr.changesUrl} of changes to ${changes.repository.url}: ${JSON.stringify(body)}`);
             }
         }
     );
