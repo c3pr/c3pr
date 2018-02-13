@@ -17,7 +17,8 @@ function sendPrToRepo(prsUrl, pr) {
                 * Status: ${response.statusCode}
                 * Error: ${error}
                 * Body:
-                -----------------------\n${body}
+                -----------------------\n
+                ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`);
             } else {
                 console.log(`${prefix} Sent pr to repo at ${prsUrl}.`);
