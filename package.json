@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/c3pr/c3pr-repo-github",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "github-webhook-handler": "^0.7.1",
     "node-git-client": "github:c3pr/node-git-client#0.3.0",

@@ -1,4 +1,6 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+
 const webhookListenerController = require('./webhookListenerController');
 const config = require('../config');
 
@@ -7,6 +9,8 @@ const app = express();
 app.use(webhookListenerController);
 
 app.use(express.static('resources/public'));
+
+app.use(bodyParser.json());
 
 require('./prsController')(app);
 
