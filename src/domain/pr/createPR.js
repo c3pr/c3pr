@@ -11,6 +11,7 @@ const STAGE_REPOS_FOLDER = process.env.STAGE_REPOS_FOLDER || '/tmp/';
 
 
 async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, prCommitMessage, prTitle, prBody, patchContent}) {
+    const prefix = `[${mainRepoHash}] [createPR]`;
     const mainRepoCloneUrl = 'https://github.com/' + mainRepoOrgRepo + '.git';
 
     const stagingFolderName = `${mainRepoHash}_${uuidv4()}`;
@@ -22,14 +23,14 @@ async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, prCommit
     const forkRepoCloneUrl = data.clone_url;
     const forkRepoBranch = stagingFolderName;
 
-    await shell(`git init ${stagingFolder}`);
+    await shell(`git init ${stagingFolder}`, {prefix});
 
     // create brand new orphan branch
-    await shell(`git checkout --orphan ${forkRepoBranch}`, {cwd: stagingFolder});
+    await shell(`git checkout --orphan ${forkRepoBranch}`, {cwd: stagingFolder}, {prefix});
     // add main repo, fetch it and merge into recently created branch
-    await shell(`git remote add main ${mainRepoCloneUrl}`, {cwd: stagingFolder});
-    await shell(`git fetch main ${mainRepoBranch}`, {cwd: stagingFolder});
-    await shell(`git merge main/${mainRepoBranch}`, {cwd: stagingFolder});
+    await shell(`git remote add main ${mainRepoCloneUrl}`, {cwd: stagingFolder}, {prefix});
+    await shell(`git fetch main ${mainRepoBranch}`, {cwd: stagingFolder}, {prefix});
+    await shell(`git merge main/${mainRepoBranch}`, {cwd: stagingFolder}, {prefix});
 
     // APPLY CHANGES
     const patchFileName = `c3pr-${uuidv4()}.patch`;
@@ -40,17 +41,17 @@ async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, prCommit
     // const patchContent = Buffer.from(fs.readFileSync('myPatch.patch', 'hex'), 'hex').toString('base64');
     fs.writeFileSync(patchFilePath, Buffer.from(patchContent, 'base64').toString('hex'), 'hex');
 
-    await shell(`git apply ${patchFileName}`, {cwd: stagingFolder});
+    await shell(`git apply ${patchFileName}`, {cwd: stagingFolder}, {prefix});
     fs.unlinkSync(patchFilePath);
 
     // ADD and COMMIT CHANGES
-    await shell(`git add -A`, {cwd: stagingFolder});
-    await shell(`git commit -m "${prCommitMessage.replace(/"/g, '\\"')}"`, {cwd: stagingFolder});
+    await shell(`git add -A`, {cwd: stagingFolder}, {prefix});
+    await shell(`git commit -m "${prCommitMessage.replace(/"/g, '\\"')}"`, {cwd: stagingFolder}, {prefix});
 
     // add fork repo
-    await shell(`git remote add fork ${forkRepoCloneUrl}`, {cwd: stagingFolder});
+    await shell(`git remote add fork ${forkRepoCloneUrl}`, {cwd: stagingFolder}, {prefix});
     // push changes
-    await shell(`git push -u fork ${forkRepoBranch}`, {cwd: stagingFolder});
+    await shell(`git push -u fork ${forkRepoBranch}`, {cwd: stagingFolder}, {prefix});
 
     // CREATE PULL REQUEST VIA API
     await createPullRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoBranch, prTitle, prBody);
