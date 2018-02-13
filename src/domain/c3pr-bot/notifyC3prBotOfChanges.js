@@ -20,10 +20,11 @@ function notifyC3prBotOfChanges(changes) {
                 * Status: ${response.statusCode}
                 * Error: ${error}
                 * Body:
-                -----------------------\n${body}
+                -----------------------\n
+                ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`);
             } else {
-                console.log(`[${changes.meta.correlationId}] >>> Notified bot ${changes.changeset.length} of changes to ${changes.repository.url}: ${body}`);
+                console.log(`[${changes.meta.correlationId}] >>> Notified bot ${changes.changeset.length} of changes to ${changes.repository.url}: ${JSON.stringify(body)}`);
             }
         }
     );
