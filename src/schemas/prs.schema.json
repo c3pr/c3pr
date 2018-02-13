@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "correlationId": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
+    "compatibleSchemas": ["c3pr/c3pr::patches"],
+    "dates": [
+      {"creatorNode": "c3pr-repo-github", "date": "2018-02-12T14:05:08.893Z", "schema": "changes"},
+      {"creatorNode": "c3pr", "date": "2018-02-12T14:05:09.122Z", "schema": "toolInvocation"},
+      {"creatorNode": "c3pr-agent", "date": "2018-02-12T14:05:15.431Z", "schema": "patches"},
+      {"creatorNode": "c3pr", "date": "2018-02-12T14:05:30.397Z", "schema": "prs"}
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c3pr/sample-project-java-maven.git",
+    "branch": "MY BRANCH",
+    "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
+  },
+  "patch": {
+    "title": "My PR",
+    "body": "This is the `markdown` body.",
+    "base64Diff": "ZGlmZiAtLWdpdCBhL1JFQURNRS5tZCBiL1JFQURNRS5tZAppbmRleCA0MzU3NTc0Li4xZTAzYjQ5IDEwMDY0NAotLS0gYS9SRUFETUUubWQKKysrIGIvUkVBRE1FLm1kCkBAIC0xLDMgKzEsMyBAQAogIyBTYW1wbGUgSmF2YStNYXZlbiBQcm9qZWN0CiAKLUV4YW1wbGUgSmF2YStNYXZlbiBwcm9qZWN0IHdpdGggaXNzdWVzIHRoYXQgY291bGQgYmUgZml4ZWQgYnkgc3RhdGljIGFuYWx5c2lzIHRvb2xzLgorRXhhbXBsZSBKYXjp7W91K01hdmVuIHByb2plY3Qgd2l0aCBpc3N1ZXMgdGhhdCBjb3VsZCBiZSBmaXhlZCBieSBzdGF0aWMgYW5hbHlzaXMgdG9vbHMuCmRpZmYgLS1naXQgYS9zcmMvbWFpbi9qYXZhL2lvL2dpdGh1Yi9jM3ByL3NhbXBsZS9qYXZhbWF2ZW4vTWFpbi5qYXZhIGIvc3JjL21haW4vamF2YS9pby9naXRodWIvYzNwci9zYW1wbGUvamF2YW1hdmVuL01haW4uamF2YQppbmRleCAzODg4MzUyLi5kNzhjMmVlIDEwMDY0NAotLS0gYS9zcmMvbWFpbi9qYXZhL2lvL2dpdGh1Yi9jM3ByL3NhbXBsZS9qYXZhbWF2ZW4vTWFpbi5qYXZhCisrKyBiL3NyYy9tYWluL2phdmEvaW8vZ2l0aHViL2MzcHIvc2FtcGxlL2phdmFtYXZlbi9NYWluLmphdmEKQEAgLTYsNyArNiw3IEBAIHB1YmxpYyBjbGFzcyBNYWluIHsKICAgICAgICAgU3RyaW5nIHNvbWVTdHJpbmcgPSBhcmdzWzBdOwogICAgICAgICBpZiAoc29tZVN0cmluZy5lcXVhbHMoImEgc3RyaW5nIGF0IHRoZSByaWdodC1oYW5kIHNpZGUiKSkgewogICAgICAgICAgICAgU3lzdGVtLm91dC5wcmludGxuKCJFcXVhbHMuLi4iKTsKLSAgICAgICAgfSBlbHNlIFN5c3RlbS5vdXQucHJpbnRsbigiRWxzZSB3aXRob3V0IGJyYWNlcyIpOworICAgICAgICB9IGVsc2UgU3lzdGVtLm91dC5wcmludGxuKCJFbHNlIHdpdGhvdXQgYnLDocOpw61hY2VzIik7CiAgICAgfQogCiB9Cg=="
+  }
+}
