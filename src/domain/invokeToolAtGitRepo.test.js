@@ -17,7 +17,7 @@ describe('invokeToolAtGitRepo', () => {
                 "compatibleSchemas": ["c3pr/c3pr-agent::toolInvocation"]
             },
             "c3pr": {
-                "prUrl": "http://c3pr-github.herokuapp.com/pr",
+                "prsUrl": "http://c3pr-github.herokuapp.com/prs",
                 "patchesUrl": "http://c3pr.herokuapp.com/patches"
             },
             "repository": {

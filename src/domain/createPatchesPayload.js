@@ -9,7 +9,7 @@ function createPatchesPayload(toolInvocation, base64GitDiff) {
             compatibleSchemas: ["c3pr/c3pr::patches"],
             dates: toolInvocation.meta.dates.concat([{node: "c3pr-agent", date: new Date().toISOString(), "schema": "patches"}])
         },
-        c3pr: {prUrl: toolInvocation.c3pr.prUrl},
+        c3pr: {prsUrl: toolInvocation.c3pr.prsUrl},
         repository: toolInvocation.repository,
         tool: toolInvocation.tool,
         patch: {
