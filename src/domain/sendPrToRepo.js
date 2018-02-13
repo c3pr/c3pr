@@ -14,7 +14,7 @@ function sendPrToRepo(prsUrl, pr) {
             if (error || response.statusCode !== 200) {
                 console.log(`${prefix} Error while sending pr to repo.
                 * URL: ${prsUrl}
-                * Status: ${response.statusCode}
+                * Status: ${(response || {}).statusCode}
                 * Error: ${error}
                 * Body:
                 -----------------------\n

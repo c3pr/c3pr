@@ -32,7 +32,7 @@ function invokeTools(toolAgents, changes) {
                 if (error || response.statusCode !== 200) {
                     console.log(`[${changes.meta.correlationId}] [invokeTools] >>>>>> Error while invoking agent.
                 * URL: ${tool.agentURL}
-                * Status: ${response.statusCode}
+                * Status: ${(response || {}).statusCode}
                 * Error: ${error}
                 * Body:
                 -----------------------\n
