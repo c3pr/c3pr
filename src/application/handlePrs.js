@@ -1,9 +1,9 @@
 const createPR = require('../domain/pr/createPR');
 
-function handlePrs(prs) {
+async function handlePrs(prs) {
     console.log(`[${prs.meta.correlationId}] [handlePrs] Handling pr request ${JSON.stringify(prs)}...`);
 
-    createPR({
+    await createPR({
         mainRepoOrgRepo: prs.repository.url.replace('https://github.com/', '').replace('.git', ''),
         mainRepoBranch: prs.repository.branch,
         mainRepoHash: prs.repository.revision,
@@ -12,6 +12,8 @@ function handlePrs(prs) {
         prBody: prs.patch.body,
         patchContent: prs.patch.diffBase64
     });
+
+    console.log(`[${prs.meta.correlationId}] [handlePrs] PR created successfully.`);
 }
 
 module.exports = handlePrs;

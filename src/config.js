@@ -4,6 +4,7 @@ const PORT = process.env.PORT || 5002;
 
 module.exports = {
     c3pr: {
+        gitHubApiToken: process.env.GITHUB_API_TOKEN,
         port: PORT,
         changesUrl: `${C3PR_BOT_BASE_URL}/changes`,
         prsUrl: (process.env.C3PR_REPO_GITHUB_URL || `http://${os.hostname()}:${PORT}`) + "/prs",
