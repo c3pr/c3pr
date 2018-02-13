@@ -16,7 +16,7 @@ function convertWebhookToChanges(webhookPayload) {
             dates: [{node: 'c3pr-repo-github', date: new Date().toISOString()}]
         },
         c3pr: {
-            prUrl: config.c3pr.prUrl
+            prsUrl: config.c3pr.prsUrl
         },
         changeset: Array.from(changeset.values()),
         repository: {

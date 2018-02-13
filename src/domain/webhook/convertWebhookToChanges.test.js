@@ -13,7 +13,7 @@ const whatBotNeedsToInvokeTools = {
         compatibleSchemas: ["c3pr/c3pr::changes"],
         dates: [{date: now.toISOString(), node: "c3pr-repo-github"}]
     },
-    c3pr: {prUrl: "http://prs/pr"},
+    c3pr: {prsUrl: "http://prs/prs"},
     changeset: ['src/main/resources/second.txt', 'src/main/resources/third.txt'],
     repository: {
         type: "git",
@@ -31,7 +31,7 @@ describe('convertWebhookToChanges', function () {
         sandbox = sinon.sandbox.create();
         clock = sinon.useFakeTimers(now.getTime());
 
-        config.c3pr.prUrl = "http://prs/pr";
+        config.c3pr.prsUrl = "http://prs/prs";
     });
 
     afterEach(() => {
@@ -61,7 +61,7 @@ describe('convertWebhookToChanges', function () {
                 compatibleSchemas: ["c3pr/c3pr::changes"],
                 dates: [{date: now.toISOString(), node: "c3pr-repo-github"}]
             },
-            c3pr: {prUrl: "http://prs/pr"},
+            c3pr: {prsUrl: "http://prs/prs"},
             changeset: ['m2', 'm3', 'm1'],
             repository: {
                 type: "git",

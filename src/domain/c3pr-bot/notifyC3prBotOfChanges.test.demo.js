@@ -9,7 +9,7 @@ const changes = {
         dates: [{date: new Date().toISOString(), node: "c3pr-repo-github"}]
     },
     c3pr: {
-        prUrl: "http://localhost:5002/pr"
+        prsUrl: "http://localhost:5002/prs"
     },
     changeset: ['src/main/resources/second.java', 'src/main/resources/third.txt'],
     repository: {
