@@ -19,7 +19,7 @@ function notifyC3prBotOfChanges(changes) {
             if (error || response.statusCode !== 200) {
                 console.log(`${prefix} Error while notifying bot.
                 * URL: ${config.c3pr.changesUrl}
-                * Status: ${response.statusCode}
+                * Status: ${(response || {}).statusCode}
                 * Error: ${error}
                 * Body:
                 -----------------------\n
