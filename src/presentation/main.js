@@ -8,5 +8,6 @@ app.use(bodyParser.json());
 
 require('./c3prController')(app);
 
-app.listen(PORT);
-console.log(`c3pr-agent now listening at port ${PORT}.`);
+app.listen(PORT, () => {
+    console.log(`c3pr-agent now listening at port ${PORT}.`);
+});
