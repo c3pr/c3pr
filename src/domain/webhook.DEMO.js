@@ -23,7 +23,7 @@ request.post(
         if (error || response.statusCode !== 200) {
             console.log(`ERROR:
                 
-                * Status: ${response.statusCode}
+                * Status: ${(response || {}).statusCode}
                 * Error: ${error}
                 * Body:
                 -----------------------
