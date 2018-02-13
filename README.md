@@ -19,7 +19,16 @@ Currently deployed at https://c3pr-github.herokuapp.com/webhook
 
 Logs available at (requires login) https://dashboard.heroku.com/apps/c3pr-github/logs
 
-# Notes
+# Required env vars
 
-The deployment environment must have the environment variable `C3PR_REPO_GITHUB_URL` set.
-E.g. `export C3PR_REPO_GITHUB_URL=http://localhost:5002`
+See [`src/config.js`](src/config.js).
+
+- `GITHUB_API_TOKEN`
+- `PORT`
+    - Defaults to `5002`
+- `C3PR_C3PR_URL`
+    - Main bot URL.
+    - Defaults to `http://${os.hostname()}:5001`
+- `C3PR_REPO_GITHUB_URL`
+    - This node's URL.
+    - Defaults to `http://${os.hostname()}:${PORT}`
