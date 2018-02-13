@@ -8,6 +8,8 @@ app.use(webhookListenerController);
 
 app.use(express.static('resources/public'));
 
+require('./prsController')(app);
+
 // The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
     res.send('No C3PR endpoint is listening at the requested location.', 404);
