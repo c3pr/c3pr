@@ -7,9 +7,9 @@ async function handleToolInvocation(toolInvocation) {
     console.log(`[${toolInvocation.meta.correlationId}] [handleToolInvocation] C3PR Agent received invocation with args: ${JSON.stringify(toolInvocation)}`);
 
     try { // if (request.repository.type === "git")
-        const base64GitDiff = await invokeToolAtGitRepo(toolInvocation);
+        const diffBase64 = await invokeToolAtGitRepo(toolInvocation);
 
-        const patchesPayload = createPatchesPayload(toolInvocation, base64GitDiff);
+        const patchesPayload = createPatchesPayload(toolInvocation, diffBase64);
 
         sendPatchToBot(toolInvocation.c3pr.patchesUrl, patchesPayload);
     } catch (e) {

@@ -1,7 +1,7 @@
 
-function createPatchesPayload(toolInvocation, base64GitDiff) {
+function createPatchesPayload(toolInvocation, diffBase64) {
 
-    console.log(`[createPatchesPayload] called with ${JSON.stringify(toolInvocation)} --- ${base64GitDiff}`);
+    console.log(`[createPatchesPayload] called with ${JSON.stringify(toolInvocation)} --- ${diffBase64}`);
 
     return {
         meta: {
@@ -15,7 +15,7 @@ function createPatchesPayload(toolInvocation, base64GitDiff) {
         patch: {
             title: toolInvocation.tool.prTitle,
             body: toolInvocation.tool.prBody,
-            base64Diff: base64GitDiff
+            diffBase64: diffBase64
         }
     };
 }
