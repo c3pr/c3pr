@@ -1,5 +1,5 @@
 const os = require("os");
-const C3PR_BOT_BASE_URL = process.env.C3PR_C3PR_URL || `https://${os.hostname()}:5001`;
+const C3PR_BOT_BASE_URL = process.env.C3PR_C3PR_URL || `http://${os.hostname()}:5001`;
 const PORT = process.env.PORT || 5002;
 
 module.exports = {
