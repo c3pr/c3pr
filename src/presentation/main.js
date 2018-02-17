@@ -20,6 +20,12 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.port, () => {
-    console.log(`c3pr-repo-github now listening at port ${config.c3pr.port}.`);
-    config.c3pr.print();
+    console.log(`
+c3pr-repo-github now listening at port ${config.c3pr.port}.
+
+c3pr (bot) changes URL will be: ${config.c3pr.changesUrl}
+c3pr-repo-github prs URL will be: ${config.c3pr.prsUrl}
+
+c3pr's git user name and password will be: '${config.c3pr.gitUserName.replace(/'/g, '')}' <'${config.c3pr.gitUserEmail.replace(/'/g, '')}'>
+`); // TODO maybe add validation of presence of these vars
 });

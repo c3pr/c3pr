@@ -10,7 +10,7 @@ const createForkIfNotExists = require("../github/createForkIfNotExists");
 const STAGE_REPOS_FOLDER = process.env.STAGE_REPOS_FOLDER || '/tmp/';
 
 
-async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, prCommitMessage, prTitle, prBody, patchContent}) {
+async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitUserName, gitUserEmail, prCommitMessage, prTitle, prBody, patchContent}) {
     const prefix = `[${mainRepoHash}] [createPR]`;
     const mainRepoCloneUrl = 'https://github.com/' + mainRepoOrgRepo + '.git';
 
@@ -46,7 +46,9 @@ async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, prCommit
 
     // ADD and COMMIT CHANGES
     await shell(`git add -A`, {cwd: stagingFolder}, {prefix});
-    await shell(`git commit -m "${prCommitMessage.replace(/"/g, '\\"')}"`, {cwd: stagingFolder}, {prefix});
+    const userNameNoQuotes = gitUserName.replace(/'/g, '');
+    const userEmailNoQuotes = gitUserEmail.replace(/'/g, '');
+    await shell(`git -c user.name='${userNameNoQuotes}' -c user.email='${userEmailNoQuotes}' commit -m "${prCommitMessage.replace(/"/g, '\\"')}"`, {cwd: stagingFolder}, {prefix});
 
     // add fork repo
     await shell(`git remote add fork ${forkRepoCloneUrl}`, {cwd: stagingFolder}, {prefix});

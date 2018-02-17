@@ -1,4 +1,5 @@
 const createPR = require('../domain/pr/createPR');
+const config = require('../config');
 
 async function handlePrs(prs) {
     console.log(`[${prs.meta.correlationId}] [handlePrs] Handling pr request ${JSON.stringify(prs)}...`);
@@ -7,6 +8,8 @@ async function handlePrs(prs) {
         mainRepoOrgRepo: prs.repository.url.replace('https://github.com/', '').replace('.git', ''),
         mainRepoBranch: prs.repository.branch,
         mainRepoHash: prs.repository.revision,
+        gitUserName: config.c3pr.gitUserName,
+        gitUserEmail: config.c3pr.gitUserEmail,
         prCommitMessage: prs.patch.title,
         prTitle: prs.patch.title,
         prBody: prs.patch.body,
