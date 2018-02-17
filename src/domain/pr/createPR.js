@@ -10,9 +10,9 @@ const createForkIfNotExists = require("../github/createForkIfNotExists");
 const STAGE_REPOS_FOLDER = process.env.STAGE_REPOS_FOLDER || '/tmp/';
 
 
-async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitUserName, gitUserEmail, prCommitMessage, prTitle, prBody, patchContent}) {
+async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitHubApiToken, gitUserName, gitUserEmail, prCommitMessage, prTitle, prBody, patchContent}) {
     const prefix = `[${mainRepoHash}] [createPR]`;
-    const mainRepoCloneUrl = 'https://github.com/' + mainRepoOrgRepo + '.git';
+    const mainRepoCloneUrl = `https://${gitHubApiToken}:${gitHubApiToken}@github.com/${mainRepoOrgRepo}.git`;
 
     const stagingFolderName = `${mainRepoHash}_${uuidv4()}`;
     const stagingFolder = path.resolve(`${STAGE_REPOS_FOLDER}/${stagingFolderName}`);

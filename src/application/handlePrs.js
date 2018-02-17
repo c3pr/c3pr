@@ -8,6 +8,7 @@ async function handlePrs(prs) {
         mainRepoOrgRepo: prs.repository.url.replace('https://github.com/', '').replace('.git', ''),
         mainRepoBranch: prs.repository.branch,
         mainRepoHash: prs.repository.revision,
+        gitHubApiToken: config.c3pr.gitHubApiToken,
         gitUserName: config.c3pr.gitUserName,
         gitUserEmail: config.c3pr.gitUserEmail,
         prCommitMessage: prs.patch.title,
