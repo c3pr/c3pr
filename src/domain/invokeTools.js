@@ -4,8 +4,10 @@ const filterApplicableToolAgents = require('./filterApplicableToolAgents');
 const config = require('../config');
 
 function invokeTools(toolAgents, changes) {
+    const prefix = `[${changes.meta.correlationId}] [invokeTools]`;
 
     const applicableToolAgents = filterApplicableToolAgents(toolAgents, changes);
+    console.log(`${prefix} Applicable tools - ${applicableToolAgents.length}: ${applicableToolAgents.map(tool => tool.toolId)}`);
 
     applicableToolAgents.forEach((tool) => {
 
@@ -30,7 +32,7 @@ function invokeTools(toolAgents, changes) {
             },
             function (error, response, body) {
                 if (error || response.statusCode !== 200) {
-                    console.log(`[${changes.meta.correlationId}] [invokeTools] >>>>>> Error while invoking agent.
+                    console.log(`${prefix} Error while invoking agent.
                 * URL: ${tool.agentURL}
                 * Status: ${(response || {}).statusCode}
                 * Error: ${error}
@@ -39,7 +41,7 @@ function invokeTools(toolAgents, changes) {
                 ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`);
                 } else {
-                    console.log(`[${changes.meta.correlationId}] [invokeTools] >>> Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool)}`);
+                    console.log(`${prefix} Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool)}`);
                 }
             }
         );
