@@ -8,27 +8,38 @@ function sh(command, options) {
     }))
 }
 
+function replaceTokens(input, replacements) {
+    let inputAfterReplacements = input;
+    replacements.forEach(replacement => {
+        inputAfterReplacements = inputAfterReplacements.replace(replacement.regex, replacement.replaceWith)
+    });
+    return inputAfterReplacements;
+}
+
 async function shell(shCommand, shOptions, myOptions = {}) {
-    console.log(`${(myOptions.prefix || "")} \$ ${shCommand}`);
+    const r = s => replaceTokens(s, myOptions.replacements || []);
+
+    console.log(`${(myOptions.prefix || "")} \$ ${r(shCommand)}`);
+
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (myOptions.stdout) {
-        console.log((myOptions.prefix || "") + stdout);
+        console.log((myOptions.prefix || "") + r(stdout));
     }
     if (error) {
         console.log("[ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        console.log((myOptions.prefix || "") + " COMMAND: " + shCommand);
-        console.log((myOptions.prefix || "") + " OPTIONS: " + JSON.stringify(shOptions));
-        console.log((myOptions.prefix || "") + " There as an error: " + error);
+        console.log((myOptions.prefix || "") + " COMMAND: " + r(shCommand));
+        console.log((myOptions.prefix || "") + " OPTIONS: " + r(JSON.stringify(shOptions)));
+        console.log((myOptions.prefix || "") + " There as an error: " + r(error));
         console.log("------------------------------");
         console.log(" STDOUT:");
-        console.log(stdout);
+        console.log(r(stdout));
         console.log("------------------------------");
         console.log(" STDERR:");
-        console.log(stderr);
+        console.log(r(stderr));
         console.log("[/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-        throw new Error(error);
+        throw new Error(r(error));
     }
-    return stdout;
+    return r(stdout);
 }
 
 module.exports = shell;
