@@ -28,7 +28,7 @@ async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitHubAp
     // create brand new orphan branch
     await shell(`git checkout --orphan ${forkRepoBranch}`, {cwd: stagingFolder}, {prefix});
     // add main repo, fetch it and merge into recently created branch
-    await shell(`git remote add main ${mainRepoCloneUrl}`, {cwd: stagingFolder}, {prefix});
+    await shell(`git remote add main ${mainRepoCloneUrl}`, {cwd: stagingFolder}, {prefix, replacements: [{regex: new RegExp(gitHubApiToken, "g"), replaceWith: "<GITHUB_API_TOKEN>"}]});
     await shell(`git fetch main ${mainRepoBranch}`, {cwd: stagingFolder}, {prefix});
     await shell(`git merge main/${mainRepoBranch}`, {cwd: stagingFolder}, {prefix});
 
