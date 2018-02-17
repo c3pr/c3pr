@@ -12,6 +12,9 @@ const STAGE_REPOS_FOLDER = process.env.STAGE_REPOS_FOLDER || '/tmp/';
 
 async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitHubApiToken, gitUserName, gitUserEmail, prCommitMessage, prTitle, prBody, patchContent}) {
     const prefix = `[${mainRepoHash}] [createPR]`;
+
+    const gitHubApiTokenReplacement = {regex: new RegExp(gitHubApiToken, "g"), replaceWith: "<GITHUB_API_TOKEN>"};
+
     const mainRepoCloneUrl = `https://${gitHubApiToken}:${gitHubApiToken}@github.com/${mainRepoOrgRepo}.git`;
 
     const stagingFolderName = `${mainRepoHash}_${uuidv4()}`;
@@ -20,7 +23,7 @@ async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitHubAp
     const data = await createForkIfNotExists(mainRepoOrgRepo);
 
     const forkRepoOrg = data.owner.login;
-    const forkRepoCloneUrl = data.clone_url;
+    const forkRepoCloneUrl = data.clone_url.replace(`https://github.com/`, `https://${gitHubApiToken}:${gitHubApiToken}@github.com/`);
     const forkRepoBranch = stagingFolderName;
 
     await shell(`git init ${stagingFolder}`, {prefix});
@@ -28,7 +31,8 @@ async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitHubAp
     // create brand new orphan branch
     await shell(`git checkout --orphan ${forkRepoBranch}`, {cwd: stagingFolder}, {prefix});
     // add main repo, fetch it and merge into recently created branch
-    await shell(`git remote add main ${mainRepoCloneUrl}`, {cwd: stagingFolder}, {prefix, replacements: [{regex: new RegExp(gitHubApiToken, "g"), replaceWith: "<GITHUB_API_TOKEN>"}]});
+
+    await shell(`git remote add main ${mainRepoCloneUrl}`, {cwd: stagingFolder}, {prefix, replacements: [gitHubApiTokenReplacement]});
     await shell(`git fetch main ${mainRepoBranch}`, {cwd: stagingFolder}, {prefix});
     await shell(`git merge main/${mainRepoBranch}`, {cwd: stagingFolder}, {prefix});
 
@@ -51,7 +55,7 @@ async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitHubAp
     await shell(`git -c user.name='${userNameNoQuotes}' -c user.email='${userEmailNoQuotes}' commit -m "${prCommitMessage.replace(/"/g, '\\"')}"`, {cwd: stagingFolder}, {prefix});
 
     // add fork repo
-    await shell(`git remote add fork ${forkRepoCloneUrl}`, {cwd: stagingFolder}, {prefix});
+    await shell(`git remote add fork ${forkRepoCloneUrl}`, {cwd: stagingFolder}, {prefix, replacements: [gitHubApiTokenReplacement]});
     // push changes
     await shell(`git push -u fork ${forkRepoBranch}`, {cwd: stagingFolder}, {prefix});
 
