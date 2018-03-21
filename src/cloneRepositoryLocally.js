@@ -2,17 +2,18 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 const fs = require('fs');
 const shell = require('./shell');
+const log = require("node-c3pr-logger").log;
 
 async function createClonesDir(prefix, correlationId, cloneDir) {
     return new Promise(resolve => {
         const resolvedClonesDir = path.resolve(cloneDir);
         if (fs.existsSync(resolvedClonesDir)) {
-            console.log(`${prefix} ${resolvedClonesDir} already exists.`);
+            log.info(prefix, 'cloneRepositoryLocally', `${resolvedClonesDir} already exists.`);
             resolve();
         } else {
-            console.log(`${prefix} ${resolvedClonesDir} does not exist, creating.`);
+            log.info(prefix, 'cloneRepositoryLocally', `${resolvedClonesDir} does not exist, creating.`);
             mkdirp(resolvedClonesDir, () => {
-                console.log(`${prefix} Clones dir created at ${resolvedClonesDir}`);
+                log.info(prefix, 'cloneRepositoryLocally', `Clones dir created at ${resolvedClonesDir}`);
                 resolve();
             });
         }
@@ -24,7 +25,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
 
     await createClonesDir(prefix, gitSHA, cloneBaseDir);
 
-    console.log(`${prefix} Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`);
+    log.info(prefix, 'cloneRepositoryLocally', `Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`);
 
     // clones that single branch (maybe there is a somewhat slightly faster way of doing this with --mirror, though I feel it probably won't pay off)
     await shell(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {prefix});
@@ -46,7 +47,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
 
     await shell(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {prefix});
 
-    console.log(`${prefix} Clone/reset completed.`);
+    log.info(prefix, 'cloneRepositoryLocally', `Clone/reset completed.`);
 }
 
 async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, url, branch, revision, cloneDepth}) {

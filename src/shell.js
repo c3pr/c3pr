@@ -1,4 +1,5 @@
 const exec = require('child_process').exec;
+const log = require("node-c3pr-logger").log;
 
 function sh(command, options) {
     return new Promise((resolve => {
@@ -19,24 +20,26 @@ function replaceTokens(input, replacements) {
 async function shell(shCommand, shOptions, myOptions = {}) {
     const r = s => replaceTokens(s, myOptions.replacements || []);
 
-    console.log(`${(myOptions.prefix || "")} \$ ${r(shCommand)}`);
+    log.info((myOptions.prefix || ""), 'shell', `\$ ${r(shCommand)}`);
 
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (myOptions.stdout) {
-        console.log((myOptions.prefix || "") + r(stdout));
+        log.info((myOptions.prefix || ""), 'shell', r(stdout));
     }
     if (error) {
-        console.log("[ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        console.log((myOptions.prefix || "") + " COMMAND: " + r(shCommand));
-        console.log((myOptions.prefix || "") + " OPTIONS: " + r(JSON.stringify(shOptions)));
-        console.log((myOptions.prefix || "") + " There as an error: " + r(error));
-        console.log("------------------------------");
-        console.log(" STDOUT:");
-        console.log(r(stdout));
-        console.log("------------------------------");
-        console.log(" STDERR:");
-        console.log(r(stderr));
-        console.log("[/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        log.info((myOptions.prefix || ""), 'shell',`
+            [ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            COMMAND: ${r(shCommand)}
+            OPTIONS: ${r(JSON.stringify(shOptions))}
+            There as an error: ${r(error)}
+            ------------------------------
+            STDOUT:
+            ${r(stdout)}
+            ------------------------------
+            STDERR:
+            ${r(stderr)}
+            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`
+        );
         throw new Error(r(error));
     }
     return r(stdout);
