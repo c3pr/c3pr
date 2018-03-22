@@ -15,9 +15,16 @@ async function logManyParameters(level, correlationIdOrCorrelationIds, scriptNam
     });
 }
 
+let warningShown = false;
+
 async function logObject(level, logOrLogs) {
-    if (level !== 'debug') {
+    if (level !== 'debug' || !config.c3pr.mongoLogsUri) {
         console.log(colchetify([...logOrLogs.correlationIds, logOrLogs.scriptName]), logOrLogs.message);
+    }
+    if (!config.c3pr.mongoLogsUri) {
+        console.log('Logs: MONGO_LOGS_URI env var is not defined. Printing to STDOUT only. (This message will be only printed once every 5mins.)');
+        warningShown = true;
+        setTimeout(() => warningShown = false, 5 * 60 * 1000);
     }
     const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
