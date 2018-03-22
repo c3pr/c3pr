@@ -13,6 +13,8 @@ Have a look at [`src`](src) folder to understand what functions are available.
 npm i -S c3pr/node-c3pr-logger#1.0.0
 ```
 
+The `MONGO_LOGS_URI` must be defined to something like 
+
 Example at a JavaScript file:
 
 ```javascript

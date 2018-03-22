@@ -21,7 +21,7 @@ async function logObject(level, logOrLogs) {
     }
     const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
-    let logs = client.db(config.c3pr.mongoLogsDatabase).collection(config.c3pr.mongoLogsCollection);
+    let logs = client.db(config.c3pr.mongoLogsDatabase).collection(log.collection ? log.collection : config.c3pr.mongoLogsCollection);
 
     if (Array.isArray(logOrLogs)) {
         const logsWithLevelAndDate = logOrLogs.map(log => addDateAndLevel(level, log));
@@ -52,5 +52,6 @@ function addDateAndLevel(level, log) {
 
 module.exports = {
     debug: (logOrLogsOrCorrIdS, scriptName, message, metadata) => log('debug', logOrLogsOrCorrIdS, scriptName, message, metadata),
-    info: (logOrLogsOrCorrIdS, scriptName, message, metadata) => log('info', logOrLogsOrCorrIdS, scriptName, message, metadata)
+    info: (logOrLogsOrCorrIdS, scriptName, message, metadata) => log('info', logOrLogsOrCorrIdS, scriptName, message, metadata),
+    collection: (collection) => log.collection = collection
 };

@@ -3,7 +3,8 @@ const expect = require('chai').expect;
 const log = require('./log');
 
 const config = require('./config');
-config.c3pr.mongoLogsCollection += '-test';
+const testLogsCollection = config.c3pr.mongoLogsCollection + '-test';
+log.collection(testLogsCollection);
 
 
 function timeout(ms) {
@@ -23,8 +24,8 @@ describe('log', () => {
 
         const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
-        let songs = client.db(config.c3pr.mongoLogsDatabase).collection(config.c3pr.mongoLogsCollection);
-        const insertedLog = await songs.find({dateTime: {$gte: dateBefore}}).next();
+        let logs = client.db(config.c3pr.mongoLogsDatabase).collection(testLogsCollection);
+        const insertedLog = await logs.find({dateTime: {$gte: dateBefore}}).next();
 
         await client.close();
 
@@ -45,7 +46,7 @@ describe('log', () => {
 
         const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
-        let songs = client.db(config.c3pr.mongoLogsDatabase).collection(config.c3pr.mongoLogsCollection);
+        let songs = client.db(config.c3pr.mongoLogsDatabase).collection(testLogsCollection);
         const insertedLog = await songs.find({dateTime: {$gte: dateBefore}}).next();
 
         await client.close();
@@ -68,8 +69,8 @@ describe('log', () => {
 
         const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
-        let songs = client.db(config.c3pr.mongoLogsDatabase).collection(config.c3pr.mongoLogsCollection);
-        const insertedLog = await songs.find({dateTime: {$gte: dateBefore}}).next();
+        let logs = client.db(config.c3pr.mongoLogsDatabase).collection(testLogsCollection);
+        const insertedLog = await logs.find({dateTime: {$gte: dateBefore}}).next();
 
         await client.close();
 
