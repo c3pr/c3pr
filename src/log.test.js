@@ -4,7 +4,7 @@ const log = require('./log');
 
 const config = require('./config');
 const testLogsCollection = config.c3pr.mongoLogsCollection + '-test';
-log.collection(testLogsCollection);
+log.testMode();
 
 
 function timeout(ms) {
