@@ -30,6 +30,8 @@ async function shell(shCommand, shOptions, myOptions = {}) {
 
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (myOptions.stdout) {
+        if (stdout.trim() === "")
+            stdout = '<empty output>';
         log.info(prefix, scriptName, r(stdout));
     }
     if (error) {
