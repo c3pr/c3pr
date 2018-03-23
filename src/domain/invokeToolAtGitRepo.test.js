@@ -1,4 +1,5 @@
 const invokeToolAtGitRepo = require('./invokeToolAtGitRepo');
+require("node-c3pr-logger").log.testMode();
 
 const expect = require('chai').expect;
 

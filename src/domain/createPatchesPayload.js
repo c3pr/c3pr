@@ -1,7 +1,8 @@
+const log = require("node-c3pr-logger").log;
 
 function createPatchesPayload(toolInvocation, diffBase64) {
 
-    console.log(`[createPatchesPayload] called with ${JSON.stringify(toolInvocation)} --- ${diffBase64}`);
+    log.info([toolInvocation.meta.correlationId], 'createPatchesPayload', `Called with ${JSON.stringify(toolInvocation)}`, {diffBase64});
 
     return {
         meta: {

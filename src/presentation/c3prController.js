@@ -1,4 +1,5 @@
 const handleToolInvocation = require('../application/handleToolInvocation');
+const log = require("node-c3pr-logger").log;
 
 module.exports = function (app) {
 
@@ -13,7 +14,7 @@ module.exports = function (app) {
             response.status(400).send(errorMessage);
             return;
         }
-        console.log(`[${toolInvocation.meta.correlationId}] >> c3prController: toolInvocation received. ${JSON.stringify(toolInvocation)}`);
+        log.info(toolInvocation.meta.correlationId, 'c3prController', `toolInvocation received.`, {toolInvocation});
         handleToolInvocation(toolInvocation);
 
         // echo back request
