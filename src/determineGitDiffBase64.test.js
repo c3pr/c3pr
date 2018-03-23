@@ -5,6 +5,7 @@ const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 const path = require('path');
 const shell = require('./shell');
+require("node-c3pr-logger").log.testMode();
 
 
 describe('determineGitDiffBase64', () => {
@@ -23,9 +24,9 @@ describe('determineGitDiffBase64', () => {
             cloneDepth: 5
         });
 
-        await shell(`echo some-change>> pom.xml`, {cwd: cloneFolder});
+        await shell(`echo some-change>> pom.xml`, {cwd: cloneFolder}, {prefix: [sha, localUniqueCorrelationId], scriptName: 'determineGitDiffBase64.test.js'});
         fs.unlinkSync(path.join(cloneFolder, 'README.md'));
-        await shell(`echo some-new-file> src/main/java/MyNewClass.java`, {cwd: cloneFolder});
+        await shell(`echo some-new-file> src/main/java/MyNewClass.java`, {cwd: cloneFolder}, {prefix: [sha, localUniqueCorrelationId], scriptName: 'determineGitDiffBase64.test.js'});
 
         const diff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder);
         expect(diff).to.be.equal(
@@ -77,22 +78,23 @@ index 0000000..80772dc
 
         const localUniqueCorrelationId = uuidv4();
 
+        const sha = '1fb4aaf9b45b64ec0778f085349109175c328195';
         const cloneFolder = await cloneRepositoryLocally({
             localUniqueCorrelationId: localUniqueCorrelationId,
             cloneBaseDir: '/tmp/c3pr/test',
             url: "https://github.com/c3pr/sample-project-java-maven.git",
             branch: 'prCreationTestBranch',
-            revision: '1fb4aaf9b45b64ec0778f085349109175c328195',
+            revision: sha,
             cloneDepth: 50
         });
 
         const patchFileName = `c3pr-${localUniqueCorrelationId}.patch`;
         const patchFilePath = `${cloneFolder}/${patchFileName}`;
         fs.writeFileSync(patchFilePath, Buffer.from(patchContent, 'base64').toString('hex'), 'hex');
-        await shell(`git apply ${patchFileName}`, {cwd: cloneFolder});
+        await shell(`git apply ${patchFileName}`, {cwd: cloneFolder}, {prefix: [sha, localUniqueCorrelationId], scriptName: 'determineGitDiffBase64.test.js'});
         fs.unlinkSync(patchFilePath);
 
-        const gitDiff = await determineGitDiffBase64('1fb4aaf9b45b64ec0778f085349109175c328195', localUniqueCorrelationId, cloneFolder);
+        const gitDiff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder);
 
         expect(patchContent).to.be.equal(gitDiff);
 

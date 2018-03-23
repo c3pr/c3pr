@@ -3,6 +3,7 @@ const cloneRepositoryLocally = require('./cloneRepositoryLocally');
 const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 const path = require('path');
+require("node-c3pr-logger").log.testMode();
 
 describe('cloneRepositoryLocally', () => {
 

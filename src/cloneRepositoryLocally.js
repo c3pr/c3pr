@@ -21,14 +21,14 @@ async function createClonesDir(prefix, correlationId, cloneDir) {
 }
 
 async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId) {
-    const prefix = `[${gitSHA}] [${localUniqueCorrelationId}] [cloneRepositoryLocally]`;
+    const prefix = [gitSHA, localUniqueCorrelationId];
 
     await createClonesDir(prefix, gitSHA, cloneBaseDir);
 
     log.info(prefix, 'cloneRepositoryLocally', `Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`);
 
     // clones that single branch (maybe there is a somewhat slightly faster way of doing this with --mirror, though I feel it probably won't pay off)
-    await shell(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {prefix});
+    await shell(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {prefix, scriptName: 'cloneRepositoryLocally'});
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //NOTE:
@@ -45,7 +45,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
     // right now, though, I feel the constant "cloneDepth" is pretty much enough.
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    await shell(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {prefix});
+    await shell(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {prefix, scriptName: 'cloneRepositoryLocally'});
 
     log.info(prefix, 'cloneRepositoryLocally', `Clone/reset completed.`);
 }

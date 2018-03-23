@@ -20,14 +20,20 @@ function replaceTokens(input, replacements) {
 async function shell(shCommand, shOptions, myOptions = {}) {
     const r = s => replaceTokens(s, myOptions.replacements || []);
 
-    log.info((myOptions.prefix || ""), 'shell', `\$ ${r(shCommand)}`);
+    let prefix = myOptions.prefix || "";
+    let scriptName = myOptions.scriptName || 'shell';
+    if (!Array.isArray(prefix)) {
+        prefix = [prefix];
+    }
+
+    log.info(prefix, scriptName, `\$ ${r(shCommand)}`);
 
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (myOptions.stdout) {
-        log.info((myOptions.prefix || ""), 'shell', r(stdout));
+        log.info(prefix, scriptName, r(stdout));
     }
     if (error) {
-        log.info((myOptions.prefix || ""), 'shell',`
+        log.info(prefix, scriptName,`
             [ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             COMMAND: ${r(shCommand)}
             OPTIONS: ${r(JSON.stringify(shOptions))}
