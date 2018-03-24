@@ -1,4 +1,5 @@
 const handlePatches = require('../application/handlePatches');
+const log = require("node-c3pr-logger").log;
 
 module.exports = function (app) {
 
@@ -8,12 +9,12 @@ module.exports = function (app) {
             !patches.meta.correlationId ||
             !patches.meta.compatibleSchemas ||
             !patches.meta.compatibleSchemas.includes("c3pr/c3pr::patches")) {
-            const errorMessage = `Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(patches)}.`;
-            console.error(errorMessage);
+            const errorMessage = `ERROR: Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas). meta: ${JSON.stringify(patches.meta)}.`;
+            log.info([patches.meta.correlationId], 'patchesController', errorMessage, {patches});
             response.status(400).send(errorMessage);
             return;
         }
-        console.log(`[${patches.meta.correlationId}] >> patchesController: patches received. ${JSON.stringify(patches)}`);
+        log.info([patches.meta.correlationId], 'patchesController', `Patches received. ${JSON.stringify(patches)}`);
         handlePatches(patches);
         response.send('Ok, that would be all, thanks.');
     });

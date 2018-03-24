@@ -1,8 +1,9 @@
 const createPrsFromPatches = require('../domain/createPrsFromPatches');
 const sendPrToRepo = require('../domain/sendPrToRepo');
+const log = require("node-c3pr-logger").log;
 
 function handlePatches(patches) {
-    console.log(`[${patches.meta.correlationId}] [handlePatches] Handling patches invoked for ${JSON.stringify(patches)}...`);
+    log.info([patches.meta.correlationId], 'handlePatches', `Handling patches invoked for ${JSON.stringify(patches)}...`);
 
     const prs = createPrsFromPatches(patches);
 

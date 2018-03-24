@@ -9,6 +9,7 @@ const RESPONSE_OK = {statusCode: 200, headers: {'content-type': 'application/jso
 
 const invokeTools = require('./invokeTools');
 const config = require('../config');
+require("node-c3pr-logger").log.testMode();
 
 describe('invokeTools', () => {
 

@@ -2,12 +2,11 @@ const request = require('request');
 const filterFilesWithExtensions = require('./filterFilesWithExtensions');
 const filterApplicableToolAgents = require('./filterApplicableToolAgents');
 const config = require('../config');
+const log = require("node-c3pr-logger").log;
 
 function invokeTools(toolAgents, changes) {
-    const prefix = `[${changes.meta.correlationId}] [invokeTools]`;
-
     const applicableToolAgents = filterApplicableToolAgents(toolAgents, changes);
-    console.log(`${prefix} Applicable tools - ${applicableToolAgents.length}: ${applicableToolAgents.map(tool => tool.toolId)}`);
+    log.info([changes.meta.correlationId], 'invokeTools', `Applicable tools - ${applicableToolAgents.length}: ${applicableToolAgents.map(tool => tool.toolId)}`);
 
     applicableToolAgents.forEach((tool) => {
 
@@ -32,7 +31,7 @@ function invokeTools(toolAgents, changes) {
             },
             function (error, response, body) {
                 if (error || response.statusCode !== 200) {
-                    console.log(`${prefix} Error while invoking agent.
+                    log.info([changes.meta.correlationId], 'invokeTools', `Error while invoking agent.
                 * URL: ${tool.agentURL}
                 * Status: ${(response || {}).statusCode}
                 * Error: ${error}
@@ -41,7 +40,7 @@ function invokeTools(toolAgents, changes) {
                 ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`);
                 } else {
-                    console.log(`${prefix} Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool)}`);
+                    log.info([changes.meta.correlationId], 'invokeTools', `Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool)}`);
                 }
             }
         );
