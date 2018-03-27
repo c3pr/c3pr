@@ -1,3 +1,4 @@
+require("node-c3pr-logger").log.testMode();
 process.env.NODE_ENV = 'test';
 
 const expect = require('chai').expect;

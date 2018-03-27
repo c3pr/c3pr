@@ -10,7 +10,7 @@ module.exports = function (app) {
             !changes.meta.compatibleSchemas ||
             !changes.meta.compatibleSchemas.includes("c3pr/c3pr::changes")) {
             const errorMessage = `Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(changes)}.`;
-            log.info([changes.meta.correlationId], 'changesController', errorMessage, {changes});
+            log.info([changes.meta && changes.meta.correlationId], 'changesController', errorMessage, {changes});
             response.status(400).send(errorMessage);
             return;
         }
