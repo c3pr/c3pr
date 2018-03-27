@@ -1,3 +1,4 @@
+const log = require("node-c3pr-logger").log;
 const express = require('express');
 const bodyParser = require('body-parser');
 

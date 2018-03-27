@@ -1,3 +1,4 @@
+const log = require("node-c3pr-logger").log;
 const handlePrs = require('../application/handlePrs');
 
 module.exports = function (app) {
@@ -8,12 +9,12 @@ module.exports = function (app) {
             !prs.meta.correlationId ||
             !prs.meta.compatibleSchemas ||
             !prs.meta.compatibleSchemas.includes("c3pr/c3pr::prs")) {
-            const errorMessage = `[prsController] Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(prs)}.`;
-            console.error(errorMessage);
+            const errorMessage = `ERROR Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(prs)}.`;
+            log.info([prs.meta && prs.meta.correlationId], 'prsController', errorMessage, {prs});
             response.status(400).send(errorMessage);
             return;
         }
-        console.log(`[${prs.meta.correlationId}] [prsController]: pr received. ${JSON.stringify(prs)}`);
+        log.info([prs.meta.correlationId], 'prsController', `pr received. ${JSON.stringify(prs)}`);
         handlePrs(prs);
         response.send('Ok, that would be all, thanks.');
     });

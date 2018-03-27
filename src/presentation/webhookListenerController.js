@@ -1,3 +1,4 @@
+const log = require("node-c3pr-logger").log;
 const createHandler = require('github-webhook-handler');
 
 const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET || 'myhashsecret';
@@ -10,7 +11,7 @@ githubWebhookHandler.on('error', function (err) {
 });
 
 githubWebhookHandler.on('push', function (event) {
-    console.log(`[${event.payload.after}] [webhookListenerController] Received a push event for ${event.payload.repository.name} to ${event.payload.ref}`);
+    log.info([event.payload.after], 'webhookListenerController', `Received a push event for ${event.payload.repository.name} to ${event.payload.ref}`);
     handleWebhook(event.payload);
 });
 
