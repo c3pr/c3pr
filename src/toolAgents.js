@@ -34,6 +34,15 @@ should be refactored into:
 System.out.println("Equal?" + "foo".equals(myString));                         // Compliant - properly deals with the null case
 \`\`\`
 `
+        },
+        {
+            toolId: "walkmod-sonar:RemoveUselessImports",
+            extensions: ["java"],
+            agentURL: "https://c3pr-tool-walkmod-sonar-now-hjmsouxims.now.sh/c3pr",
+            command: "walkmod apply sonar:RemoveUselessImports",
+            toolMeta: {rule: "sonar:RemoveUselessImports"},
+            prTitle: "Useless imports",
+            prBody: `Useless imports are bad!`
         }
     ]
 };
