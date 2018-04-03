@@ -20,7 +20,7 @@ describe('log', () => {
         const someNumber = Math.random() * 999 + 1;
         const logMessage = 'someNumber --> ' + someNumber;
 
-        await log.info({correlationIds: ['test'], scriptName: 'logs', message: logMessage, metadata: {stuff: 'yo'}});
+        await log.info2('nawde', {correlationIds: ['test'], scriptName: 'logs', message: logMessage, metadata: {stuff: 'yo'}});
 
         const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
@@ -29,6 +29,7 @@ describe('log', () => {
 
         await client.close();
 
+        expect(insertedLog.node).to.equal('nawde');
         expect(insertedLog.correlationIds).to.deep.equal(['test']);
         expect(insertedLog.scriptName).to.equal('logs');
         expect(insertedLog.message).to.equal(logMessage);
@@ -42,7 +43,7 @@ describe('log', () => {
         const someNumber = Math.random() * 999 + 1;
         const logMessage = 'someNumber --> ' + someNumber;
 
-        await log.info('test', 'logs', logMessage, {stuff: 'yo'});
+        await log.info2('nawde', 'test', 'logs', logMessage, {stuff: 'yo'});
 
         const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
@@ -51,6 +52,7 @@ describe('log', () => {
 
         await client.close();
 
+        expect(insertedLog.node).to.equal('nawde');
         expect(insertedLog.correlationIds).to.deep.equal(['test']);
         expect(insertedLog.scriptName).to.equal('logs');
         expect(insertedLog.message).to.equal(logMessage);
@@ -65,7 +67,7 @@ describe('log', () => {
         const someNumber = Math.random() * 999 + 1;
         const logMessage = 'someNumber --> ' + someNumber;
 
-        await log.info(['test', 'idTwo'], 'logs', logMessage, {stuff: 'yo'});
+        await log.info2('nawde', ['test', 'idTwo'], 'logs', logMessage, {stuff: 'yo'});
 
         const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
@@ -74,6 +76,7 @@ describe('log', () => {
 
         await client.close();
 
+        expect(insertedLog.node).to.equal('nawde');
         expect(insertedLog.correlationIds).to.deep.equal(['test', 'idTwo']);
         expect(insertedLog.scriptName).to.equal('logs');
         expect(insertedLog.message).to.equal(logMessage);
