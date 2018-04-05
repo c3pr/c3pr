@@ -31,7 +31,7 @@ async function logObject(nodeName, logOrLogs) {
     }
     const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
-    let logs = client.db(config.c3pr.mongoLogsDatabase).collection(config.c3pr.mongoLogsCollection + (c3prlog.testModeActivated ? "-test" : ""));
+    let logs = client.db(config.c3pr.mongoLogsDatabase).collection(config.c3pr.mongoLogsCollection + (c3prLOG.testModeActivated ? "-test" : ""));
 
     if (Array.isArray(logOrLogs)) {
         const logsWithNodeAndDate = logOrLogs.map(log => addNodeAndDate(nodeName, log));
@@ -46,7 +46,7 @@ async function logObject(nodeName, logOrLogs) {
 const isNonArrayObject = o => !Array.isArray(o) && typeof o === 'object';
 const isObjectArray = o => Array.isArray(o) && o.length > 0 && isNonArrayObject(o[0]);
 
-async function c3prlog(nodeName, logOrLogsOrCorrIdS, scriptName, message, metadata) {
+async function c3prLOG(nodeName, logOrLogsOrCorrIdS, scriptName, message, metadata) {
     if (isNonArrayObject(logOrLogsOrCorrIdS)) { // log
         return logObject(nodeName, logOrLogsOrCorrIdS);
     } else if (isObjectArray(logOrLogsOrCorrIdS)) { // logs
@@ -55,10 +55,10 @@ async function c3prlog(nodeName, logOrLogsOrCorrIdS, scriptName, message, metada
         return logManyParameters(nodeName, logOrLogsOrCorrIdS, scriptName, message, metadata);
     }
 }
-c3prlog.testMode = () => c3prlog.testModeActivated = true;
+c3prLOG.testMode = () => c3prLOG.testModeActivated = true;
 
 function addNodeAndDate(nodeName, log) {
     return {node: nodeName, dateTime: new Date().toISOString(), ...log};
 }
 
-module.exports = c3prlog;
+module.exports = c3prLOG;

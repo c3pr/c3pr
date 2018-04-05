@@ -1,1 +1,1 @@
-module.exports = require('./src/c3prlog');
+module.exports = require('./src/c3prLOG');

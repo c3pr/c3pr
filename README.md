@@ -18,9 +18,8 @@ The `MONGO_LOGS_URI` must be defined to something like
 Example at a JavaScript file:
 
 ```javascript
-const log = require("node-c3pr-logger").log;
-log.info(...);
-log.debug(...);
+const c3prLOG = require("node-c3pr-logger");
+c3prLOG('node-name', ...);
 ```
 
 See [test file](src/log.test.js) for usages.
