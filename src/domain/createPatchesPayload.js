@@ -1,8 +1,8 @@
-const log = require("node-c3pr-logger").log;
+const c3prLOG = require("node-c3pr-logger");
 
 function createPatchesPayload(toolInvocation, diffBase64) {
 
-    log.info([toolInvocation.meta.correlationId], 'createPatchesPayload', `Called with ${JSON.stringify(toolInvocation)}`, {diffBase64});
+    c3prLOG('c3pr-agent', [toolInvocation.meta.correlationId], 'createPatchesPayload', `Called with ${JSON.stringify(toolInvocation)}`, {diffBase64});
 
     return {
         meta: {

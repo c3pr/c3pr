@@ -1,5 +1,5 @@
 const handleToolInvocation = require('../application/handleToolInvocation');
-const log = require("node-c3pr-logger").log;
+const c3prLOG = require("node-c3pr-logger");
 
 module.exports = function (app) {
 
@@ -10,11 +10,11 @@ module.exports = function (app) {
             !toolInvocation.meta.compatibleSchemas ||
             !toolInvocation.meta.compatibleSchemas.includes("c3pr/c3pr-agent::toolInvocation")) {
             const errorMessage = `Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(toolInvocation)}.`;
-            log.info([toolInvocation.meta && toolInvocation.meta.correlationId], 'c3prController', errorMessage, {toolInvocation});
+            c3prLOG('c3pr-agent', [toolInvocation.meta && toolInvocation.meta.correlationId], 'c3prController', errorMessage, {toolInvocation});
             response.status(400).send(errorMessage);
             return;
         }
-        log.info(toolInvocation.meta.correlationId, 'c3prController', `toolInvocation received.`, {toolInvocation});
+        c3prLOG('c3pr-agent', toolInvocation.meta.correlationId, 'c3prController', `toolInvocation received.`, {toolInvocation});
         handleToolInvocation(toolInvocation);
 
         // echo back request

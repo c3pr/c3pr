@@ -3,7 +3,7 @@ const determineGitDiffBase64 = require("node-git-client").determineGitDiffBase64
 const shell = require("node-git-client").shell;
 const uuidv4 = require('uuid/v4');
 
-const log = require("node-c3pr-logger").log;
+const c3prLOG = require("node-c3pr-logger");
 
 const config = require('../config');
 
@@ -16,7 +16,7 @@ async function invokeToolAtGitRepo(toolInvocation) {
     const corrIds = [toolInvocation.meta.correlationId, localUniqueCorrelationId];
     const scriptName = 'invokeToolAtGitRepo';
 
-    log.info(corrIds, scriptName, `Invoking tool at git repo: ${toolInvocation.repository.url}`);
+    c3prLOG('c3pr-agent', corrIds, scriptName, `Invoking tool at git repo: ${toolInvocation.repository.url}`);
 
     const cloneFolder = await cloneRepositoryLocally({
         localUniqueCorrelationId: localUniqueCorrelationId,
@@ -27,7 +27,7 @@ async function invokeToolAtGitRepo(toolInvocation) {
         cloneDepth: CLONE_DEPTH
     });
 
-    log.info(corrIds, scriptName, `Done cloning at ${cloneFolder}.`);
+    c3prLOG('c3pr-agent', corrIds, scriptName, `Done cloning at ${cloneFolder}.`);
 
     await shell(toolInvocation.tool.command, {cwd: cloneFolder}, {stdout: true, prefix: corrIds, scriptName: scriptName});
 
