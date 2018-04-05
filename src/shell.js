@@ -1,5 +1,5 @@
 const exec = require('child_process').exec;
-const log = require("node-c3pr-logger").log;
+const c3prLOG = require("node-c3pr-logger");
 
 function sh(command, options) {
     return new Promise((resolve => {
@@ -26,16 +26,17 @@ async function shell(shCommand, shOptions, myOptions = {}) {
         prefix = [prefix];
     }
 
-    log.info(prefix, scriptName, `\$ ${r(shCommand)}`);
+    const nodeName = myOptions.nodeName || 'node-git-client';
+    c3prLOG(nodeName, prefix, scriptName, `\$ ${r(shCommand)}`);
 
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (myOptions.stdout) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        log.info(prefix, scriptName, r(stdout));
+        c3prLOG(nodeName, prefix, scriptName, r(stdout));
     }
     if (error) {
-        log.info(prefix, scriptName,`
+        c3prLOG(nodeName, prefix, scriptName,`
             [ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             COMMAND: ${r(shCommand)}
             OPTIONS: ${r(JSON.stringify(shOptions))}
