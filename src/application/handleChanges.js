@@ -1,9 +1,9 @@
 const toolAgents = require('../toolAgents');
 const invokeTools = require('../domain/invokeTools');
-const log = require("node-c3pr-logger").log;
+const c3prLOG = require("node-c3pr-logger");
 
 function handleChanges(changes) {
-    log.info([changes.meta.correlationId], 'handleChanges', `Handling changes invoked for ${changes.repository.url} rev ${changes.repository.revision}...`);
+    c3prLOG('c3pr', [changes.meta.correlationId], 'handleChanges', `Handling changes invoked for ${changes.repository.url} rev ${changes.repository.revision}...`);
     invokeTools(toolAgents, changes)
 }
 

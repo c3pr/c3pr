@@ -1,4 +1,4 @@
-require("node-c3pr-logger").log.testMode();
+require("node-c3pr-logger").testMode();
 process.env.NODE_ENV = 'test';
 
 const expect = require('chai').expect;
@@ -10,7 +10,7 @@ const RESPONSE_OK = {statusCode: 200, headers: {'content-type': 'application/jso
 
 const invokeTools = require('./invokeTools');
 const config = require('../config');
-require("node-c3pr-logger").log.testMode();
+require("node-c3pr-logger").testMode();
 
 describe('invokeTools', () => {
 

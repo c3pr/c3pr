@@ -1,8 +1,8 @@
 const request = require('request');
-const log = require("node-c3pr-logger").log;
+const c3prLOG = require("node-c3pr-logger");
 
 function sendPrToRepo(prsUrl, pr) {
-    log.info([pr.meta.correlationId], 'sendPrToRepo', `Sending pr to repo ${prsUrl}...`, {pr});
+    c3prLOG('c3pr', [pr.meta.correlationId], 'sendPrToRepo', `Sending pr to repo ${prsUrl}...`, {pr});
 
     request.post(
         {
@@ -12,7 +12,7 @@ function sendPrToRepo(prsUrl, pr) {
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
-                log.info([pr.meta.correlationId], 'sendPrToRepo', `Error while sending pr to repo.
+                c3prLOG('c3pr', [pr.meta.correlationId], 'sendPrToRepo', `Error while sending pr to repo.
                 * URL: ${prsUrl}
                 * Status: ${(response || {}).statusCode}
                 * Error: ${error}
@@ -21,7 +21,7 @@ function sendPrToRepo(prsUrl, pr) {
                 ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`);
             } else {
-                log.info([pr.meta.correlationId], 'sendPrToRepo', `Sent pr to repo at ${prsUrl}.`);
+                c3prLOG('c3pr', [pr.meta.correlationId], 'sendPrToRepo', `Sent pr to repo at ${prsUrl}.`);
             }
         }
     );

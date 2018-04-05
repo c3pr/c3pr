@@ -1,5 +1,5 @@
 const handleChanges = require('../application/handleChanges');
-const log = require("node-c3pr-logger").log;
+const c3prLOG = require("node-c3pr-logger");
 
 module.exports = function (app) {
 
@@ -10,11 +10,11 @@ module.exports = function (app) {
             !changes.meta.compatibleSchemas ||
             !changes.meta.compatibleSchemas.includes("c3pr/c3pr::changes")) {
             const errorMessage = `Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(changes)}.`;
-            log.info([changes.meta && changes.meta.correlationId], 'changesController', errorMessage, {changes});
+            c3prLOG('c3pr', [changes.meta && changes.meta.correlationId], 'changesController', errorMessage, {changes});
             response.status(400).send(errorMessage);
             return;
         }
-        log.info([changes.meta.correlationId], 'changesController', `Changes received. ${JSON.stringify(changes)}`);
+        c3prLOG('c3pr', [changes.meta.correlationId], 'changesController', `Changes received. ${JSON.stringify(changes)}`);
         handleChanges(changes);
         response.send('Ok, that would be all, thanks.');
     });
