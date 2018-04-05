@@ -1,17 +1,17 @@
 const mongodb = require('mongodb');
 const expect = require('chai').expect;
-const log = require('./log');
+const c3prlog = require('./c3prlog');
 
 const config = require('./config');
 const testLogsCollection = config.c3pr.mongoLogsCollection + '-test';
-log.testMode();
+c3prlog.testMode();
 
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-describe('log', () => {
+describe('c3prlog', () => {
 
     it('should log object', async () => {
         const dateBefore = new Date().toISOString();
@@ -20,7 +20,7 @@ describe('log', () => {
         const someNumber = Math.random() * 999 + 1;
         const logMessage = 'someNumber --> ' + someNumber;
 
-        await log.info2('nawde', {correlationIds: ['test'], scriptName: 'logs', message: logMessage, metadata: {stuff: 'yo'}});
+        await c3prlog('nawde', {correlationIds: ['test'], scriptName: 'logs', message: logMessage, metadata: {stuff: 'yo'}});
 
         const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
@@ -43,7 +43,7 @@ describe('log', () => {
         const someNumber = Math.random() * 999 + 1;
         const logMessage = 'someNumber --> ' + someNumber;
 
-        await log.info2('nawde', 'test', 'logs', logMessage, {stuff: 'yo'});
+        await c3prlog('nawde', 'test', 'logs', logMessage, {stuff: 'yo'});
 
         const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
@@ -67,7 +67,7 @@ describe('log', () => {
         const someNumber = Math.random() * 999 + 1;
         const logMessage = 'someNumber --> ' + someNumber;
 
-        await log.info2('nawde', ['test', 'idTwo'], 'logs', logMessage, {stuff: 'yo'});
+        await c3prlog('nawde', ['test', 'idTwo'], 'logs', logMessage, {stuff: 'yo'});
 
         const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
