@@ -1,9 +1,9 @@
-const log = require("node-c3pr-logger").log;
+const c3prLOG = require("node-c3pr-logger");
 const createPR = require('../domain/pr/createPR');
 const config = require('../config');
 
 async function handlePrs(prs) {
-    log([prs.meta.correlationId], 'handlePrs', `Handling PR request title '${prs.repository.revision}' rev '${prs.repository.revision}'`, {prs});
+    c3prLOG('c3pr-repo-github', [prs.meta.correlationId], 'handlePrs', `Handling PR request title '${prs.repository.revision}' rev '${prs.repository.revision}'`, {prs});
 
     await createPR({
         mainRepoOrgRepo: prs.repository.url.replace('https://github.com/', '').replace('.git', ''),
@@ -18,7 +18,7 @@ async function handlePrs(prs) {
         patchContent: prs.patch.diffBase64
     });
 
-    log([prs.meta.correlationId], 'handlePrs', `PR created successfully.`);
+    c3prLOG('c3pr-repo-github', [prs.meta.correlationId], 'handlePrs', `PR created successfully.`);
 }
 
 module.exports = handlePrs;

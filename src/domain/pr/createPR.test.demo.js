@@ -1,4 +1,4 @@
-require("node-c3pr-logger").log.testMode();
+require("node-c3pr-logger").testMode();
 const assert = require('assert');
 const createPR = require('./createPR');
 const config = require('../../config');

@@ -1,4 +1,4 @@
-const log = require("node-c3pr-logger").log;
+const c3prLOG = require("node-c3pr-logger");
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -29,4 +29,5 @@ c3pr-repo-github prs URL will be: ${config.c3pr.prsUrl}
 
 c3pr's git user name and password will be: '${config.c3pr.gitUserName.replace(/'/g, '')}' <'${config.c3pr.gitUserEmail.replace(/'/g, '')}'>
 `); // TODO maybe add validation of presence of these vars
+    c3prLOG('c3pr-repo-github', 'boot', 'main', `C-3PR Github Repo is up at ${config.c3pr.prsUrl}`);
 });
