@@ -53,8 +53,17 @@ interface LogMeta {
     moduleNames?: string | string[];
 }
 
-const c3prLOG = <C3prLOG>async function(message: string, metadata: any, ...logMetas: LogMeta[]) {
-    return logWithMeta(message, metadata, logMetas);
+function isLogMeta(o: any) {
+    return (!!o.correlationId || !!o.correlationIds) && (!!o.moduleName || !!o.moduleNames);
+}
+
+const c3prLOG = <C3prLOG>async function(message: string, ...metas: any[]) {
+    if (!isLogMeta(metas[0])) {
+        let metadata = metas.shift();
+        return logWithMeta(message, metadata, metas);
+    } else {
+        return logWithMeta(message, {}, metas);
+    }
 };
 c3prLOG.testMode = () => (c3prLOG as any).testModeActivated = true;
 

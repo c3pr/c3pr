@@ -21,7 +21,12 @@ Example at a JavaScript file:
 const c3prLOG = require("node-c3pr-logger");
 
 let logMeta = {nodeName: 'my-node', correlationId: 'SHA121313', moduleName: 'my-script'};
-c3prLOG('message', {meta: 'data'}, logMeta);
+c3prLOG('message', logMeta);
+// or
+c3prLOG('message', {meta: 'some specific data'}, logMeta);
+// or
+let logMeta2 = {correlationId: 'some subID', moduleName: 'my-reusable-script'};
+c3prLOG('message', logMeta, logMeta2);
 ```
 
 See [test file](src/log.test.js) for usages.

@@ -13,7 +13,7 @@ function timeout(ms) {
 
 describe('c3prLOG', () => {
 
-    function go(title, ...logMeta) {
+    function go(title, hasMeta, ...metas) {
         it(title, async () => {
             const dateBefore = new Date().toISOString();
             await timeout(100);
@@ -21,7 +21,7 @@ describe('c3prLOG', () => {
             const someNumber = Math.random() * 999 + 1;
             const logMessage = 'someNumber --> ' + someNumber;
 
-            await c3prLOG(logMessage, {stuff: 'yo2'}, ...logMeta);
+            await c3prLOG(logMessage, ...metas);
 
             const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
@@ -34,31 +34,34 @@ describe('c3prLOG', () => {
             expect(insertedLog.correlationIds).to.deep.equal(['test', 'idTwo']);
             expect(insertedLog.moduleNames).to.deep.equal(['logs-one', 'logs-two']);
             expect(insertedLog.message).to.equal(logMessage);
-            expect(insertedLog.metadata).to.deep.equal({stuff: 'yo2'});
+            if (hasMeta)
+            expect(insertedLog.metadata).to.deep.equal(metas[0]);
         }).timeout(10 * 1000);
     }
 
     go('should log logMeta (correlationIds)',
-        {nodeName: 'nawde', correlationIds: ['test', 'idTwo'], moduleNames: ['logs-one', 'logs-two']}
+        true, {stuff: 'yo2'}, {nodeName: 'nawde', correlationIds: ['test', 'idTwo'], moduleNames: ['logs-one', 'logs-two']}
+    );
+    go('should log logMeta (NO METADATA) (correlationIds)',
+        false, {nodeName: 'nawde', correlationIds: ['test', 'idTwo'], moduleNames: ['logs-one', 'logs-two']}
     );
     go('should log logMeta (correlationId + correlationIds)',
-        {nodeName: 'nawde', correlationId: 'test', correlationIds: ['idTwo'], moduleName: 'logs-one', moduleNames: ['logs-two']}
+        true, {stuff: 'yo2'}, {nodeName: 'nawde', correlationId: 'test', correlationIds: ['idTwo'], moduleName: 'logs-one', moduleNames: ['logs-two']}
     );
     go('should log logMeta (logMetas + correlationId)',
-        {nodeName: 'nawde', correlationId: 'test', moduleName: 'logs-one'}, {correlationId: 'idTwo', moduleName: 'logs-two'}
+        true, {stuff: 'yo2'}, {nodeName: 'nawde', correlationId: 'test', moduleName: 'logs-one'}, {correlationId: 'idTwo', moduleName: 'logs-two'}
     );
     go('should log logMeta (logMetas + correlationIds)',
-        {nodeName: 'nawde', correlationIds: ['test'], moduleName: 'logs-one'}, {correlationIds: ['idTwo'], moduleName: 'logs-two'}
+        true, {stuff: 'yo2'}, {nodeName: 'nawde', correlationIds: ['test'], moduleName: 'logs-one'}, {correlationIds: ['idTwo'], moduleName: 'logs-two'}
     );
     go('should log logMeta (logMetas + correlationId + correlationIds)',
-        {nodeName: 'nawde', correlationId: 'test', moduleName: 'logs-one'}, {correlationIds: ['idTwo'], moduleName: 'logs-two'}
+        true, {stuff: 'yo2'}, {nodeName: 'nawde', correlationId: 'test', moduleName: 'logs-one'}, {correlationIds: ['idTwo'], moduleName: 'logs-two'}
     );
     go('should log logMeta (logMetas + correlationIds not array)',
-        {nodeName: 'nawde', correlationIds: 'test', moduleName: 'logs-one'}, {correlationIds: 'idTwo', moduleName: 'logs-two'}
+        true, {stuff: 'yo2'}, {nodeName: 'nawde', correlationIds: 'test', moduleName: 'logs-one'}, {correlationIds: 'idTwo', moduleName: 'logs-two'}
     );
     go('should log logMeta (logMetas + nodeName on second)',
-        {correlationId: 'test', moduleName: 'logs-one'}, {nodeName: 'nawde', correlationIds: ['idTwo'], moduleName: 'logs-two'}
+        true, {stuff: 'yo2'}, {correlationId: 'test', moduleName: 'logs-one'}, {nodeName: 'nawde', correlationIds: ['idTwo'], moduleName: 'logs-two'}
     );
-
 
 });

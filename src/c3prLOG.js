@@ -31,8 +31,17 @@ async function log(nodeName, correlationIds, moduleNames, message, metadata) {
     await logs.insertOne({ node: nodeName, dateTime: new Date().toISOString(), correlationIds, moduleNames, message, metadata });
     await client.close();
 }
-const c3prLOG = async function (message, metadata, ...logMetas) {
-    return logWithMeta(message, metadata, logMetas);
+function isLogMeta(o) {
+    return (!!o.correlationId || !!o.correlationIds) && (!!o.moduleName || !!o.moduleNames);
+}
+const c3prLOG = async function (message, ...metas) {
+    if (!isLogMeta(metas[0])) {
+        let metadata = metas.shift();
+        return logWithMeta(message, metadata, metas);
+    }
+    else {
+        return logWithMeta(message, {}, metas);
+    }
 };
 c3prLOG.testMode = () => c3prLOG.testModeActivated = true;
 module.exports = c3prLOG;
