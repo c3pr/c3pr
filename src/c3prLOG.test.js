@@ -13,74 +13,52 @@ function timeout(ms) {
 
 describe('c3prLOG', () => {
 
-    it('should log object', async () => {
-        const dateBefore = new Date().toISOString();
-        await timeout(100);
+    function go(title, ...logMeta) {
+        it(title, async () => {
+            const dateBefore = new Date().toISOString();
+            await timeout(100);
 
-        const someNumber = Math.random() * 999 + 1;
-        const logMessage = 'someNumber --> ' + someNumber;
+            const someNumber = Math.random() * 999 + 1;
+            const logMessage = 'someNumber --> ' + someNumber;
 
-        await c3prLOG('nawde', {correlationIds: ['test'], scriptName: 'logs', message: logMessage, metadata: {stuff: 'yo'}});
+            await c3prLOG(logMessage, {stuff: 'yo2'}, ...logMeta);
 
-        const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
+            const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
 
-        let logs = client.db(config.c3pr.mongoLogsDatabase).collection(testLogsCollection);
-        const insertedLog = await logs.find({dateTime: {$gte: dateBefore}}).next();
+            let logs = client.db(config.c3pr.mongoLogsDatabase).collection(testLogsCollection);
+            const insertedLog = await logs.find({dateTime: {$gte: dateBefore}}).next();
 
-        await client.close();
+            await client.close();
 
-        expect(insertedLog.node).to.equal('nawde');
-        expect(insertedLog.correlationIds).to.deep.equal(['test']);
-        expect(insertedLog.scriptName).to.equal('logs');
-        expect(insertedLog.message).to.equal(logMessage);
-        expect(insertedLog.metadata).to.deep.equal({stuff: 'yo'});
-    }).timeout(10 * 1000);
+            expect(insertedLog.node).to.equal('nawde');
+            expect(insertedLog.correlationIds).to.deep.equal(['test', 'idTwo']);
+            expect(insertedLog.moduleNames).to.deep.equal(['logs-one', 'logs-two']);
+            expect(insertedLog.message).to.equal(logMessage);
+            expect(insertedLog.metadata).to.deep.equal({stuff: 'yo2'});
+        }).timeout(10 * 1000);
+    }
 
-    it('should log id string', async () => {
-        const dateBefore = new Date().toISOString();
-        await timeout(100);
+    go('should log logMeta (correlationIds)',
+        {nodeName: 'nawde', correlationIds: ['test', 'idTwo'], moduleNames: ['logs-one', 'logs-two']}
+    );
+    go('should log logMeta (correlationId + correlationIds)',
+        {nodeName: 'nawde', correlationId: 'test', correlationIds: ['idTwo'], moduleName: 'logs-one', moduleNames: ['logs-two']}
+    );
+    go('should log logMeta (logMetas + correlationId)',
+        {nodeName: 'nawde', correlationId: 'test', moduleName: 'logs-one'}, {correlationId: 'idTwo', moduleName: 'logs-two'}
+    );
+    go('should log logMeta (logMetas + correlationIds)',
+        {nodeName: 'nawde', correlationIds: ['test'], moduleName: 'logs-one'}, {correlationIds: ['idTwo'], moduleName: 'logs-two'}
+    );
+    go('should log logMeta (logMetas + correlationId + correlationIds)',
+        {nodeName: 'nawde', correlationId: 'test', moduleName: 'logs-one'}, {correlationIds: ['idTwo'], moduleName: 'logs-two'}
+    );
+    go('should log logMeta (logMetas + correlationIds not array)',
+        {nodeName: 'nawde', correlationIds: 'test', moduleName: 'logs-one'}, {correlationIds: 'idTwo', moduleName: 'logs-two'}
+    );
+    go('should log logMeta (logMetas + nodeName on second)',
+        {correlationId: 'test', moduleName: 'logs-one'}, {nodeName: 'nawde', correlationIds: ['idTwo'], moduleName: 'logs-two'}
+    );
 
-        const someNumber = Math.random() * 999 + 1;
-        const logMessage = 'someNumber --> ' + someNumber;
-
-        await c3prLOG('nawde', 'test', 'logs', logMessage, {stuff: 'yo'});
-
-        const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
-
-        let songs = client.db(config.c3pr.mongoLogsDatabase).collection(testLogsCollection);
-        const insertedLog = await songs.find({dateTime: {$gte: dateBefore}}).next();
-
-        await client.close();
-
-        expect(insertedLog.node).to.equal('nawde');
-        expect(insertedLog.correlationIds).to.deep.equal(['test']);
-        expect(insertedLog.scriptName).to.equal('logs');
-        expect(insertedLog.message).to.equal(logMessage);
-        expect(insertedLog.metadata).to.deep.equal({stuff: 'yo'});
-    }).timeout(10 * 1000);
-
-
-    it('should log ids array', async () => {
-        const dateBefore = new Date().toISOString();
-        await timeout(100);
-
-        const someNumber = Math.random() * 999 + 1;
-        const logMessage = 'someNumber --> ' + someNumber;
-
-        await c3prLOG('nawde', ['test', 'idTwo'], 'logs', logMessage, {stuff: 'yo'});
-
-        const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
-
-        let logs = client.db(config.c3pr.mongoLogsDatabase).collection(testLogsCollection);
-        const insertedLog = await logs.find({dateTime: {$gte: dateBefore}}).next();
-
-        await client.close();
-
-        expect(insertedLog.node).to.equal('nawde');
-        expect(insertedLog.correlationIds).to.deep.equal(['test', 'idTwo']);
-        expect(insertedLog.scriptName).to.equal('logs');
-        expect(insertedLog.message).to.equal(logMessage);
-        expect(insertedLog.metadata).to.deep.equal({stuff: 'yo'});
-    }).timeout(10 * 1000);
 
 });

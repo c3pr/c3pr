@@ -1,64 +1,39 @@
 const mongodb = require('mongodb');
 const config = require('./config');
-
-function colchetify(arr) {
-    return arr.map(i => `[${i}]`).join(' ');
+function wrap(arr, prefix = `[`, suffix = `]`) {
+    return arr.map(i => `${prefix}${i}${suffix}`).join(' ');
 }
-
-async function logManyParameters(nodeName, correlationIdOrCorrelationIds, scriptName, message, metadata) {
-    const correlationIds = Array.isArray(correlationIdOrCorrelationIds) ? correlationIdOrCorrelationIds : [correlationIdOrCorrelationIds];
-    return logObject(nodeName, {
-        correlationIds,
-        scriptName,
-        message,
-        metadata
-    });
+function arrayfy(o) {
+    return Array.isArray(o) ? o : [o];
 }
-
 let warningShown = false;
-
-async function logObject(nodeName, logOrLogs) {
+function showWarningIfDatabaseNotDefined() {
     if (!config.c3pr.mongoLogsUri && !warningShown) {
         console.log('Logs: MONGO_LOGS_URI env var is not defined. Printing to STDOUT only. (This message will be only printed once every 5mins.)');
         warningShown = true;
         setTimeout(() => warningShown = false, 5 * 60 * 1000).unref();
     }
-    if (!config.c3pr.mongoLogsUri) {
-        console.log(colchetify([...logOrLogs.correlationIds, logOrLogs.scriptName]), logOrLogs.message);
-    }
+}
+async function logWithMeta(message, metadata, logMetas) {
+    const nodeName = logMetas.find(logMeta => !!logMeta.nodeName).nodeName;
+    const correlationIds = logMetas.reduce((acc, { correlationId, correlationIds }) => acc.concat(correlationId || []).concat(correlationIds || []), []);
+    const moduleNames = logMetas.reduce((acc, { moduleName, moduleNames }) => acc.concat(moduleName || []).concat(moduleNames || []), []);
+    await log(nodeName, correlationIds, moduleNames, message, metadata);
+}
+async function log(nodeName, correlationIds, moduleNames, message, metadata) {
+    showWarningIfDatabaseNotDefined();
+    console.log(wrap(correlationIds), wrap(moduleNames, '<', '>'), message);
     if (!config.c3pr.mongoLogsUri) {
         return;
     }
     const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
-
     let logs = client.db(config.c3pr.mongoLogsDatabase).collection(config.c3pr.mongoLogsCollection + (c3prLOG.testModeActivated ? "-test" : ""));
-
-    if (Array.isArray(logOrLogs)) {
-        const logsWithNodeAndDate = logOrLogs.map(log => addNodeAndDate(nodeName, log));
-        await logs.insertMany(logsWithNodeAndDate);
-    } else {
-        await logs.insertOne(addNodeAndDate(nodeName, logOrLogs));
-    }
-
+    await logs.insertOne({ node: nodeName, dateTime: new Date().toISOString(), correlationIds, moduleNames, message, metadata });
     await client.close();
 }
-
-const isNonArrayObject = o => !Array.isArray(o) && typeof o === 'object';
-const isObjectArray = o => Array.isArray(o) && o.length > 0 && isNonArrayObject(o[0]);
-
-async function c3prLOG(nodeName, logOrLogsOrCorrIdS, scriptName, message, metadata) {
-    if (isNonArrayObject(logOrLogsOrCorrIdS)) { // log
-        return logObject(nodeName, logOrLogsOrCorrIdS);
-    } else if (isObjectArray(logOrLogsOrCorrIdS)) { // logs
-        return logObject(nodeName, logOrLogsOrCorrIdS);
-    } else { // corrId or corrIds
-        return logManyParameters(nodeName, logOrLogsOrCorrIdS, scriptName, message, metadata);
-    }
-}
+const c3prLOG = async function (message, metadata, ...logMetas) {
+    return logWithMeta(message, metadata, logMetas);
+};
 c3prLOG.testMode = () => c3prLOG.testModeActivated = true;
-
-function addNodeAndDate(nodeName, log) {
-    return {node: nodeName, dateTime: new Date().toISOString(), ...log};
-}
-
 module.exports = c3prLOG;
+//# sourceMappingURL=c3prLOG.js.map

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "noEmitHelpers": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "compileOnSave": true,
+  "buildOnSave": true
+}
