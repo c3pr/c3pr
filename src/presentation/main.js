@@ -1,3 +1,4 @@
+const c3prLOG = require("node-c3pr-logger");
 const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('../config');
@@ -16,4 +17,7 @@ app.get('*', function(req, res){
     res.status(404).send('No C3PR endpoint is listening at the requested location.');
 });
 
-app.listen(config.c3pr.port, () => console.log(`c3pr now listening at port ${config.c3pr.port}.`));
+app.listen(config.c3pr.port, () => {
+    console.log(`c3pr now listening at port ${config.c3pr.port}.`);
+    c3prLOG(`C-3PR bot is up at port ${config.c3pr.port}`, {nodeName: 'c3pr', correlationIds: 'boot', moduleName: 'main'});
+});

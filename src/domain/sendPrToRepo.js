@@ -12,14 +12,14 @@ function sendPrToRepo(prsUrl, pr) {
         },
         function (error, response, body) {
             if (error || response.statusCode !== 200) {
-                c3prLOG('c3pr', [pr.meta.correlationId], 'sendPrToRepo', `Error while sending pr to repo.
+                c3prLOG(`Error while sending pr to repo.
                 * URL: ${prsUrl}
                 * Status: ${(response || {}).statusCode}
                 * Error: ${error}
                 * Body:
                 -----------------------\n
                 ${JSON.stringify(body, null, 2)}
-                -----------------------\n\n`);
+                -----------------------\n\n`, {nodeName: 'c3pr', correlationId: pr.meta.correlationId, moduleName: 'sendPrToRepo'});
             } else {
                 c3prLOG(`Sent pr to repo at ${prsUrl}.`, {nodeName: 'c3pr', correlationId: pr.meta.correlationId, moduleName: 'sendPrToRepo'});
             }

@@ -31,14 +31,14 @@ function invokeTools(toolAgents, changes) {
             },
             function (error, response, body) {
                 if (error || response.statusCode !== 200) {
-                    c3prLOG('c3pr', [changes.meta.correlationId], 'invokeTools', `Error while invoking agent.
+                    c3prLOG(`Error while invoking agent.
                 * URL: ${tool.agentURL}
                 * Status: ${(response || {}).statusCode}
                 * Error: ${error}
                 * Body:
                 -----------------------\n
                 ${JSON.stringify(body, null, 2)}
-                -----------------------\n\n`);
+                -----------------------\n\n`, {nodeName: 'c3pr', correlationId: changes.meta.correlationId, moduleName: 'invokeTools'});
                 } else {
                     c3prLOG(`Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool)}`, {nodeName: 'c3pr', correlationId: changes.meta.correlationId, moduleName: 'invokeTools'});
                 }
