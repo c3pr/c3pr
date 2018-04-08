@@ -10,11 +10,11 @@ module.exports = function (app) {
             !prs.meta.compatibleSchemas ||
             !prs.meta.compatibleSchemas.includes("c3pr/c3pr::prs")) {
             const errorMessage = `ERROR Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(prs)}.`;
-            c3prLOG('c3pr-repo-github', [prs.meta && prs.meta.correlationId], 'prsController', errorMessage, {prs});
+            c3prLOG(errorMessage, {prs}, {nodeName: 'c3pr-repo-github', correlationIds: [prs.meta && prs.meta.correlationId], moduleName: 'prsController'});
             response.status(400).send(errorMessage);
             return;
         }
-        c3prLOG('c3pr-repo-github', [prs.meta.correlationId], 'prsController', `pr received. ${JSON.stringify(prs)}`);
+        c3prLOG(`pr received. ${JSON.stringify(prs)}`, {nodeName: 'c3pr-repo-github', correlationId: prs.meta.correlationId, moduleName: 'prsController'});
         handlePrs(prs);
         response.send('Ok, that would be all, thanks.');
     });

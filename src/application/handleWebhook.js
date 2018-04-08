@@ -3,7 +3,7 @@ const convertWebhookToChanges = require('../domain/webhook/convertWebhookToChang
 const notifyC3prBotOfChanges = require('../domain/c3pr-bot/notifyC3prBotOfChanges');
 
 function handleWebhook(webhookPayload) {
-    c3prLOG('c3pr-repo-github', [webhookPayload.after], 'handleWebhook', `Handling webhook invoked for ${webhookPayload.repository.clone_url} - m: ${webhookPayload.head_commit.message}...`);
+    c3prLOG(`Handling webhook invoked for ${webhookPayload.repository.clone_url} - m: ${webhookPayload.head_commit.message}...`, {webhookPayload}, {nodeName: 'c3pr-repo-github', correlationId: webhookPayload.after, moduleName: 'handleWebhook'});
     const changes = convertWebhookToChanges(webhookPayload);
     notifyC3prBotOfChanges(changes);
 }

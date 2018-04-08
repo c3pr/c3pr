@@ -3,7 +3,7 @@ const createPR = require('../domain/pr/createPR');
 const config = require('../config');
 
 async function handlePrs(prs) {
-    c3prLOG('c3pr-repo-github', [prs.meta.correlationId], 'handlePrs', `Handling PR request title '${prs.repository.revision}' rev '${prs.repository.revision}'`, {prs});
+    c3prLOG(`Handling PR request title '${prs.repository.revision}' rev '${prs.repository.revision}'`, {prs}, {nodeName: 'c3pr-repo-github', correlationId: prs.meta.correlationId, moduleName: 'handlePrs'});
 
     await createPR({
         mainRepoOrgRepo: prs.repository.url.replace('https://github.com/', '').replace('.git', ''),
@@ -18,7 +18,7 @@ async function handlePrs(prs) {
         patchContent: prs.patch.diffBase64
     });
 
-    c3prLOG('c3pr-repo-github', [prs.meta.correlationId], 'handlePrs', `PR created successfully.`);
+    c3prLOG(`PR created successfully.`, {nodeName: 'c3pr-repo-github', correlationId: prs.meta.correlationId, moduleName: 'handlePrs'});
 }
 
 module.exports = handlePrs;

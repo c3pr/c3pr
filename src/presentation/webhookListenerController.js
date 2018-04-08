@@ -11,7 +11,7 @@ githubWebhookHandler.on('error', function (err) {
 });
 
 githubWebhookHandler.on('push', function (event) {
-    c3prLOG('c3pr-repo-github', [event.payload.after], 'webhookListenerController', `Received a push event for ${event.payload.repository.name} to ${event.payload.ref}`);
+    c3prLOG(`Received a push event for ${event.payload.repository.name} to ${event.payload.ref}`, {nodeName: 'c3pr-repo-github', correlationId: event.payload.after, moduleName: 'webhookListenerController'});
     handleWebhook(event.payload);
 });
 
