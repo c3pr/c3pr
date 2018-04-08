@@ -5,7 +5,7 @@ const c3prLOG = require("node-c3pr-logger");
 
 async function handleToolInvocation(toolInvocation) {
 
-    c3prLOG('c3pr-agent', [toolInvocation.meta.correlationId], 'handleToolInvocation', `C3PR Agent received invocation with args: ${JSON.stringify(toolInvocation)}`);
+    c3prLOG(`C3PR Agent received invocation: ${toolInvocation.tool.toolId}. Files: ${JSON.stringify(toolInvocation.files)}`, {toolInvocation}, {nodeName: 'c3pr-agent', correlationId: toolInvocation.meta.correlationId, moduleName: 'handleToolInvocation'});
 
     try { // if (request.repository.type === "git")
         const diffBase64 = await invokeToolAtGitRepo(toolInvocation);
@@ -17,7 +17,7 @@ async function handleToolInvocation(toolInvocation) {
         c3prLOG('c3pr-agent', [toolInvocation.meta.correlationId], 'handleToolInvocation', `Error while invoking tool. \n${e}\n`)
     }
 
-    c3prLOG('c3pr-agent', [toolInvocation.meta.correlationId], 'handleToolInvocation', `Tool invocation complete.`);
+    c3prLOG(`Tool invocation complete.`, {nodeName: 'c3pr-agent', correlationId: toolInvocation.meta.correlationId, moduleName: 'handleToolInvocation'});
 
 }
 

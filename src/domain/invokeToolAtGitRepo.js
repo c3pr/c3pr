@@ -16,7 +16,7 @@ async function invokeToolAtGitRepo(toolInvocation) {
     const corrIds = [toolInvocation.meta.correlationId, localUniqueCorrelationId];
     const scriptName = 'invokeToolAtGitRepo';
 
-    c3prLOG('c3pr-agent', corrIds, scriptName, `Invoking tool at git repo: ${toolInvocation.repository.url}`);
+    c3prLOG(`Invoking tool at git repo: ${toolInvocation.repository.url}`, {nodeName: 'c3pr-agent', correlationIds: corrIds, moduleNames: scriptName});
 
     const cloneFolder = await cloneRepositoryLocally({
         localUniqueCorrelationId: localUniqueCorrelationId,
@@ -27,7 +27,7 @@ async function invokeToolAtGitRepo(toolInvocation) {
         cloneDepth: CLONE_DEPTH
     });
 
-    c3prLOG('c3pr-agent', corrIds, scriptName, `Done cloning at ${cloneFolder}.`);
+    c3prLOG(`Done cloning at ${cloneFolder}.`, {nodeName: 'c3pr-agent', correlationIds: corrIds, moduleNames: scriptName});
 
     await shell(toolInvocation.tool.command, {cwd: cloneFolder}, {stdout: true, prefix: corrIds, scriptName: scriptName});
 

@@ -10,11 +10,11 @@ module.exports = function (app) {
             !toolInvocation.meta.compatibleSchemas ||
             !toolInvocation.meta.compatibleSchemas.includes("c3pr/c3pr-agent::toolInvocation")) {
             const errorMessage = `Request does not contain required metadata (meta.correlationId and meta.compatibleSchemas): ${JSON.stringify(toolInvocation)}.`;
-            c3prLOG('c3pr-agent', [toolInvocation.meta && toolInvocation.meta.correlationId], 'c3prController', errorMessage, {toolInvocation});
+            c3prLOG(errorMessage, {toolInvocation}, {nodeName: 'c3pr-agent', correlationIds: [toolInvocation.meta && toolInvocation.meta.correlationId], moduleName: 'c3prController'});
             response.status(400).send(errorMessage);
             return;
         }
-        c3prLOG('c3pr-agent', toolInvocation.meta.correlationId, 'c3prController', `toolInvocation received.`, {toolInvocation});
+        c3prLOG(`toolInvocation received.`, {toolInvocation}, {nodeName: 'c3pr-agent', correlationIds: toolInvocation.meta.correlationId, moduleName: 'c3prController'});
         handleToolInvocation(toolInvocation);
 
         // echo back request
