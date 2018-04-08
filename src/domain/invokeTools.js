@@ -6,7 +6,7 @@ const c3prLOG = require("node-c3pr-logger");
 
 function invokeTools(toolAgents, changes) {
     const applicableToolAgents = filterApplicableToolAgents(toolAgents, changes);
-    c3prLOG('c3pr', [changes.meta.correlationId], 'invokeTools', `Applicable tools - ${applicableToolAgents.length}: ${applicableToolAgents.map(tool => tool.toolId)}`);
+    c3prLOG(`Applicable tools - ${applicableToolAgents.length}: ${applicableToolAgents.map(tool => tool.toolId)}`, {nodeName: 'c3pr', correlationId: changes.meta.correlationId, moduleName: 'invokeTools'});
 
     applicableToolAgents.forEach((tool) => {
 
@@ -40,7 +40,7 @@ function invokeTools(toolAgents, changes) {
                 ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`);
                 } else {
-                    c3prLOG('c3pr', [changes.meta.correlationId], 'invokeTools', `Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool)}`);
+                    c3prLOG(`Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool)}`, {nodeName: 'c3pr', correlationId: changes.meta.correlationId, moduleName: 'invokeTools'});
                 }
             }
         );

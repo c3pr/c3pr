@@ -2,7 +2,7 @@ const request = require('request');
 const c3prLOG = require("node-c3pr-logger");
 
 function sendPrToRepo(prsUrl, pr) {
-    c3prLOG('c3pr', [pr.meta.correlationId], 'sendPrToRepo', `Sending pr to repo ${prsUrl}...`, {pr});
+    c3prLOG(`Sending pr to repo ${prsUrl}...`, {pr}, {nodeName: 'c3pr', correlationId: pr.meta.correlationId, moduleName: 'sendPrToRepo'});
 
     request.post(
         {
@@ -21,7 +21,7 @@ function sendPrToRepo(prsUrl, pr) {
                 ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`);
             } else {
-                c3prLOG('c3pr', [pr.meta.correlationId], 'sendPrToRepo', `Sent pr to repo at ${prsUrl}.`);
+                c3prLOG(`Sent pr to repo at ${prsUrl}.`, {nodeName: 'c3pr', correlationId: pr.meta.correlationId, moduleName: 'sendPrToRepo'});
             }
         }
     );
