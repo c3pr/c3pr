@@ -6,15 +6,16 @@ const c3prLOG = require("node-c3pr-logger");
 
 async function createClonesDir({nodeName, correlationIds, moduleName}, cloneDir) {
     let scriptName = (moduleName ? moduleName + " " : "") + 'cloneRepositoryLocally';
+    const logMeta = {nodeName: nodeName, correlationIds: correlationIds, moduleNames: scriptName};
     return new Promise(resolve => {
         const resolvedClonesDir = path.resolve(cloneDir);
         if (fs.existsSync(resolvedClonesDir)) {
-            c3prLOG(nodeName, correlationIds, scriptName, `${resolvedClonesDir} already exists.`);
+            c3prLOG(`${resolvedClonesDir} already exists.`, logMeta);
             resolve();
         } else {
-            c3prLOG(nodeName, correlationIds, scriptName, `${resolvedClonesDir} does not exist, creating.`);
+            c3prLOG(`${resolvedClonesDir} does not exist, creating.`, logMeta);
             mkdirp(resolvedClonesDir, () => {
-                c3prLOG(nodeName, correlationIds, scriptName, `Clones dir created at ${resolvedClonesDir}`);
+                c3prLOG(`Clones dir created at ${resolvedClonesDir}`, logMeta);
                 resolve();
             });
         }
@@ -26,7 +27,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
 
     await createClonesDir({nodeName: 'node-git-client', correlationIds: prefix}, cloneBaseDir);
 
-    c3prLOG('node-git-client', prefix, 'cloneRepositoryLocally', `Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`);
+    c3prLOG(`Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`, {nodeName: 'node-git-client', correlationIds: prefix, moduleName: 'cloneRepositoryLocally'});
 
     // clones that single branch (maybe there is a somewhat slightly faster way of doing this with --mirror, though I feel it probably won't pay off)
     await shell(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {prefix, scriptName: 'cloneRepositoryLocally'});
@@ -48,7 +49,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
 
     await shell(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {prefix, scriptName: 'cloneRepositoryLocally'});
 
-    c3prLOG('node-git-client', prefix, 'cloneRepositoryLocally', `Clone/reset completed.`);
+    c3prLOG(`Clone/reset completed.`, {nodeName: 'node-git-client', correlationIds:  prefix, moduleName: 'cloneRepositoryLocally'});
 }
 
 async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, url, branch, revision, cloneDepth}) {

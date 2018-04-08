@@ -27,16 +27,16 @@ async function shell(shCommand, shOptions, myOptions = {}) {
     }
 
     const nodeName = myOptions.nodeName || 'node-git-client';
-    c3prLOG(nodeName, prefix, scriptName, `\$ ${r(shCommand)}`);
+    c3prLOG(`\$ ${r(shCommand)}`, {nodeName: nodeName, correlationIds: prefix, moduleNames: scriptName});
 
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (myOptions.stdout) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        c3prLOG(nodeName, prefix, scriptName, r(stdout));
+        c3prLOG(r(stdout), {nodeName: nodeName, correlationIds: prefix, moduleNames: scriptName});
     }
     if (error) {
-        c3prLOG(nodeName, prefix, scriptName,`
+        c3prLOG(`
             [ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             COMMAND: ${r(shCommand)}
             OPTIONS: ${r(JSON.stringify(shOptions))}
@@ -47,7 +47,8 @@ async function shell(shCommand, shOptions, myOptions = {}) {
             ------------------------------
             STDERR:
             ${r(stderr)}
-            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`
+            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`,
+            {nodeName: nodeName, correlationIds: prefix, moduleNames: scriptName}
         );
         throw new Error(r(error));
     }
