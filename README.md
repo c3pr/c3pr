@@ -9,8 +9,8 @@ Have a look at [`src`](src) folder to understand what functions are available.
 ### Usage:
 
 ```bash
-# Change 6.0.0 below with the desired version tag
-npm i -S c3pr/node-c3pr-logger#6.0.0
+# Change 7.0.0 below with the desired version tag
+npm i -S c3pr/node-c3pr-logger#7.0.0
 ```
 
 The `MONGO_LOGS_URI` must be defined to something like 
