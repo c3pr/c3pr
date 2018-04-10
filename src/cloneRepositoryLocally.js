@@ -1,7 +1,7 @@
 const mkdirp = require('mkdirp');
 const path = require('path');
 const fs = require('fs');
-const shell = require('./shell');
+const c3prSH = require('./c3prSH');
 const c3prLOG = require("node-c3pr-logger");
 
 async function createClonesDir(cloneDir, ...logMeta) {
@@ -29,7 +29,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
     c3prLOG(`Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`, ...logMetas, gitCloneLogMeta);
 
     // clones that single branch (maybe there is a somewhat slightly faster way of doing this with --mirror, though I feel it probably won't pay off)
-    await shell(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {logMeta});
+    await c3prSH(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {logMeta});
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //NOTE:
@@ -46,7 +46,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
     // right now, though, I feel the constant "cloneDepth" is pretty much enough.
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    await shell(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {logMeta});
+    await c3prSH(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {logMeta});
 
     c3prLOG(`Clone/reset completed.`, ...logMeta);
 }

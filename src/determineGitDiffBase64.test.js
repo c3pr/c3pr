@@ -4,7 +4,7 @@ const determineGitDiffBase64 = require('./determineGitDiffBase64');
 const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 const path = require('path');
-const shell = require('./shell');
+const c3prSH = require('./c3prSH');
 require("node-c3pr-logger").testMode();
 
 
@@ -26,9 +26,9 @@ describe('determineGitDiffBase64', () => {
             cloneDepth: 5
         }, logMeta);
 
-        await shell(`echo some-change>> pom.xml`, {cwd: cloneFolder}, {logMeta});
+        await c3prSH(`echo some-change>> pom.xml`, {cwd: cloneFolder}, {logMeta});
         fs.unlinkSync(path.join(cloneFolder, 'README.md'));
-        await shell(`echo some-new-file> src/main/java/MyNewClass.java`, {cwd: cloneFolder}, {logMeta});
+        await c3prSH(`echo some-new-file> src/main/java/MyNewClass.java`, {cwd: cloneFolder}, {logMeta});
 
         const diff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder, logMeta);
         expect(diff).to.be.equal(
@@ -93,7 +93,7 @@ index 0000000..80772dc
         const patchFileName = `c3pr-${localUniqueCorrelationId}.patch`;
         const patchFilePath = `${cloneFolder}/${patchFileName}`;
         fs.writeFileSync(patchFilePath, Buffer.from(patchContent, 'base64').toString('hex'), 'hex');
-        await shell(`git apply ${patchFileName}`, {cwd: cloneFolder}, {prefix: [sha, localUniqueCorrelationId], scriptName: 'determineGitDiffBase64.test.js'});
+        await c3prSH(`git apply ${patchFileName}`, {cwd: cloneFolder}, {prefix: [sha, localUniqueCorrelationId], scriptName: 'determineGitDiffBase64.test.js'});
         fs.unlinkSync(patchFilePath);
 
         const gitDiff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder);
