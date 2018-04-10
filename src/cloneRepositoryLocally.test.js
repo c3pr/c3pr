@@ -16,7 +16,7 @@ describe('cloneRepositoryLocally', () => {
             branch: 'branch-for-clone-tests',
             revision: '30b03c1d8aa6ee670534b80edd0dc39c12644259',
             cloneDepth: 5
-        });
+        }, {nodeName: 'CRL-test', correlationId: 'testC', moduleName: 'testM'});
 
         expect(fs.existsSync(cloneFolder)).to.be.true;
         expect(fs.existsSync(path.join(cloneFolder, '.git'))).to.be.true;

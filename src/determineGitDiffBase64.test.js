@@ -15,6 +15,8 @@ describe('determineGitDiffBase64', () => {
         const localUniqueCorrelationId = uuidv4();
         const sha = '30b03c1d8aa6ee670534b80edd0dc39c12644259';
 
+        const logMeta = {nodeName: 'DGDB-test', correlationId: [sha, localUniqueCorrelationId], moduleName: 'determineGitDiffBase64.test.js'};
+
         const cloneFolder = await cloneRepositoryLocally({
             localUniqueCorrelationId: localUniqueCorrelationId,
             cloneBaseDir: '/tmp/c3pr/test/clones',
@@ -22,13 +24,13 @@ describe('determineGitDiffBase64', () => {
             branch: 'branch-for-clone-tests',
             revision: sha,
             cloneDepth: 5
-        });
+        }, logMeta);
 
-        await shell(`echo some-change>> pom.xml`, {cwd: cloneFolder}, {prefix: [sha, localUniqueCorrelationId], scriptName: 'determineGitDiffBase64.test.js'});
+        await shell(`echo some-change>> pom.xml`, {cwd: cloneFolder}, {logMeta});
         fs.unlinkSync(path.join(cloneFolder, 'README.md'));
-        await shell(`echo some-new-file> src/main/java/MyNewClass.java`, {cwd: cloneFolder}, {prefix: [sha, localUniqueCorrelationId], scriptName: 'determineGitDiffBase64.test.js'});
+        await shell(`echo some-new-file> src/main/java/MyNewClass.java`, {cwd: cloneFolder}, {logMeta});
 
-        const diff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder);
+        const diff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder, logMeta);
         expect(diff).to.be.equal(
 
 // this convertion to base64 only works here because there are no accents (so no ISOvsUTF encoding trouble)

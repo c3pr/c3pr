@@ -1,7 +1,7 @@
 const exec = require('child_process').exec;
 const c3prLOG = require("node-c3pr-logger");
 
-function sh(command, options) {
+function sh(command, options): Promise<{error, stdout, stderr}> {
     return new Promise((resolve => {
         exec(command, options, function (error, stdout, stderr) {
             resolve({error, stdout, stderr});
@@ -11,29 +11,26 @@ function sh(command, options) {
 
 function replaceTokens(input, replacements) {
     let inputAfterReplacements = input;
-    replacements.forEach(replacement => {
-        inputAfterReplacements = inputAfterReplacements.replace(replacement.regex, replacement.replaceWith)
+    replacements.forEach(({regex, replaceWith}) => {
+        inputAfterReplacements = inputAfterReplacements.replace(regex, replaceWith)
     });
     return inputAfterReplacements;
 }
 
-async function shell(shCommand, shOptions, myOptions = {}) {
-    const r = s => replaceTokens(s, myOptions.replacements || []);
+const shellLogMeta = {moduleName: 'c3prSH'};
 
-    let prefix = myOptions.prefix || "";
-    let scriptName = myOptions.scriptName || 'shell';
-    if (!Array.isArray(prefix)) {
-        prefix = [prefix];
-    }
+async function c3prSH(shCommand, shOptions, {logMeta, stdout: shouldStdOut, replacements}) {
+    const r = s => replaceTokens(s, replacements || []);
 
-    const nodeName = myOptions.nodeName || 'node-git-client';
-    c3prLOG(`\$ ${r(shCommand)}`, {nodeName: nodeName, correlationIds: prefix, moduleNames: scriptName});
+    const logMetaArr = Array.isArray(logMeta) ? logMeta : [logMeta];
+
+    c3prLOG(`\$ ${r(shCommand)}`, ...logMetaArr, shellLogMeta);
 
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
-    if (myOptions.stdout) {
+    if (shouldStdOut) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        c3prLOG(r(stdout), {nodeName: nodeName, correlationIds: prefix, moduleNames: scriptName});
+        c3prLOG(r(stdout), ...logMetaArr, shellLogMeta);
     }
     if (error) {
         c3prLOG(`
@@ -48,11 +45,11 @@ async function shell(shCommand, shOptions, myOptions = {}) {
             STDERR:
             ${r(stderr)}
             [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`,
-            {nodeName: nodeName, correlationIds: prefix, moduleNames: scriptName}
+            ...logMetaArr, shellLogMeta
         );
         throw new Error(r(error));
     }
     return r(stdout);
 }
 
-module.exports = shell;
+module.exports = c3prSH;

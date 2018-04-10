@@ -4,33 +4,32 @@ const fs = require('fs');
 const shell = require('./shell');
 const c3prLOG = require("node-c3pr-logger");
 
-async function createClonesDir({nodeName, correlationIds, moduleName}, cloneDir) {
-    let scriptName = (moduleName ? moduleName + " " : "") + 'cloneRepositoryLocally';
-    const logMeta = {nodeName: nodeName, correlationIds: correlationIds, moduleNames: scriptName};
+async function createClonesDir(cloneDir, ...logMeta) {
     return new Promise(resolve => {
         const resolvedClonesDir = path.resolve(cloneDir);
         if (fs.existsSync(resolvedClonesDir)) {
-            c3prLOG(`${resolvedClonesDir} already exists.`, logMeta);
+            c3prLOG(`${resolvedClonesDir} already exists.`, ...logMeta);
             resolve();
         } else {
-            c3prLOG(`${resolvedClonesDir} does not exist, creating.`, logMeta);
+            c3prLOG(`${resolvedClonesDir} does not exist, creating.`, ...logMeta);
             mkdirp(resolvedClonesDir, () => {
-                c3prLOG(`Clones dir created at ${resolvedClonesDir}`, logMeta);
+                c3prLOG(`Clones dir created at ${resolvedClonesDir}`, ...logMeta);
                 resolve();
             });
         }
     });
 }
 
-async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId) {
-    const prefix = [gitSHA, localUniqueCorrelationId];
+async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId, ...logMetas) {
+    const gitCloneLogMeta = {correlationIds: [gitSHA, localUniqueCorrelationId], moduleName: 'cloneRepositoryLocally'};
+    const logMeta = [...logMetas, gitCloneLogMeta];
 
-    await createClonesDir({nodeName: 'node-git-client', correlationIds: prefix}, cloneBaseDir);
+    await createClonesDir(cloneBaseDir, ...logMeta);
 
-    c3prLOG(`Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`, {nodeName: 'node-git-client', correlationIds: prefix, moduleName: 'cloneRepositoryLocally'});
+    c3prLOG(`Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`, ...logMetas, gitCloneLogMeta);
 
     // clones that single branch (maybe there is a somewhat slightly faster way of doing this with --mirror, though I feel it probably won't pay off)
-    await shell(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {prefix, scriptName: 'cloneRepositoryLocally'});
+    await shell(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {logMeta});
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //NOTE:
@@ -47,19 +46,19 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
     // right now, though, I feel the constant "cloneDepth" is pretty much enough.
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    await shell(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {prefix, scriptName: 'cloneRepositoryLocally'});
+    await shell(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {logMeta});
 
-    c3prLOG(`Clone/reset completed.`, {nodeName: 'node-git-client', correlationIds:  prefix, moduleName: 'cloneRepositoryLocally'});
+    c3prLOG(`Clone/reset completed.`, ...logMeta);
 }
 
-async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, url, branch, revision, cloneDepth}) {
+async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, url, branch, revision, cloneDepth}, ...logMetas) {
 
     const repoURL = url;
     const gitSHA = revision;
     const cloneFolder = path.resolve(path.join(cloneBaseDir, gitSHA, localUniqueCorrelationId));
 
     // clones at "cloneBaseDir/SHA/RANDOMUUID", e.g. "./tmp/59b20b8d5c6ff8d09518454d4dd8b7b30f095ab5/471ff3f9-2ada-48eb-a0f3-3ab70f3f0bdd"
-    await gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId);
+    await gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId, ...logMetas);
 
     return cloneFolder;
 

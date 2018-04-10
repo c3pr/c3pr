@@ -9,8 +9,8 @@ Have a look at [`src`](src) folder to understand what functions are available.
 ### Usage:
 
 ```bash
-# Change 0.1.0 below with the desired version tag
-npm i -S c3pr/node-git-client#0.1.0
+# Change 6.0.0 below with the desired version tag
+npm i -S c3pr/node-git-client#6.0.0
 ```
 
 Example at a JavaScript file:
