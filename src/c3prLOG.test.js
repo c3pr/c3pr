@@ -11,33 +11,41 @@ function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function verify(title, {nodeName, correlationIds, moduleNames, meta}, ...logMetas) {
+    it(title, async () => {
+        const dateBefore = new Date().toISOString();
+        await timeout(100);
+
+        const someNumber = Math.random() * 999 + 1;
+        const logMessage = 'someNumber --> ' + someNumber;
+
+        await c3prLOG(logMessage, ...logMetas);
+
+        const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
+
+        let logs = client.db(config.c3pr.mongoLogsDatabase).collection(testLogsCollection);
+        const insertedLog = await logs.find({dateTime: {$gte: dateBefore}}).next();
+
+        await client.close();
+
+        expect(insertedLog.node).to.deep.equal(nodeName);
+        expect(insertedLog.correlationIds).to.deep.equal(correlationIds);
+        expect(insertedLog.moduleNames).to.deep.equal(moduleNames);
+        expect(insertedLog.message).to.deep.equal(logMessage);
+        if (meta)
+            expect(insertedLog.metadata).to.deep.equal(meta);
+    }).timeout(10 * 1000);
+}
+
+function go(title, hasMeta, ...logMetas) {
+    verify(title, {nodeName: "nawde", correlationIds: ['test', 'idTwo'], moduleNames: ['logs-one', 'logs-two'], meta: hasMeta && logMetas[0]}, ...logMetas);
+}
+
 describe('c3prLOG', () => {
 
-    function go(title, hasMeta, ...metas) {
-        it(title, async () => {
-            const dateBefore = new Date().toISOString();
-            await timeout(100);
+    verify('no log should log default', {nodeName: "empty-logMeta", correlationIds: ["empty-logMeta"], moduleNames: ["empty-logMeta"]});
 
-            const someNumber = Math.random() * 999 + 1;
-            const logMessage = 'someNumber --> ' + someNumber;
-
-            await c3prLOG(logMessage, ...metas);
-
-            const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
-
-            let logs = client.db(config.c3pr.mongoLogsDatabase).collection(testLogsCollection);
-            const insertedLog = await logs.find({dateTime: {$gte: dateBefore}}).next();
-
-            await client.close();
-
-            expect(insertedLog.node).to.equal('nawde');
-            expect(insertedLog.correlationIds).to.deep.equal(['test', 'idTwo']);
-            expect(insertedLog.moduleNames).to.deep.equal(['logs-one', 'logs-two']);
-            expect(insertedLog.message).to.equal(logMessage);
-            if (hasMeta)
-            expect(insertedLog.metadata).to.deep.equal(metas[0]);
-        }).timeout(10 * 1000);
-    }
+    verify('empty log should log default', {nodeName: "empty-logMeta", correlationIds: ["empty-logMeta"], moduleNames: ["empty-logMeta"]}, {});
 
     go('should log logMeta (correlationIds)',
         true, {stuff: 'yo2'}, {nodeName: 'nawde', correlationIds: ['test', 'idTwo'], moduleNames: ['logs-one', 'logs-two']}

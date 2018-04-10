@@ -18,7 +18,12 @@ function showWarningIfDatabaseNotDefined() {
     }
 }
 
-async function logWithMeta(message: string, metadata: any, logMetas: LogMeta[]) {
+async function logWithMeta(message: string, metadata: any, logMetasArg: LogMeta[]) {
+    let logMetas = logMetasArg;
+    if (!logMetasArg.length) {
+        console.log("WARNING: Called c3prLOG with no LogMeta.");
+        logMetas = [{nodeName: "empty-logMeta", correlationId: "empty-logMeta", moduleName: "empty-logMeta"}];
+    }
     const nodeName = logMetas.find(logMeta => !!logMeta.nodeName).nodeName;
     const correlationIds = logMetas.reduce((acc, {correlationId, correlationIds}) => acc.concat(correlationId || []).concat(correlationIds || []), []);
     const moduleNames = logMetas.reduce((acc, {moduleName, moduleNames}) => acc.concat(moduleName || []).concat(moduleNames || []), []);
@@ -54,7 +59,7 @@ interface LogMeta {
 }
 
 function isLogMeta(o: any) {
-    return (!!o.correlationId || !!o.correlationIds) && (!!o.moduleName || !!o.moduleNames);
+    return o && (!!o.correlationId || !!o.correlationIds) && (!!o.moduleName || !!o.moduleNames);
 }
 
 const c3prLOG = <C3prLOG>async function(message: string, ...metas: any[]) {
