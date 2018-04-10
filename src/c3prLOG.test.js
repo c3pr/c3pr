@@ -43,9 +43,13 @@ function go(title, hasMeta, ...logMetas) {
 
 describe('c3prLOG', () => {
 
-    verify('no log should log default', {nodeName: "empty-logMeta", correlationIds: ["empty-logMeta"], moduleNames: ["empty-logMeta"]});
+    verify('no log should log default', {nodeName: "empty-logMeta-nodeName", correlationIds: ["empty-logMeta-correlationIds"], moduleNames: ["empty-logMeta-moduleNames"]});
 
-    verify('empty log should log default', {nodeName: "empty-logMeta", correlationIds: ["empty-logMeta"], moduleNames: ["empty-logMeta"]}, {});
+    verify('empty log should log default', {nodeName: "empty-logMeta-nodeName", correlationIds: ["empty-logMeta-correlationIds"], moduleNames: ["empty-logMeta-moduleNames"]}, {});
+
+    verify('present log, but no nodeName should not error',
+        {nodeName: "empty-nodeName", correlationIds: ["ci"], moduleNames: ["mn"]}, {correlationIds: ["ci"], moduleNames: ["mn"]}
+    );
 
     go('should log logMeta (correlationIds)',
         true, {stuff: 'yo2'}, {nodeName: 'nawde', correlationIds: ['test', 'idTwo'], moduleNames: ['logs-one', 'logs-two']}

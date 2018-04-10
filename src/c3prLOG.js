@@ -14,13 +14,15 @@ function showWarningIfDatabaseNotDefined() {
         setTimeout(() => warningShown = false, 5 * 60 * 1000).unref();
     }
 }
+const emptyLogMeta = [{ nodeName: "empty-logMeta-nodeName", correlationIds: ["empty-logMeta-correlationIds"], moduleNames: ["empty-logMeta-moduleNames"] }];
+const emptyNodeName = { nodeName: "empty-nodeName" };
 async function logWithMeta(message, metadata, logMetasArg) {
     let logMetas = logMetasArg;
     if (!logMetasArg.length) {
         console.log("WARNING: Called c3prLOG with no LogMeta.");
-        logMetas = [{ nodeName: "empty-logMeta", correlationId: "empty-logMeta", moduleName: "empty-logMeta" }];
+        logMetas = emptyLogMeta;
     }
-    const nodeName = logMetas.find(logMeta => !!logMeta.nodeName).nodeName;
+    const nodeName = (logMetas.find(logMeta => !!logMeta.nodeName) || emptyNodeName).nodeName;
     const correlationIds = logMetas.reduce((acc, { correlationId, correlationIds }) => acc.concat(correlationId || []).concat(correlationIds || []), []);
     const moduleNames = logMetas.reduce((acc, { moduleName, moduleNames }) => acc.concat(moduleName || []).concat(moduleNames || []), []);
     await log(nodeName, correlationIds, moduleNames, message, metadata);
