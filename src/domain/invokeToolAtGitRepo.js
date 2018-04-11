@@ -1,6 +1,6 @@
 const cloneRepositoryLocally = require("node-git-client").cloneRepositoryLocally;
 const determineGitDiffBase64 = require("node-git-client").determineGitDiffBase64;
-const shell = require("node-git-client").shell;
+const c3prSH = require("node-git-client").c3prSH;
 const uuidv4 = require('uuid/v4');
 
 const c3prLOG = require("node-c3pr-logger");
@@ -13,10 +13,9 @@ const CLONE_DEPTH = config.c3pr.agent.cloneDepth;
 async function invokeToolAtGitRepo(toolInvocation) {
 
     const localUniqueCorrelationId = uuidv4();
-    const corrIds = [toolInvocation.meta.correlationId, localUniqueCorrelationId];
-    const scriptName = 'invokeToolAtGitRepo';
+    const logMeta = {nodeName: 'c3pr-agent', correlationIds: [toolInvocation.meta.correlationId, localUniqueCorrelationId], moduleName: 'invokeToolAtGitRepo'};
 
-    c3prLOG(`Invoking tool at git repo: ${toolInvocation.repository.url}`, {nodeName: 'c3pr-agent', correlationIds: corrIds, moduleNames: scriptName});
+    c3prLOG(`Invoking tool at git repo: ${toolInvocation.repository.url}`, logMeta);
 
     const cloneFolder = await cloneRepositoryLocally({
         localUniqueCorrelationId: localUniqueCorrelationId,
@@ -25,13 +24,13 @@ async function invokeToolAtGitRepo(toolInvocation) {
         branch: toolInvocation.repository.branch,
         revision: toolInvocation.repository.revision,
         cloneDepth: CLONE_DEPTH
-    });
+    }, logMeta);
 
-    c3prLOG(`Done cloning at ${cloneFolder}.`, {nodeName: 'c3pr-agent', correlationIds: corrIds, moduleNames: scriptName});
+    c3prLOG(`Done cloning at ${cloneFolder}.`, logMeta);
 
-    await shell(toolInvocation.tool.command, {cwd: cloneFolder}, {stdout: true, prefix: corrIds, scriptName: scriptName});
+    await c3prSH(toolInvocation.tool.command, {cwd: cloneFolder}, {stdout: true, logMeta});
 
-    return await determineGitDiffBase64(toolInvocation.meta.correlationId, localUniqueCorrelationId, cloneFolder);
+    return await determineGitDiffBase64(toolInvocation.meta.correlationId, localUniqueCorrelationId, cloneFolder, logMeta);
 
 }
 
