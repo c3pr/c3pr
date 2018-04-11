@@ -22,7 +22,7 @@ npm start
 npm i -g nexe
 # Replace 2.0.0 with latest version
 git tag 2.0.0
-nexe --input ../index.js --output c3pr-agent-alpine-2.0.0 --target alpine-x64
+nexe --input index.js --output c3pr-agent-alpine-2.0.0 --target alpine-x64
 git push tag 2.0.0
-# Upload the c3pr-agent-alpine-1.0.0 to github releases page
+# Upload the c3pr-agent-alpine-2.0.0 to github releases page
 ```
