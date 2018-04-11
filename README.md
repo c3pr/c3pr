@@ -26,4 +26,4 @@ generate-executable.bat
 ```
 
 That will generate an executable on `dist/c3pr-agent-alpine-X.0.0`.
-Upload the `c3pr-agent-alpine-X.0.0` to [github releases page](https://github.com/c3pr/c3pr-agent/releases).
+**Push** the branch/tag and **upload** the `c3pr-agent-alpine-X.0.0` to [github releases page](https://github.com/c3pr/c3pr-agent/releases).
