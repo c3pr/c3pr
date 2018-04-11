@@ -18,15 +18,12 @@ npm start
 
 # Releases
 
-```bash
-npm run build
-```
+First edit `build/generate-executable.bat` to update the `VERSION` number. Then:
 
 ```bash
-npm i -g nexe
-# Replace 2.0.0 with latest version
-git tag 2.0.0
-nexe --input index.js --output c3pr-agent-alpine-2.0.0 --target alpine-x64
-git push tag 2.0.0
-# Upload the c3pr-agent-alpine-2.0.0 to github releases page
+cd build
+generate-executable.bat
 ```
+
+That will generate an executable on `dist/c3pr-agent-alpine-X.0.0`.
+Upload the `c3pr-agent-alpine-X.0.0` to [github releases page](https://github.com/c3pr/c3pr-agent/releases).
