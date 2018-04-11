@@ -19,6 +19,10 @@ npm start
 # Releases
 
 ```bash
+npm run build
+```
+
+```bash
 npm i -g nexe
 # Replace 2.0.0 with latest version
 git tag 2.0.0
