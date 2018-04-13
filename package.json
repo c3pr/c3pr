@@ -7,7 +7,7 @@
     "start": "node src/index.js",
     "debug": "node %NODE_DEBUG_OPTION% src/index.js",
     "test": "mocha src/**/*.test.js",
-    "bundle": "rollup -c && node rollup.c3pr-patch.js"
+    "bundle": "rollup -c"
   },
   "repository": {
     "type": "git",

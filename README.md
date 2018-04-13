@@ -18,11 +18,11 @@ npm start
 
 # Releases
 
-First edit `build/generate-executable.bat` to update the `VERSION` number. Then:
+First edit `release/generate-release.bat` to update the `VERSION` number. Then:
 
 ```bash
-cd build
-generate-executable.bat
+cd release
+generate-release.bat
 ```
 
 That will generate an executable on `dist/c3pr-agent-alpine-X.0.0`.
