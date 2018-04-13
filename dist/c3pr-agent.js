@@ -67917,25 +67917,20 @@ axios_1.default = default_1;
 var axios$1 = axios_1;
 
 function sendPatchToBot(patchesUrl, patchesPayload) {
-    nodeC3prLogger(`Called with ${patchesPayload}`, {nodeName: 'c3pr-agent', correlationId: patchesPayload.meta.correlationId, moduleName: 'sendPatchToBot'});
+    const logMeta = {nodeName: 'c3pr-agent', correlationId: patchesPayload.meta.correlationId, moduleName: 'sendPatchToBot'};
+    nodeC3prLogger(`Called with ${patchesPayload}`, logMeta);
 
-    axios$1.post(patchesUrl, patchesPayload).then(
-        () => console.log('sucesso'),
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                nodeC3prLogger(`Error while sending patch to bot.
-                * URL: ${patchesUrl}
-                * Status: ${(response || {}).statusCode}
-                * Error: ${error}
-                * Body:
-                -----------------------\n
-                ${JSON.stringify(body, null, 2)}
-                -----------------------\n\n`, {nodeName: 'c3pr-agent', correlationId: patchesPayload.meta.correlationId, moduleName: 'sendPatchToBot'});
-            } else {
-                nodeC3prLogger(`Sent patch to bot at ${patchesUrl}.`, {nodeName: 'c3pr-agent', correlationId: patchesPayload.meta.correlationId, moduleName: 'sendPatchToBot'});
-            }
-        }
-    );
+    axios$1.post(patchesUrl, patchesPayload)
+        .then(() => {
+            nodeC3prLogger(`Sent patch to bot at ${patchesUrl}.`, logMeta);
+        }).catch(function (...error) {
+            nodeC3prLogger(`Error while sending patch to bot.
+            * URL: ${patchesUrl}
+            * Error:
+            -----------------------\n
+            ${JSON.stringify({...error}, null, 2)}
+            -----------------------\n\n`, logMeta);
+        });
 }
 
 var sendPatchToBot_1 = sendPatchToBot;
@@ -67991,12 +67986,12 @@ c3prController(app);
 
 // The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
-    res.status(404).send('This is the C3PR Agent (v. __C3PR_AGENT_EXECUTABLE_VERSION__), I am fine, thanks. Btw, no endpoint is listening at the requested location.');
+    res.status(404).send('This is the C3PR Agent (v. 4.0.0), I am fine, thanks. Btw, no endpoint is listening at the requested location.');
 });
 
 
 app.listen(PORT, () => {
-    console.log(`c3pr-agent version __C3PR_AGENT_EXECUTABLE_VERSION__ now listening at port ${PORT}.`);
+    console.log(`c3pr-agent version 4.0.0 now listening at port ${PORT}.`);
 });
 
 var src$5 = {
