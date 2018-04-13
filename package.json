@@ -4,7 +4,8 @@
   "description": "C3PR Container agent",
   "main": "index.js",
   "scripts": {
-    "start": "node %NODE_DEBUG_OPTION% src/index.js",
+    "start": "node src/index.js",
+    "debug": "node %NODE_DEBUG_OPTION% src/index.js",
     "test": "mocha src/**/*.test.js",
     "bundle": "rollup -c && node rollup.c3pr-patch.js"
   },
@@ -24,19 +25,18 @@
   },
   "homepage": "https://github.com/c3pr/c3pr-agent",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.2",
-    "express": "^4.16.2",
+    "express": "^4.16.3",
     "mkdirp": "^0.5.1",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#7.0.2",
     "node-git-client": "github:c3pr/node-git-client#6.0.2",
-    "request": "^2.83.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
     "@types/sinon-chai": "^2.7.29",
     "chai": "^4.1.2",
     "mocha": "^5.0.0",
-    "replace-in-file": "^3.4.0",
     "rollup": "^0.57.1",
     "rollup-plugin-commonjs": "^9.1.0",
     "rollup-plugin-json": "^2.3.0",
