@@ -38,7 +38,7 @@ System.out.println("Equal?" + "foo".equals(myString));                         /
         {
             toolId: "walkmod-sonar:RemoveUselessImports",
             extensions: ["java"],
-            agentURL: "https://c3pr-tool-walkmod-sonar-now-hjmsouxims.now.sh/c3pr",
+            agentURL: "https://now-xubywnnwjo.now.sh/c3pr",
             command: "walkmod apply sonar:RemoveUselessImports",
             toolMeta: {rule: "sonar:RemoveUselessImports"},
             prTitle: "Useless imports",
