@@ -18,12 +18,33 @@ npm start
 
 # Releases
 
-First edit `release/generate-release.bat` to update the `VERSION` number. Then:
+Steps:
+
+- release.bat
+- test.bat
+- commit and push
+- upload binary to github
+
+First edit `release/version.bat` to update the `VERSION` number. Then:
 
 ```bash
 cd release
-generate-release.bat
+release.bat
 ```
 
-That will generate an executable on `dist/c3pr-agent-alpine-X.0.0`.
-**Push** the branch/tag and **upload** the `c3pr-agent-alpine-X.0.0` to [github releases page](https://github.com/c3pr/c3pr-agent/releases).
+That will generate an executable on `release/c3pr-agent-alpine-X.0.0`.
+When OK, you should  **upload** it to the [github releases page](https://github.com/c3pr/c3pr-agent/releases).
+
+You can test it via:
+
+```bash
+# inside release folder
+test.bat
+```
+
+You can also automatically commit and tag via:
+
+```bash
+# inside release folder
+commit.bat
+```
