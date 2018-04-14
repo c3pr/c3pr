@@ -67986,12 +67986,12 @@ c3prController(app);
 
 // The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
-    res.status(404).send('This is the C3PR Agent (v. 4.0.0), I am fine, thanks. Btw, no endpoint is listening at the requested location.');
+    res.status(404).send('This is the C3PR Agent (v. 5.0.0), I am fine, thanks. Btw, no endpoint is listening at the requested location.');
 });
 
 
 app.listen(PORT, () => {
-    console.log(`c3pr-agent version 4.0.0 now listening at port ${PORT}.`);
+    console.log(`c3pr-agent version 5.0.0 now listening at port ${PORT}.`);
 });
 
 var src$5 = {
