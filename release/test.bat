@@ -1,0 +1,2 @@
+cd ../dist
+test.bat
