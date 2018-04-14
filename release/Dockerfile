@@ -11,5 +11,5 @@ ENV AGENT_VERSION ${AGENT_VERSION}
 
 CMD replace-in-file /__C3PR_AGENT_EXECUTABLE_VERSION__/g ${AGENT_VERSION} c3pr-agent.js --isRegex && \
 #    nexe --input c3pr-agent.js --output c3pr-agent-alpine-4.0.0 --target alpine-x64
-    pkg --targets node8-alpine-x64 --output c3pr-agent-alpine-${AGENT_VERSION} c3pr-agent.js
+    pkg --debug --targets node8-alpine-x64 --output c3pr-agent-alpine-${AGENT_VERSION} c3pr-agent.js
 
