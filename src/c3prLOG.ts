@@ -51,6 +51,7 @@ async function log(nodeName: string, correlationIds: string[], moduleNames: stri
 interface C3prLOG {
     (): Promise<any>;
     testMode(): void;
+    isEnvVarSet(): boolean;
 }
 
 interface LogMeta {
@@ -74,5 +75,6 @@ const c3prLOG = <C3prLOG>async function(message: string, ...metas: any[]) {
     }
 };
 c3prLOG.testMode = () => (c3prLOG as any).testModeActivated = true;
+c3prLOG.isEnvVarSet = () => !!config && !!config.c3pr && !!config.c3pr.mongoLogsUri;
 
 module.exports = c3prLOG;

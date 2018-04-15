@@ -51,5 +51,6 @@ const c3prLOG = async function (message, ...metas) {
     }
 };
 c3prLOG.testMode = () => c3prLOG.testModeActivated = true;
+c3prLOG.isEnvVarSet = () => !!config && !!config.c3pr && !!config.c3pr.mongoLogsUri;
 module.exports = c3prLOG;
 //# sourceMappingURL=c3prLOG.js.map
