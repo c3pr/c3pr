@@ -14,7 +14,7 @@ module.exports = function (app) {
             response.status(400).send(errorMessage);
             return;
         }
-        c3prLOG(`pr received. ${JSON.stringify(prs)}`, {nodeName: 'c3pr-repo-github', correlationId: prs.meta.correlationId, moduleName: 'prsController'});
+        c3prLOG(`pr received. Title: ${prs.patch.title} - Repo: ${prs.repository.url}`, {prs}, {nodeName: 'c3pr-repo-github', correlationId: prs.meta.correlationId, moduleName: 'prsController'});
         handlePrs(prs);
         response.send('Ok, that would be all, thanks.');
     });
