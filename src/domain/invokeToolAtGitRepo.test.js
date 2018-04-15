@@ -19,7 +19,7 @@ describe('invokeToolAtGitRepo', () => {
             },
             "c3pr": {
                 "prsUrl": "http://c3pr-github.herokuapp.com/prs",
-                "patchesUrl": "http://c3pr.herokuapp.com/patches"
+                "patchesUrl": "http://c3pr-brain.herokuapp.com/patches"
             },
             "repository": {
                 "type": "git",
