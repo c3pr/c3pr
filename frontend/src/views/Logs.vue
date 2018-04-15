@@ -44,7 +44,7 @@ export default {
   created() { this.fetchAll(); },
   methods: {
     fetchAll() {
-      fetch('http://localhost:5001/logs')
+      fetch('/api/logs')
         .then(r => r.json())
         .then((r) => {
           r.sort((a, b) => a.dateTime.localeCompare(b.dateTime));
