@@ -1,12 +1,12 @@
 const os = require("os");
 const PORT = process.env.PORT || 5001;
 
-const c3prBaseUrl = process.env.C3PR_C3PR_URL || `http://${os.hostname()}:${PORT}`;
+const c3prBrainUrl = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:${PORT}`;
 
 module.exports = {
     c3pr: {
         port: PORT,
-        changesUrl: `${c3prBaseUrl}/changes`,
-        patchesUrl: `${c3prBaseUrl}/patches`
+        changesUrl: `${c3prBrainUrl}/changes`,
+        patchesUrl: `${c3prBrainUrl}/patches`
     }
 };
