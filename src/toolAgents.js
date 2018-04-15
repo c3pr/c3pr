@@ -12,7 +12,7 @@ const toolAgents = {
         {
             toolId: "walkmod-sonar:StringCheckOnLeft",
             extensions: ["java"],
-            agentURL: "https://c3pr-tool-walkmod-sonar-now-hjmsouxims.now.sh/c3pr",
+            agentURL: "https://now-jrtdukayyh.now.sh/c3pr",
             command: "walkmod apply sonar:StringCheckOnLeft",
             toolMeta: {rule: "sonar:StringCheckOnLeft"},
             prTitle: "Strings literals should be placed on the left side when checking for equality",
@@ -38,7 +38,7 @@ System.out.println("Equal?" + "foo".equals(myString));                         /
         {
             toolId: "walkmod-sonar:RemoveUselessImports",
             extensions: ["java"],
-            agentURL: "https://now-jrtdukayyh.now.sh",
+            agentURL: "https://now-jrtdukayyh.now.sh/c3pr",
             command: "walkmod apply sonar:RemoveUselessImports",
             toolMeta: {rule: "sonar:RemoveUselessImports"},
             prTitle: "Useless imports",
