@@ -40,7 +40,7 @@ function invokeTools(toolAgents, changes) {
                 ${JSON.stringify(body, null, 2)}
                 -----------------------\n\n`, {nodeName: 'c3pr', correlationId: changes.meta.correlationId, moduleName: 'invokeTools'});
                 } else {
-                    c3prLOG(`Invoked agent ${tool.toolId} of changes to ${changes.repository.url}: ${JSON.stringify(tool)}`, {nodeName: 'c3pr', correlationId: changes.meta.correlationId, moduleName: 'invokeTools'});
+                    c3prLOG(`Invoked agent ${tool.toolId} of changes to ${changes.repository.url}.`, {tool}, {nodeName: 'c3pr', correlationId: changes.meta.correlationId, moduleName: 'invokeTools'});
                 }
             }
         );
