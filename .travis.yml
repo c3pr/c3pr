@@ -8,10 +8,17 @@ cache:
   - node_modules
 
 # generated via "travis setup heroku" | after "travis login --github-token TOKEN" and "heroku login" @ https://github.com/acdcjunior/docker-heroku-travis
+#
+# PS> docker run --rm -it -v ${PWD}:/c3pr -w /c3pr acdcjunior/heroku-travis bash
+# root@a2717d1d78da:/c3pr# heroku login
+# ------------------ enter email and password
+# root@a2717d1d78da:/c3pr# travis login --github-token TOKEN
+# root@a2717d1d78da:/c3pr# travis setup heroku --force
+#
 deploy:
   provider: heroku
   api_key:
-    secure: hbDhuyk3K4cjHlqw0pT3hbZqPic8wpVCfkue+KaFF9PLhI3wiYjzKml1ACuYsGn9V5RHqSKljQYvURJAH50JeCHQA13b2W1H1eXZEeEJkDieAl7RJVpWCFFITLH/F38cjghtuFQmd9kRSYtJfTxxoK2HEdffD1NKBYLz5HnVuMmxOlHdZIKR95gefrBdFvX5rF3N+7E4aUG2O3Ue57oeJbDbgnTIHO3ITd83IjCubfrr+yyx8I0E7d/vzuPU81w942wKEixCRAwmTQD6wg1X7ecDMN3J2JEzMbgaxv8Dxh5TQCHIesllMhKguN76OipzsBAbrv9yO+Rg1LnoTatyuljqnc1CmFdG3kmRkEayCAEMGTTpVVIy7i0TAuG9UzrGLuLFz0Y6WleUTT+UedgJlawZZoAC8Z9JTItTwQHNHl9yc9cPn7ByAKWMVqfcLpPLgyjihJMAyJWI5PdPzoQwxjzTjxB7dHlfa/TeapqRCyxTheaxNHhBdNLlA6k1Gi41UofLM2j3z763/Q6vnRaJP+xbpxhfdILzQcVhaaAmlK2oQq6W7qwoZ/J/y+fU+L7y0LBcSXgjpCGYshsSp0KuJJgLRE/kYOxP4nwVNUhlobZvT+uTqVg2tPnb7r3atE1Wb+qwFlOey726x1kjAuNoTkRLcPKTOyjZeaQ7W57a+Fs=
-  app: c3pr
+    secure: aMwlspjxF3y9aUZqgRqktlwvmMY/pFrfywFiZOsb+y/6OQHgALdsWPwwqOi/ETOyqvmM2lZHXFQu9dnL6t3c1Nozo+MD6T+bbmqR5blPuTvxRmILzmSsKc51mlZwSnilP/s325oQ6ZQ/t49FSaTFbrPe1E33vp4mrOveiQhktilVwPsNosQyWnq3gtJGudPdqTGZ89LoMt3w2Mo0Fcv3zTvM6RSw63ymb9NNcl3n4ObL9w5+ad6vNnRIsFz9Gd1Vjq7WgImLotNAmmOdiI9Zr0xJp6eu3+8NlERIVFToVsrlibk3ms8vUDAdBqX7JaWgZKEoW7Y6hVnA+3Z2bAjMV+zT5GKde143aNnjRCwqsc7LK6IqQ74txsnAVoH6BlRr0IquTUUyTLmGhUn5CwxjXp1RlvcXBJkgh4AnBjCKk5lmqlFEBWOGwuC12cyD07PCu3DUltLv7+/I4ExFdYts1YV7i8Jw2EoZpSyVy7ZTribITVE8FmAFR5HFG5OqpdLkUS28cBgnvw/GJW1xmw7PkMzz1BfLny7SftcPFIA0eBtwBBPK3Dtyl19J1l1M7hyEnA25qN1/y4C3dC6l0QlFXWClBLXWUpgvoIkK95pPpp9d3H5cbvWNgL2LKif2gLqO1yh06MtJlmdxuL88eHRnIh5fyexLIqH417AzhmkuRIw=
+  app: c3pr-brain
   on:
-    repo: c3pr/c3pr
+    repo: c3pr/c3pr-brain
