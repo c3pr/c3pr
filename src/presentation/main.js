@@ -13,7 +13,7 @@ require('./c3prController')(app);
 app.get('*', function(req, res){
     res.status(404).send('This is the C3PR Agent (v. __C3PR_AGENT_EXECUTABLE_VERSION__). ' +
         `c3prLOG env var is ${!c3prLOG.isEnvVarSet() ? 'not' : ''} set. ` +
-        'Btw, no endpoint is listening at the requested location.');
+        `Btw, no endpoint is listening at ${req.url}.`);
 });
 
 
