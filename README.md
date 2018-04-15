@@ -1,6 +1,7 @@
-[![Build Status](https://img.shields.io/travis/c3pr/c3pr-repo-github/master.svg?label=c3pr/c3pr-repo-github&style=for-the-badge)](https://travis-ci.org/c3pr/c3pr-repo-github)
+[![Build Status](https://travis-ci.org/c3pr/c3pr-repo-github.svg?branch=master)](https://travis-ci.org/c3pr/c3pr-repo-github)
 
 [![Build Status](https://travis-ci.org/c3pr/c3pr.svg?branch=master)](https://travis-ci.org/c3pr/c3pr)
+[![Build Status](https://travis-ci.org/c3pr/c3pr-brain.svg?branch=master)](https://travis-ci.org/c3pr/c3pr-brain)
 [![Build Status](https://travis-ci.org/c3pr/c3pr-agent.svg?branch=master)](https://travis-ci.org/c3pr/c3pr-agent)
 [![Build Status](https://travis-ci.org/c3pr/node-git-client.svg?branch=master)](https://travis-ci.org/c3pr/node-git-client)
 
@@ -26,8 +27,8 @@ See [`src/config.js`](src/config.js).
 - `GITHUB_API_TOKEN`
 - `PORT`
     - Defaults to `5002`
-- `C3PR_C3PR_URL`
-    - Main bot URL.
+- `C3PR_BRAIN_URL`
+    - Brain node URL.
     - Defaults to `http://${os.hostname()}:5001`
 - `C3PR_REPO_GITHUB_URL`
     - This node's URL.
