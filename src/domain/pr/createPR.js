@@ -26,7 +26,7 @@ async function createPR({mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitHubAp
     const forkRepoCloneUrl = data.clone_url.replace(`https://github.com/`, `https://${gitHubApiToken}:${gitHubApiToken}@github.com/`);
     const forkRepoBranch = stagingFolderName;
 
-    await c3prSH(`git init ${stagingFolder}`, {logMeta});
+    await c3prSH(`git init ${stagingFolder}`, {}, {logMeta});
 
     // create brand new orphan branch
     await c3prSH(`git checkout --orphan ${forkRepoBranch}`, {cwd: stagingFolder}, {logMeta});
