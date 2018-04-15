@@ -15,6 +15,6 @@ Check the dashboard at https://c3pr.herokuapp.com/
 
 # About this repo
 
-C3PR is a distributed system. The module in this repo handles centralized logging/tracing as well as centralized configuration management.
+C3PR is a distributed system. The module in this repo handles the main dashboard and centralized logging/tracing as well as centralized configuration management.
 
 In other words, it will know what nodes are online and will make all other nodes aware of it.
