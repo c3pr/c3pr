@@ -15,8 +15,11 @@ function replaceTokens(input, replacements) {
     return inputAfterReplacements;
 }
 const shellLogMeta = { moduleName: 'c3prSH' };
-async function c3prSH(shCommand, shOptions, { logMeta, stdout: shouldStdOut, replacements }) {
+async function c3prSH(shCommand, shOptions, { logMeta, stdout: shouldStdOut, replacements, thirdArgNotProvided } = { logMeta: undefined, stdout: undefined, replacements: undefined, thirdArgNotProvided: true }) {
     const r = s => replaceTokens(s, replacements || []);
+    if (thirdArgNotProvided) {
+        c3prLOG(`WARNING: no third arg provided when SH'ing \`${r(shCommand)}\``, shellLogMeta);
+    }
     const logMetaArr = Array.isArray(logMeta) ? logMeta : [logMeta];
     c3prLOG(`\$ ${r(shCommand)}`, ...logMetaArr, shellLogMeta);
     let { error, stdout, stderr } = await sh(shCommand, shOptions);
