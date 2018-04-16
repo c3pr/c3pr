@@ -5,20 +5,26 @@ const c3prLOG = require("node-c3pr-logger");
 
 async function handleToolInvocation(toolInvocation) {
 
-    c3prLOG(`C3PR Agent received invocation: ${toolInvocation.tool.toolId}. Files: ${JSON.stringify(toolInvocation.files)}`, {toolInvocation}, {nodeName: 'c3pr-agent', correlationId: toolInvocation.meta.correlationId, moduleName: 'handleToolInvocation'});
+    const logMeta = {nodeName: 'c3pr-agent', correlationId: toolInvocation.meta.correlationId, moduleName: 'handleToolInvocation'};
+    c3prLOG(`C3PR Agent received invocation: ${toolInvocation.tool.toolId}. Files: ${JSON.stringify(toolInvocation.files)}`, {toolInvocation}, logMeta);
 
     try { // if (request.repository.type === "git")
         const diffBase64 = await invokeToolAtGitRepo(toolInvocation);
+        const aPatchHasBeenGenerated = !!(diffBase64 || '').trim();
 
-        const patchesPayload = createPatchesPayload(toolInvocation, diffBase64);
+        if (aPatchHasBeenGenerated) {
+            const patchesPayload = createPatchesPayload(toolInvocation, diffBase64);
+            await sendPatchToBot(toolInvocation.c3pr.patchesUrl, patchesPayload);
+            c3prLOG(`Tool invocation complete. A patch has been generated and sent.`, logMeta);
+        } else {
+            c3prLOG(`Tool invocation complete. No patch has been generated.`, logMeta);
+        }
 
-        sendPatchToBot(toolInvocation.c3pr.patchesUrl, patchesPayload);
+        return aPatchHasBeenGenerated;
     } catch (e) {
-        c3prLOG('c3pr-agent', [toolInvocation.meta.correlationId], 'handleToolInvocation', `Error while invoking tool. \n${e}\n`)
+        c3prLOG('c3pr-agent', [toolInvocation.meta.correlationId], 'handleToolInvocation', `Error while invoking tool. \n${e}\n`);
+        return '';
     }
-
-    c3prLOG(`Tool invocation complete.`, {nodeName: 'c3pr-agent', correlationId: toolInvocation.meta.correlationId, moduleName: 'handleToolInvocation'});
-
 }
 
 module.exports = handleToolInvocation;
