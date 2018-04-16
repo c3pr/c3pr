@@ -1,30 +1,21 @@
-const request = require('request');
+const axios = require('axios');
 const c3prLOG = require("node-c3pr-logger");
 
-function sendPrToRepo(prsUrl, pr) {
-    c3prLOG(`Sending pr to repo ${prsUrl}...`, {pr}, {nodeName: 'c3pr-brain', correlationId: pr.meta.correlationId, moduleName: 'sendPrToRepo'});
+async function sendPrToRepo(prsUrl, pr) {
+    const logMeta = {nodeName: 'c3pr-brain', correlationId: pr.meta.correlationId, moduleName: 'sendPrToRepo'};
+    c3prLOG(`Sending pr to repo ${prsUrl}...`, {pr}, logMeta);
 
-    request.post(
-        {
-            url: prsUrl,
-            json: true,
-            body: pr
-        },
-        function (error, response, body) {
-            if (error || response.statusCode !== 200) {
-                c3prLOG(`Error while sending pr to repo.
+    try {
+        await axios.post(prsUrl, pr);
+        c3prLOG(`Sent pr to repo at ${prsUrl}.`, logMeta);
+    } catch (e) {
+        c3prLOG(`Error while sending pr to repo.
                 * URL: ${prsUrl}
-                * Status: ${(response || {}).statusCode}
-                * Error: ${error}
-                * Body:
+                * Error:
                 -----------------------\n
-                ${JSON.stringify(body, null, 2)}
-                -----------------------\n\n`, {nodeName: 'c3pr-brain', correlationId: pr.meta.correlationId, moduleName: 'sendPrToRepo'});
-            } else {
-                c3prLOG(`Sent pr to repo at ${prsUrl}.`, {nodeName: 'c3pr-brain', correlationId: pr.meta.correlationId, moduleName: 'sendPrToRepo'});
-            }
-        }
-    );
+                ${require('util').inspect(e)}
+                -----------------------\n\n`, logMeta);
+    }
 }
 
 module.exports = sendPrToRepo;
