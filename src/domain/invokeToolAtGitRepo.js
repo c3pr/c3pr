@@ -30,7 +30,7 @@ async function invokeToolAtGitRepo(toolInvocation) {
 
     await c3prSH(toolInvocation.tool.command, {cwd: cloneFolder}, {stdout: true, logMeta});
 
-    return await determineGitDiffBase64(toolInvocation.meta.correlationId, localUniqueCorrelationId, cloneFolder, logMeta);
+    return determineGitDiffBase64(toolInvocation.meta.correlationId, localUniqueCorrelationId, cloneFolder, logMeta);
 
 }
 
