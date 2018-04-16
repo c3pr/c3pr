@@ -10,7 +10,8 @@ function shuffleArray(array) {
 
 function decideApplicableToolAgents(changes) {
     const applicableToolAgents = filterApplicableToolAgents(toolAgents, changes);
-    return shuffleArray(applicableToolAgents);
+    shuffleArray(applicableToolAgents);
+    return applicableToolAgents;
 }
 
 module.exports = decideApplicableToolAgents;
