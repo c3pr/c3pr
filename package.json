@@ -30,7 +30,7 @@
     "express": "^4.16.3",
     "mkdirp": "^0.5.1",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#7.1.0",
-    "node-git-client": "github:c3pr/node-git-client#6.0.2",
+    "node-git-client": "github:c3pr/node-git-client#6.0.4",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
