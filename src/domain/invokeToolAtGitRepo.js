@@ -10,6 +10,9 @@ const config = require('../config');
 const CLONE_DIR = config.c3pr.agent.cloneDir;
 const CLONE_DEPTH = config.c3pr.agent.cloneDepth;
 
+/**
+ * Invokes the tool at a git repo and returns the diff. Empty string if no changes were detected by git.
+ */
 async function invokeToolAtGitRepo(toolInvocation) {
 
     const localUniqueCorrelationId = uuidv4();

@@ -54,4 +54,36 @@ index ad8bb19..7db8f5e 100644
 
     }).timeout(10 * 1000);
 
+    it('invokeToolAtGitRepo NO DIFF', async () => {
+
+        const diff = await invokeToolAtGitRepo({
+            "meta": {
+                "correlationId": "30b03c1d8aa6ee670534b80edd0dc39c12644259",
+                "compatibleSchemas": ["c3pr/c3pr-agent::toolInvocation"]
+            },
+            "c3pr": {
+                "prsUrl": "http://c3pr-github.herokuapp.com/prs",
+                "patchesUrl": "http://c3pr-brain.herokuapp.com/patches"
+            },
+            "repository": {
+                "type": "git",
+                "url": "https://github.com/c3pr/sample-project-java-maven.git",
+                "branch": "branch-for-clone-tests",
+                "revision": "30b03c1d8aa6ee670534b80edd0dc39c12644259"
+            },
+            "files": [
+                "pom.xml"
+            ],
+            "tool": {
+                "command": "echo nothing",
+                "meta": {
+                    "rule": "sonar:StringCheckOnLeft"
+                }
+            }
+        });
+
+        expect(diff).to.be.equal('').toString('base64');
+
+    }).timeout(10 * 1000);
+
 });
