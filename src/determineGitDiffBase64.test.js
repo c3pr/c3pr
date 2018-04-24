@@ -30,9 +30,11 @@ describe('determineGitDiffBase64', () => {
         fs.unlinkSync(path.join(cloneFolder, 'README.md'));
         await c3prSH(`echo some-new-file> src/main/java/MyNewClass.java`, {cwd: cloneFolder}, {logMeta});
 
-        const diff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder, logMeta);
-        expect(diff).to.be.equal(
+        const filesAndDiff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder, logMeta);
 
+        expect(filesAndDiff.files).to.deep.equal(["README.md", "pom.xml", "src/main/java/MyNewClass.java"]);
+
+        expect(filesAndDiff.diff).to.be.equal(
 // this convertion to base64 only works here because there are no accents (so no ISOvsUTF encoding trouble)
 Buffer.from(
 `diff --git a/README.md b/README.md
@@ -96,9 +98,10 @@ index 0000000..80772dc
         await c3prSH(`git apply ${patchFileName}`, {cwd: cloneFolder}, {prefix: [sha, localUniqueCorrelationId], scriptName: 'determineGitDiffBase64.test.js'});
         fs.unlinkSync(patchFilePath);
 
-        const gitDiff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder);
+        const filesAndDiff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder);
 
-        expect(patchContent).to.be.equal(gitDiff);
+        expect(filesAndDiff.files).to.deep.equal(["README.md", "src/main/java/io/github/c3pr/sample/javamaven/Main.java"]);
+        expect(filesAndDiff.diff).to.be.equal(patchContent);
 
     }).timeout(10 * 1000);
 
