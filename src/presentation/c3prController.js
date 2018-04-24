@@ -17,11 +17,11 @@ module.exports = function (app) {
             return;
         }
         c3prLOG(`toolInvocation received.`, {toolInvocation}, logMeta);
-        handleToolInvocation(toolInvocation).then(aPatchHasBeenGenerated => {
-            if (aPatchHasBeenGenerated) {
-                response.status(200).send('This tool diff ended successfully and generated a diff.');
+        handleToolInvocation(toolInvocation).then(toolInvocationResult => {
+            if (toolInvocationResult.files.length) {
+                response.status(200).send({files: toolInvocationResult.files, description: 'This tool invocation completed successfully and has generated a diff.'});
             } else {
-                response.status(204).send('This tool diff ended successfully and did NOT generate a diff.');
+                response.status(204).send({files: toolInvocationResult.files, description: 'This tool invocation completed successfully and has NOT generated a diff.'});
             }
         });
     });

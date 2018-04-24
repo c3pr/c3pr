@@ -9,18 +9,18 @@ async function handleToolInvocation(toolInvocation) {
     c3prLOG(`C3PR Agent received invocation: ${toolInvocation.tool.toolId}. Files: ${JSON.stringify(toolInvocation.files)}`, {toolInvocation}, logMeta);
 
     try { // if (request.repository.type === "git")
-        const diffBase64 = await invokeToolAtGitRepo(toolInvocation);
-        const aPatchHasBeenGenerated = !!(diffBase64 || '').trim();
+        const toolInvocationResult = await invokeToolAtGitRepo(toolInvocation);
+        const aPatchHasBeenGenerated = toolInvocationResult.files.length;
 
         if (aPatchHasBeenGenerated) {
-            const patchesPayload = createPatchesPayload(toolInvocation, diffBase64);
+            const patchesPayload = createPatchesPayload(toolInvocation, toolInvocationResult);
             await sendPatchToBot(toolInvocation.c3pr.patchesUrl, patchesPayload);
             c3prLOG(`Tool invocation complete. A patch has been generated and sent.`, logMeta);
         } else {
             c3prLOG(`Tool invocation complete. No patch has been generated.`, logMeta);
         }
 
-        return aPatchHasBeenGenerated;
+        return toolInvocationResult;
     } catch (e) {
         c3prLOG('c3pr-agent', [toolInvocation.meta.correlationId], 'handleToolInvocation', `Error while invoking tool. \n${e}\n`);
         return '';
