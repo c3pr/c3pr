@@ -1,7 +1,7 @@
 const toolAgents = require('../toolAgents');
 const filterApplicableToolAgents = require('./filterApplicableToolAgents');
 
-function shuffleArray(array) {
+function __shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
@@ -10,8 +10,10 @@ function shuffleArray(array) {
 
 function decideApplicableToolAgents(changes) {
     const applicableToolAgents = filterApplicableToolAgents(toolAgents, changes);
-    shuffleArray(applicableToolAgents);
+    decideApplicableToolAgents.__shuffleArray(applicableToolAgents);
     return applicableToolAgents;
 }
+// exposed for testing
+decideApplicableToolAgents.__shuffleArray = __shuffleArray;
 
 module.exports = decideApplicableToolAgents;
