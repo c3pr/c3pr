@@ -12,7 +12,7 @@ describe('invokeToolAtGitRepo', () => {
 
     it('invokeToolAtGitRepo', async () => {
 
-        const diff = await invokeToolAtGitRepo({
+        const toolInvocationResult = await invokeToolAtGitRepo({
             "meta": {
                 "correlationId": "30b03c1d8aa6ee670534b80edd0dc39c12644259",
                 "compatibleSchemas": ["c3pr/c3pr-agent::toolInvocation"]
@@ -38,7 +38,8 @@ describe('invokeToolAtGitRepo', () => {
             }
         });
 
-        expect(diff).to.be.equal(
+        expect(toolInvocationResult.files).to.deep.equal(["pom.xml"]);
+        expect(toolInvocationResult.diff).to.be.equal(
 // this convertion to base64 only works here because there are no accents (so no ISOvsUTF encoding trouble)
 Buffer.from(
 `diff --git a/pom.xml b/pom.xml
@@ -56,7 +57,7 @@ index ad8bb19..7db8f5e 100644
 
     it('invokeToolAtGitRepo NO DIFF', async () => {
 
-        const diff = await invokeToolAtGitRepo({
+        const toolInvocationResult = await invokeToolAtGitRepo({
             "meta": {
                 "correlationId": "30b03c1d8aa6ee670534b80edd0dc39c12644259",
                 "compatibleSchemas": ["c3pr/c3pr-agent::toolInvocation"]
@@ -82,7 +83,8 @@ index ad8bb19..7db8f5e 100644
             }
         });
 
-        expect(diff).to.be.equal('').toString('base64');
+        expect(toolInvocationResult.files).to.deep.equal([]);
+        expect(toolInvocationResult.diff).to.be.equal('');
 
     }).timeout(10 * 1000);
 
