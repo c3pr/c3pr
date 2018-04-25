@@ -62,7 +62,7 @@ index 0000000..80772dc
 +++ b/src/main/java/MyNewClass.java
 @@ -0,0 +1 @@
 +some-new-file
-`,).toString('base64'));
+`).toString('base64'));
 
     }).timeout(10 * 1000);
 
@@ -102,6 +102,29 @@ index 0000000..80772dc
 
         expect(filesAndDiff.files).to.deep.equal(["README.md", "src/main/java/io/github/c3pr/sample/javamaven/Main.java"]);
         expect(filesAndDiff.diff).to.be.equal(patchContent);
+
+    }).timeout(10 * 1000);
+
+    it('determineGitDiffBase64', async () => {
+
+        const localUniqueCorrelationId = uuidv4();
+        const sha = '30b03c1d8aa6ee670534b80edd0dc39c12644259';
+
+        const logMeta = {nodeName: 'DGDB-test', correlationId: [sha, localUniqueCorrelationId], moduleName: 'determineGitDiffBase64.test.js'};
+
+        const cloneFolder = await cloneRepositoryLocally({
+            localUniqueCorrelationId: localUniqueCorrelationId,
+            cloneBaseDir: '/tmp/c3pr/test/clones',
+            url: 'https://github.com/c3pr/sample-project-java-maven.git',
+            branch: 'branch-for-clone-tests',
+            revision: sha,
+            cloneDepth: 5
+        }, logMeta);
+
+        const filesAndDiff = await determineGitDiffBase64(sha, localUniqueCorrelationId, cloneFolder, logMeta);
+
+        expect(filesAndDiff.files).to.deep.equal([]);
+        expect(filesAndDiff.diff).to.be.equal('');
 
     }).timeout(10 * 1000);
 

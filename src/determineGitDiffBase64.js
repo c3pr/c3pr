@@ -11,7 +11,7 @@ async function determineGitDiffBase64(correlationId, localUniqueCorrelationId, c
     const patchFileName = `c3pr-diff-${localUniqueCorrelationId}.patch`;
     const diffFilePath = `${cloneFolder}/${patchFileName}`;
 
-    let fileNames = await c3prSH(`git diff --staged --name-only`, {cwd: cloneFolder, stdout: true}, {logMeta, stdout: true});
+    let fileNames = await c3prSH(`git diff --staged --name-only`, {cwd: cloneFolder}, {logMeta});
 
     await c3prSH(`git diff --staged > ${patchFileName}`, {cwd: cloneFolder}, {logMeta});
 
@@ -19,7 +19,8 @@ async function determineGitDiffBase64(correlationId, localUniqueCorrelationId, c
     const diffViaFile = Buffer.from(fs.readFileSync(diffFilePath, 'hex'), 'hex').toString('base64');
     fs.unlinkSync(diffFilePath);
 
-    return {files: fileNames.trim().split('\n'), diff: diffViaFile};
+    const files = fileNames.trim().split('\n').filter(f => f);
+    return {files, diff: diffViaFile};
 
 }
 
