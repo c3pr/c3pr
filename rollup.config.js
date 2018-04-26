@@ -1,6 +1,7 @@
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import json from 'rollup-plugin-json';
+import minify from 'rollup-plugin-minify-es';
 
 export default {
     input: 'src/index.js',
@@ -14,6 +15,7 @@ export default {
     plugins: [
         resolve(),
         commonjs(),
-        json()
+        json(),
+        minify()
     ],
 };
