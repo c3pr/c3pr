@@ -1,0 +1,23 @@
+module.exports = [
+    require('./AddCurlyBrackets'),
+    require('./AddSwitchDefaultCase'),
+    require('./ArrayDesignatorOnType'),
+    require('./CollapsibleIfStatements'),
+    require('./DeclarationsShouldUseCollectionInterfaces'),
+    require('./LocalVarsShouldComplyWithNamingConvention'),
+    require('./PrimitiveInstantiationForToString'),
+    require('./RedundantCastsShouldNotBeUsed'),
+    require('./RemoveCodeComment'),
+    require('./RemoveEmptyMethod'),
+    require('./RemoveEmptyStatement'),
+    require('./RemoveLiteralBoolean'),
+    require('./RemoveUnusedMethodParameters'),
+    require('./RemoveUselessImports'),
+    require('./RemoveUselessParentheses'),
+    require('./RemoveUselessVariables'),
+    require('./StaticInitializedFieldToFinal'),
+    require('./StringCheckOnLeft'),
+    require('./UseCollectionIsEmpty'),
+    require('./UseStringEquals'),
+    require('./VariableImmediatelyReturned')
+];
