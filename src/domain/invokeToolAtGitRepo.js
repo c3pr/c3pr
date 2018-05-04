@@ -31,7 +31,9 @@ async function invokeToolAtGitRepo(toolInvocation) {
 
     c3prLOG(`Done cloning at ${cloneFolder}.`, logMeta);
 
-    await c3prSH(toolInvocation.tool.command, {cwd: cloneFolder}, {stdout: true, logMeta});
+    for (let file of toolInvocation.files) {
+        await c3prSH(toolInvocation.tool.command.replace(/#{filename}/g, file), {cwd: cloneFolder}, {stdout: true, logMeta});
+    }
 
     return determineGitDiffBase64(toolInvocation.meta.correlationId, localUniqueCorrelationId, cloneFolder, logMeta);
 

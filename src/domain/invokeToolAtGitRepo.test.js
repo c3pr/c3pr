@@ -28,30 +28,43 @@ describe('invokeToolAtGitRepo', () => {
                 "revision": "30b03c1d8aa6ee670534b80edd0dc39c12644259"
             },
             "files": [
-                "pom.xml"
+                "pom.xml",
+                "README.md"
             ],
             "tool": {
-                "command": "echo this-would-be-a-change-executed-via-tool>> pom.xml",
+                "command": "echo this-would-be-a-change-executed-via-tool in the '#{filename}' file>> #{filename}",
                 "meta": {
                     "rule": "sonar:StringCheckOnLeft"
                 }
             }
         });
 
-        expect(toolInvocationResult.files).to.deep.equal(["pom.xml"]);
-        expect(toolInvocationResult.diff).to.be.equal(
-// this convertion to base64 only works here because there are no accents (so no ISOvsUTF encoding trouble)
-Buffer.from(
-`diff --git a/pom.xml b/pom.xml
-index ad8bb19..7db8f5e 100644
+        expect(toolInvocationResult.files).to.deep.equal(["README.md", "pom.xml"]);
+
+const diff =
+`diff --git a/README.md b/README.md
+index 70f85b5..6ee0464 100644
+--- a/README.md
++++ b/README.md
+@@ -1,3 +1,4 @@
+ # Sample Java + Maven Project
+ 
+ Example Java+Maven project with issues that could be fixed by static analysis tools.
++this-would-be-a-change-executed-via-tool in the 'README.md' file
+diff --git a/pom.xml b/pom.xml
+index ad8bb19..49d4084 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -13,3 +13,4 @@
  	</properties>
  
  </project>
-+this-would-be-a-change-executed-via-tool
-`,).toString('base64'));
++this-would-be-a-change-executed-via-tool in the 'pom.xml' file
+`;
+        expect(Buffer.from(toolInvocationResult.diff, 'base64').toString()).to.be.equal(diff);
+
+        // this convertion to base64 only works here because there are no accents (so no ISOvsUTF encoding trouble)
+        expect(toolInvocationResult.diff).to.be.equal(Buffer.from(diff).toString('base64'));
 
     }).timeout(10 * 1000);
 
