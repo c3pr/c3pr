@@ -20,3 +20,11 @@ console.log(fileAsStringBackFromBase64);
 console.log('\n');
 
 fs.writeFileSync(afterPatchFile, fileAsStringBackFromBase64, 'hex');
+
+
+// TO AND FROM base64
+
+const asBase64 = Buffer.from('Hello World!!').toString('base64');
+console.log( asBase64 );
+const backToNormal = Buffer.from(asBase64, 'base64').toString();
+console.log( backToNormal );
