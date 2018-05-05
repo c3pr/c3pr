@@ -32,7 +32,7 @@ describe('invokeToolAtGitRepo', () => {
                 "README.md"
             ],
             "tool": {
-                "command": "echo this-would-be-a-change-executed-via-tool in the '#{filename}' file>> #{filename}",
+                "command": "echo this-would-be-a-change-executed-via-tool in the !#{filename}! file>> #{filename}",
                 "meta": {
                     "rule": "sonar:StringCheckOnLeft"
                 }
@@ -43,23 +43,23 @@ describe('invokeToolAtGitRepo', () => {
 
 const diff =
 `diff --git a/README.md b/README.md
-index 70f85b5..6ee0464 100644
+index 70f85b5..c202dcd 100644
 --- a/README.md
 +++ b/README.md
 @@ -1,3 +1,4 @@
  # Sample Java + Maven Project
  
  Example Java+Maven project with issues that could be fixed by static analysis tools.
-+this-would-be-a-change-executed-via-tool in the 'README.md' file
++this-would-be-a-change-executed-via-tool in the !README.md! file
 diff --git a/pom.xml b/pom.xml
-index ad8bb19..49d4084 100644
+index ad8bb19..78c4a56 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -13,3 +13,4 @@
  	</properties>
  
  </project>
-+this-would-be-a-change-executed-via-tool in the 'pom.xml' file
++this-would-be-a-change-executed-via-tool in the !pom.xml! file
 `;
         expect(Buffer.from(toolInvocationResult.diff, 'base64').toString()).to.be.equal(diff);
 
