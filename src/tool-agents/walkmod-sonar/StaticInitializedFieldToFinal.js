@@ -2,7 +2,7 @@ module.exports = {
     toolId: "walkmod-sonar:StaticInitializedFieldToFinal",
     extensions: ["java"],
     agentURL: "https://c3pr-tool-walkmod-sonar.now.sh/c3pr",
-    command: "walkmod apply sonar:StaticInitializedFieldToFinal",
+    command: "walkmod apply sonar:StaticInitializedFieldToFinal -i #{filename}",
     toolMeta: {rule: "sonar:StaticInitializedFieldToFinal"},
     prTitle: "StaticInitializedFieldToFinal",
     prBody: `
