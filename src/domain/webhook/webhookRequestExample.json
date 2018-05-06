@@ -16,75 +16,81 @@
     "id": 1,
     "name": "sample-project-java-maven",
     "description": null,
-    "web_url": "http://59105d2b76c4/sample_user/sample-project-java-maven",
+    "web_url": "http://my.gitlab/c3pr/sample-project-java-maven",
     "avatar_url": null,
-    "git_ssh_url": "git@59105d2b76c4:sample_user/sample-project-java-maven.git",
-    "git_http_url": "http://59105d2b76c4/sample_user/sample-project-java-maven.git",
-    "namespace": "sample_user",
+    "git_ssh_url": "git@my.gitlab:c3pr/sample-project-java-maven.git",
+    "git_http_url": "http://my.gitlab/c3pr/sample-project-java-maven.git",
+    "namespace": "c3pr",
     "visibility_level": 20,
-    "path_with_namespace": "sample_user/sample-project-java-maven",
+    "path_with_namespace": "c3pr/sample-project-java-maven",
     "default_branch": "master",
     "ci_config_path": null,
-    "homepage": "http://59105d2b76c4/sample_user/sample-project-java-maven",
-    "url": "git@59105d2b76c4:sample_user/sample-project-java-maven.git",
-    "ssh_url": "git@59105d2b76c4:sample_user/sample-project-java-maven.git",
-    "http_url": "http://59105d2b76c4/sample_user/sample-project-java-maven.git"
+    "homepage": "http://my.gitlab/c3pr/sample-project-java-maven",
+    "url": "git@my.gitlab:c3pr/sample-project-java-maven.git",
+    "ssh_url": "git@my.gitlab:c3pr/sample-project-java-maven.git",
+    "http_url": "http://my.gitlab/c3pr/sample-project-java-maven.git"
   },
   "commits": [
     {
       "id": "5d296db9a2d2914d648945ae68303323b197de5b",
       "message": "refactor(UseStringEquals): move to more specific package\n",
       "timestamp": "2018-05-04T12:51:50-03:00",
-      "url": "http://59105d2b76c4/sample_user/sample-project-java-maven/commit/5d296db9a2d2914d648945ae68303323b197de5b",
+      "url": "http://my.gitlab/c3pr/sample-project-java-maven/commit/5d296db9a2d2914d648945ae68303323b197de5b",
       "author": {
         "name": "Antonio Jr",
         "email": "acdcjunior@gmail.com"
       },
       "added": [
-        "src/main/java/io/github/c3pr/sample/javamaven/walkmod/IssueUseStringEquals.java"
+        "src/main/resources/first.txt"
       ],
-      "modified": [],
-      "removed": []
+      "removed": [],
+      "modified": []
     },
     {
       "id": "e4ad09f8bc8b1f78349bcd48e0d2ffd0e4cfa5e3",
       "message": "feat(UseStringEquals): make code sample clearer\n",
       "timestamp": "2018-05-04T12:50:54-03:00",
-      "url": "http://59105d2b76c4/sample_user/sample-project-java-maven/commit/e4ad09f8bc8b1f78349bcd48e0d2ffd0e4cfa5e3",
+      "url": "http://my.gitlab/c3pr/sample-project-java-maven/commit/e4ad09f8bc8b1f78349bcd48e0d2ffd0e4cfa5e3",
       "author": {
         "name": "Antonio Jr",
         "email": "acdcjunior@gmail.com"
       },
-      "added": [],
-      "modified": [
-        "src/main/java/io/github/c3pr/sample/javamaven/IssueUseStringEquals.java"
+      "added": [
+        "src/main/resources/second.txt"
       ],
-      "removed": []
+      "removed": [],
+      "modified": [
+        "src/main/resources/first.txt"
+      ]
     },
     {
       "id": "0ccf0a8590d027c049a23913d2f36a32748bade1",
       "message": "feat(UseStringEquals): move supported/unsupported expressions\n",
       "timestamp": "2018-05-04T12:43:48-03:00",
-      "url": "http://59105d2b76c4/sample_user/sample-project-java-maven/commit/0ccf0a8590d027c049a23913d2f36a32748bade1",
+      "url": "http://my.gitlab/c3pr/sample-project-java-maven/commit/0ccf0a8590d027c049a23913d2f36a32748bade1",
       "author": {
         "name": "Antonio Jr",
         "email": "acdcjunior@gmail.com"
       },
-      "added": [],
-      "modified": [
-        "src/main/java/io/github/c3pr/sample/javamaven/IssueUseStringEquals.java"
+      "added": [
+        "src/main/resources/third.txt"
       ],
-      "removed": []
+      "removed": [
+        "src/main/resources/first.txt"
+      ],
+      "modified": [
+        "src/main/resources/second.txt"
+      ]
     }
   ],
   "total_commits_count": 3,
   "repository": {
     "name": "sample-project-java-maven",
-    "url": "git@59105d2b76c4:sample_user/sample-project-java-maven.git",
+    "url": "git@my.gitlab:c3pr/sample-project-java-maven.git",
     "description": null,
-    "homepage": "http://59105d2b76c4/sample_user/sample-project-java-maven",
-    "git_http_url": "http://59105d2b76c4/sample_user/sample-project-java-maven.git",
-    "git_ssh_url": "git@59105d2b76c4:sample_user/sample-project-java-maven.git",
+    "homepage": "http://my.gitlab/c3pr/sample-project-java-maven",
+    "git_http_url": "http://my.gitlab/c3pr/sample-project-java-maven.git",
+    "git_ssh_url": "git@my.gitlab:c3pr/sample-project-java-maven.git",
     "visibility_level": 20
   }
 }
