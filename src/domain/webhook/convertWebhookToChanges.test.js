@@ -17,7 +17,7 @@ const whatBotNeedsToInvokeTools = {
     changeset: ['src/main/resources/second.txt', 'src/main/resources/third.txt'],
     repository: {
         type: "git",
-        url: "https://github.com/c3pr/sample-project-java-maven.git",
+        url: "http://127.0.0.1:8090/c3pr/sample-project-java-maven.git",
         branch: "master",
         revision: "13b7eedacc076e8a16ae565b535fd48edb9a044a"
     }
@@ -48,11 +48,11 @@ describe('convertWebhookToChanges', function () {
         const changes = convertWebhookToChanges({
             ref: "refs/heads/w00t-a-branch",
             after: "after-hash",
-            repository: { clone_url: "clone-url" },
+            repository: { git_http_url: "!git_http_url!" },
             commits: [
-                {added: [], removed: [], modified: ['m2', 'm3']},
-                {added: [], removed: [], modified: ['m1']},
-                {added: [], removed: [], modified: []},
+                {timestamp: '1', added: ['m2'], removed: [], modified: ['m3']},
+                {timestamp: '3', added: [], removed: ['m2'], modified: ['m1']},
+                {timestamp: '2', added: [], removed: [], modified: ['m2']},
             ]
         });
         expect(changes).to.deep.equal({
@@ -62,10 +62,10 @@ describe('convertWebhookToChanges', function () {
                 dates: [{date: now.toISOString(), node: "c3pr-repo-gitlab"}]
             },
             c3pr: {prsUrl: "http://prs/prs"},
-            changeset: ['m2', 'm3', 'm1'],
+            changeset: ['m1', 'm3'],
             repository: {
                 type: "git",
-                url: "clone-url",
+                url: "!git_http_url!",
                 branch: "w00t-a-branch",
                 revision: "after-hash"
             }

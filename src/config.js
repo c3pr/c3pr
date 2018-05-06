@@ -16,5 +16,9 @@ module.exports = {
         gitUserName: 'c3pr-bot',
         gitUserEmail: 'c3prbot@gmail.com',
 
+        gitlabUrlTransform(url) {
+            return url.replace(/^https?:\/\/[^\/]+\//, 'http://127.0.0.1:8090/')
+        }
+
     }
 };
