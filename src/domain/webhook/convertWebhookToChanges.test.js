@@ -44,15 +44,15 @@ describe('convertWebhookToChanges', function () {
         expect(changes).to.deep.equal(whatBotNeedsToInvokeTools);
     });
 
-    it('more elaborate example', function () {
+    it('more elaborate example, with out-of-order-commit that removes a file', function () {
         const changes = convertWebhookToChanges({
             ref: "refs/heads/w00t-a-branch",
             after: "after-hash",
             repository: { clone_url: "clone-url" },
             commits: [
-                {added: [], removed: [], modified: ['m2', 'm3']},
-                {added: [], removed: [], modified: ['m1']},
-                {added: [], removed: [], modified: []},
+                {timestamp: '1', added: ['m2'], removed: [], modified: ['m3']},
+                {timestamp: '3', added: [], removed: ['m2'], modified: ['m1']},
+                {timestamp: '2', added: [], removed: [], modified: ['m2']},
             ]
         });
         expect(changes).to.deep.equal({
@@ -62,7 +62,7 @@ describe('convertWebhookToChanges', function () {
                 dates: [{date: now.toISOString(), node: "c3pr-repo-github"}]
             },
             c3pr: {prsUrl: "http://prs/prs"},
-            changeset: ['m2', 'm3', 'm1'],
+            changeset: ['m1', 'm3'],
             repository: {
                 type: "git",
                 url: "clone-url",

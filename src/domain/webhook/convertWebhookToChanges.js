@@ -1,13 +1,25 @@
 const config = require('../../config');
 
-function convertWebhookToChanges(webhookPayload) {
-    const changeset = new Set();
-    webhookPayload.commits.forEach(commit => {
-        commit.added.forEach(added => changeset.add(added));
-        commit.modified.forEach(modified => changeset.add(modified));
-        commit.removed.forEach(removed => changeset.delete(removed));
+function extractChangedFiles(webhookCommits) {
+    const commits = [...webhookCommits];
+    commits.sort((a, b) => {
+        return a.timestamp.localeCompare(b.timestamp);
     });
 
+    const changesetFiles = new Set();
+    commits.forEach(commit => {
+        commit.added.forEach(added => changesetFiles.add(added));
+        commit.modified.forEach(modified => changesetFiles.add(modified));
+        commit.removed.forEach(removed => changesetFiles.delete(removed));
+    });
+
+    const changeset = Array.from(changesetFiles.values());
+    changeset.sort();
+    return changeset;
+}
+
+function convertWebhookToChanges(webhookPayload) {
+    const changeset = extractChangedFiles(webhookPayload.commits);
     const gitSHA = webhookPayload.after;
     return {
         meta: {
@@ -18,7 +30,7 @@ function convertWebhookToChanges(webhookPayload) {
         c3pr: {
             prsUrl: config.c3pr.prsUrl
         },
-        changeset: Array.from(changeset.values()),
+        changeset,
         repository: {
             type: "git",
             url: webhookPayload.repository.clone_url,
