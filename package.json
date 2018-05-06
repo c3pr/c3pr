@@ -1,0 +1,40 @@
+{
+  "name": "c3pr-adapter-gitlab",
+  "version": "1.0.0",
+  "description": "C3PR Repository Adapter for GitLab",
+  "scripts": {
+    "start": "node src/index.js",
+    "debug": "node %NODE_DEBUG_OPTION% src/index.js",
+    "test": "mocha src/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c3pr/c3pr-repo-gitlab.git"
+  },
+  "keywords": [
+    "c3pr",
+    "gitlab"
+  ],
+  "author": "acdcjunior",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/c3pr/c3pr-repo-gitlab/issues"
+  },
+  "homepage": "https://github.com/c3pr/c3pr-repo-gitlab",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "github-webhook-handler": "^0.7.1",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#7.1.0",
+    "node-git-client": "github:c3pr/node-git-client#6.0.4",
+    "octonode": "^0.9.1",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/request": "^2.47.0",
+    "@types/sinon-chai": "^2.7.29",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0",
+    "sinon": "^4.2.2"
+  }
+}
