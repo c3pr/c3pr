@@ -1,0 +1,1 @@
+docker run -p 8090:80 --name gitlab gitlab/gitlab-ce
