@@ -1,0 +1,35 @@
+{
+  "name": "node-c3pr-repo",
+  "version": "1.0.0",
+  "description": "Reusable functions for C3PR repo implementations in node",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha src/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c3pr/node-c3pr-repo.git"
+  },
+  "keywords": [
+    "logging"
+  ],
+  "author": "acdcjunior",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/c3pr/node-c3pr-repo/issues"
+  },
+  "homepage": "https://github.com/c3pr/node-c3pr-repo#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#7.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^10.0.4",
+    "@types/sinon-chai": "^2.7.29",
+    "axios-mock-adapter": "^1.15.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0",
+    "sinon": "^4.2.2",
+    "typescript": "^2.8.3"
+  }
+}
