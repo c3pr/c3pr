@@ -11,7 +11,7 @@ function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function verify(title, {nodeName, correlationIds, moduleNames, meta}, ...logMetas) {
+function verifyLOG({title, expected: {nodeName, correlationIds, moduleNames, meta}, logMetas}) {
     it(title, async () => {
         const dateBefore = new Date().toISOString();
         await timeout(100);
@@ -38,18 +38,38 @@ function verify(title, {nodeName, correlationIds, moduleNames, meta}, ...logMeta
 }
 
 function go(title, hasMeta, ...logMetas) {
-    verify(title, {nodeName: "nawde", correlationIds: ['test', 'idTwo'], moduleNames: ['logs-one', 'logs-two'], meta: hasMeta && logMetas[0]}, ...logMetas);
+    verifyLOG({
+        title: title,
+        expected: {nodeName: "nawde", correlationIds: ['test', 'idTwo'], moduleNames: ['logs-one', 'logs-two'], meta: hasMeta && logMetas[0]},
+        logMetas
+    });
 }
 
 describe('c3prLOG', () => {
 
-    verify('no log should log default', {nodeName: "empty-logMeta-nodeName", correlationIds: ["empty-logMeta-correlationIds"], moduleNames: ["empty-logMeta-moduleNames"]});
+    verifyLOG({
+        title: 'no log should log default',
+        expected: {nodeName: "empty-logMeta-nodeName", correlationIds: ["empty-logMeta-correlationIds"], moduleNames: ["empty-logMeta-moduleNames"]},
+        logMetas: []
+    });
 
-    verify('empty log should log default', {nodeName: "empty-logMeta-nodeName", correlationIds: ["empty-logMeta-correlationIds"], moduleNames: ["empty-logMeta-moduleNames"]}, {});
+    verifyLOG({
+        title: 'empty log should log default',
+        expected: {nodeName: "empty-logMeta-nodeName", correlationIds: ["empty-logMeta-correlationIds"], moduleNames: ["empty-logMeta-moduleNames"]},
+        logMetas: [{}]
+    });
 
-    verify('present log, but no nodeName should not error',
-        {nodeName: "empty-nodeName", correlationIds: ["ci"], moduleNames: ["mn"]}, {correlationIds: ["ci"], moduleNames: ["mn"]}
-    );
+    verifyLOG({
+        title: 'null log is the same as nothing',
+        expected: {nodeName: "empty-nodeName", correlationIds: [], moduleNames: []},
+        logMetas: [{meta: 'this will be interpreted as meta object'}, undefined, {}]
+    });
+
+    verifyLOG({
+        title: 'present log, but no nodeName should not error',
+        expected: {nodeName: "empty-nodeName", correlationIds: ["ci"], moduleNames: ["mn"]},
+        logMetas: [{correlationIds: ["ci"], moduleNames: ["mn"]}]
+    });
 
     go('should log logMeta (correlationIds)',
         true, {stuff: 'yo2'}, {nodeName: 'nawde', correlationIds: ['test', 'idTwo'], moduleNames: ['logs-one', 'logs-two']}

@@ -22,8 +22,8 @@ const emptyLogMeta = [{nodeName: "empty-logMeta-nodeName", correlationIds: ["emp
 const emptyNodeName = {nodeName: "empty-nodeName"};
 
 async function logWithMeta(message: string, metadata: any, logMetasArg: LogMeta[]) {
-    let logMetas = logMetasArg;
-    if (!logMetasArg.length) {
+    let logMetas = logMetasArg.filter(log => log);
+    if (!logMetas.length) {
         console.log("WARNING: Called c3prLOG with no LogMeta.");
         logMetas = emptyLogMeta;
     }

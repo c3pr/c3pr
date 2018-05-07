@@ -17,8 +17,8 @@ function showWarningIfDatabaseNotDefined() {
 const emptyLogMeta = [{ nodeName: "empty-logMeta-nodeName", correlationIds: ["empty-logMeta-correlationIds"], moduleNames: ["empty-logMeta-moduleNames"] }];
 const emptyNodeName = { nodeName: "empty-nodeName" };
 async function logWithMeta(message, metadata, logMetasArg) {
-    let logMetas = logMetasArg;
-    if (!logMetasArg.length) {
+    let logMetas = logMetasArg.filter(log => log);
+    if (!logMetas.length) {
         console.log("WARNING: Called c3prLOG with no LogMeta.");
         logMetas = emptyLogMeta;
     }
