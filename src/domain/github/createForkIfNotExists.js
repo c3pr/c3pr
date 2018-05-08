@@ -9,7 +9,10 @@ function createForkIfNotExists(repoName) {
             if (err) {
                 reject(err);
             } else {
-                resolve(data);
+                resolve({
+                    organization: data.owner.login,
+                    cloneUrl: data.clone_url
+                });
             }
         });
     });
