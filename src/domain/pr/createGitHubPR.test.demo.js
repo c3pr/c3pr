@@ -1,6 +1,6 @@
 require("node-c3pr-logger").testMode();
 const assert = require('assert');
-const createPR = require('./createPR');
+const createGitHubPR = require('./createGitHubPR');
 const config = require('../../config');
 const githubClient = require('octonode').client(config.c3pr.gitHubApiToken);
 const ghrepo = githubClient.repo('c3pr/sample-project-java-maven');
@@ -26,7 +26,7 @@ ghrepo.prs(async (err, prsBefore) => {
     // existe a possibilidade de fazerem um push, entre o webhook inicial e a criacao da PR, que apague um arquivo que a PR modifica.
     // Realmente, nao ha muito o que podemos fazer. Se o arquivo foi apagado, entao nao precisava da PR mesmo. Se ele foi
     // movido, talvez uma nova PR venha a ser feita quando do novo webhook
-    await createPR({
+    await createGitHubPR({
         mainRepoOrgRepo: 'c3pr/sample-project-java-maven',
         mainRepoBranch: 'prCreationTestBranch',
         mainRepoHash: '1fb4aaf9b45b64ec0778f085349109175c328195',
@@ -58,5 +58,3 @@ ghrepo.prs(async (err, prsBefore) => {
     });
 
 });
-
-
