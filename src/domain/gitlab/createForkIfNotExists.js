@@ -3,6 +3,7 @@ const config = require('../../config');
 
 const encodeGroupProjectPath = require('./encodeGroupProjectPath');
 const getGitLabProject = require('./getGitLabProject');
+const c3prLOG = require("node-c3pr-logger");
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -44,7 +45,8 @@ function generateForkName(urlEncodedOrgNameProjectName) {
 /**
  * Forks the given project under the gitlab bot user account.
  */
-async function createForkIfNotExists(orgNameProjectName) {
+async function createForkIfNotExists(orgNameProjectName, logMetas) {
+    const logMeta = {nodeName: 'c3pr-repo-gitlab', moduleName: 'createForkIfNotExists'};
 
     let urlEncodedOrgNameProjectName = encodeGroupProjectPath(orgNameProjectName);
 
@@ -52,14 +54,14 @@ async function createForkIfNotExists(orgNameProjectName) {
     const forkId = encodeURIComponent(config.c3pr.gitUserName + '/' + forkName);
     try {
         let projectData = await getGitLabProject(forkId);
-        console.log(`Fork '${forkId}' already exists, returning.`);
+        c3prLOG(`Fork '${forkId}' already exists, returning.`, {orgNameProjectName}, logMetas, logMeta);
         return {
             organization: config.c3pr.gitUserName,
             forkName,
-            cloneUrl: projectData.http_url_to_repo
+            cloneUrl: config.c3pr.gitlabUrlTransform(projectData.http_url_to_repo)
         };
     } catch (e) {
-        console.log(`Fork '${forkId}' does not exist, will be created.`);
+        c3prLOG(`Fork '${forkId}' does not exist, will be created.`, {orgNameProjectName}, logMetas, logMeta);
     }
 
     let projectId = await scheduleForkCreation(urlEncodedOrgNameProjectName);
