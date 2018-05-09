@@ -1,16 +1,11 @@
 const axios = require('axios');
 const config = require('../../config');
 
+const encodeGroupProjectPath = require('./encodeGroupProjectPath');
+const getGitLabProject = require('./getGitLabProject');
+
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function getProject(projectId) {
-    let {data: getProject} = await axios.get(
-        `${config.c3pr.gitLabUrl}/api/v4/projects/${projectId}`,
-        {headers: {"PRIVATE-TOKEN": config.c3pr.gitLabApiToken}}
-    );
-    return getProject;
 }
 
 async function scheduleForkCreation(urlEncodedOrgNameProjectName) {
@@ -27,7 +22,7 @@ async function waitForForkCompletion(projectId) {
     let wait = true;
     while (wait) {
         await timeout(100);
-        let {import_status} = await getProject(projectId);
+        let {import_status} = await getGitLabProject(projectId);
         wait = import_status !== 'finished';
     }
     console.log('Fork creation completed.');
@@ -51,15 +46,12 @@ function generateForkName(urlEncodedOrgNameProjectName) {
  */
 async function createForkIfNotExists(orgNameProjectName) {
 
-    let urlEncodedOrgNameProjectName = orgNameProjectName;
-    if (!orgNameProjectName.includes('%')) {
-        urlEncodedOrgNameProjectName = encodeURIComponent(orgNameProjectName);
-    }
+    let urlEncodedOrgNameProjectName = encodeGroupProjectPath(orgNameProjectName);
 
     const forkName = generateForkName(urlEncodedOrgNameProjectName);
     const forkId = encodeURIComponent(config.c3pr.gitUserName + '/' + forkName);
     try {
-        let projectData = await getProject(forkId);
+        let projectData = await getGitLabProject(forkId);
         console.log(`Fork '${forkId}' already exists, returning.`);
         return {
             organization: config.c3pr.gitUserName,
