@@ -4,7 +4,7 @@ const notifyC3prBotOfChanges = require('../src/changes/notifyC3prBotOfChanges');
 
 function handleWebhook(config, convertWebhookToChanges, webhookPayload, ...logMetas) {
     c3prLOG(
-        `Handling webhook invoked for ${webhookPayload.repository.url}. Message: '${webhookPayload.commits[0].message}'`,
+        `Handling webhook invoked for ${webhookPayload.repository.url}. Message: '${webhookPayload.commits[0].message}'.`,
         {webhookPayload},
         ...logMetas, {nodeName: 'node, c3pr-repo', correlationId: webhookPayload.after, moduleName: 'handleWebhook'}
     );
