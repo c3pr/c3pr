@@ -34,6 +34,7 @@ function convertWebhookToChanges(webhookPayload) {
         changeset,
         repository: {
             type: "git",
+            fullpath: webhookPayload.project.path_with_namespace,
             url: config.c3pr.gitlabUrlTransform(webhookPayload.repository.git_http_url),
             // TODO maybe it would be more secure to send down the refs and git fetch the refs instead of the branch... This seems rather sketchy
             branch: webhookPayload.ref.replace(/refs\/heads\//, ''),

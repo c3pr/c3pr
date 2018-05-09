@@ -17,6 +17,7 @@ const whatBotNeedsToInvokeTools = {
     changeset: ['src/main/resources/second.txt', 'src/main/resources/third.txt'],
     repository: {
         type: "git",
+        fullpath: "c3pr/sample-project-java-maven",
         url: "http://127.0.0.1:8090/c3pr/sample-project-java-maven.git",
         branch: "master",
         revision: "13b7eedacc076e8a16ae565b535fd48edb9a044a"
@@ -48,6 +49,7 @@ describe('convertWebhookToChanges', function () {
         const changes = convertWebhookToChanges({
             ref: "refs/heads/w00t-a-branch",
             after: "after-hash",
+            project: { path_with_namespace: "!fullpath!" },
             repository: { git_http_url: "!git_http_url!" },
             commits: [
                 {timestamp: '1', added: ['m2'], removed: [], modified: ['m3']},
@@ -65,6 +67,7 @@ describe('convertWebhookToChanges', function () {
             changeset: ['m1', 'm3'],
             repository: {
                 type: "git",
+                fullpath: "!fullpath!",
                 url: "!git_http_url!",
                 branch: "w00t-a-branch",
                 revision: "after-hash"
