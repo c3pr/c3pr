@@ -1,7 +1,11 @@
 <template>
   <div class="about">
-    <button @click="fetchAll">fetchAll</button>
+    <button @click="fetchAll">{{ fetchStatus }}</button>
 
+    <button @click="displayedMeta = {}">clear displayedMeta</button>
+    <pre>
+      {{ displayedMeta }}
+    </pre>
     <hr>
     <div>
     <span v-for="prop of Object.keys(display)" :key="prop">
@@ -15,10 +19,10 @@
         <td v-if="display.dateTime">{{ log.dateTime }}</td>
         <td v-if="display.correlationIds">{{ unique(log.correlationIds) }}</td>
         <td v-if="display.moduleNames">{{ log.moduleNames }}</td>
-        <td v-if="display.message" :title="log.message" class="message">
+        <td v-if="display.message" :title="log.message" class="message" style="cursor: pointer" @click="displayedMeta = log.metadata">
           {{ log.message.substr(0, 100) }}
         </td>
-        <td v-if="display.meta">{{ log.meta }}</td>
+        <td v-if="display.meta">{{ log.metadata }}</td>
       </tr>
     </table>
   </div>
@@ -29,7 +33,9 @@ export default {
   name: 'Logs',
   data() {
     return {
+      fetchStatus: 'Click to re-fetch logs',
       logs: [],
+      displayedMeta: {},
       display: {
         _id: false,
         node: true,
@@ -37,18 +43,20 @@ export default {
         correlationIds: true,
         moduleNames: true,
         message: true,
-        meta: true,
+        meta: false,
       },
     };
   },
   created() { this.fetchAll(); },
   methods: {
     fetchAll() {
+      this.fetchStatus = 'Fetching logs...';
       fetch('/api/logs')
         .then(r => r.json())
         .then((r) => {
-          r.sort((a, b) => a.dateTime.localeCompare(b.dateTime));
+          r.sort((a, b) => a.dateTime.localeCompare(b.dateTime) * -1);
           this.logs = r;
+          this.fetchStatus = 'Click to re-fetch logs';
         });
     },
     unique(a) {
@@ -65,4 +73,8 @@ export default {
   .c3pr-repo-github { color: purple; }
   .c3pr { color: blue; }
   .c3pr-agent { color: green; }
+  pre {
+    text-align: initial;
+    white-space: pre-wrap;
+  }
 </style>
