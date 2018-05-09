@@ -19,7 +19,8 @@
         <td v-if="display.dateTime">{{ log.dateTime }}</td>
         <td v-if="display.correlationIds">{{ unique(log.correlationIds) }}</td>
         <td v-if="display.moduleNames">{{ log.moduleNames }}</td>
-        <td v-if="display.message" :title="log.message" class="message" style="cursor: pointer" @click="displayedMeta = log.metadata">
+        <td v-if="display.message" :title="log.message" class="message" style="cursor: pointer"
+          @click="displayedMeta = log.metadata">
           {{ log.message.substr(0, 100) }}
         </td>
         <td v-if="display.meta">{{ log.metadata }}</td>
