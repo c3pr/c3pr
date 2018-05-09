@@ -2,11 +2,12 @@ const createMergeRequest = require("../gitlab/createMergeRequest");
 const createForkIfNotExists = require("../gitlab/createForkIfNotExists");
 const createPR = require("node-c3pr-repo/create-pr/create-pr");
 
-async function createGitLabPR({
+async function createGitLabMR({
                             mainRepoOrgRepo,
                             mainRepoBranch,
                             mainRepoHash,
-                            gitHubApiToken,
+                            gitLabUrl,
+                            gitLabApiToken,
                             gitUserName,
                             gitUserEmail,
                             prCommitMessage,
@@ -15,13 +16,13 @@ async function createGitLabPR({
                             patchContent
                         }) {
 
-    const mainRepoCloneUrl = `https://${gitHubApiToken}:${gitHubApiToken}@github.com/${mainRepoOrgRepo}.git`;
-
     const addAuthenticationToCloneUrl = (cloneUrl) => {
-        return cloneUrl.replace(`https://github.com/`, `https://${gitHubApiToken}:${gitHubApiToken}@github.com/`)
+        return cloneUrl.replace(/^http(s?):\/\//, `http$1://clone:${gitLabApiToken}@`)
     };
 
-    const tokenReplacementForLogFunction = {regex: new RegExp(gitHubApiToken, "g"), replaceWith: "<GITHUB_API_TOKEN>"};
+    const mainRepoCloneUrl = addAuthenticationToCloneUrl(`${gitLabUrl}/${mainRepoOrgRepo}.git`);
+
+    const tokenReplacementForLogFunction = {regex: new RegExp(gitLabApiToken, "g"), replaceWith: "<GITLAB_API_TOKEN>"};
 
     await createPR({
         createPullRequest: createMergeRequest,
@@ -41,4 +42,4 @@ async function createGitLabPR({
     });
 }
 
-module.exports = createGitLabPR;
+module.exports = createGitLabMR;
