@@ -29,6 +29,7 @@ async function createPR({
     const forkInfo = await createForkIfNotExists(mainRepoOrgRepo);
 
     const forkRepoOrg = forkInfo.organization;
+    const forkRepoProject = forkInfo.forkName;
     const forkRepoCloneUrl = addAuthenticationToCloneUrl(forkInfo.cloneUrl);
     const forkRepoBranch = stagingFolderName;
 
@@ -66,7 +67,7 @@ async function createPR({
     await c3prSH(`git push -u fork ${forkRepoBranch}`, {cwd: stagingFolder}, {logMeta});
 
     // CREATE PULL REQUEST VIA API
-    await createPullRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoBranch, prTitle, prBody);
+    await createPullRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBody);
 
 }
 
