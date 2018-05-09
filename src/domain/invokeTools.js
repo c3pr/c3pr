@@ -9,7 +9,7 @@ async function invokeTools(changes) {
     const logMeta = {nodeName: 'c3pr-brain', correlationId: changes.meta.correlationId, moduleName: 'invokeTools'};
 
     const applicableToolAgents = decideApplicableToolAgents(changes);
-    c3prLOG(`Applicable tools - ${applicableToolAgents.length}: ${applicableToolAgents.map(tool => tool.toolId)}`, logMeta);
+    c3prLOG(`Applicable tools - ${applicableToolAgents.length}: ${JSON.stringify(applicableToolAgents.map(tool => tool.toolId))}`, logMeta);
 
     const toolsApplied = [];
     let changedAndNotRefactoredFiles = [...changes.changeset];
@@ -20,7 +20,7 @@ async function invokeTools(changes) {
             continue;
         }
         try {
-            c3prLOG(`Invoking agent ${tool.toolId} of changes to ${changes.repository.url}.`, {tool}, logMeta);
+            c3prLOG(`Invoking agent ${tool.toolId} at ${tool.agentURL} on changes to ${changes.repository.url}, files: ${JSON.stringify(filesForThisTool)}`, {tool}, logMeta);
             let response = await axios.post(tool.agentURL, {
                 meta: {
                     correlationId: changes.meta.correlationId,
