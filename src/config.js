@@ -20,7 +20,6 @@ module.exports = {
         gitUserName: 'c3pr-bot',
         gitUserEmail: 'c3prbot@gmail.com',
         gitLabApiToken: GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3', // api + read_user token for the gitUserName gitlab user
-        gitLabApiTokenRoot: 'Z-dLB9FWZNS5jrMdqrSJ',
 
         gitlabUrlTransform(url) {
             return url.replace(/^https?:\/\/[^\/]+\//, GITLAB_URL)
