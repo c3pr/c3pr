@@ -24,8 +24,9 @@ c3pr-repo-gitlab now listening at port ${config.c3pr.port}.
 
 c3pr (bot) changes URL will be: ${config.c3pr.changesUrl}
 c3pr-repo-gitlab prs URL will be: ${config.c3pr.prsUrl}
+c3pr-repo-gitlab webhooks URL will be: ${config.c3pr.webhooksUrl}
 
 c3pr's git user name and password will be: '${config.c3pr.gitUserName.replace(/'/g, '')}' <'${config.c3pr.gitUserEmail.replace(/'/g, '')}'>
 `); // TODO maybe add validation of presence of these vars
-    c3prLOG(`C-3PR Github Repo is up at ${config.c3pr.prsUrl}`, {nodeName: 'c3pr-repo-gitlab', correlationIds: 'boot', moduleName: 'main'});
+    c3prLOG(`C-3PR Github Repo is up at ${config.c3pr.url}.`, {nodeName: 'c3pr-repo-gitlab', correlationIds: 'boot', moduleName: 'main'});
 });
