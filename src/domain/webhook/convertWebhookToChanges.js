@@ -33,6 +33,7 @@ function convertWebhookToChanges(webhookPayload) {
         changeset,
         repository: {
             type: "git",
+            fullpath: webhookPayload.repository.full_name,
             url: webhookPayload.repository.clone_url,
             // TODO maybe it would be more secure to send down the refs and git fetch the refs instead of the branch... This seems rather sketchy
             branch: webhookPayload.ref.replace(/refs\/heads\//, ''),
