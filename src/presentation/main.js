@@ -14,10 +14,9 @@ require('./patchesController')(app);
 
 // The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
-    res.status(404).send(`No C3PR endpoint is listening at ${req.url}.`);
+    res.status(404).send(`No C-3PR BRAIN endpoint is listening at ${req.url}.`);
 });
 
 app.listen(config.c3pr.port, () => {
-    console.log(`c3pr now listening at port ${config.c3pr.port}.`);
-    c3prLOG(`C-3PR bot is up at port ${config.c3pr.port}`, {nodeName: 'c3pr-brain', correlationIds: 'boot', moduleName: 'main'});
+    c3prLOG(`C-3PR BRAIN is up at port ${config.c3pr.port}`, {nodeName: 'c3pr-brain', correlationIds: 'boot', moduleName: 'main'});
 });
