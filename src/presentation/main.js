@@ -18,5 +18,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.port, () => {
-    c3prLOG(`C-3PR BRAIN is up at port ${config.c3pr.port}`, {nodeName: 'c3pr-brain', correlationIds: 'boot', moduleName: 'main'});
+    c3prLOG(`C-3PR BRAIN is up at port ${config.c3pr.port}.`, {nodeName: 'c3pr-brain', correlationIds: 'boot', moduleName: 'main'});
 });
