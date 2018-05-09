@@ -1,14 +1,5 @@
-const createPullRequest = require("../gitlab/createPullRequest");
-
-const createForkIfNotExistsORIGINAL = require("../gitlab/createForkIfNotExists");
-const createForkIfNotExists = async (mainRepoOrgRepo) => {
-    const data = await createForkIfNotExistsORIGINAL(mainRepoOrgRepo);
-    return {
-        organization: data.owner.login,
-        cloneUrl: data.clone_url
-    };
-};
-
+const createMergeRequest = require("../gitlab/createMergeRequest");
+const createForkIfNotExists = require("../gitlab/createForkIfNotExists");
 const createPR = require("node-c3pr-repo/create-pr/create-pr");
 
 async function createGitLabPR({
@@ -33,7 +24,7 @@ async function createGitLabPR({
     const tokenReplacementForLogFunction = {regex: new RegExp(gitHubApiToken, "g"), replaceWith: "<GITHUB_API_TOKEN>"};
 
     await createPR({
-        createPullRequest,
+        createPullRequest: createMergeRequest,
         createForkIfNotExists,
         addAuthenticationToCloneUrl,
         tokenReplacementForLogFunction,
