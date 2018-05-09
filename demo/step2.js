@@ -12,7 +12,11 @@
     - Check the checkbox and save.
 */
 //
+
+const config = require('../src/config');
 module.exports = {
-    gitlabUrl: 'http://127.0.0.1:8090',
-    rootAccessToken: 'RogEtsjxizyt6vEDd2bC'
+    gitlabUrl: config.c3pr.gitLabUrl,
+    rootAccessToken: config.c3pr.gitLabApiToken,
+    gitUserName: config.c3pr.gitUserName,
+    gitUserEmail: config.c3pr.gitUserEmail,
 };

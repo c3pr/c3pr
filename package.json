@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/c3pr/c3pr-repo-gitlab",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "github-webhook-handler": "^0.7.1",

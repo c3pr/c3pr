@@ -1,6 +1,6 @@
-const createPullRequest = require("../github/createPullRequest");
+const createPullRequest = require("../gitlab/createPullRequest");
 
-const createForkIfNotExistsORIGINAL = require("../github/createForkIfNotExists");
+const createForkIfNotExistsORIGINAL = require("../gitlab/createForkIfNotExists");
 const createForkIfNotExists = async (mainRepoOrgRepo) => {
     const data = await createForkIfNotExistsORIGINAL(mainRepoOrgRepo);
     return {
