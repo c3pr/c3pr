@@ -1,3 +1,4 @@
+//
 /*
 - Go to gitlab: http://127.0.0.1:8090/ and provide the initial password
 - log-in
@@ -17,6 +18,7 @@ const config = require('../src/config');
 module.exports = {
     gitlabUrl: config.c3pr.gitLabUrl,
     rootAccessToken: config.c3pr.gitLabApiToken,
+    gitLabApiToken: config.c3pr.gitLabApiToken,
     gitUserName: config.c3pr.gitUserName,
     gitUserEmail: config.c3pr.gitUserEmail,
 };
