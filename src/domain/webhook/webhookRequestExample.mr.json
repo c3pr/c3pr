@@ -1,0 +1,121 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "name": "Administrator",
+    "username": "root",
+    "avatar_url": "https://www.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=80&d=identicon"
+  },
+  "project": {
+    "id": 1,
+    "name": "Xsample-project-java-mavenX",
+    "description": "",
+    "web_url": "http://d52b4bc956cd/sample_user/sample-project-java-maven",
+    "avatar_url": null,
+    "git_ssh_url": "git@d52b4bc956cd:sample_user/sample-project-java-maven.git",
+    "git_http_url": "http://d52b4bc956cd/sample_user/sample-project-java-maven.git",
+    "namespace": "sample_user",
+    "visibility_level": 20,
+    "path_with_namespace": "sample_user/sample-project-java-maven",
+    "default_branch": "master",
+    "ci_config_path": null,
+    "homepage": "http://d52b4bc956cd/sample_user/sample-project-java-maven",
+    "url": "git@d52b4bc956cd:sample_user/sample-project-java-maven.git",
+    "ssh_url": "git@d52b4bc956cd:sample_user/sample-project-java-maven.git",
+    "http_url": "http://d52b4bc956cd/sample_user/sample-project-java-maven.git"
+  },
+  "object_attributes": {
+    "assignee_id": null,
+    "author_id": 1,
+    "created_at": "2018-05-09 23:25:56 UTC",
+    "description": "Using the equality (`==`) and inequality (`!=`) operators to compare two strings does not check to see if\n they have the same values. Rather it checks to see if both object references point to exactly the same object\n  in memory. The vast majority of the time, this is not what you want to do.\n   \nUse the `.equals()` method to compare a string object to a string literal.\n\n### Noncompliant Code Sample\n\n```java\nString strOne = \"blue\";\nString strTwo = new String(\"blue\"); // this is the same as if strTwo was read from a file, an HTTP request, console input, etc.\n\nif (strOne == \"blue\") {\n    System.out.println(\"strOne is \\\"blue\\\"\"); // prints\n}\nif (strTwo == \"blue\") {\n    System.out.println(\"strTwo is \\\"blue\\\"\"); // DOESN'T print\n}\nif (strOne != \"blue\") {\n    System.out.println(\"strOne is not \\\"blue\\\"\"); // prints\n}\nif (strTwo != \"blue\") {\n    System.out.println(\"strTwo is not \\\"blue\\\"\"); // DOESN'T print\n}\n```\n\n### Compliant Solution\n\n```java\nString strOne = \"blue\";\nString strTwo = new String(\"blue\"); // this is the same as if strTwo was read from a file, an HTTP request, console input, etc.\n\nif (strOne.equals(\"blue\")) {\n    System.out.println(\"strOne is \\\"blue\\\"\"); // prints\n}\nif (strTwo.equals(\"blue\")) {\n    System.out.println(\"strTwo is \\\"blue\\\"\"); // prints\n}\nif (!strOne.equals(\"blue\")) {\n    System.out.println(\"strOne is not \\\"blue\\\"\"); // DOESN'T print\n}\nif (!strTwo.equals(\"blue\")) {\n    System.out.println(\"strTwo is not \\\"blue\\\"\"); // DOESN'T print\n}\n```",
+    "head_pipeline_id": null,
+    "id": 5,
+    "iid": 5,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": null
+    },
+    "merge_status": "unchecked",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "71bb65bd5469805e3061de07552d0a2b933c5691_1204c45c-9e15-486a-a31e-e898aa2ef3e1",
+    "source_project_id": 11,
+    "state": "opened",
+    "target_branch": "master",
+    "target_project_id": 1,
+    "time_estimate": 0,
+    "title": "Strings should be compared using equals()",
+    "updated_at": "2018-05-09 23:25:56 UTC",
+    "updated_by_id": null,
+    "url": "http://d52b4bc956cd/sample_user/sample-project-java-maven/merge_requests/5",
+    "source": {
+      "id": 11,
+      "name": "sample-project-java-maven",
+      "description": null,
+      "web_url": "http://d52b4bc956cd/c3pr-bot/sample_user__sample-project-java-maven",
+      "avatar_url": null,
+      "git_ssh_url": "git@d52b4bc956cd:c3pr-bot/sample_user__sample-project-java-maven.git",
+      "git_http_url": "http://d52b4bc956cd/c3pr-bot/sample_user__sample-project-java-maven.git",
+      "namespace": "c3pr-bot",
+      "visibility_level": 20,
+      "path_with_namespace": "c3pr-bot/sample_user__sample-project-java-maven",
+      "default_branch": "master",
+      "ci_config_path": null,
+      "homepage": "http://d52b4bc956cd/c3pr-bot/sample_user__sample-project-java-maven",
+      "url": "git@d52b4bc956cd:c3pr-bot/sample_user__sample-project-java-maven.git",
+      "ssh_url": "git@d52b4bc956cd:c3pr-bot/sample_user__sample-project-java-maven.git",
+      "http_url": "http://d52b4bc956cd/c3pr-bot/sample_user__sample-project-java-maven.git"
+    },
+    "target": {
+      "id": 1,
+      "name": "Xsample-project-java-mavenX",
+      "description": "",
+      "web_url": "http://d52b4bc956cd/sample_user/sample-project-java-maven",
+      "avatar_url": null,
+      "git_ssh_url": "git@d52b4bc956cd:sample_user/sample-project-java-maven.git",
+      "git_http_url": "http://d52b4bc956cd/sample_user/sample-project-java-maven.git",
+      "namespace": "sample_user",
+      "visibility_level": 20,
+      "path_with_namespace": "sample_user/sample-project-java-maven",
+      "default_branch": "master",
+      "ci_config_path": null,
+      "homepage": "http://d52b4bc956cd/sample_user/sample-project-java-maven",
+      "url": "git@d52b4bc956cd:sample_user/sample-project-java-maven.git",
+      "ssh_url": "git@d52b4bc956cd:sample_user/sample-project-java-maven.git",
+      "http_url": "http://d52b4bc956cd/sample_user/sample-project-java-maven.git"
+    },
+    "last_commit": {
+      "id": "7091b0faf19b70df82cc2dca8f0e05cb46231b06",
+      "message": "Strings should be compared using equals()\n",
+      "timestamp": "2018-05-09T20:25:54-03:00",
+      "url": "http://d52b4bc956cd/sample_user/sample-project-java-maven/commit/7091b0faf19b70df82cc2dca8f0e05cb46231b06",
+      "author": {
+        "name": "c3pr-bot",
+        "email": "c3prbot@gmail.com"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "human_total_time_spent": null,
+    "human_time_estimate": null,
+    "action": "open"
+  },
+  "labels": [],
+  "changes": {
+    "total_time_spent": {
+      "previous": null,
+      "current": 0
+    }
+  },
+  "repository": {
+    "name": "Xsample-project-java-mavenX",
+    "url": "git@d52b4bc956cd:sample_user/sample-project-java-maven.git",
+    "description": "",
+    "homepage": "http://d52b4bc956cd/sample_user/sample-project-java-maven"
+  }
+}
