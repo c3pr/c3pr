@@ -24,6 +24,6 @@ https.request(c3prAgentDistUrl, function(res) {
     res.on("end", function () {
         console.log(`\nDownload complete - ${count} parts. Source length: ${c3prAgentSource.length}`);
 
-        vm.runInNewContext(c3prAgentSource, {require, console, Buffer, process, module, setTimeout, clearTimeout});
+        vm.runInNewContext(c3prAgentSource, {require, console, Buffer, process, module, setInterval, setTimeout, clearTimeout});
     });
 }).end();
