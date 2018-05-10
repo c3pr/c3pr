@@ -1,1 +1,1 @@
-set VERSION=7.0.0
+set VERSION=7.1.0

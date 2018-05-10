@@ -7,7 +7,7 @@ let count = 0;
 // var ff = require('fs').readFileSync('G:\\MSc-Tools\\c3pr\\c3pr-agent\\dist\\c3pr-agent.js');
 // console.log(ff.toString().length);
 
-console.log(`Agent executable version __C3PR_AGENT_EXECUTABLE_VERSION__.`);
+console.log(`Agent executable version 7.1.0.`);
 
 const c3prAgentDistUrl = 'https://raw.githubusercontent.com/c3pr/c3pr-agent/master/dist/c3pr-agent.js';
 console.log(`Fetching latest agent from ${c3prAgentDistUrl}...`);
