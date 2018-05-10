@@ -1,7 +1,7 @@
 const os = require("os");
 const PORT = process.env.PORT || 5000;
 
-const c3prBaseUrl = process.env.C3PR_DASHBOARD_URL || `http://${os.hostname()}:${PORT}`;
+const c3prBaseUrl = process.env.C3PR_REGISTRY_URL || `http://${os.hostname()}:${PORT}`;
 
 module.exports = {
     c3pr: {
