@@ -2,6 +2,8 @@ const createMergeRequest = require("../gitlab/createMergeRequest");
 const createForkIfNotExists = require("../gitlab/createForkIfNotExists");
 const createPR = require("node-c3pr-repo/create-pr/create-pr");
 
+const c3prLOG = require("node-c3pr-logger");
+
 async function createGitLabMR({
                             mainRepoOrgRepo,
                             mainRepoBranch,
@@ -15,6 +17,13 @@ async function createGitLabMR({
                             prBody,
                             patchContent
                         }) {
+
+    const logMeta = {nodeName: 'c3pr-repo-gitlab', correlationId: mainRepoHash, moduleName: 'createGitLabMR'};
+    c3prLOG(
+        `Initiating MR creation.`,
+        {mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitLabUrl, gitLabApiToken, gitUserName, gitUserEmail, prCommitMessage, prTitle, prBody, patchContent},
+        logMeta
+    );
 
     const addAuthenticationToCloneUrl = (cloneUrl) => {
         return cloneUrl.replace(/^http(s?):\/\//, `http$1://clone:${gitLabApiToken}@`)
@@ -38,7 +47,8 @@ async function createGitLabMR({
         prTitle,
         prBody,
         patchContent,
-        mainRepoCloneUrl
+        mainRepoCloneUrl,
+        logMetas: [logMeta]
     });
 }
 
