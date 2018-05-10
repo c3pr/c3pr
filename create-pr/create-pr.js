@@ -19,14 +19,15 @@ async function createPR({
                             prTitle,
                             prBody,
                             patchContent,
-                            mainRepoCloneUrl
+                            mainRepoCloneUrl,
+                            logMetas
                         }) {
-    const logMeta = {nodeName: 'node-c3pr-repo', correlationIds: mainRepoHash, moduleName: 'createPR'};
+    const logMeta = [...(logMetas || []), {nodeName: 'node-c3pr-repo', correlationIds: mainRepoHash, moduleName: 'createPR'}];
 
     const stagingFolderName = `${mainRepoHash}_${uuidv4()}`;
     const stagingFolder = path.resolve(`${STAGE_REPOS_FOLDER}/${stagingFolderName}`);
 
-    const forkInfo = await createForkIfNotExists(mainRepoOrgRepo);
+    const forkInfo = await createForkIfNotExists(mainRepoOrgRepo, logMeta);
 
     const forkRepoOrg = forkInfo.organization;
     const forkRepoProject = forkInfo.forkName;
@@ -50,7 +51,7 @@ async function createPR({
     // The base64 used here assume a specific format, a patch file generated (somewhere else) as:
     // git diff > 'myPatch.patch'
     // const patchContent = Buffer.from(fs.readFileSync('myPatch.patch', 'hex'), 'hex').toString('base64');
-    fs.writeFileSync(patchFilePath, Buffer.from(patchContent, 'base64').toString('hex'), 'hex');
+    fs.writeFileSync(patchFilePath, Buffer.from(patchContent.diff, 'base64').toString('hex'), 'hex');
 
     await c3prSH(`git apply ${patchFileName}`, {cwd: stagingFolder}, {logMeta});
     fs.unlinkSync(patchFilePath);
