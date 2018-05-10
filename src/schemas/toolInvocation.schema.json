@@ -13,6 +13,7 @@
   },
   "repository": {
     "type": "git",
+    "fullpath": "c3pr/sample-project-java-maven",
     "url": "https://github.com/c3pr/sample-project-java-maven.git",
     "branch": "branch-for-clone-tests",
     "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"

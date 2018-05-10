@@ -23,6 +23,7 @@ describe('invokeToolAtGitRepo', () => {
             },
             "repository": {
                 "type": "git",
+                "fullpath": "c3pr/sample-project-java-maven",
                 "url": "https://github.com/c3pr/sample-project-java-maven.git",
                 "branch": "branch-for-clone-tests",
                 "revision": "30b03c1d8aa6ee670534b80edd0dc39c12644259"
@@ -81,6 +82,7 @@ index ad8bb19..78c4a56 100644
             },
             "repository": {
                 "type": "git",
+                "fullpath": "c3pr/sample-project-java-maven",
                 "url": "https://github.com/c3pr/sample-project-java-maven.git",
                 "branch": "branch-for-clone-tests",
                 "revision": "30b03c1d8aa6ee670534b80edd0dc39c12644259"
