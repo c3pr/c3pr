@@ -14,11 +14,15 @@ const c3prRegistry = {
     get debug() {
         return [..._registry];
     },
-    addEntry(entry) {
-        if (!entry.key || !entry.timeout || entry.value === undefined) {
-            throw new Error("Entry must have a key, timeout and value. Received: " + JSON.stringify(entry));
-        }
-        _registry.push(entry);
+    put(entryOrEntries) {
+        let entries = Array.isArray(entryOrEntries) ? entryOrEntries : [entryOrEntries];
+
+        entries.forEach(entry => {
+            if (!entry.key || !entry.timeout || entry.value === undefined) {
+                throw new Error("Entry must have a key, timeout and value. Received: " + JSON.stringify(entry));
+            }
+            _registry.push(Object.freeze(entry));
+        });
     },
     cleanRegistryStepInMs: 2500
 };

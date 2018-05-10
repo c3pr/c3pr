@@ -14,8 +14,8 @@ module.exports = function (app) {
     // curl --data '{"key": "added", "value": "booo", "timeout": 10000}' --header "Content-Type: application/json" -X PATCH http://127.0.0.1:5000/api/registry
     app.patch('/api/v1/registry', function (request, response) {
         try {
-            const entry = request.body;
-            c3prRegistry.addEntry(entry);
+            const entryOrEntries = request.body;
+            c3prRegistry.put(entryOrEntries);
             response.status(200).send('Got it!');
         } catch (e) {
             response.status(400).send('Error '+e);
