@@ -1,4 +1,4 @@
-const agentUrl = process.env.C3PR_AGENT_URL || `http://${os.hostname()}:${port}`;
+const agentUrl = process.env.C3PR_AGENT_URL || `http://${os.hostname()}:5003`;
 
 module.exports = {
     c3pr: {
