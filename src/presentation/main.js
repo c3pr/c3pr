@@ -24,9 +24,13 @@ app.listen(config.c3pr.agent.port, () => {
 Agent ID: ${config.c3pr.agent.agentId}`, logMeta);
     console.log();
 
-    c3prLOG(`Now broadcasting to C-3PR registry.`, logMeta);
+    c3prLOG(`Now broadcasting to C-3PR registry API: ${config.c3pr.registryUrl}.`, logMeta);
     setInterval(() => {
-        axios.patch(config.c3pr.registryUrl, {key: `agent://${config.c3pr.agent.agentId}`, value: config.c3pr.agent.agentUrl, timeout: 13 * 1000})
+        axios.patch(config.c3pr.registryUrl,
+            {key: `agent://${config.c3pr.agent.agentId}`, value: config.c3pr.agent.agentUrl, timeout: 13 * 1000}
+        ).catch((e) => {
+            console.log(`Error while broadcasting to registry. URL: ${config.c3pr.registryUrl}. - ${e}`);
+        });
     }, 10 * 1000);
 
 });
