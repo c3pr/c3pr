@@ -2,9 +2,10 @@ const expect = require('chai').expect;
 const c3prRegistry = require('./c3prRegistry');
 
 const initialRegistry = [
-    {key: "mongoLogsUriIsSet",   value: true,                            timeout: -1},
-    {key: "mongoLogsDatabase",   value: "c3pr",                          timeout: -1},
-    {key: "mongoLogsCollection", value: "logs",                          timeout: -1}
+    {key: "registryUrl", value: "http://localhost:5000/api/v1/registry", timeout: -1},
+    {key: "mongoLogsUriIsSet", value: true, timeout: -1},
+    {key: "mongoLogsDatabase", value: "c3pr", timeout: -1},
+    {key: "mongoLogsCollection", value: "logs", timeout: -1}
 ];
 
 describe('c3prRegistry', function () {
@@ -17,6 +18,7 @@ describe('c3prRegistry', function () {
             mongoLogsUriIsSet: true,
             mongoLogsDatabase: "c3pr",
             mongoLogsCollection: "logs",
+            registryUrl: "http://localhost:5000/api/v1/registry"
         });
     });
 
