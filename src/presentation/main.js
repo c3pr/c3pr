@@ -25,20 +25,11 @@ Agent ID: ${config.c3pr.agent.agentId}`, logMeta);
     console.log();
 
     c3prLOG(`Now broadcasting to C-3PR registry API: ${config.c3pr.registryUrl}.`, logMeta);
-    let i = 1;
     setInterval(() => {
-        console.log('sending', i);
-        axios.get(config.c3pr.registryUrl)
-        .then((r) => {
-            console.log(`Received data: ${JSON.stringify(r.data)}`);
-        }).catch((e) => {
-            console.log(`Error ${i} while GETTING. URL: ${config.c3pr.registryUrl}. - ${e}`);
-        });
-
         axios.patch(config.c3pr.registryUrl,
             {key: `agent://${config.c3pr.agent.agentId}`, value: config.c3pr.agent.agentUrl, timeout: 13 * 1000}
         ).catch((e) => {
-            console.log(`Error ${i} while broadcasting to registry. URL: ${config.c3pr.registryUrl}. - ${e}`);
+            console.log(`Error while broadcasting to registry. URL: ${config.c3pr.registryUrl}. - ${e}`);
         });
     }, 10 * 1000);
 
