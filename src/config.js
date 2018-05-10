@@ -1,12 +1,13 @@
 const os = require("os");
-const PORT = process.env.PORT || 5001;
 
-const c3prBrainUrl = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:${PORT}`;
+const c3prBrainUrl = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:5001`;
 
 module.exports = {
     c3pr: {
-        port: PORT,
+        registryUrl: process.env.C3PR_REGISTRY_URL || `http://${os.hostname()}:5000`,
+
+        port: require('url').parse(c3prBrainUrl).port || 80,
         changesUrl: `${c3prBrainUrl}/changes`,
-        patchesUrl: `${c3prBrainUrl}/patches`
+        patchesUrl: `${c3prBrainUrl}/patches`,
     }
 };
