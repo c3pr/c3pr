@@ -21,6 +21,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.port, () => {
-    console.log(`c3pr now listening at port ${config.c3pr.port}.`);
     c3prLOG(`C-3PR dashboard is up at port ${config.c3pr.port}.`, {nodeName: 'c3pr', correlationIds: 'boot', moduleName: 'main'});
 });
