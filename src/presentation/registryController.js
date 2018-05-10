@@ -3,16 +3,16 @@ const c3prRegistry = require('../domain/c3prRegistry');
 
 module.exports = function (app) {
 
-    app.get('/api/registry', function (request, response) {
+    app.get('/api/v1/registry', function (request, response) {
         response.send(c3prRegistry.registry);
     });
 
-    app.get('/api/registry/debug', function (request, response) {
+    app.get('/api/v1/registry/debug', function (request, response) {
         response.send(c3prRegistry.debug);
     });
 
     // curl --data '{"key": "added", "value": "booo", "timeout": 10000}' --header "Content-Type: application/json" -X PATCH http://127.0.0.1:5000/api/registry
-    app.patch('/api/registry', function (request, response) {
+    app.patch('/api/v1/registry', function (request, response) {
         try {
             const entry = request.body;
             c3prRegistry.addEntry(entry);
