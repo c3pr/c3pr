@@ -25,7 +25,11 @@ module.exports = {
         gitLabApiToken: GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3', // api + read_user token for the gitUserName gitlab user
 
         gitlabUrlTransform(url) {
-            return url.replace(/^https?:\/\/[^\/]+\//, GITLAB_URL)
+            let gitlabUrl = GITLAB_URL;
+            if (!gitlabUrl.endsWith('/')) {
+                gitlabUrl += '/';
+            }
+            return url.replace(/^https?:\/\/[^\/]+\//, gitlabUrl)
         }
 
     }
