@@ -2,7 +2,7 @@ const agentUrl = process.env.C3PR_AGENT_URL || `http://${os.hostname()}:${port}`
 
 module.exports = {
     c3pr: {
-        registryUrl: process.env.C3PR_DASHBOARD_URL || 'http://host.docker.internal:5000',
+        registryUrl: process.env.C3PR_REGISTRY_URL || 'http://host.docker.internal:5000',
         agent: {
             agentUrl: agentUrl,
             port: require('url').parse(agentUrl).port || 80,
