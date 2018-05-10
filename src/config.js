@@ -6,7 +6,7 @@ module.exports = {
         agent: {
             port,
             agentUrl: process.env.C3PR_AGENT_URL || `http://${os.hostname()}:${port}`,
-            toolId: process.env.C3PR_AGENT_URL || `http://${os.hostname()}:${port}`,
+            agentId: process.env.C3PR_AGENT_ID,
             cloneDir: process.env.C3PR_CLONE_DIR || '/tmp/c3pr/clones',
             cloneDepth: process.env.C3PR_CLONE_DEPTH || 50
         }
