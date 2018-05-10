@@ -4,10 +4,10 @@ const config = require('../config');
 
 async function handlePrs(prs) {
     const logMeta = {nodeName: 'c3pr-repo-gitlab', correlationId: prs.meta.correlationId, moduleName: 'handlePrs'};
-    c3prLOG(`Handling PR request title '${prs.repository.revision}' rev '${prs.repository.revision}'`, {prs}, logMeta);
+    c3prLOG(`Handling PR request title '${prs.patch.title}' rev '${prs.repository.revision}'`, {prs}, logMeta);
 
     await createGitLabMR({
-        mainRepoOrgRepo: prs.repository.url.replace('https://github.com/', '').replace('.git', ''),
+        mainRepoOrgRepo: prs.repository.fullpath,
         mainRepoBranch: prs.repository.branch,
         mainRepoHash: prs.repository.revision,
         gitLabUrl: config.c3pr.gitLabUrl,
