@@ -1,6 +1,6 @@
 {
   "name": "node-c3pr-repo",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Reusable functions for C3PR repo implementations in node",
   "main": "index.js",
   "scripts": {
