@@ -47,24 +47,19 @@ function retrieveAllTimedOut(timeoutInMs) {
     return timedOut;
 }
 
-function unshiftUnprocessedEventOfType(eventType) {
+function peekUnprocessedEventOfType(eventType) {
     let unprocessedEventsOfType = EVENTS_UNPROCESSED.get(eventType) || new Set();
-    const firstEventOfType = unprocessedEventsOfType.values().next();
-    if (firstEventOfType.done) {
-        return;
-    }
-    let uuid = firstEventOfType.value;
-    unprocessedEventsOfType.delete(uuid);
+    const {value: uuid} = unprocessedEventsOfType.values().next();
     return uuid;
 }
 
 module.exports = Object.freeze({
-    UNPROCESSED: 1,
-    PROCESSING: 2,
-    PROCESSED: 3,
+    UNPROCESSED: 'UNPROCESSED',
+    PROCESSING: 'PROCESSING',
+    PROCESSED: 'PROCESSED',
     addAsUnprocessed,
     removeAsProcessing,
     addAsProcessing,
-    unshiftUnprocessedEventOfType,
+    peekUnprocessedEventOfType: peekUnprocessedEventOfType,
     retrieveAllTimedOut
 });

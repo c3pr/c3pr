@@ -17,7 +17,7 @@ async function find(uuid) {
 }
 
 async function markStatus(uuid, status) {
-    await (await events).update(
+    return (await events).update(
         {uuid},
         {$set: {status}}
     );

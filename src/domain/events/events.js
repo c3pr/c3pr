@@ -3,25 +3,46 @@ const config = require('../../config');
 const uuidv4 = require('uuid/v4');
 const eventsDB = require('./eventsDB');
 const Status = require('./status');
+const assert = require('assert');
 
 async function register(eventType, payload) {
     let uuid = uuidv4();
     let status = Status.UNPROCESSED;
 
-    await eventsDB.insert({uuid, status, eventType, dateTime: new Date().toISOString(), payload});
+    await eventsDB.insert({uuid, eventType, dateTime: new Date().toISOString(), payload});
     Status.addAsUnprocessed(eventType, uuid);
+
+    return uuid;
 }
 
-async function collect(eventType) {
-    let uuid = Status.unshiftUnprocessedEventOfType(eventType);
+function find(uuid) {
+    assert.ok(uuid, "uuid is required");
+    return eventsDB.find(uuid);
+}
+
+function peekUnprocessed(eventType) {
+    let uuid = Status.peekUnprocessedEventOfType(eventType);
     if (!uuid) {
         return null;
     }
-
-    Status.addAsProcessing(eventType, uuid);
-    await eventsDB.persistAsProcessing(uuid);
-
     return eventsDB.find(uuid);
+}
+
+function patchAsProcessing(eventType, uuid) {
+    assert.ok(eventType, "eventType is required");
+    assert.ok(uuid, "uuid is required");
+    Status.addAsProcessing(eventType, uuid);
+    return eventsDB.persistAsProcessing(uuid);
+}
+
+/**
+ * If the uuid is not at EVENTS_PROCESSING, it errors.
+ */
+function patchAsProcessed(eventType, uuid) {
+    assert.ok(eventType, "eventType is required");
+    assert.ok(uuid, "uuid is required");
+    Status.removeAsProcessing(eventType, uuid);
+    return eventsDB.persistAsProcessed(uuid);
 }
 
 /**
@@ -36,18 +57,12 @@ setTimeout(() => {
     })
 }, config.c3pr.hub.uncollectPollingInMs).unref();
 
-/**
- * - Gets the uuid from EVENTS_PROCESSING
- * - If not there, errors
- * - If there, marks the event as processed, removes the uuid from EVENTS_PROCESSING
- */
-async function complete(eventType, uuid) {
-    Status.removeAsProcessing(eventType, uuid);
-    return eventsDB.persistAsProcessed(uuid);
-}
+
 
 module.exports = {
     register,
-    collect,
-    complete
+    find,
+    peekUnprocessed,
+    patchAsProcessing,
+    patchAsProcessed
 };
