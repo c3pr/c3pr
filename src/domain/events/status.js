@@ -1,3 +1,5 @@
+const assert = require('assert');
+
 /*************************************************************************
  These functions are used to keep control of what UUIDs are under active
  processing or not.
@@ -18,16 +20,33 @@ function addAsUnprocessed(eventType, uuid) {
     EVENTS_UNPROCESSED.set(eventType, unprocessedEventsOfType);
 }
 
-function addAsProcessing(eventType, uuid) {
-    let processingEventsOfType = EVENTS_PROCESSING.get(eventType) || new Map();
-    processingEventsOfType.set(uuid, new Date().toISOString());
+function addAsProcessing(eventType, uuid, processorUUID) {
+    assert.ok(eventType && uuid && processorUUID);
+
+    const processingEventsOfType = EVENTS_PROCESSING.get(eventType) || new Map();
+
+    const processingEvent = processingEventsOfType.get(uuid);
+    if (processingEvent && processingEvent.processorUUID !== processorUUID) {
+        throw new Error(`Event of UUID '${uuid}' and type '${eventType}' is already being processed by processorUUID '${processingEvent.processorUUID}'. processorUUID you sent me: '${processorUUID}'.`)
+    }
+
+    processingEventsOfType.set(uuid, {dateTime: new Date().toISOString(), processorUUID});
     EVENTS_PROCESSING.set(eventType, processingEventsOfType);
 }
 
-function removeAsProcessing(eventType, uuid) {
-    let processingEventsOfType = EVENTS_PROCESSING.get(eventType) || new Map();
-    if (!processingEventsOfType.has(uuid)) {
-        throw new Error(`UUID ${uuid} of event type ${eventType} is not currently processing.`)
+function currentlyProcessing(eventType, uuid) {
+    const processingEventsOfType = EVENTS_PROCESSING.get(eventType) || new Map();
+    return processingEventsOfType.get(uuid);
+}
+
+function removeAsProcessing(eventType, uuid, processorUUID) {
+    const processingEventsOfType = EVENTS_PROCESSING.get(eventType) || new Map();
+    const processingEvent = processingEventsOfType.get(uuid);
+    if (!processingEvent) {
+        throw new Error(`Event of UUID '${uuid}' and type '${eventType}' is not currently being processed.`)
+    }
+    if (processingEvent.processorUUID !== processorUUID) {
+        throw new Error(`Event of UUID '${uuid}' and type '${eventType}' is being processed by a different processorUUID ('${processingEvent.processorUUID}'), not the one you sent me ('${processorUUID}').`)
     }
     processingEventsOfType.delete(uuid);
 }
@@ -36,7 +55,7 @@ function retrieveAllTimedOut(timeoutInMs) {
     let timedOut = [];
     let nowAsTimestamp = new Date().getTime();
     EVENTS_PROCESSING.forEach((eventMap, eventType) => {
-        eventMap.forEach((isoDate, uuid) => {
+        eventMap.forEach(({dateTime: isoDate}, uuid) => {
             let valueAsTimestamp = new Date(isoDate).getTime();
             let timePassed = nowAsTimestamp - valueAsTimestamp;
             if (timePassed > timeoutInMs) {
@@ -58,8 +77,9 @@ module.exports = Object.freeze({
     PROCESSING: 'PROCESSING',
     PROCESSED: 'PROCESSED',
     addAsUnprocessed,
+    currentlyProcessing,
     removeAsProcessing,
     addAsProcessing,
-    peekUnprocessedEventOfType: peekUnprocessedEventOfType,
+    peekUnprocessedEventOfType,
     retrieveAllTimedOut
 });

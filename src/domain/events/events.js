@@ -9,7 +9,7 @@ async function register(eventType, payload) {
     let uuid = uuidv4();
     let status = Status.UNPROCESSED;
 
-    await eventsDB.insert({uuid, eventType, dateTime: new Date().toISOString(), payload});
+    await eventsDB.insert({uuid, eventType, meta: {status, processor: null, dateTime: new Date().toISOString()}, payload});
     Status.addAsUnprocessed(eventType, uuid);
 
     return uuid;
@@ -28,22 +28,30 @@ function peekUnprocessed(eventType) {
     return eventsDB.find(uuid);
 }
 
-function patchAsProcessing(eventType, uuid) {
-    assert.ok(eventType, "eventType is required");
-    assert.ok(uuid, "uuid is required");
-    Status.addAsProcessing(eventType, uuid);
-    return eventsDB.persistAsProcessing(uuid);
+function patchAsProcessing(eventType, uuid, processorUUID) {
+    assert.ok(eventType && uuid && processorUUID, "Missing required arguments");
+    Status.addAsProcessing(eventType, uuid, processorUUID);
+    return eventsDB.persistAsProcessing(uuid, processorUUID);
 }
 
 /**
  * If the uuid is not at EVENTS_PROCESSING, it errors.
  */
-function patchAsProcessed(eventType, uuid) {
-    assert.ok(eventType, "eventType is required");
-    assert.ok(uuid, "uuid is required");
-    Status.removeAsProcessing(eventType, uuid);
-    return eventsDB.persistAsProcessed(uuid);
+async function patchAsProcessed(eventType, uuid, processorUUID) {
+    assert.ok(eventType && uuid && processorUUID, "Missing required arguments");
+    if (!Status.currentlyProcessing(eventType, uuid)) {
+        let evt = await eventsDB.find(uuid);
+        if (evt.meta.status === Status.PROCESSED && evt.meta.processorUUID === processorUUID) {
+            return;
+        }
+        if (evt.meta.status === Status.PROCESSED && evt.meta.processorUUID !== processorUUID) {
+            throw new Error(`Event of UUID '${uuid}' and type '${eventType}' has been processed by a different processorUUID: ${evt.meta.processorUUID}. processorUUID you sent me: ${processorUUID}.`)
+        }
+    }
+    Status.removeAsProcessing(eventType, uuid, processorUUID);
+    return eventsDB.persistAsProcessed(uuid, processorUUID);
 }
+
 
 /**
  * Marks as UNPROCESSED all events that have status = PROCESSING for longer than config.c3pr.hub.uncollectTimeoutInMs.
@@ -53,7 +61,7 @@ setTimeout(() => {
     allTimedOut.forEach(({eventType, uuid}) => {
         Status.removeAsProcessing(eventType, uuid);
         Status.addAsUnprocessed(eventType, uuid);
-        eventsDB.persistAsUnprocessed(uuid);
+        eventsDB.persistAsUnprocessed(uuid, null);
     })
 }, config.c3pr.hub.uncollectPollingInMs).unref();
 
