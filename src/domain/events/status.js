@@ -45,7 +45,7 @@ function removeAsProcessing(eventType, uuid, processorUUID) {
     if (!processingEvent) {
         throw new Error(`Event of UUID '${uuid}' and type '${eventType}' is not currently being processed.`)
     }
-    if (processingEvent.processorUUID !== processorUUID) {
+    if (processorUUID !== '<TIMED_OUT>' && processingEvent.processorUUID !== processorUUID) {
         throw new Error(`Event of UUID '${uuid}' and type '${eventType}' is being processed by a different processorUUID ('${processingEvent.processorUUID}'), not the one you sent me ('${processorUUID}').`)
     }
     processingEventsOfType.delete(uuid);

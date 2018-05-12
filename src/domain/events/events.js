@@ -52,17 +52,19 @@ async function patchAsProcessed(eventType, uuid, processorUUID) {
     return eventsDB.persistAsProcessed(uuid, processorUUID);
 }
 
+function patchAsUnprocessed(eventType, uuid) {
+    assert.ok(eventType && uuid, "Missing required arguments");
+    Status.removeAsProcessing(eventType, uuid, '<TIMED_OUT>');
+    Status.addAsUnprocessed(eventType, uuid);
+    return eventsDB.persistAsUnprocessed(uuid, null);
+}
 
 /**
  * Marks as UNPROCESSED all events that have status = PROCESSING for longer than config.c3pr.hub.uncollectTimeoutInMs.
  */
 setTimeout(() => {
     const allTimedOut = Status.retrieveAllTimedOut(config.c3pr.hub.uncollectTimeoutInMs);
-    allTimedOut.forEach(({eventType, uuid}) => {
-        Status.removeAsProcessing(eventType, uuid);
-        Status.addAsUnprocessed(eventType, uuid);
-        eventsDB.persistAsUnprocessed(uuid, null);
-    })
+    allTimedOut.forEach(({eventType, uuid}) => patchAsUnprocessed(eventType, uuid))
 }, config.c3pr.hub.uncollectPollingInMs).unref();
 
 
@@ -72,5 +74,6 @@ module.exports = {
     find,
     peekUnprocessed,
     patchAsProcessing,
-    patchAsProcessed
+    patchAsProcessed,
+    patchAsUnprocessed
 };

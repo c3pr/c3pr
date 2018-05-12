@@ -153,6 +153,18 @@ describe('events', function () {
         }
     }).timeout(6 * 1000);
 
+    it('patchAsUnprocessed', async () => {
+        /// given
+        let uuid = await events.register(EVENT_TYPE, payload);
+        await events.patchAsProcessing(EVENT_TYPE, uuid, processorUUID);
+        /// when
+        await events.patchAsUnprocessed(EVENT_TYPE, uuid);
+        /// then
+        let evt = await events.find(uuid);
+        expect(evt.meta.status).to.equal(Status.UNPROCESSED);
+        expect(evt.meta.processorUUID).to.equal(null);
+    }).timeout(6 * 1000);
+
     after(async () => {
         await eventsDB.close();
     })
