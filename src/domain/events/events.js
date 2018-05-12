@@ -25,7 +25,7 @@ function peekUnprocessed(eventType) {
     assert.ok(eventType, "eventType is required");
     let uuid = Status.peekUnprocessedEventOfType(eventType);
     if (!uuid) {
-        return null;
+        return Promise.resolve(null);
     }
     return eventsDB.find(uuid);
 }
