@@ -6,6 +6,7 @@ const Status = require('./status');
 const assert = require('assert');
 
 async function register(eventType, payload) {
+    assert.ok(eventType && payload, "Missing required arguments");
     let uuid = uuidv4();
     let status = Status.UNPROCESSED;
 
@@ -21,6 +22,7 @@ function find(uuid) {
 }
 
 function peekUnprocessed(eventType) {
+    assert.ok(eventType, "eventType is required");
     let uuid = Status.peekUnprocessedEventOfType(eventType);
     if (!uuid) {
         return null;
