@@ -24,6 +24,7 @@
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
+    "jwt-simple": "^0.5.1",
     "mongodb": "^3.0.4",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#7.1.0",
     "uuid": "^3.2.1"
