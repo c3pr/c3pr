@@ -61,4 +61,6 @@ axios.post(config.c3pr.webhooksUrl, webhookPayload).then(response => {
 }).catch(response => {
     console.log('ERROR');
     console.log(response.data);
+    console.log('\n\n\n\n');
+    console.dir(response)
 });
