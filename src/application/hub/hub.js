@@ -1,3 +1,4 @@
+const EventEmitter = require('events');
 const axios = require('axios');
 
 const config = require('../../config');
@@ -25,9 +26,14 @@ function emit(eventType) {
     hub.emit(eventType);
 }
 
+function clearListeners(eventType) {
+    hub.removeAllListeners(eventType);
+}
+
 module.exports = {
     c3pr: {
         subscribeTo,
-        emit
+        emit,
+        clearListeners
     }
 };
