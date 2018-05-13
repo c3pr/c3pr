@@ -7,13 +7,13 @@ const hub = new EventEmitter();
 
 function notify(callbackUrl, tryNumber, eventType, listener) {
     axios.post(callbackUrl).catch(() => {
-        if (tryNumber > config.c3pr.hub.broadcast.maxRetries) {
+        if (tryNumber > config.c3pr.hub.bus.maxRetries) {
             hub.removeListener(eventType, listener);
             return;
         }
         setTimeout(() => {
             notify(callbackUrl, tryNumber + 1, eventType, listener);
-        }, config.c3pr.hub.broadcast.retryWaitingTimeInMs);
+        }, config.c3pr.hub.bus.retryWaitingTimeInMs);
     });
 }
 
@@ -31,7 +31,7 @@ function clearListeners(eventType) {
 }
 
 module.exports = {
-    c3pr: {
+    c3prBus: {
         subscribeTo,
         emit,
         clearListeners

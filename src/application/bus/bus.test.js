@@ -6,11 +6,11 @@ const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
 const axiosMock = new MockAdapter(axios);
 
-const c3prHub = require('./hub').c3pr;
+const c3prBus = require('./bus').c3prBus;
 
 const config = require('../../config');
 
-describe('hub', function () {
+describe('bus', function () {
 
     let eventType;
 
@@ -19,7 +19,7 @@ describe('hub', function () {
     });
 
     after(() => {
-        c3prHub.clearListeners(eventType);
+        c3prBus.clearListeners(eventType);
     });
 
     it('subscribeTo + callback success', async () => {
@@ -32,8 +32,8 @@ describe('hub', function () {
         });
 
         /// when
-        c3prHub.subscribeTo(eventType, "http://bob.com/subscriberOne");
-        c3prHub.emit(eventType);
+        c3prBus.subscribeTo(eventType, "http://bob.com/subscriberOne");
+        c3prBus.emit(eventType);
         /// then
         await postExpectation;
     });
@@ -44,25 +44,25 @@ describe('hub', function () {
         const postExpectation = new Promise(resolve => {
             axiosMock.onPost("http://bob.com/subscriberTwo").reply(function () {
                 retry++;
-                if (retry === config.c3pr.hub.broadcast.maxRetries) {
+                if (retry === config.c3pr.hub.bus.maxRetries) {
                     resolve();
                 }
                 return [500, {}, {'content-type': 'application/json'}];
             });
         });
 
-        c3prHub.subscribeTo(eventType, "http://bob.com/subscriberTwo");
-        c3prHub.emit(eventType);
+        c3prBus.subscribeTo(eventType, "http://bob.com/subscriberTwo");
+        c3prBus.emit(eventType);
         await postExpectation;
 
         /// when
         // we emit once more and hope it is not called again
-        c3prHub.emit(eventType);
+        c3prBus.emit(eventType);
 
         /// then
         // if it is not called again, the retry number didn't change
         setTimeout(() => {
-            expect(retry).to.equal(config.c3pr.hub.broadcast.maxRetries);
+            expect(retry).to.equal(config.c3pr.hub.bus.maxRetries);
         }, 1000)
     }).timeout(99 * 1000);
 

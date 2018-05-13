@@ -1,7 +1,7 @@
 const encodeUuidToken = require("../domain/auth/auth").encodeUuidToken;
 const decodeToken = require("../domain/auth/auth").decodeToken;
 
-const subscribeTo = require('../application/hub/hub');
+const c3prBus = require('../application/bus/bus').c3prBus;
 
 module.exports = function (app) {
 
@@ -13,7 +13,7 @@ module.exports = function (app) {
             return;
         }
         request.body.subscriptions.forEach(({eventType, callbackUrl}) => {
-            subscribeTo(eventType, callbackUrl);
+            c3prBus.subscribeTo(eventType, callbackUrl);
         });
         response.json(encodeUuidToken());
     });
