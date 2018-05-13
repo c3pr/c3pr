@@ -1,8 +1,8 @@
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 const registerChanges = require('node-c3pr-repo/register-changes').c3pr.registerChanges;
 
-const config = require('../config');
-const convertWebhookToChanges = require('../domain/webhook/convertWebhookToChanges');
+const config = require('../../config');
+const convertWebhookToChanges = require('./convertWebhookToChanges');
 
 function handleWebhook(webhookPayload) {
     const logMetas = [{nodeName: 'c3pr-repo-gitlab', correlationId: webhookPayload.after, moduleName: 'handleWebhook'}];

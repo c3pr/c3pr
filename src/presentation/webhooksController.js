@@ -1,5 +1,5 @@
 const c3prLOG = require("node-c3pr-logger");
-const handleWebhook = require('../application/handleWebhook').c3pr.handleWebhook;
+const handleWebhook = require('../application/webhook/handleWebhook').c3pr.handleWebhook;
 
 module.exports = function (app) {
 
