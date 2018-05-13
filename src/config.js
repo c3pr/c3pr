@@ -15,6 +15,7 @@ module.exports = {
         url: C3PR_REPO_GITLAB_URL,
 
         c3prHubUrl: C3PR_HUB_URL,
+        loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
         changesUrl: `${C3PR_HUB_URL}/api/v1/events/changes`,
 
         prsUrl: `${C3PR_REPO_GITLAB_URL}/prs`,
