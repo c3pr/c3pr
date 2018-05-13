@@ -1,11 +1,12 @@
 const os = require("os");
 
-const C3PR_BRAIN_URL = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:5001`;
 const PORT = process.env.PORT || 5004;
-const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN;
 const C3PR_REPO_GITLAB_URL = process.env.C3PR_REPO_GITLAB_URL || `http://localhost:${PORT}` || `http://${os.hostname()}:${PORT}`;
 
+const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
+
 const GITLAB_URL = 'http://127.0.0.1:8090';
+const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN;
 
 module.exports = {
     c3pr: {
@@ -13,7 +14,9 @@ module.exports = {
         port: PORT,
         url: C3PR_REPO_GITLAB_URL,
 
-        changesUrl: `${C3PR_BRAIN_URL}/changes`,
+        c3prHubUrl: C3PR_HUB_URL,
+        changesUrl: `${C3PR_HUB_URL}/api/v1/events/changes`,
+
         prsUrl: `${C3PR_REPO_GITLAB_URL}/prs`,
         webhooksUrl: `${C3PR_REPO_GITLAB_URL}/webhooks`,
 
