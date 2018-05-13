@@ -9,12 +9,12 @@ async function registerChanges(changes, {changesUrl, jwt, logMetas: outerLogMeta
     try {
         c3prLOG2({msg: `Notifying HUB (${changesUrl}) of changes to ${changes.repository.url}...`, logMetas});
 
-        await axios.post(changesUrl, {headers: {Authentication: `Bearer ${jwt}`}}, changes);
+        await axios.post(changesUrl, changes, {headers: {Authorization: `Bearer ${jwt}`}});
 
         c3prLOG2({msg: `Notified HUB (${changesUrl}) of changes to ${changes.repository.url}.`, logMetas});
     } catch (e) {
         c3prLOG2({
-            msg: `Error while notifying bot at ${changesUrl}. Reason: '${e}'.`,
+            msg: `Error while notifying bot at ${changesUrl}. Reason: '${e}'. Data: ${e.response.data}`,
             logMetas,
             meta: {error: require('util').inspect(e)}
         });
