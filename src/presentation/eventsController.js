@@ -1,22 +1,25 @@
 const events = require('../domain/events/events');
+const authExpressMiddleware = require("../domain/auth/authExpressMiddleware");
 
 
 module.exports = function (app) {
 
+    app.use('/api/v1/events', authExpressMiddleware);
+
+    // curl -sD - http://127.0.0.1:5000/api/v1/events/MY_TYPE/peek/unprocessed --header "Authorization: Bearer $(curl -s -X POST http://127.0.0.1:5000/api/v1/login | tr -d '"')"
     app.get('/api/v1/events/:eventType/peek/unprocessed', function (request, response) {
         events.peekUnprocessed(request.params.eventType).then((evt) => {
             if (evt) {
                 response.status(200).send(evt);
             } else {
-                response.status(404).send();
+                response.status(204).send();
             }
         }).catch((e) => {
             response.status(500).send(e);
         });
     });
 
-    // curl -s http://127.0.0.1:5000/api/v1/events/bozoType/2231a335-c00e-4246-961b-c23ff8ba8b0f
-    // curl -I http://127.0.0.1:5000/api/v1/events/bozoType/2231a335-c00e-4246-961b-c23ff8ba8b0f
+    // curl -sD - http://127.0.0.1:5000/api/v1/events/MY_TYPE/2231a335-c00e-4246-961b-c23ff8ba8b0f --header "Authorization: Bearer $(curl -s -X POST http://127.0.0.1:5000/api/v1/login | tr -d '"')"
     app.get('/api/v1/events/:eventType/:uuid', function ({params: {eventType, uuid}}, response) {
         events.find(uuid).then((evt) => {
             if (evt) {
@@ -38,16 +41,18 @@ module.exports = function (app) {
     });
 
     // curl --data '{"key": "added", "value": "booo", "timeout": 10000}' --header "Content-Type: application/json" -X PATCH http://127.0.0.1:5000/api/registry
-    app.patch('/api/v1/events/:eventType/:uuid/meta', function ({params: {eventType, uuid}}, response) {
-        events.patchAsProcessing(eventType, uuid).then(() => {
+    app.patch('/api/v1/events/:eventType/:uuid/meta', function ({params: {eventType, uuid}, decodedJwtToken}, response) {
+        let processorUUID = decodedJwtToken.sub;
+        events.patchAsProcessing(eventType, uuid, processorUUID).then(() => {
             response.status(200).send();
         }).catch((e) => {
             response.status(500).send(e);
         });
     });
 
-    app.patch('/api/v1/events/:eventType/:uuid/processed', function ({params: {eventType, uuid}}, response) {
-        events.patchAsProcessed(eventType, uuid).then(() => {
+    app.patch('/api/v1/events/:eventType/:uuid/processed', function ({params: {eventType, uuid}, decodedJwtToken}, response) {
+        let processorUUID = decodedJwtToken.sub;
+        events.patchAsProcessed(eventType, uuid, processorUUID).then(() => {
             response.status(200).send();
         }).catch((e) => {
             response.status(500).send(e);
