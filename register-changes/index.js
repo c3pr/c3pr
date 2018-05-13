@@ -14,13 +14,9 @@ async function registerChanges(changes, {changesUrl, jwt, logMetas: outerLogMeta
         c3prLOG2({msg: `Notified HUB (${changesUrl}) of changes to ${changes.repository.url}.`, logMetas});
     } catch (e) {
         c3prLOG2({
-            msg: `Error while notifying bot.
-            * URL: ${changesUrl}
-            * Error:
-            -----------------------\n
-            ${require('util').inspect(e)}
-            -----------------------\n\n`,
-            logMetas
+            msg: `Error while notifying bot at ${changesUrl}. Reason: '${e}'.`,
+            logMetas,
+            meta: {error: require('util').inspect(e)}
         });
     }
 }
