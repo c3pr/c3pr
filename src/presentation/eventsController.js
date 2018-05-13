@@ -15,6 +15,7 @@ module.exports = function (app) {
                 response.status(204).send();
             }
         }).catch((e) => {
+            console.error(e);
             response.status(500).send(e);
         });
     });
@@ -28,14 +29,37 @@ module.exports = function (app) {
                 response.status(404).send();
             }
         }).catch((e) => {
+            console.error(e);
             response.status(500).send(e);
         });
     });
 
+    // curl -sD - http://127.0.0.1:5000/api/v1/events --header "Authorization: Bearer $(curl -s -X POST http://127.0.0.1:5000/api/v1/login | tr -d '"')"
+    app.get('/api/v1/events/', function ({params: {eventType, uuid}}, response) {
+        events.findAll().then((evts) => {
+            response.status(200).send(evts);
+        }).catch((e) => {
+            console.error(e);
+            response.status(500).send(e);
+        });
+    });
+
+    // curl -sD - http://127.0.0.1:5000/api/v1/events/MY_TYPE --header "Authorization: Bearer $(curl -s -X POST http://127.0.0.1:5000/api/v1/login | tr -d '"')"
+    app.get('/api/v1/events/:eventType/', function ({params: {eventType, uuid}}, response) {
+        events.findAllOfType(eventType).then((evts) => {
+            response.status(200).send(evts);
+        }).catch((e) => {
+            console.error(e);
+            response.status(500).send(e);
+        });
+    });
+
+    // curl -sD - -X POST http://127.0.0.1:5000/api/v1/events/MY_TYPE --data '{"key": "added", "value": "booo", "timeout": 10000}' --header "Content-Type: application/json" --header "Authorization: Bearer $(curl -s -X POST http://127.0.0.1:5000/api/v1/login | tr -d '"')"
     app.post('/api/v1/events/:eventType/', function (request, response) {
         events.register(request.params.eventType, request.body).then((uuid) => {
             response.status(200).send(uuid);
         }).catch((e) => {
+            console.error(e);
             response.status(500).send(e);
         });
     });
@@ -46,6 +70,7 @@ module.exports = function (app) {
         events.patchAsProcessing(eventType, uuid, processorUUID).then(() => {
             response.status(200).send();
         }).catch((e) => {
+            console.error(e);
             response.status(500).send(e);
         });
     });
@@ -55,6 +80,7 @@ module.exports = function (app) {
         events.patchAsProcessed(eventType, uuid, processorUUID).then(() => {
             response.status(200).send();
         }).catch((e) => {
+            console.error(e);
             response.status(500).send(e);
         });
     });

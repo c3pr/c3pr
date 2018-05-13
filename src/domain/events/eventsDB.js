@@ -16,6 +16,14 @@ async function find(uuid) {
     return (await events).findOne({uuid});
 }
 
+async function findAll() {
+    return (await events).find({}).toArray();
+}
+
+async function findAllOfType(eventType) {
+    return (await events).find({eventType}).toArray();
+}
+
 async function markStatus(uuid, status, processorUUID) {
     return (await events).update(
         {uuid},
@@ -38,6 +46,8 @@ function persistAsProcessed(uuid, processorUUID) {
 module.exports = {
     insert,
     find,
+    findAll,
+    findAllOfType,
     persistAsUnprocessed,
     persistAsProcessing,
     persistAsProcessed,

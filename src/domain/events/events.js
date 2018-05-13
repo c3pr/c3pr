@@ -21,6 +21,15 @@ function find(uuid) {
     return eventsDB.find(uuid);
 }
 
+function findAll() {
+    return eventsDB.findAll();
+}
+
+function findAllOfType(eventType) {
+    assert.ok(eventType, "eventType is required");
+    return eventsDB.findAllOfType(eventType);
+}
+
 function peekUnprocessed(eventType) {
     assert.ok(eventType, "eventType is required");
     let uuid = Status.peekUnprocessedEventOfType(eventType);
@@ -74,6 +83,8 @@ setTimeout(() => {
 module.exports = {
     register,
     find,
+    findAll,
+    findAllOfType,
     peekUnprocessed,
     patchAsProcessing,
     patchAsProcessed,
