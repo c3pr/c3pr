@@ -16,6 +16,11 @@ module.exports = {
             mongoEventsCollection: 'events',
             uncollectPollingInMs: 5 * 60 * 1000, // five minutes
             uncollectTimeoutInMs: 60 * 60 * 1000, // one hour
+
+            broadcast: {
+                maxRetries: 2,
+                retryWaitingTimeInMs: 5 * 1000 // 5 seconds
+            }
         },
     }
 };

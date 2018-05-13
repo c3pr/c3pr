@@ -5,6 +5,8 @@ const eventsDB = require('./eventsDB');
 const Status = require('./status');
 const assert = require('assert');
 
+const c3prHub = require('../../application/hub/hub').c3pr;
+
 async function register(eventType, payload) {
     assert.ok(eventType && payload, "Missing required arguments");
     let uuid = uuidv4();
@@ -12,6 +14,8 @@ async function register(eventType, payload) {
 
     await eventsDB.insert({uuid, eventType, meta: {status, processor: null, dateTime: new Date().toISOString()}, payload});
     Status.addAsUnprocessed(eventType, uuid);
+
+    c3prHub.emit(eventType);
 
     return uuid;
 }
