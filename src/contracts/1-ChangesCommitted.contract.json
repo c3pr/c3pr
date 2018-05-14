@@ -1,0 +1,13 @@
+{
+  "date": "2018-02-12T14:05:08.893Z",
+
+  "repository": {
+    "full_path": "c3pr/sample-project-java-maven",
+    "author": "someusername",
+    "clone_url_http": "https://github.com/c3pr/sample-project-java-maven.git",
+    "branch": "branch-for-clone-tests",
+    "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
+  },
+
+  "changed_files": ["src/main/resources/second.java", "src/main/resources/third.txt"]
+}
