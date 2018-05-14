@@ -11,7 +11,7 @@ module.exports = function (app) {
             response.status(400).send(`Your request payload must be a subscriptions array with the format: [{eventType, callbackUrl}].`);
             return;
         }
-        request.body.subscriptions.forEach(({eventType, callbackUrl}) => {
+        request.body.forEach(({eventType, callbackUrl}) => {
             c3prBus.subscribeTo(eventType, callbackUrl);
         });
         response.json(encodeUuidToken());
