@@ -13,9 +13,9 @@ module.exports = {
         port: require('url').parse(c3prBrainUrl).port || 80,
 
         brain: {
-            changesCallbackUrl: `${c3prBrainUrl}/callbacks/changes`,
-            completeToolInvocationCallbackUrl: `${c3prBrainUrl}/callbacks/complete-tool-invocation`,
-            patchCallbackUrl: `${c3prBrainUrl}/callbacks/patch`,
+            ChangesCommittedCallbackUrl:        `${c3prBrainUrl}/callbacks/ChangesCommitted`,
+            ToolInvocationCompletedCallbackUrl: `${c3prBrainUrl}/callbacks/ToolInvocationCompleted`,
+            PullRequestUpdatedCallbackUrl:      `${c3prBrainUrl}/callbacks/PullRequestUpdated`,
         },
 
         hub: {
