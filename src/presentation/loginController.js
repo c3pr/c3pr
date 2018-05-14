@@ -6,10 +6,9 @@ const c3prBus = require('../application/bus/bus').c3prBus;
 module.exports = function (app) {
 
     // curl -sD - -X POST http://127.0.0.1:5000/api/v1/login
-    /** @namespace request.body.subscriptions */
     app.post('/api/v1/login', function (request, response) {
-        if (!Array.isArray(request.body.subscriptions)) {
-            response.status(400).send(`Your request payload must contain a subscriptions array, with the format: [{eventType, callbackUrl}].`);
+        if (!Array.isArray(request.body)) {
+            response.status(400).send(`Your request payload must be a subscriptions array with the format: [{eventType, callbackUrl}].`);
             return;
         }
         request.body.subscriptions.forEach(({eventType, callbackUrl}) => {
