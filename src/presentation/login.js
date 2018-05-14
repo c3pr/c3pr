@@ -6,7 +6,7 @@ const config = require('../config');
 
 const logMetas = [{nodeName: 'c3pr-repo-gitlab', correlationId: 'boot', moduleName: 'login'}];
 
-axios.post(config.c3pr.loginUrl).then(({data: jwt}) => {
+axios.post(config.c3pr.loginUrl, {eventType: "pr", callbackUrl: config.c3pr.prsUrl}).then(({data: jwt}) => {
     config.c3pr.jwt = jwt;
 
     c3prLOG2({
