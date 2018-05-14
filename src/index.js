@@ -1,1 +1,1 @@
-require('./presentation/main');
+require('./web/main');
