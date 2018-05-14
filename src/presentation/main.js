@@ -2,7 +2,8 @@ const c3prLOG = require("node-c3pr-logger");
 const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('../config');
-const axios = require('axios');
+
+require('../application/login/login');
 
 const app = express();
 
@@ -22,14 +23,4 @@ app.listen(config.c3pr.port, () => {
     const logMeta = {nodeName: 'c3pr-brain', correlationIds: 'boot', moduleName: 'main'};
 
     c3prLOG(`C-3PR BRAIN is up at port ${config.c3pr.port}.`, logMeta);
-
-    c3prLOG(`Now broadcasting to C-3PR registry API: ${config.c3pr.registryUrl}.`, logMeta);
-    setInterval(() => {
-        axios.patch(config.c3pr.registryUrl, [
-            {key: `changesUrl`, value: config.c3pr.changesUrl, timeout: 13 * 1000},
-            {key: `patchesUrl`, value: config.c3pr.patchesUrl, timeout: 13 * 1000}
-        ]).catch((e) => {
-            console.log(`Error while broadcasting to registry. URL: ${config.c3pr.registryUrl}. - ${e}`);
-        });
-    }, 10 * 1000);
 });
