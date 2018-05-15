@@ -1,5 +1,5 @@
-const events = require('../domain/events/events');
-const authExpressMiddleware = require("../domain/auth/authExpressMiddleware");
+const events = require('../application/events/events');
+const authExpressMiddleware = require("../application/auth/authExpressMiddleware");
 
 
 module.exports = function (app) {
