@@ -1,4 +1,4 @@
-const invokeTools = require('../domain/invokeTools');
+const invokeTools = require('./ChangesCommitted/requestToolInvocation/invokeTools');
 const c3prLOG = require("node-c3pr-logger");
 
 function handleChanges(changes) {

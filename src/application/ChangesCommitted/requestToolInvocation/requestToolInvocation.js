@@ -1,4 +1,4 @@
-const invokeTools = require('../../domain/invokeTools');
+const invokeTools = require('./invokeTools');
 
 function requestToolInvocation(changesCommitted) {
     invokeTools(changesCommitted);

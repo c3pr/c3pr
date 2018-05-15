@@ -1,7 +1,7 @@
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 const c3prHubClient = require('node-c3pr-hub-client/events/markEventAsProcessing').c3prHubClient;
 
-const c3prRTI = require('../requestToolInvocation/requestToolInvocation').c3pr;
+const c3prRTI = require('./requestToolInvocation/requestToolInvocation').c3pr;
 
 const config = require('../../config');
 

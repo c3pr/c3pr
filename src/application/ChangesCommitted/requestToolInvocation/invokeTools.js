@@ -1,6 +1,6 @@
 const axios = require('axios');
 const filterFilesWithExtensions = require('./filterFilesWithExtensions');
-const config = require('../config');
+const config = require('../../../config');
 const c3prLOG = require("node-c3pr-logger");
 
 const decideApplicableToolAgents = require('./decideApplicableToolAgents');
