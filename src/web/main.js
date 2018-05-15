@@ -11,6 +11,7 @@ app.use(express.static('resources/public'));
 
 app.use(bodyParser.json());
 
+require('./c3prHubListenerController')(app);
 require('./changesController')(app);
 require('./patchesController')(app);
 
