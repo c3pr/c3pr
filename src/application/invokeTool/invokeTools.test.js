@@ -23,7 +23,7 @@ const invokeTools = require('./invokeTools').c3prBrain.invokeTools;
 describe('invokeTools', () => {
 
     const changes = {
-        changeset: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js', 'src/boo.txt'],
+        changed_files: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js', 'src/boo.txt'],
         repository: {
             url: "https://github.com/org/repo.git",
             branch: "my-branch-name",
@@ -31,7 +31,7 @@ describe('invokeTools', () => {
         }
     };
 
-    it('should issue a post to each tool with extensions on changeset files', async () => {
+    it('should issue a post to each tool with extensions on changed_files files', async () => {
 
         toolAgents.agents = [
             {toolId: "one", extensions: ["java", "js"], agentURL: "http://one", command: "one command", toolMeta: {rule: "one"}, prTitle: "prTitle one", prBody: `prBody one`},
@@ -42,22 +42,22 @@ describe('invokeTools', () => {
 
         axiosMock.onPost(toolAgents.agents[0].agentURL, {
             repository,
-            files: [changes.changeset[0], changes.changeset[1]],
+            files: [changes.changed_files[0], changes.changed_files[1]],
             tool: toolAgents.agents[0]
         }).reply(204, {}, {'content-type': 'application/json'}); // calls on tool 'one' never produce diff
 
         axiosMock.onPost(toolAgents.agents[1].agentURL, {
             repository,
-            files: [changes.changeset[1]],
+            files: [changes.changed_files[1]],
             tool: toolAgents.agents[1]
-        }).reply(200, {files: [changes.changeset[1]]}, {'content-type': 'application/json'}); // calls on tool 'two' produces diff
+        }).reply(200, {files: [changes.changed_files[1]]}, {'content-type': 'application/json'}); // calls on tool 'two' produces diff
 
         // execute
-        let toolsApplied = await invokeTools({repository: changes.repository, files: changes.changeset});
+        let toolsApplied = await invokeTools({repository: changes.repository, files: changes.changed_files});
 
         // verify
         expect(toolsApplied[0]).to.deep.equal({ toolId: 'one', diff: false, files: []});
-        expect(toolsApplied[1]).to.deep.equal({ toolId: 'two', diff: true, files: [changes.changeset[1]]}); // should aways stop on 'two'
+        expect(toolsApplied[1]).to.deep.equal({ toolId: 'two', diff: true, files: [changes.changed_files[1]]}); // should aways stop on 'two'
         expect(toolsApplied.length).to.equal(2);
     });
 
@@ -72,22 +72,22 @@ describe('invokeTools', () => {
 
         axiosMock.onPost(toolAgents.agents[0].agentURL, {
             repository,
-            files: [changes.changeset[0], changes.changeset[1]],
+            files: [changes.changed_files[0], changes.changed_files[1]],
             tool: toolAgents.agents[0]
-        }).reply(200, {files: [changes.changeset[0]]}, {'content-type': 'application/json'}); // calls on tool 'one' changes only one file, so the other tool can be invoked in the remaining one
+        }).reply(200, {files: [changes.changed_files[0]]}, {'content-type': 'application/json'}); // calls on tool 'one' changes only one file, so the other tool can be invoked in the remaining one
 
         axiosMock.onPost(toolAgents.agents[1].agentURL, {
             repository,
-            files: [changes.changeset[1]],
+            files: [changes.changed_files[1]],
             tool: toolAgents.agents[1]
-        }).reply(200, {files: [changes.changeset[1]]}, {'content-type': 'application/json'}); // calls on tool 'two' changes the other file
+        }).reply(200, {files: [changes.changed_files[1]]}, {'content-type': 'application/json'}); // calls on tool 'two' changes the other file
 
         // execute
-        let toolsApplied = await invokeTools({repository: changes.repository, files: changes.changeset});
+        let toolsApplied = await invokeTools({repository: changes.repository, files: changes.changed_files});
 
         // verify
-        expect(toolsApplied[0]).to.deep.equal({ toolId: 'one', diff: true, files: [changes.changeset[0]]});
-        expect(toolsApplied[1]).to.deep.equal({ toolId: 'two', diff: true, files: [changes.changeset[1]]});
+        expect(toolsApplied[0]).to.deep.equal({ toolId: 'one', diff: true, files: [changes.changed_files[0]]});
+        expect(toolsApplied[1]).to.deep.equal({ toolId: 'two', diff: true, files: [changes.changed_files[1]]});
         expect(toolsApplied.length).to.equal(2);
     });
 
