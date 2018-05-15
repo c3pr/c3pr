@@ -26,6 +26,7 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "github-webhook-handler": "^0.7.1",
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#1.0.0",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#8.0.0",
     "node-c3pr-repo": "github:c3pr/node-c3pr-repo#2.2.2",
     "node-git-client": "github:c3pr/node-git-client#6.0.4",

@@ -14,11 +14,16 @@ module.exports = {
         port: PORT,
         url: C3PR_REPO_GITLAB_URL,
 
-        c3prHubUrl: C3PR_HUB_URL,
-        loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
-        changesUrl: `${C3PR_HUB_URL}/api/v1/events/changes`,
+        hub: {
+            c3prHubUrl: C3PR_HUB_URL,
+            loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
+            PullRequestRequestedUrl: `${C3PR_HUB_URL}/api/v1/events/PullRequestRequested`,
+        },
 
-        prsUrl: `${C3PR_REPO_GITLAB_URL}/prs`,
+        repoGitlab: {
+            PullRequestRequestedCallbackUrl: `${C3PR_REPO_GITLAB_URL}/callbacks/PullRequestRequested`
+        },
+
         webhooksUrl: `${C3PR_REPO_GITLAB_URL}/webhooks`,
 
         gitHubApiToken: GITLAB_API_TOKEN,

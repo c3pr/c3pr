@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 
 const config = require('../config');
 
-require('./login');
+require('../application/login/login');
 
 const app = express();
 
