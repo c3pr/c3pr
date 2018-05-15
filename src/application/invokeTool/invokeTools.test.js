@@ -2,7 +2,6 @@ require("node-c3pr-logger").testMode();
 process.env.NODE_ENV = 'test';
 
 const expect = require('chai').expect;
-const sinon = require('sinon');
 require('chai').should();
 
 const decideApplicableToolAgents = require('./decideApplicableToolAgents');
@@ -31,17 +30,6 @@ describe('invokeTools', () => {
             revision: "4444eedacc076e8a16ae565b535fd48edb9a044a"
         }
     };
-
-    const now = new Date();
-    let sandbox, clock;
-    beforeEach(() => {
-        sandbox = sinon.sandbox.create();
-        clock = sinon.useFakeTimers(now.getTime());
-    });
-    afterEach(() => {
-        sandbox.restore();
-        clock.restore();
-    });
 
     it('should issue a post to each tool with extensions on changeset files', async () => {
 
