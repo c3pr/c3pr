@@ -12,9 +12,9 @@ const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
 const axiosMock = new MockAdapter(axios);
 
-const toolAgents = require('../../../toolAgents');
+const toolAgents = require('../../toolAgents');
 
-const config = require('../../../config');
+const config = require('../../config');
 config.c3pr.patchesUrl = 'http://changes-server/patches';
 
 require("node-c3pr-logger").testMode();

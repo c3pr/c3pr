@@ -1,4 +1,4 @@
-const toolAgents = require('../../../toolAgents');
+const toolAgents = require('../../toolAgents');
 const filterApplicableToolAgents = require('./filterApplicableToolAgents');
 
 function __shuffleArray(array) {

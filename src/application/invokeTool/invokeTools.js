@@ -1,20 +1,34 @@
 const axios = require('axios');
 const filterFilesWithExtensions = require('./filterFilesWithExtensions');
-const config = require('../../../config');
 const c3prLOG = require("node-c3pr-logger");
 
 const decideApplicableToolAgents = require('./decideApplicableToolAgents');
 
+/**
+ * NOTE: files will be changed_files[if ChangesCommitted] or unmodified_files[if ToolInvocationCompleted]
+ *
+ * - Fetch all available tool agents
+ * - From the files array (FUTURE: and project configuration) enumerate which tool agents are eligible
+ * - Pick one tool agent
+ * - Create ToolInvocationRequested for such tool agent.
+ */
 async function invokeTools({repository, files}) {
     const logMeta = {nodeName: 'c3pr-brain', moduleName: 'invokeTools'};
 
+    /**
+     * @type {Object[]}
+     */
     const applicableToolAgents = decideApplicableToolAgents(files);
+
     c3prLOG(`Applicable tools - ${applicableToolAgents.length}: ${JSON.stringify(applicableToolAgents.map(tool => tool.toolId))}`, logMeta);
 
     const toolsApplied = [];
     let changedAndNotRefactoredFiles = [...files];
     for (let tool of applicableToolAgents) {
 
+        /**
+         * @type {Object[]}
+         */
         const filesForThisTool = filterFilesWithExtensions(changedAndNotRefactoredFiles, tool.extensions);
         if (filesForThisTool.length === 0) {
             continue;
@@ -54,4 +68,8 @@ async function invokeTools({repository, files}) {
     return toolsApplied;
 }
 
-module.exports = invokeTools;
+module.exports = {
+    c3prBrain: {
+        invokeTools
+    }
+};

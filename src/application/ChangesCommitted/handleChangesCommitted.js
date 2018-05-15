@@ -1,7 +1,7 @@
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 const c3prHubClient = require('node-c3pr-hub-client/events/markEventAsProcessing').c3prHubClient;
 
-const c3prRTI = require('./requestToolInvocation/requestToolInvocation').c3pr;
+const c3prRTI = require('../invokeTool/invokeTools').c3prBrain;
 
 const config = require('../../config');
 
@@ -15,8 +15,9 @@ function handleChangesCommitted() {
     ).catch(() => {
         c3prLOG2({msg: `Couldn't collect ChangesCommitted. Skipping.`, logMetas: [logMeta]});
     }).then((changesCommitted) => {
+        // noinspection JSIgnoredPromiseFromCall
         /** @namespace changesCommitted.changed_files */
-        c3prRTI.requestToolInvocation({repository: changesCommitted.repository, files: changesCommitted.changed_files});
+        c3prRTI.invokeTools({repository: changesCommitted.repository, files: changesCommitted.changed_files});
     });
 }
 
