@@ -1,4 +1,4 @@
-const c3prRegistry = require('../domain/c3prRegistry');
+const c3prRegistry = require('../application/registry/c3prRegistry');
 
 
 module.exports = function (app) {

@@ -1,4 +1,4 @@
-const config = require('../config');
+const config = require('../../config');
 
 let _registry = [
     {key: "registryUrl", value: config.c3pr.registryUrl, timeout: -1},
