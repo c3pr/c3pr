@@ -5,14 +5,14 @@ const c3prLOG = require("node-c3pr-logger");
 
 const decideApplicableToolAgents = require('./decideApplicableToolAgents');
 
-async function invokeTools(changes) {
-    const logMeta = {nodeName: 'c3pr-brain', correlationId: changes.meta.correlationId, moduleName: 'invokeTools'};
+async function invokeTools({repository, files}) {
+    const logMeta = {nodeName: 'c3pr-brain', moduleName: 'invokeTools'};
 
-    const applicableToolAgents = decideApplicableToolAgents(changes);
+    const applicableToolAgents = decideApplicableToolAgents(files);
     c3prLOG(`Applicable tools - ${applicableToolAgents.length}: ${JSON.stringify(applicableToolAgents.map(tool => tool.toolId))}`, logMeta);
 
     const toolsApplied = [];
-    let changedAndNotRefactoredFiles = [...changes.changeset];
+    let changedAndNotRefactoredFiles = [...files];
     for (let tool of applicableToolAgents) {
 
         const filesForThisTool = filterFilesWithExtensions(changedAndNotRefactoredFiles, tool.extensions);
@@ -20,18 +20,9 @@ async function invokeTools(changes) {
             continue;
         }
         try {
-            c3prLOG(`Invoking agent ${tool.toolId} at ${tool.agentURL} on changes to ${changes.repository.url}, files: ${JSON.stringify(filesForThisTool)}`, {tool}, logMeta);
+            c3prLOG(`Invoking agent ${tool.toolId} at ${tool.agentURL} on changes to ${repository.url}, files: ${JSON.stringify(filesForThisTool)}`, {tool}, logMeta);
             let response = await axios.post(tool.agentURL, {
-                meta: {
-                    correlationId: changes.meta.correlationId,
-                    compatibleSchemas: ["c3pr/c3pr-agent::toolInvocation"],
-                    dates: changes.meta.dates.concat([{node: "c3pr", date: new Date().toISOString(), "schema": "toolInvocation"}])
-                },
-                c3pr: {
-                    prsUrl: changes.c3pr.prsUrl,
-                    patchesUrl: config.c3pr.patchesUrl
-                },
-                repository: changes.repository,
+                 repository: repository,
                 files: filesForThisTool,
                 tool: tool
             });

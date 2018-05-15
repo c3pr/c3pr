@@ -1,7 +1,7 @@
 const extractExtensionsInChangeset = require('./extractExtensionsInChangeset').extractExtensionsInChangeset;
 
-function filterApplicableToolAgents(toolAgents, changes) {
-    const extensionsInChangeset = extractExtensionsInChangeset(changes.changeset);
+function filterApplicableToolAgents(toolAgents, files) {
+    const extensionsInChangeset = extractExtensionsInChangeset(files);
 
     let atLeastOneExtensionInChangesetIsIn = function (extensions) {
         return extensionsInChangeset.filter(extensionInChangeset => extensions.includes(extensionInChangeset)).length > 0;

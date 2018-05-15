@@ -8,8 +8,8 @@ function __shuffleArray(array) {
     }
 }
 
-function decideApplicableToolAgents(changes) {
-    const applicableToolAgents = filterApplicableToolAgents(toolAgents, changes);
+function decideApplicableToolAgents(files) {
+    const applicableToolAgents = filterApplicableToolAgents(toolAgents, files);
     decideApplicableToolAgents.__shuffleArray(applicableToolAgents);
     return applicableToolAgents;
 }

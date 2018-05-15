@@ -15,7 +15,8 @@ function handleChangesCommitted() {
     ).catch(() => {
         c3prLOG2({msg: `Couldn't collect ChangesCommitted. Skipping.`, logMetas: [logMeta]});
     }).then((changesCommitted) => {
-        c3prRTI.requestToolInvocation(changesCommitted);
+        /** @namespace changesCommitted.changed_files */
+        c3prRTI.requestToolInvocation({repository: changesCommitted.repository, files: changesCommitted.changed_files});
     });
 }
 
