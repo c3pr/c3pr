@@ -2,15 +2,13 @@ const os = require("os");
 
 const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
 
-const c3prBrainUrl = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:5001`;
+const C3PR_BRAIN_URL = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:5001`;
 
 module.exports = {
     c3pr: {
         jwt: null,
 
         registryUrl: process.env.C3PR_REGISTRY_URLx || `http://${os.hostname()}:5000/api/v1/registry`,
-
-        port: require('url').parse(c3prBrainUrl).port || 80,
 
         hub: {
             c3prHubUrl: C3PR_HUB_URL,
@@ -21,9 +19,12 @@ module.exports = {
         },
 
         brain: {
-            ChangesCommittedCallbackUrl:        `${c3prBrainUrl}/callbacks/ChangesCommitted`,
-            ToolInvocationCompletedCallbackUrl: `${c3prBrainUrl}/callbacks/ToolInvocationCompleted`,
-            PullRequestUpdatedCallbackUrl:      `${c3prBrainUrl}/callbacks/PullRequestUpdated`,
+            c3prBrainUrl: C3PR_BRAIN_URL,
+            c3prBrainPort: require('url').parse(C3PR_BRAIN_URL).port || 80,
+
+            ChangesCommittedCallbackUrl:        `/callbacks/ChangesCommitted`,
+            ToolInvocationCompletedCallbackUrl: `/callbacks/ToolInvocationCompleted`,
+            PullRequestUpdatedCallbackUrl:      `/callbacks/PullRequestUpdated`,
         }
     }
 };
