@@ -11,7 +11,7 @@ function handleChangesCommitted() {
     c3prLOG2({msg: `Handling ChangesCommitted.`, logMetas: [logMeta]});
 
     c3prHubClient.markEventAsProcessing(
-        {eventType: `ChangesCommitted`, jwt: config.c3pr.jwt, logMetas: [logMeta]}
+        {eventType: `ChangesCommitted`, c3prHubUrl: config.c3pr.hub.c3prHubUrl, jwt: config.c3pr.jwt, logMetas: [logMeta]}
     ).catch(() => {
         c3prLOG2({msg: `Couldn't collect ChangesCommitted. Skipping.`, logMetas: [logMeta]});
     }).then((changesCommitted) => {
