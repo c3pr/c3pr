@@ -1,7 +1,7 @@
 {
   "parent": {
-    "event_type": "ChangesCommitted",
-    "uuid": "changes-uuid-12312-3123123-12312"
+    "event_type": "ChangesCommitted OR ToolInvocationCompleted",
+    "uuid": "uuid-12312-3123123-12312"
   },
 
   "repository": {

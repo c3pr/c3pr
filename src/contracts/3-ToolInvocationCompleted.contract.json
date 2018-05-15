@@ -13,6 +13,7 @@
   },
 
   "changed_files": ["src/main/this-array-can-be-empty"],
+  "unmodified_files": ["src/main/this-array-can-be-empty-as-well"],
 
   "pr_title": "PR Title (if the above array is empty, these fields won't matter)",
   "pr_body": "This is the `markdown` body.",
