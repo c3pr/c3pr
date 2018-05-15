@@ -12,16 +12,18 @@ module.exports = {
 
         port: require('url').parse(c3prBrainUrl).port || 80,
 
+        hub: {
+            c3prHubUrl: C3PR_HUB_URL,
+            loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
+            ChangesCommittedUrl:        `${C3PR_HUB_URL}/api/v1/events/ChangesCommitted`,
+            ToolInvocationCompletedUrl: `${C3PR_HUB_URL}/api/v1/events/ToolInvocationCompleted`,
+            PullRequestUpdatedUrl:      `${C3PR_HUB_URL}/api/v1/events/PullRequestUpdated`,
+        },
+
         brain: {
             ChangesCommittedCallbackUrl:        `${c3prBrainUrl}/callbacks/ChangesCommitted`,
             ToolInvocationCompletedCallbackUrl: `${c3prBrainUrl}/callbacks/ToolInvocationCompleted`,
             PullRequestUpdatedCallbackUrl:      `${c3prBrainUrl}/callbacks/PullRequestUpdated`,
-        },
-
-        hub: {
-            c3prHubUrl: C3PR_HUB_URL,
-            loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
-            changesUrl: `${C3PR_HUB_URL}/api/v1/events/changes`,
         }
     }
 };
