@@ -13,7 +13,11 @@ async function markEventAsProcessing({eventType, jwt, logMetas: outerLogMetas}) 
         await axios.patch(`/api/v1/events/${eventType}/${event.uuid}/meta/processing`, {}, {headers});
         return event.payload;
     } catch (e) {
-        c3prLOG2({msg: `Error while marking event ${event.uuid} of type ${eventType} as processing.`, logMetas: [...(outerLogMetas || []), logMeta], meta: e});
+        c3prLOG2({
+            msg: `Error while marking event ${event.uuid} of type ${eventType} as processing. Reason: '${e}'. Data: ${e.response && e.response.data}`,
+            logMetas: [...(outerLogMetas || []), logMeta],
+            meta: {error: require('util').inspect(e)}
+        });
         throw e;
     }
 }
