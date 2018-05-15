@@ -1,4 +1,4 @@
-const handlePatches = require('../application/handlePatches');
+const handlePatches = require('../application/ToolInvocationCompleted/handlePatches');
 const c3prLOG = require("node-c3pr-logger");
 
 module.exports = function (app) {

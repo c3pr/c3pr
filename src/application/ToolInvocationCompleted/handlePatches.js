@@ -1,5 +1,5 @@
-const createPrsFromPatches = require('../domain/createPrsFromPatches');
-const sendPrToRepo = require('../domain/sendPrToRepo');
+const createPrsFromPatches = require('./createPrsFromPatches');
+const sendPrToRepo = require('./sendPrToRepo');
 const c3prLOG = require("node-c3pr-logger");
 
 function handlePatches(patches) {
