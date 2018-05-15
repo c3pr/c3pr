@@ -1,4 +1,3 @@
-const toolAgents = require('../../toolAgents');
 const filterApplicableToolAgents = require('./filterApplicableToolAgents');
 
 function __shuffleArray(array) {
@@ -8,7 +7,7 @@ function __shuffleArray(array) {
     }
 }
 
-function decideApplicableToolAgents(files) {
+function decideApplicableToolAgents(toolAgents, files) {
     const applicableToolAgents = filterApplicableToolAgents(toolAgents, files);
     decideApplicableToolAgents.__shuffleArray(applicableToolAgents);
     return applicableToolAgents;
