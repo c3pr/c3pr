@@ -1,13 +1,13 @@
 const extractExtensionsInChangeset = require('./extractExtensionsInChangeset').extractExtensionsInChangeset;
 
+function atLeastOneExtensionInChangesetIsIn(extensionsInChangeset, extensions) {
+    return extensionsInChangeset.filter(extensionInChangeset => extensions.includes(extensionInChangeset)).length > 0;
+}
+
 function filterApplicableToolAgents(toolAgents, files) {
     const extensionsInChangeset = extractExtensionsInChangeset(files);
 
-    let atLeastOneExtensionInChangesetIsIn = function (extensions) {
-        return extensionsInChangeset.filter(extensionInChangeset => extensions.includes(extensionInChangeset)).length > 0;
-    };
-
-    return toolAgents.agents.filter(toolAgent => atLeastOneExtensionInChangesetIsIn(toolAgent.extensions));
+    return toolAgents.filter(toolAgent => atLeastOneExtensionInChangesetIsIn(extensionsInChangeset, toolAgent.extensions));
 }
 
 module.exports = filterApplicableToolAgents;
