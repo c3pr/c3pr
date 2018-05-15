@@ -1,5 +1,5 @@
-const encodeUuidToken = require("../domain/auth/auth").encodeUuidToken;
-const decodeToken = require("../domain/auth/auth").decodeToken;
+const encodeUuidToken = require("../application/auth/auth").encodeUuidToken;
+const decodeToken = require("../application/auth/auth").decodeToken;
 
 const c3prBus = require('../application/bus/bus').c3prBus;
 
