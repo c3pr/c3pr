@@ -1,9 +1,6 @@
 require("node-c3pr-logger").testMode();
 process.env.NODE_ENV = 'test';
 
-const expect = require('chai').expect;
-require('chai').should();
-
 const registerNewEvent = require('./registerNewEvent').c3prRNE.registerNewEvent;
 
 const axios = require('axios');
@@ -30,10 +27,8 @@ describe('registerNewEvent', () => {
             c3prHubUrl,
             jwt,
             payload,
-            retryWait: 100
+            retryWait: 50
         });
-
-        expect(2).to.equal(2);
     });
 
 });
