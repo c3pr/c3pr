@@ -8,11 +8,12 @@ module.exports = {
     c3pr: {
         jwt: null,
 
-        registryUrl: process.env.C3PR_REGISTRY_URLx || `http://${os.hostname()}:5000/api/v1/registry`,
-
         hub: {
             c3prHubUrl: C3PR_HUB_URL,
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
+
+            registryUrl: `${C3PR_HUB_URL}/api/v1/registry`,
+
             ChangesCommittedUrl:        `${C3PR_HUB_URL}/api/v1/events/ChangesCommitted`,
             ToolInvocationCompletedUrl: `${C3PR_HUB_URL}/api/v1/events/ToolInvocationCompleted`,
             PullRequestUpdatedUrl:      `${C3PR_HUB_URL}/api/v1/events/PullRequestUpdated`,

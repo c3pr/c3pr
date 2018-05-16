@@ -11,8 +11,6 @@ const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
 const axiosMock = new MockAdapter(axios);
 
-const toolAgents = require('../../toolAgents');
-
 const config = require('../../config');
 config.c3pr.patchesUrl = 'http://changes-server/patches';
 
@@ -20,75 +18,55 @@ require("node-c3pr-logger").testMode();
 
 const invokeTools = require('./invokeTools').c3prBrain.invokeTools;
 
+let configureFetchAllToolAgents = function (agents) {
+    axiosMock
+        .onGet(config.c3pr.hub.registryUrl, {headers: {Authorization: `Bearer ${config.c3pr.jwt}`}})
+        .reply(200, agents, {'content-type': 'application/json'});
+};
 describe('invokeTools', () => {
-
-    const changes = {
-        changed_files: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js', 'src/boo.txt'],
-        repository: {
-            url: "https://github.com/org/repo.git",
-            branch: "my-branch-name",
-            revision: "4444eedacc076e8a16ae565b535fd48edb9a044a"
-        }
-    };
 
     it('should issue a post to each tool with extensions on changed_files files', async () => {
 
-        toolAgents.agents = [
-            {toolId: "one", extensions: ["java", "js"], agentURL: "http://one", command: "one command", toolMeta: {rule: "one"}, prTitle: "prTitle one", prBody: `prBody one`},
-            {toolId: "two", extensions: ["js"], agentURL: "http://two", command: "two command", toolMeta: {rule: "two"}, prTitle: "prTitle two", prBody: `prBody two`},
+        const parent = {event_type: "ChangesCommitted", uuid: "uuid-12312-3123123-12312" };
+        const changes = {
+            repository: {
+                full_path: "c3pr/sample-project-java-maven",
+                author: "someusername",
+                clone_url_http: "https://github.com/c3pr/sample-project-java-maven.git",
+                branch: "branch-for-clone-tests",
+                revision: "13b7eedacc076e8a16ae565b535fd48edb9a044a"
+            },
+            changed_files: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js', 'src/boo.txt'],
+        };
+
+        const agents = [
+            {key: "agent://one", value: {tool_id: "one", extensions: ["java", "js"], tags: ["java", "js"]}, timeout: "2028-05-15T15:30:27.667Z"},
+            {key: "agent://two", value: {tool_id: "two", extensions: ["js"], tags: ["js"]}, timeout: "2028-05-15T15:30:28.667Z"},
         ];
+        configureFetchAllToolAgents(agents);
 
-        const repository = changes.repository;
-
-        axiosMock.onPost(toolAgents.agents[0].agentURL, {
-            repository,
-            files: [changes.changed_files[0], changes.changed_files[1]],
-            tool: toolAgents.agents[0]
-        }).reply(204, {}, {'content-type': 'application/json'}); // calls on tool 'one' never produce diff
-
-        axiosMock.onPost(toolAgents.agents[1].agentURL, {
-            repository,
-            files: [changes.changed_files[1]],
-            tool: toolAgents.agents[1]
-        }).reply(200, {files: [changes.changed_files[1]]}, {'content-type': 'application/json'}); // calls on tool 'two' produces diff
+        let toolOneCalled = false;
+        let toolTwoCalled = false;
+        axiosMock
+            .onPost(
+                `${config.c3pr.hub.c3prHubUrl}/api/v1/events/ToolInvocationRequested`,
+                {parent, repository: changes.repository, tool_id: "two", files: ['src/main/a/b/c/Main.js']}
+            ).reply(() => { toolTwoCalled = true; return [200]; })
+            .onPost(
+                `${config.c3pr.hub.c3prHubUrl}/api/v1/events/ToolInvocationRequested`,
+                {parent, repository: changes.repository, tool_id: "one", files: ['src/main/a/b/c/Main.java']}
+            ).reply(() => { toolOneCalled = true; return [200]; });
 
         // execute
-        let toolsApplied = await invokeTools({repository: changes.repository, files: changes.changed_files});
+        await invokeTools({parent, repository: changes.repository, files: changes.changed_files});
 
         // verify
-        expect(toolsApplied[0]).to.deep.equal({ toolId: 'one', diff: false, files: []});
-        expect(toolsApplied[1]).to.deep.equal({ toolId: 'two', diff: true, files: [changes.changed_files[1]]}); // should aways stop on 'two'
-        expect(toolsApplied.length).to.equal(2);
+        expect(toolOneCalled).to.equal(true);
+        expect(toolTwoCalled).to.equal(true);
     });
 
     it('should not send file forward if it was modified by previous tool invocation', async () => {
 
-        toolAgents.agents = [
-            {toolId: "one", extensions: ["java", "js"], agentURL: "http://one", command: "one command", toolMeta: {rule: "one"}, prTitle: "prTitle one", prBody: `prBody one`},
-            {toolId: "two", extensions: ["java", "js"], agentURL: "http://two", command: "two command", toolMeta: {rule: "two"}, prTitle: "prTitle two", prBody: `prBody two`},
-        ];
-
-        const repository = changes.repository;
-
-        axiosMock.onPost(toolAgents.agents[0].agentURL, {
-            repository,
-            files: [changes.changed_files[0], changes.changed_files[1]],
-            tool: toolAgents.agents[0]
-        }).reply(200, {files: [changes.changed_files[0]]}, {'content-type': 'application/json'}); // calls on tool 'one' changes only one file, so the other tool can be invoked in the remaining one
-
-        axiosMock.onPost(toolAgents.agents[1].agentURL, {
-            repository,
-            files: [changes.changed_files[1]],
-            tool: toolAgents.agents[1]
-        }).reply(200, {files: [changes.changed_files[1]]}, {'content-type': 'application/json'}); // calls on tool 'two' changes the other file
-
-        // execute
-        let toolsApplied = await invokeTools({repository: changes.repository, files: changes.changed_files});
-
-        // verify
-        expect(toolsApplied[0]).to.deep.equal({ toolId: 'one', diff: true, files: [changes.changed_files[0]]});
-        expect(toolsApplied[1]).to.deep.equal({ toolId: 'two', diff: true, files: [changes.changed_files[1]]});
-        expect(toolsApplied.length).to.equal(2);
     });
 
 });
