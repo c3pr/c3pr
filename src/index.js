@@ -1,1 +1,1 @@
-require('./web/main');
+require('./web/express');

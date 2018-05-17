@@ -58,6 +58,8 @@ export default {
           r.sort((a, b) => a.dateTime.localeCompare(b.dateTime) * -1);
           this.logs = r;
           this.fetchStatus = 'Click to re-fetch logs';
+        }).catch(e => {
+          alert('Error: ' + e);
         });
     },
     unique(a) {
