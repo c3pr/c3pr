@@ -19,3 +19,8 @@ A repo adapter should POST to this URL when notifying from changes.
 
 The deployment environment must have the environment variable `C3PR_BRAIN_URL` set.
 E.g. `export C3PR_BRAIN_URL=http://localhost:5001`
+
+# TODO
+
+- analyze TIC for calls that did not change any file and emit new TIR in consequence
+- save commit status in the database, so we can keep track of what has been created for each commit
