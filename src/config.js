@@ -27,6 +27,11 @@ module.exports = {
             PullRequestRequestedCallbackUrl: `/callbacks/PullRequestRequested`,
 
             webhooksUrl: WEBHOOKS_URL,
+
+            gitlab: {
+                url: GITLAB_URL,
+                apiToken: GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3', // api + read_user token for the gitUserName gitlab user
+            }
         },
 
         gitHubApiToken: GITLAB_API_TOKEN,
