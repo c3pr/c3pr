@@ -1,10 +1,9 @@
 const config = require('../../config');
+const sortCommits = require('../gitlab/sortCommits');
 
 function extractChangedFiles(webhookCommits) {
-    const commits = [...webhookCommits];
-    commits.sort((a, b) => {
-        return a.timestamp.localeCompare(b.timestamp);
-    });
+    /** @type {Array} */
+    const commits = sortCommits(webhookCommits);
 
     const changesetFiles = new Set();
     commits.forEach(commit => {
@@ -19,23 +18,17 @@ function extractChangedFiles(webhookCommits) {
 }
 
 function convertWebhookToChanges(webhookPayload) {
-    const changeset = extractChangedFiles(webhookPayload.commits);
+    const changed_files = extractChangedFiles(webhookPayload.commits);
 
     const gitSHA = webhookPayload.after;
     return {
-        meta: {
-            correlationId: gitSHA,
-            compatibleSchemas: ["c3pr/c3pr::changes"],
-            dates: [{node: 'c3pr-repo-gitlab', date: new Date().toISOString()}]
-        },
-        c3pr: {
-            prsUrl: config.c3pr.prsUrl
-        },
-        changeset,
+        date: new Date().toISOString(),
+        changed_files,
         repository: {
-            type: "git",
-            fullpath: webhookPayload.project.path_with_namespace,
-            url: config.c3pr.gitlabUrlTransform(webhookPayload.repository.git_http_url),
+            author: webhookPayload.user_username,
+            full_path: webhookPayload.project.path_with_namespace,
+            clone_url_http: config.c3pr.gitlabUrlTransform(webhookPayload.repository.git_http_url),
+
             // TODO maybe it would be more secure to send down the refs and git fetch the refs instead of the branch... This seems rather sketchy
             branch: webhookPayload.ref.replace(/refs\/heads\//, ''),
             revision: gitSHA

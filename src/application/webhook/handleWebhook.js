@@ -1,20 +1,20 @@
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
-const registerChanges = require('node-c3pr-repo/register-changes').c3pr.registerChanges;
+const sortCommits = require('../gitlab/sortCommits');
 
-const config = require('../../config');
-const convertWebhookToChanges = require('./convertWebhookToChanges');
+const createAndEmitChangesCommitted = require('../ChangesCommitted/createAndEmitChangesCommitted');
 
 function handleWebhook(webhookPayload) {
     const logMetas = [{nodeName: 'c3pr-repo-gitlab', correlationId: webhookPayload.after, moduleName: 'handleWebhook'}];
+
+    // noinspection JSUnresolvedFunction
+    const lastCommit = sortCommits(webhookPayload.commits).pop();
     c3prLOG2({
-        msg: `Handling webhook invoked for ${webhookPayload.repository.url}. Message: '${webhookPayload.commits[0].message}'.`,
+        msg: `Handling webhook invoked for ${webhookPayload.repository.url}. Message: '${lastCommit.message}'.`,
         logMetas,
         meta: {webhookPayload}
     });
 
-    const changes = convertWebhookToChanges(webhookPayload);
-
-    return registerChanges(changes, {changesUrl: config.c3pr.changesUrl, jwt: config.c3pr.jwt, logMetas});
+    createAndEmitChangesCommitted(webhookPayload);
 }
 
 module.exports = {
