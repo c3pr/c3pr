@@ -2,6 +2,7 @@ const config = require('../config');
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 
 const c3prHCC = require('../application/ChangesCommitted/handleChangesCommitted').c3pr;
+const c3prHTIC = require('../application/ToolInvocationCompleted/handleToolInvocationCompleted').c3pr;
 
 module.exports = function (app) {
 
@@ -13,6 +14,7 @@ module.exports = function (app) {
 
     app.post(config.c3pr.brain.ToolInvocationCompletedCallbackUrl, function (request, response) {
         c3prLOG2({msg: `'ToolInvocationCompleted' received.`});
+        c3prHTIC.handleToolInvocationCompleted();
         response.send();
     });
 
