@@ -1,6 +1,6 @@
 require("node-c3pr-logger").testMode();
 const assert = require('assert');
-const createGitLabPR = require('./createGitLabPR');
+const createGitLabPR = require('./createGitLabMR');
 const config = require('../../config');
 const githubClient = require('octonode').client(config.c3pr.gitHubApiToken);
 const ghrepo = githubClient.repo('c3pr/sample-project-java-maven');

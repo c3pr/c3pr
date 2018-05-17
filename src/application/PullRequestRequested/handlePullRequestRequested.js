@@ -1,7 +1,7 @@
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 const c3prCEAMAP = require('node-c3pr-hub-client/events/collectEventAndMarkAsProcessing').c3prCEAMAP;
 
-const createGitLabMR = require('../../domain/pr/createGitLabMR');
+const createGitLabMR = require('../pr/createGitLabMR');
 
 const config = require('../../config');
 
