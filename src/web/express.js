@@ -10,6 +10,7 @@ app.use(express.static('resources/public'));
 
 app.use(bodyParser.json());
 
+require('./c3prHubListenerController')(app);
 require('./webhooksController')(app);
 
 app.get('*', function(req, res){
