@@ -24,7 +24,7 @@ c3pr-repo-gitlab now listening at port ${config.c3pr.repoGitlab.c3prRepoGitlabPo
 
 c3pr-repo-gitlab webhooks URL will be: ${config.c3pr.repoGitlab.c3prRepoGitlabUrl + config.c3pr.repoGitlab.webhooksUrl}
 
-c3pr's git user name and password will be: '${config.c3pr.repoGitlab.gitlab.botUserName.replace(/'/g, '')}' <'${config.c3pr.repoGitlab.gitlab.botUserEmail.replace(/'/g, '')}'>
+c3pr's git username and email are: '${config.c3pr.repoGitlab.gitlab.botUserName.replace(/'/g, '')}' <'${config.c3pr.repoGitlab.gitlab.botUserEmail.replace(/'/g, '')}'>
 `);
     c3prLOG(`C-3PR Github Repo is up at ${config.c3pr.repoGitlab.c3prRepoGitlabUrl}.`, {nodeName: 'c3pr-repo-gitlab', correlationIds: 'boot', moduleName: 'express'});
 });
