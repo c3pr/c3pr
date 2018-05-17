@@ -16,9 +16,9 @@ require('./loginController')(app);
 
 // The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
-    res.status(404).send(`No C3PR endpoint is listening at ${req.url}.`);
+    res.status(404).send(`No C-3PR hub endpoint is listening at ${req.url}.`);
 });
 
 app.listen(config.c3pr.port, () => {
-    c3prLOG(`C-3PR dashboard is up at port ${config.c3pr.port}.`, {nodeName: 'c3pr', correlationIds: 'boot', moduleName: 'main'});
+    c3prLOG(`C-3PR hub is up at port ${config.c3pr.port}.`, {nodeName: 'c3pr-hub', correlationIds: 'boot', moduleName: 'main'});
 });
