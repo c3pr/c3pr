@@ -4,8 +4,6 @@ const bodyParser = require('body-parser');
 
 const config = require('../config');
 
-require('../application/login/login');
-
 const app = express();
 
 app.use(express.static('resources/public'));
