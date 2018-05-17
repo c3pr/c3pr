@@ -18,14 +18,16 @@ require("node-c3pr-logger").testMode();
 
 const invokeTools = require('./invokeTools').c3prBrain.invokeTools;
 
-let configureFetchAllToolAgents = function (agents) {
+function configureFetchAllToolAgents(agents) {
     axiosMock
         .onGet(config.c3pr.hub.registryUrl, {headers: {Authorization: `Bearer ${config.c3pr.jwt}`}})
         .reply(200, agents, {'content-type': 'application/json'});
-};
+}
+
+
 describe('invokeTools', () => {
 
-    it('should issue a post to each tool with extensions on changed_files files', async () => {
+    it('should emit a ToolInvocationRequested for each file that have a tool available', async () => {
 
         const parent = {event_type: "ChangesCommitted", uuid: "uuid-12312-3123123-12312" };
         const changes = {
