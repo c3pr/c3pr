@@ -9,7 +9,7 @@ async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, 
     let forkRepoId = encodeURIComponent(forkRepoOrg+"/"+forkRepoProject);
 
     let {data: mergeRequestCreation} = await axios.post(
-        `${config.c3pr.gitLabUrl}/api/v4/projects/${forkRepoId}/merge_requests`,
+        `${config.c3pr.repoGitlab.gitlab.url}/api/v4/projects/${forkRepoId}/merge_requests`,
         {
             //"id": forkRepoId,               // integer/string yes	The ID or URL-encoded path of the project owned by the authenticated user
             "source_branch": forkRepoBranch,  // string	       yes	The source branch
@@ -23,7 +23,7 @@ async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, 
             //"remove_source_branch": "",     // boolean       no	Flag indicating if a merge request should remove the source branch when merging
             "allow_maintainer_to_push": true, // boolean       no	Whether or not a maintainer of the target project can push to the source branch
         },
-        {headers: {"PRIVATE-TOKEN": config.c3pr.gitLabApiToken}}
+        {headers: {"PRIVATE-TOKEN": config.c3pr.repoGitlab.gitlab.apiToken}}
     );
 
     return mergeRequestCreation;

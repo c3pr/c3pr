@@ -13,8 +13,6 @@ const WEBHOOKS_URL = `/webhooks`;
 module.exports = {
     c3pr: {
 
-        url: C3PR_REPO_GITLAB_URL,
-
         hub: {
             c3prHubUrl: C3PR_HUB_URL,
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
@@ -31,15 +29,11 @@ module.exports = {
             gitlab: {
                 url: GITLAB_URL,
                 apiToken: GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3', // api + read_user token for the gitUserName gitlab user
+
+                botUserName: 'c3pr-bot', // used as (1) commit author, (2) mr author, and (3) namespace for the forks
+                botUserEmail: 'c3prbot@gmail.com'
             }
         },
-
-        gitHubApiToken: GITLAB_API_TOKEN,
-
-        gitLabUrl: GITLAB_URL,
-        gitUserName: 'c3pr-bot',
-        gitUserEmail: 'c3prbot@gmail.com',
-        gitLabApiToken: GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3', // api + read_user token for the gitUserName gitlab user
 
         gitlabUrlTransform(url) {
             let gitlabUrl = GITLAB_URL;

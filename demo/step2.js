@@ -16,9 +16,9 @@
 
 const config = require('../src/config');
 module.exports = {
-    gitlabUrl: config.c3pr.gitLabUrl,
-    rootAccessToken: config.c3pr.gitLabApiToken,
-    gitLabApiToken: config.c3pr.gitLabApiToken,
-    gitUserName: config.c3pr.gitUserName,
-    gitUserEmail: config.c3pr.gitUserEmail,
+    gitlabUrl: config.c3pr.repoGitlab.gitlab.url,
+    rootAccessToken: config.c3pr.repoGitlab.gitlab.apiToken,
+    gitLabApiToken: config.c3pr.repoGitlab.gitlab.apiToken,
+    gitUserName: config.c3pr.repoGitlab.gitlab.botUserName,
+    gitUserEmail: config.c3pr.repoGitlab.gitlab.botUserEmail,
 };
