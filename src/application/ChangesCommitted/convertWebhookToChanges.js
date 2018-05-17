@@ -27,7 +27,7 @@ function convertWebhookToChanges(webhookPayload) {
         repository: {
             author: webhookPayload.user_username,
             full_path: webhookPayload.project.path_with_namespace,
-            clone_url_http: config.c3pr.gitlabUrlTransform(webhookPayload.repository.git_http_url),
+            clone_url_http: config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url),
 
             // TODO maybe it would be more secure to send down the refs and git fetch the refs instead of the branch... This seems rather sketchy
             branch: webhookPayload.ref.replace(/refs\/heads\//, ''),

@@ -6,7 +6,7 @@ const C3PR_REPO_GITLAB_URL = process.env.C3PR_REPO_GITLAB_URL || `http://localho
 const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
 
 const GITLAB_URL = 'http://127.0.0.1:8090';
-const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN;
+const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3';
 
 const WEBHOOKS_URL = `/webhooks`;
 
@@ -28,19 +28,19 @@ module.exports = {
 
             gitlab: {
                 url: GITLAB_URL,
-                apiToken: GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3', // api + read_user token for the gitUserName gitlab user
+                apiToken: GITLAB_API_TOKEN, // api + read_user token for the gitUserName gitlab user
 
                 botUserName: 'c3pr-bot', // used as (1) commit author, (2) mr author, and (3) namespace for the forks
-                botUserEmail: 'c3prbot@gmail.com'
-            }
-        },
+                botUserEmail: 'c3prbot@gmail.com',
 
-        gitlabUrlTransform(url) {
-            let gitlabUrl = GITLAB_URL;
-            if (!gitlabUrl.endsWith('/')) {
-                gitlabUrl += '/';
+                normalizeGitLabUrl(url) {
+                    let gitlabUrl = GITLAB_URL;
+                    if (!gitlabUrl.endsWith('/')) {
+                        gitlabUrl += '/';
+                    }
+                    return url.replace(/^https?:\/\/[^\/]+\//, gitlabUrl)
+                }
             }
-            return url.replace(/^https?:\/\/[^\/]+\//, gitlabUrl)
         }
 
     }

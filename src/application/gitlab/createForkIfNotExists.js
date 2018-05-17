@@ -36,6 +36,7 @@ async function renameFork(projectId, newForkName) {
         {headers: {"PRIVATE-TOKEN": config.c3pr.repoGitlab.gitlab.apiToken}}
     );
     console.log('Fork renamed.');
+    /** @namespace data.http_url_to_repo */
     return data.http_url_to_repo;
 }
 
@@ -58,7 +59,7 @@ async function createForkIfNotExists(orgNameProjectName, logMetas) {
         return {
             organization: config.c3pr.repoGitlab.gitlab.botUserName,
             forkName,
-            cloneUrl: config.c3pr.gitlabUrlTransform(projectData.http_url_to_repo)
+            cloneUrl: config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(projectData.http_url_to_repo)
         };
     } catch (e) {
         c3prLOG(`Fork '${forkId}' does not exist, will be created.`, {orgNameProjectName}, logMetas, logMeta);
