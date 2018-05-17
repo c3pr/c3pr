@@ -6,13 +6,10 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(express.static('frontend/dist'));
-
 app.use(bodyParser.json());
 
 app.use(cors());
 
-require('./logsController')(app);
 require('./registryController')(app);
 require('./eventsController')(app);
 require('./loginController')(app);
