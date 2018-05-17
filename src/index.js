@@ -1,2 +1,2 @@
 require('./application/login/login');
-require('./web/main');
+require('./web/express');
