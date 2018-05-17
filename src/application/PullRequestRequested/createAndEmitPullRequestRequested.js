@@ -3,7 +3,7 @@ const emitPullRequestRequested = require('../PullRequestRequested/emitPullReques
 
 function createAndEmitPullRequestRequested(toolInvocationCompleted, logMetas) {
     const pullRequestRequested = createPullRequestRequested(toolInvocationCompleted);
-    emitPullRequestRequested(emitPullRequestRequested(pullRequestRequested, logMetas));
+    emitPullRequestRequested(pullRequestRequested, logMetas);
 }
 
 module.exports = createAndEmitPullRequestRequested;
