@@ -8,23 +8,26 @@ const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
 const GITLAB_URL = 'http://127.0.0.1:8090';
 const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN;
 
+const WEBHOOKS_URL = `/webhooks`;
+
 module.exports = {
     c3pr: {
 
-        port: PORT,
         url: C3PR_REPO_GITLAB_URL,
 
         hub: {
             c3prHubUrl: C3PR_HUB_URL,
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
-            PullRequestRequestedUrl: `${C3PR_HUB_URL}/api/v1/events/PullRequestRequested`,
         },
 
         repoGitlab: {
-            PullRequestRequestedCallbackUrl: `${C3PR_REPO_GITLAB_URL}/callbacks/PullRequestRequested`
-        },
+            c3prRepoGitlabUrl: C3PR_REPO_GITLAB_URL,
+            c3prRepoGitlabPort: require('url').parse(C3PR_REPO_GITLAB_URL).port || 80,
 
-        webhooksUrl: `${C3PR_REPO_GITLAB_URL}/webhooks`,
+            PullRequestRequestedCallbackUrl: `/callbacks/PullRequestRequested`,
+
+            webhooksUrl: WEBHOOKS_URL,
+        },
 
         gitHubApiToken: GITLAB_API_TOKEN,
 
