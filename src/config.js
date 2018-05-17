@@ -13,10 +13,6 @@ module.exports = {
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
 
             registryUrl: `${C3PR_HUB_URL}/api/v1/registry`,
-
-            ChangesCommittedUrl:        `${C3PR_HUB_URL}/api/v1/events/ChangesCommitted`,
-            ToolInvocationCompletedUrl: `${C3PR_HUB_URL}/api/v1/events/ToolInvocationCompleted`,
-            PullRequestUpdatedUrl:      `${C3PR_HUB_URL}/api/v1/events/PullRequestUpdated`,
         },
 
         brain: {
