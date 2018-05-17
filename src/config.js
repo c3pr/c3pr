@@ -1,12 +1,12 @@
 const os = require("os");
 const PORT = process.env.PORT || 5000;
 
-const c3prBaseUrl = process.env.C3PR_REGISTRY_URL || `http://${os.hostname()}:${PORT}`;
+const C3PR_REGISTRY_URL = process.env.C3PR_REGISTRY_URL || `http://${os.hostname()}:${PORT}/api/v1/registry`;
 
 module.exports = {
     c3pr: {
         port: PORT,
-        registryUrl: `${c3prBaseUrl}/api/v1/registry`,
+        registryUrl: C3PR_REGISTRY_URL,
         mongoLogsUri: process.env.MONGO_LOGS_URI,
         mongoLogsDatabase: 'c3pr',
         mongoLogsCollection: 'logs',
