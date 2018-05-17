@@ -55,7 +55,7 @@ describe('status', function () {
         const timedOut = Status.retrieveAllTimedOut(-1);
         /// then
         expect(timedOut).to.deep.equal([{
-            eventType: EVENT_TYPE,
+            event_type: EVENT_TYPE,
             uuid
         }]);
     });

@@ -20,8 +20,8 @@ async function findAll() {
     return (await events).find({}).toArray();
 }
 
-async function findAllOfType(eventType) {
-    return (await events).find({eventType}).toArray();
+async function findAllOfType(event_type) {
+    return (await events).find({event_type}).toArray();
 }
 
 async function markStatus(uuid, status, processorUUID) {

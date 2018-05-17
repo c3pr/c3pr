@@ -29,7 +29,7 @@ describe('events', function () {
         /// then
         let evt = await events.peekUnprocessed(EVENT_TYPE);
 
-        expect(evt.eventType).to.deep.equal(EVENT_TYPE);
+        expect(evt.event_type).to.deep.equal(EVENT_TYPE);
         expect(evt.meta.status).to.deep.equal(Status.UNPROCESSED);
         expect(evt.payload).to.deep.equal(payload);
     }).timeout(6 * 1000);

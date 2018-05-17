@@ -5,29 +5,29 @@ const config = require('../../config');
 
 const hub = new EventEmitter();
 
-function notify(callbackUrl, tryNumber, eventType, listener) {
+function notify(callbackUrl, tryNumber, event_type, listener) {
     axios.post(callbackUrl).catch(() => {
         if (tryNumber > config.c3pr.hub.bus.maxRetries) {
-            hub.removeListener(eventType, listener);
+            hub.removeListener(event_type, listener);
             return;
         }
         setTimeout(() => {
-            notify(callbackUrl, tryNumber + 1, eventType, listener);
+            notify(callbackUrl, tryNumber + 1, event_type, listener);
         }, config.c3pr.hub.bus.retryWaitingTimeInMs);
     });
 }
 
-function subscribeTo(eventType, callbackUrl) {
-    const listener = () => notify(callbackUrl, 1, eventType, listener);
-    hub.on(eventType, listener);
+function subscribeTo(event_type, callbackUrl) {
+    const listener = () => notify(callbackUrl, 1, event_type, listener);
+    hub.on(event_type, listener);
 }
 
-function emit(eventType) {
-    hub.emit(eventType);
+function emit(event_type) {
+    hub.emit(event_type);
 }
 
-function clearListeners(eventType) {
-    hub.removeAllListeners(eventType);
+function clearListeners(event_type) {
+    hub.removeAllListeners(event_type);
 }
 
 module.exports = {

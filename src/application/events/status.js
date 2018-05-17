@@ -14,39 +14,39 @@ const assert = require('assert');
 const EVENTS_UNPROCESSED = new Map();
 const EVENTS_PROCESSING = new Map();
 
-function addAsUnprocessed(eventType, uuid) {
-    let unprocessedEventsOfType = EVENTS_UNPROCESSED.get(eventType) || new Set();
+function addAsUnprocessed(event_type, uuid) {
+    let unprocessedEventsOfType = EVENTS_UNPROCESSED.get(event_type) || new Set();
     unprocessedEventsOfType.add(uuid);
-    EVENTS_UNPROCESSED.set(eventType, unprocessedEventsOfType);
+    EVENTS_UNPROCESSED.set(event_type, unprocessedEventsOfType);
 }
 
-function addAsProcessing(eventType, uuid, processorUUID) {
-    assert.ok(eventType && uuid && processorUUID);
+function addAsProcessing(event_type, uuid, processorUUID) {
+    assert.ok(event_type && uuid && processorUUID);
 
-    const processingEventsOfType = EVENTS_PROCESSING.get(eventType) || new Map();
+    const processingEventsOfType = EVENTS_PROCESSING.get(event_type) || new Map();
 
     const processingEvent = processingEventsOfType.get(uuid);
     if (processingEvent && processingEvent.processorUUID !== processorUUID) {
-        throw new Error(`Event of UUID '${uuid}' and type '${eventType}' is already being processed by processorUUID '${processingEvent.processorUUID}'. processorUUID you sent me: '${processorUUID}'.`)
+        throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is already being processed by processorUUID '${processingEvent.processorUUID}'. processorUUID you sent me: '${processorUUID}'.`)
     }
 
     processingEventsOfType.set(uuid, {dateTime: new Date().toISOString(), processorUUID});
-    EVENTS_PROCESSING.set(eventType, processingEventsOfType);
+    EVENTS_PROCESSING.set(event_type, processingEventsOfType);
 }
 
-function currentlyProcessing(eventType, uuid) {
-    const processingEventsOfType = EVENTS_PROCESSING.get(eventType) || new Map();
+function currentlyProcessing(event_type, uuid) {
+    const processingEventsOfType = EVENTS_PROCESSING.get(event_type) || new Map();
     return processingEventsOfType.get(uuid);
 }
 
-function removeAsProcessing(eventType, uuid, processorUUID) {
-    const processingEventsOfType = EVENTS_PROCESSING.get(eventType) || new Map();
+function removeAsProcessing(event_type, uuid, processorUUID) {
+    const processingEventsOfType = EVENTS_PROCESSING.get(event_type) || new Map();
     const processingEvent = processingEventsOfType.get(uuid);
     if (!processingEvent) {
-        throw new Error(`Event of UUID '${uuid}' and type '${eventType}' is not currently being processed.`)
+        throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is not currently being processed.`)
     }
     if (processorUUID !== '<TIMED_OUT>' && processingEvent.processorUUID !== processorUUID) {
-        throw new Error(`Event of UUID '${uuid}' and type '${eventType}' is being processed by a different processorUUID ('${processingEvent.processorUUID}'), not the one you sent me ('${processorUUID}').`)
+        throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is being processed by a different processorUUID ('${processingEvent.processorUUID}'), not the one you sent me ('${processorUUID}').`)
     }
     processingEventsOfType.delete(uuid);
 }
@@ -54,20 +54,20 @@ function removeAsProcessing(eventType, uuid, processorUUID) {
 function retrieveAllTimedOut(timeoutInMs) {
     let timedOut = [];
     let nowAsTimestamp = new Date().getTime();
-    EVENTS_PROCESSING.forEach((eventMap, eventType) => {
+    EVENTS_PROCESSING.forEach((eventMap, event_type) => {
         eventMap.forEach(({dateTime: isoDate}, uuid) => {
             let valueAsTimestamp = new Date(isoDate).getTime();
             let timePassed = nowAsTimestamp - valueAsTimestamp;
             if (timePassed > timeoutInMs) {
-                timedOut.push({eventType, uuid});
+                timedOut.push({event_type, uuid});
             }
         });
     });
     return timedOut;
 }
 
-function peekUnprocessedEventOfType(eventType) {
-    let unprocessedEventsOfType = EVENTS_UNPROCESSED.get(eventType) || new Set();
+function peekUnprocessedEventOfType(event_type) {
+    let unprocessedEventsOfType = EVENTS_UNPROCESSED.get(event_type) || new Set();
     const {value: uuid} = unprocessedEventsOfType.values().next();
     return uuid;
 }

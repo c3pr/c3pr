@@ -12,14 +12,14 @@ const config = require('../../config');
 
 describe('bus', function () {
 
-    let eventType;
+    let event_type;
 
     before(() => {
-        eventType = uuidv4();
+        event_type = uuidv4();
     });
 
     after(() => {
-        c3prBus.clearListeners(eventType);
+        c3prBus.clearListeners(event_type);
     });
 
     it('subscribeTo + callback success', async () => {
@@ -32,8 +32,8 @@ describe('bus', function () {
         });
 
         /// when
-        c3prBus.subscribeTo(eventType, "http://bob.com/subscriberOne");
-        c3prBus.emit(eventType);
+        c3prBus.subscribeTo(event_type, "http://bob.com/subscriberOne");
+        c3prBus.emit(event_type);
         /// then
         await postExpectation;
     });
@@ -51,13 +51,13 @@ describe('bus', function () {
             });
         });
 
-        c3prBus.subscribeTo(eventType, "http://bob.com/subscriberTwo");
-        c3prBus.emit(eventType);
+        c3prBus.subscribeTo(event_type, "http://bob.com/subscriberTwo");
+        c3prBus.emit(event_type);
         await postExpectation;
 
         /// when
         // we emit once more and hope it is not called again
-        c3prBus.emit(eventType);
+        c3prBus.emit(event_type);
 
         /// then
         // if it is not called again, the retry number didn't change
