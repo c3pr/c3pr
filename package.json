@@ -1,6 +1,6 @@
 {
   "name": "node-c3pr-hub-client",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Client for c3pr-hub in node",
   "main": "index.js",
   "scripts": {
