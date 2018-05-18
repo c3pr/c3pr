@@ -2,7 +2,9 @@
   <div class="about">
     <button @click="fetchAll">{{ fetchStatus }}</button>
 
-    <button @click="displayedMeta = {}">clear displayedMeta</button>
+    <button @click="displayedMeta = {}" :disabled="Object.keys(displayedMeta).length === 0">
+      clear displayedMeta
+    </button>
     <pre>
       {{ displayedMeta }}
     </pre>
@@ -58,7 +60,8 @@ export default {
           r.sort((a, b) => a.dateTime.localeCompare(b.dateTime) * -1);
           this.logs = r;
           this.fetchStatus = 'Click to re-fetch logs';
-        }).catch(e => {
+        }).catch((e) => {
+          // eslint-disable-next-line
           alert('Error: ' + e);
         });
     },
