@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
+require('./busController')(app);
 require('./registryController')(app);
 require('./eventsController')(app);
 require('./loginController')(app);
