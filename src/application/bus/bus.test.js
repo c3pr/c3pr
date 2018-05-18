@@ -1,3 +1,4 @@
+require("node-c3pr-logger").testMode();
 const expect = require('chai').expect;
 
 const uuidv4 = require('uuid/v4');
@@ -10,15 +11,17 @@ const c3prBus = require('./bus').c3prBus;
 
 const config = require('../../config');
 
+const flushPromises = require('util').promisify(setImmediate);
+
 describe('bus', function () {
 
     let event_type;
 
-    before(() => {
+    beforeEach(() => {
         event_type = uuidv4();
     });
 
-    after(() => {
+    afterEach(() => {
         c3prBus.clearListeners(event_type);
     });
 
@@ -40,30 +43,73 @@ describe('bus', function () {
 
     it('subscribeTo + callback error', async () => {
         /// setup
-        let retry = -1;
-        const postExpectation = new Promise(resolve => {
+        let retryCount = -1;
+        const retryCountHasReachedMaxRetries = new Promise(resolve => {
             axiosMock.onPost("http://bob.com/subscriberTwo").reply(function () {
-                retry++;
-                if (retry === config.c3pr.hub.bus.maxRetries) {
+                retryCount++;
+                if (retryCount === config.c3pr.hub.bus.maxRetries) {
                     resolve();
                 }
-                return [500, {}, {'content-type': 'application/json'}];
+                return [500];
             });
         });
 
         c3prBus.subscribeTo(event_type, "http://bob.com/subscriberTwo");
         c3prBus.emit(event_type);
-        await postExpectation;
+        await retryCountHasReachedMaxRetries;
+        await flushPromises();
 
         /// when
         // we emit once more and hope it is not called again
         c3prBus.emit(event_type);
 
         /// then
-        // if it is not called again, the retry number didn't change
-        setTimeout(() => {
-            expect(retry).to.equal(config.c3pr.hub.bus.maxRetries);
-        }, 1000)
+        // because it is not called again, then the retryCount number didn't change from when the retryCountHasReachedMaxRetries promise resolved
+        expect(retryCount).to.equal(config.c3pr.hub.bus.maxRetries);
+    }).timeout(99 * 1000);
+
+    it('getListeners()', async () => {
+        /// setup
+        c3prBus.subscribeTo(event_type, "http://bob.com/subscriberAAA");
+        c3prBus.subscribeTo(event_type, "http://bob.com/subscriberBBB");
+        /// when
+        const listeners = c3prBus.getListeners();
+        /// then
+        expect(listeners).to.deep.equal([
+            {
+                callbackUrl: "http://bob.com/subscriberAAA",
+                event_type: event_type
+            },
+            {
+                callbackUrl: "http://bob.com/subscriberBBB",
+                event_type: event_type
+            }
+        ]);
+    });
+
+    it('callback error removes listener from getListeners()', async () => {
+        /// setup
+        let retryCount = -1;
+        const retryCountHasReachedMaxRetries = new Promise(resolve => {
+            axiosMock.onPost("http://bob.com/subscriberXYZ").reply(function () {
+                retryCount++;
+                if (retryCount === config.c3pr.hub.bus.maxRetries) {
+                    resolve();
+                }
+                return [500];
+            });
+        });
+
+        c3prBus.subscribeTo(event_type, "http://bob.com/subscriberXYZ");
+        expect(c3prBus.getListeners()).to.deep.equal([{callbackUrl: "http://bob.com/subscriberXYZ", event_type: event_type}]);
+
+        /// when
+        c3prBus.emit(event_type); // this will call the URL and fail many times until the listener is removed
+        await retryCountHasReachedMaxRetries;
+        await flushPromises();
+
+        /// then
+        expect(c3prBus.getListeners()).to.deep.equal([]);
     }).timeout(99 * 1000);
 
 });
