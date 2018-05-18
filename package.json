@@ -1,6 +1,6 @@
 {
   "name": "node-c3pr-logger",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Node.js client for remote logging",
   "main": "index.js",
   "scripts": {
