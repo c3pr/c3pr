@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 require('./logsController')(app);
+require('./hubController')(app);
 
 app.get('*', function(req, res){
     // The 404 Route (ALWAYS Keep this as the last route)
