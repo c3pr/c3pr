@@ -1,23 +1,21 @@
 const axios = require('axios');
+const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 
 const config = require('../config');
+const loadToolsSummary = require('./loadToolsSummary');
 
-const fs = require('fs');
-if (!fs.existsSync(config.c3pr.agent.agentToolsPath)) {
-    throw new Error(`Could not find tools file at 'C3PR_AGENT_TOOLS_PATH': ${config.c3pr.agent.agentToolsPath}`);
-}
+const summary = loadToolsSummary();
 
-const tools = require(config.c3pr.agent.agentToolsPath);
-if (!tools.summary) {
-    throw new Error(`The object at 'C3PR_AGENT_TOOLS_PATH' (${config.c3pr.agent.agentToolsPath}) does not have a 'summary' property.`);
-}
-
-c3prLOG(`Now broadcasting to C-3PR registry API: ${config.c3pr.hub.registryUrl}.`, logMeta);
+c3prLOG2({
+    msg: `Now broadcasting to C-3PR registry API: ${config.c3pr.hub.registryUrl}.`,
+    logMetas: [{nodeName: 'c3pr-agent', correlationIds: 'boot', moduleName: 'hubRegistryBroadcast'}],
+    meta: {summary}
+});
 setInterval(() => {
     axios.patch(config.c3pr.hub.registryUrl,
         {
             key: `agent://${config.c3pr.agent.agentId}`,
-            value: tools.summary,
+            value: summary,
             timeout: config.c3pr.hub.broadcastTimeoutInMs
         }
     ).catch((e) => {
