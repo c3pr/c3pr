@@ -19,8 +19,8 @@ Current nodes:
 | Repo Name               | Type                     | Dockerfile | Port  | Build
 | ----------------------- | ------------------------ | ---------- | ---  | ---
 | c3pr-hub                | Central registry         | OK         | 5000 | [![Build Status](https://travis-ci.org/c3pr/c3pr-hub.svg?branch=master)](https://travis-ci.org/c3pr/c3pr-hub)
-| c3pr-brain              | PR/Projects Intelligence | TODO       | 5001 | [![Build Status](https://travis-ci.org/c3pr/c3pr-brain.svg?branch=master)](https://travis-ci.org/c3pr/c3pr-brain)
-| c3pr-dashboard          | Centralized UI           | TODO       | 5005 | [![Build Status](https://travis-ci.org/c3pr/c3pr-dashboard.svg?branch=master)](https://travis-ci.org/c3pr/c3pr-dashboard)
+| c3pr-brain              | PR/Projects Intelligence | OK         | 5001 | [![Build Status](https://travis-ci.org/c3pr/c3pr-brain.svg?branch=master)](https://travis-ci.org/c3pr/c3pr-brain)
+| c3pr-dashboard          | Centralized UI           | OK         | 5005 | [![Build Status](https://travis-ci.org/c3pr/c3pr-dashboard.svg?branch=master)](https://travis-ci.org/c3pr/c3pr-dashboard)
 |                         |                          |            |      |
 | node-c3pr-hub-client    | Reusable lib             | -          | -    | [![Build Status](https://travis-ci.org/c3pr/node-c3pr-hub-client.svg?branch=master)](https://travis-ci.org/c3pr/node-c3pr-hub-client)
 | node-c3pr-logger        | Reusable lib             | -          | -    | [![Build Status](https://travis-ci.org/c3pr/node-c3pr-logger.svg?branch=master)](https://travis-ci.org/c3pr/node-c3pr-logger)
