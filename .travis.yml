@@ -6,19 +6,3 @@ node_js:
 cache:
   directories:
   - node_modules
-
-# generated via "travis setup heroku" | after "travis login --github-token TOKEN" and "heroku login" @ https://github.com/acdcjunior/docker-heroku-travis
-#
-# PS> docker run --rm -it -v ${PWD}:/c3pr -w /c3pr acdcjunior/heroku-travis bash
-# root@a2717d1d78da:/c3pr# heroku login
-# ------------------ enter email and password
-# root@a2717d1d78da:/c3pr# travis login --github-token TOKEN
-# root@a2717d1d78da:/c3pr# travis setup heroku --force
-#
-deploy:
-  provider: heroku
-  api_key:
-    secure: <TODO: generate>
-  app: c3pr-dashboard
-  on:
-    repo: c3pr/c3pr-dashboard
