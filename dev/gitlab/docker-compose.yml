@@ -16,7 +16,7 @@ services:
 
   c3pr-hub:
     build:
-      context: ../../c3pr-hub
+      context: ../../../c3pr-hub
     ports:
       - 5000:5000
     environment:
@@ -25,7 +25,7 @@ services:
 
   c3pr-brain:
     build:
-      context: ../../c3pr-brain
+      context: ../../../c3pr-brain
     ports:
       - 5001:5001
     environment:
@@ -35,7 +35,7 @@ services:
 
   c3pr-dashboard:
     build:
-      context: ../../c3pr-dashboard
+      context: ../../../c3pr-dashboard
     ports:
       - 5005:5005
     environment:
@@ -57,7 +57,7 @@ services:
 
   c3pr-repo-gitlab:
     build:
-      context: ../../c3pr-repo-gitlab
+      context: ../../../c3pr-repo-gitlab
     ports:
       - 5003:5003
     environment:
@@ -70,7 +70,7 @@ services:
 
   c3pr-tool-walkmod-sonar:
     build:
-      context: ../../c3pr-tool-walkmod-sonar
+      context: ../../../c3pr-tool-walkmod-sonar
     ports:
       - 5003:5003
     environment:
