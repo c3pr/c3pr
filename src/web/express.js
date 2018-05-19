@@ -5,8 +5,6 @@ const config = require('../config');
 
 const app = express();
 
-app.use(express.static('resources/public'));
-
 app.use(bodyParser.json());
 
 require('./c3prHubListenerController')(app);
