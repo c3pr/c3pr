@@ -1,9 +1,7 @@
 const expect = require('chai').expect;
 const c3prRegistry = require('./c3prRegistry');
 
-const initialRegistry = [
-    {key: "registryUrl", value: "http://localhost:5000/api/v1/registry", timeout: -1}
-];
+const initialRegistry = [];
 
 describe('c3prRegistry', function () {
     it('c3prRegistry debug', function () {
@@ -11,9 +9,7 @@ describe('c3prRegistry', function () {
     });
 
     it('c3prRegistry registry', function () {
-        expect(c3prRegistry.registry).to.deep.equal({
-            registryUrl: "http://localhost:5000/api/v1/registry"
-        });
+        expect(c3prRegistry.registry).to.deep.equal({});
     });
 
     it('c3prRegistry put single entry', function () {
@@ -22,6 +18,9 @@ describe('c3prRegistry', function () {
             ...initialRegistry,
             {key: "aaa", value: "bbb", timeout: 9999}
         ]);
+        expect(c3prRegistry.registry).to.deep.equal({
+            aaa: "bbb"
+        });
     });
 
     it('c3prRegistry put array of entries', function () {

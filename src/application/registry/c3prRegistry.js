@@ -1,8 +1,4 @@
-const config = require('../../config');
-
-let _registry = [
-    {key: "registryUrl", value: config.c3pr.registryUrl, timeout: -1}
-];
+let _registry = [];
 
 const c3prRegistry = {
     get registry() {
