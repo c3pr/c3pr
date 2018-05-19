@@ -7,11 +7,8 @@ module.exports = {
     c3pr: {
         port: PORT,
         registryUrl: C3PR_REGISTRY_URL,
-        mongoLogsUri: process.env.MONGO_LOGS_URI,
-        mongoLogsDatabase: 'c3pr',
-        mongoLogsCollection: 'logs',
         hub: {
-            mongoC3prUri: process.env.MONGO_LOGS_URI,
+            mongoC3prUrl: process.env.C3PR_MONGO_URL,
             mongoC3prDatabase: 'c3pr',
             mongoEventsCollection: 'events',
             uncollectPollingInMs: 5 * 60 * 1000, // five minutes

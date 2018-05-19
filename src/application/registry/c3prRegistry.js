@@ -1,10 +1,7 @@
 const config = require('../../config');
 
 let _registry = [
-    {key: "registryUrl", value: config.c3pr.registryUrl, timeout: -1},
-    {key: "mongoLogsUriIsSet", value: !!config.c3pr.mongoLogsUri, timeout: -1},
-    {key: "mongoLogsDatabase", value: config.c3pr.mongoLogsDatabase, timeout: -1},
-    {key: "mongoLogsCollection", value: config.c3pr.mongoLogsCollection, timeout: -1}
+    {key: "registryUrl", value: config.c3pr.registryUrl, timeout: -1}
 ];
 
 const c3prRegistry = {
