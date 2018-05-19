@@ -10,7 +10,7 @@ module.exports = {
         dashboard: {
             c3prDashboardPort: PORT,
 
-            mongoLogsUri: process.env.MONGO_LOGS_URI,
+            mongoLogsUri: process.env.C3PR_MONGO_URL,
             mongoLogsDatabase: 'c3pr',
             mongoLogsCollection: 'logs',
         },
