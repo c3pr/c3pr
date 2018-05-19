@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const c3prLOG = require('./c3prLOG');
 
 const config = require('./config');
-const testLogsCollection = config.c3pr.mongoLogsCollection + '-test';
+const testLogsCollection = config.c3pr.logger.collection + '-test';
 c3prLOG.testMode();
 
 
@@ -21,9 +21,9 @@ function verifyLOG({title, expected: {nodeName, correlationIds, moduleNames, met
 
         await c3prLOG(logMessage, ...logMetas);
 
-        const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
+        const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl);
 
-        let logs = client.db(config.c3pr.mongoLogsDatabase).collection(testLogsCollection);
+        let logs = client.db(config.c3pr.logger.database).collection(testLogsCollection);
         const insertedLog = await logs.find({dateTime: {$gte: dateBefore}}).next();
 
         await client.close();

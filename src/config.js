@@ -1,9 +1,9 @@
-const MONGO_LOGS_URI = process.env.MONGO_LOGS_URI;
-
 module.exports = {
     c3pr: {
-        mongoLogsUri: MONGO_LOGS_URI,
-        mongoLogsDatabase: 'c3pr',
-        mongoLogsCollection: 'logs'
+        logger: {
+            mongoUrl: process.env.C3PR_MONGO_URL || 'mongodb://127.0.0.1:27017',
+            database: 'c3pr',
+            collection: 'logs'
+        }
     }
 };

@@ -1,4 +1,5 @@
 const mongodb = require('mongodb');
+const config = require('./config');
 
 let seedData = [
     {decade: '1970s', artist: 'Debby Boone', song: 'You Light Up My Life', weeksAtOne: 10},
@@ -6,14 +7,12 @@ let seedData = [
     {decade: '1990s', artist: 'Mariah Carey', song: 'One Sweet Day', weeksAtOne: 16}
 ];
 
-let MONGO_LOGS_URI = process.env.MONGO_LOGS_URI;
-
-mongodb.MongoClient.connect(MONGO_LOGS_URI, async function (err, client) {
+mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl, async function (err, client) {
     if (err) throw err;
 
-    let db = client.db('c3pr');
+    let db = client.db(config.c3pr.logger.database);
 
-    let songs = db.collection('songs');
+    let songs = db.collection(config.c3pr.logger.collection + "-demo");
 
     let result = await songs.insertMany(seedData);
 

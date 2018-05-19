@@ -5,13 +5,9 @@ function wrap(arr, prefix = `[`, suffix = `]`) {
     return arr.map(i => `${prefix}${i}${suffix}`).join(' ');
 }
 
-function arrayfy<T>(o: T | T[]): T[] {
-    return Array.isArray(o) ? o : [o];
-}
-
 let warningShown = false;
 function showWarningIfDatabaseNotDefined() {
-    if (!config.c3pr.mongoLogsUri && !warningShown) {
+    if (!config.c3pr.logger.mongoUrl && !warningShown) {
         console.log('Logs: MONGO_LOGS_URI env var is not defined. Printing to STDOUT only. (This message will be printed only once every 5 minutes.)');
         warningShown = true;
         setTimeout(() => warningShown = false, 5 * 60 * 1000).unref();
@@ -37,12 +33,12 @@ async function log(nodeName: string, correlationIds: string[], moduleNames: stri
 
     console.log(wrap(correlationIds), wrap(moduleNames, '<', '>'), message);
 
-    if (!config.c3pr.mongoLogsUri) {
+    if (!config.c3pr.logger.mongoUrl) {
         return;
     }
-    const client = await mongodb.MongoClient.connect(config.c3pr.mongoLogsUri);
+    const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl);
 
-    let logs = client.db(config.c3pr.mongoLogsDatabase).collection(config.c3pr.mongoLogsCollection + ((c3prLOG as any).testModeActivated ? "-test" : ""));
+    let logs = client.db(config.c3pr.logger.database).collection(config.c3pr.logger.collection + ((c3prLOG as any).testModeActivated ? "-test" : ""));
 
     await logs.insertOne({node: nodeName, dateTime: new Date().toISOString(), correlationIds, moduleNames, message, metadata});
     await client.close();
@@ -75,6 +71,6 @@ const c3prLOG = <C3prLOG>async function(message: string, ...metas: any[]) {
     }
 };
 c3prLOG.testMode = () => (c3prLOG as any).testModeActivated = true;
-c3prLOG.isEnvVarSet = () => !!config && !!config.c3pr && !!config.c3pr.mongoLogsUri;
+c3prLOG.isEnvVarSet = () => !!config && !!config.c3pr && !!config.c3pr.logger.mongoUrl;
 
 module.exports = c3prLOG;
