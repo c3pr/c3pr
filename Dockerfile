@@ -2,6 +2,8 @@ FROM node:8-alpine
 
 MAINTAINER acdcjunior
 
+RUN apk add -U --no-cache git
+
 RUN mkdir -p /opt/c3pr-brain
 WORKDIR /opt/c3pr-brain
 
