@@ -1,0 +1,17 @@
+version: '3.1'
+services:
+
+  c3prgitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: c3prgitlab
+    environment:
+      GITLAB_ROOT_PASSWORD: c3prc3pr
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://c3prgitlab:8888'
+    ports:
+      - '8888:8888'
+#    volumes:
+#      - ./gitlab/config:/etc/gitlab
+#      - ./gitlab/logs:/var/log/gitlab
+#      - ./gitlab/data:/var/opt/gitlab
