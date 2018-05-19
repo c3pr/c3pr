@@ -66,7 +66,7 @@ services:
       C3PR_REPO_GITLAB_URL: http://c3pr-repo-gitlab:5003
       C3PR_HUB_URL: http://c3pr-hub:5000
       GITLAB_URL: http://c3prgitlab:8888
-      GITLAB_API_TOKEN: -HCmXGsXkmrv7krhUiy3
+      GITLAB_API_TOKEN: TKbVFC57TM27HcVnqK55
 
   c3pr-tool-walkmod-sonar:
     build:
