@@ -21,5 +21,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.hub.port, () => {
-    c3prLOG(`C-3PR hub is up at port ${config.c3pr.hub.port}.`, {nodeName: 'c3pr-hub', correlationIds: 'boot', moduleName: 'main'});
+    c3prLOG(`C-3PR hub is up at port ${config.c3pr.hub.port}.`, {nodeName: 'c3pr-hub', correlationIds: 'boot', moduleName: 'express'});
 });
