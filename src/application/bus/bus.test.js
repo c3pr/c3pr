@@ -112,4 +112,19 @@ describe('bus', function () {
         expect(c3prBus.getListeners()).to.deep.equal([]);
     }).timeout(99 * 1000);
 
+    it.only('subscribeTo should subscribe each url just once per event type', async () => {
+        /// setup
+        c3prBus.subscribeTo(event_type, "http://bob.com/subscriberAAA");
+        c3prBus.subscribeTo(event_type, "http://bob.com/subscriberAAA");
+        /// when
+        const listeners = c3prBus.getListeners();
+        /// then
+        expect(listeners).to.deep.equal([
+            {
+                callbackUrl: "http://bob.com/subscriberAAA",
+                event_type: event_type
+            }
+        ]);
+    });
+
 });
