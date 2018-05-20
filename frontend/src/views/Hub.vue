@@ -77,7 +77,7 @@
           <td>{{ event.uuid }}</td>
           <td>{{ event.event_type }}</td>
           <td>{{ event.meta.status }}</td>
-          <td>{{ event.meta.processor }}</td>
+          <td>{{ event.meta.processorUUID }}</td>
           <td>{{ event.meta.dateTime }}</td>
           <td>{{ formatPayload(event.event_type, event.payload) }}</td>
         </tr>
