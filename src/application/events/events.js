@@ -57,6 +57,9 @@ async function patchAsProcessed(event_type, uuid, processorUUID) {
     assert.ok(event_type && uuid && processorUUID, "Missing required arguments");
     if (!Status.currentlyProcessing(event_type, uuid)) {
         let evt = await eventsDB.find(uuid);
+        if (!evt) {
+            throw new Error(`Event of UUID '${uuid}' and type '${event_type}' doesn't exist.`)
+        }
         if (evt.meta.status === Status.PROCESSED && evt.meta.processorUUID === processorUUID) {
             return;
         }
