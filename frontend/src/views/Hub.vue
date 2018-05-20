@@ -1,5 +1,9 @@
 <template>
   <div class="about">
+    <button @click="fetchEvents">{{ fetchStatus }}</button>
+
+    <hr>
+
     <h1>Bus Listeners</h1>
     <table>
       <thead>
@@ -17,6 +21,7 @@
         </tr>
       </tbody>
     </table>
+
     <hr>
 
     <h1>Registry</h1>
@@ -34,28 +39,31 @@
         </tr>
       </tbody>
     </table>
-    <hr>
-
-    <button @click="fetchEvents">{{ fetchStatus }}</button>
 
     <hr>
 
     <h1>Events</h1>
-    <div>
-    <span v-for="prop of Object.keys(display)" :key="prop">
-      <input type="checkbox" v-model="display[prop]">{{ prop }}
-    </span>
-    </div>
     <table>
-      <tr v-for="event of events" :class="event.node" :key="event._id">
-        <td v-if="display._id">{{ event._id }}</td>
-        <td v-if="display.uuid">{{ event.uuid }}</td>
-        <td v-if="display.event_type">{{ event.event_type }}</td>
-        <td v-if="display.meta.status">{{ event.meta.status }}</td>
-        <td v-if="display.meta.processor">{{ event.meta.processor }}</td>
-        <td v-if="display.meta.dateTime">{{ event.meta.dateTime }}</td>
-        <td v-if="display.payload">{{ event.payload }}</td>
-      </tr>
+      <thead>
+        <tr>
+          <th>uuid</th>
+          <th>event_type</th>
+          <th>status</th>
+          <th>processor</th>
+          <th>dateTime</th>
+          <th>payload</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="event of events" :class="event.node" :key="event.uuid">
+          <td>{{ event.uuid }}</td>
+          <td>{{ event.event_type }}</td>
+          <td>{{ event.meta.status }}</td>
+          <td>{{ event.meta.processor }}</td>
+          <td>{{ event.meta.dateTime }}</td>
+          <td>{{ formatPayload(event.event_type, event.payload) }}</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
@@ -68,16 +76,9 @@ export default {
   data() {
     return {
       fetchStatus: 'Click to re-fetch events',
-      events: [],
-      display: {
-        _id: false,
-        uuid: true,
-        event_type: true,
-        meta: { status: true, processor: true, dateTime: true },
-        payload: true,
-      },
       listeners: [],
       registry: [],
+      events: [],
     };
   },
   created() { this.fetchAll(); },
@@ -91,21 +92,26 @@ export default {
       this.registry = data;
     },
     async fetchEvents() {
-      this.fetchStatus = 'Fetching Events...';
-      try {
-        const { data } = await axios.get('/api/hub/api/v1/events');
-        data.sort((a, b) => a.meta.dateTime.localeCompare(b.meta.dateTime) * -1);
-        this.events = data;
-        this.fetchStatus = 'Click to re-fetch events';
-      } catch (e) {
-        // eslint-disable-next-line
-          alert('Error: ' + e);
-      }
+      const { data } = await axios.get('/api/hub/api/v1/events');
+      data.sort((a, b) => a.meta.dateTime.localeCompare(b.meta.dateTime) * -1);
+      this.events = data;
     },
     fetchAll() {
-      this.fetchBusListeners();
-      this.fetchRegistry();
-      this.fetchEvents();
+      this.fetchStatus = 'Fetching all...';
+      Promise.all([this.fetchBusListeners(), this.fetchRegistry(), this.fetchEvents()]).then(() => {
+        this.fetchStatus = 'Click to re-fetch all';
+      }).catch(e => {
+        // eslint-disable-next-line
+        alert('Error: ' + e);
+      });
+    },
+    formatPayload(event_type, payload) {
+      switch (event_type) {
+        case "ChangesCommitted": {
+          return {url: payload.repository.clone_url_http, changed_files: payload.changed_files}
+        }
+      }
+      return payload;
     },
   },
 };
