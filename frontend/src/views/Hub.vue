@@ -68,7 +68,8 @@
           <th>event_type</th>
           <th>status</th>
           <th>processor</th>
-          <th>dateTime</th>
+          <th>created</th>
+          <th>modified</th>
           <th>payload</th>
         </tr>
       </thead>
@@ -78,7 +79,8 @@
           <td>{{ event.event_type }}</td>
           <td>{{ event.meta.status }}</td>
           <td>{{ event.meta.processorUUID }}</td>
-          <td>{{ event.meta.dateTime }}</td>
+          <td>{{ event.meta.created }}</td>
+          <td>{{ event.meta.modified }}</td>
           <td>{{ formatPayload(event.event_type, event.payload) }}</td>
         </tr>
       </tbody>
@@ -111,7 +113,7 @@ export default {
     },
     async fetchEvents() {
       const { data } = await axios.get('/api/hub/api/v1/events');
-      data.sort((a, b) => a.meta.dateTime.localeCompare(b.meta.dateTime) * -1);
+      data.sort((a, b) => a && a.meta && a.meta.dateTime && b && b.meta && b.meta.dateTime && a.meta.dateTime.localeCompare(b.meta.dateTime) * -1);
       this.events = data;
     },
     fetchAll() {
