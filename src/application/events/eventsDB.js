@@ -24,15 +24,19 @@ async function findAllOfType(event_type) {
     return (await events).find({event_type}).toArray();
 }
 
+async function findAllOfStatus(status) {
+    return (await events).find({'meta.status': status}).toArray();
+}
+
 async function markStatus(uuid, status, processorUUID) {
     return (await events).update(
         {uuid},
-        {$set: {meta: {status, processorUUID}}}
+        {$set: {'meta.status': status, 'meta.processorUUID': processorUUID, 'meta.modified': new Date().toISOString()}}
     );
 }
 
-function persistAsUnprocessed(uuid, processorUUID) {
-    return markStatus(uuid, Status.UNPROCESSED, processorUUID);
+function persistAsUnprocessed(uuid) {
+    return markStatus(uuid, Status.UNPROCESSED, null);
 }
 
 function persistAsProcessing(uuid, processorUUID) {
@@ -48,6 +52,7 @@ module.exports = {
     find,
     findAll,
     findAllOfType,
+    findAllOfStatus,
     persistAsUnprocessed,
     persistAsProcessing,
     persistAsProcessed,

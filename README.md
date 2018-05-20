@@ -21,5 +21,4 @@ C3PR is a distributed system. The module in this repo handles centralized:
 
 ### TODO
 
-- upon boot, load up the events that are processed or not
 - broadcast events that are unprocessed from time to time (not only when they are registered)

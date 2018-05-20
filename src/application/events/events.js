@@ -1,3 +1,4 @@
+const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 const config = require('../../config');
 
 const uuidv4 = require('uuid/v4');
@@ -12,7 +13,7 @@ async function register(event_type, payload) {
     let uuid = uuidv4();
     let status = Status.UNPROCESSED;
 
-    await eventsDB.insert({uuid, event_type, meta: {status, processor: null, dateTime: new Date().toISOString()}, payload});
+    await eventsDB.insert({uuid, event_type, meta: {status, processorUUID: null, created: new Date().toISOString()}, payload});
     Status.addAsUnprocessed(event_type, uuid);
 
     c3prBus.emit(event_type);
@@ -71,18 +72,36 @@ function patchAsUnprocessed(event_type, uuid) {
     assert.ok(event_type && uuid, "Missing required arguments");
     Status.removeAsProcessing(event_type, uuid, '<TIMED_OUT>');
     Status.addAsUnprocessed(event_type, uuid);
-    return eventsDB.persistAsUnprocessed(uuid, null);
+    return eventsDB.persistAsUnprocessed(uuid);
 }
 
-/**
- * Marks as UNPROCESSED all events that have status = PROCESSING for longer than config.c3pr.hub.uncollectTimeoutInMs.
- */
-setTimeout(() => {
-    const allTimedOut = Status.retrieveAllTimedOut(config.c3pr.hub.uncollectTimeoutInMs);
-    allTimedOut.forEach(({event_type, uuid}) => patchAsUnprocessed(event_type, uuid))
-}, config.c3pr.hub.uncollectPollingInMs).unref();
+const logMetas = [{nodeName: 'c3pr-hub', moduleName: 'events'}];
 
+async function initializeEventsOnStartup() {
+    c3prLOG2({
+        msg: 'Initializing events status database.', logMetas
+    });
+    const previouslyUnprocessedEvents = await eventsDB.findAllOfStatus(Status.UNPROCESSED);
+    previouslyUnprocessedEvents.forEach(({event_type, uuid}) => Status.addAsUnprocessed(event_type, uuid));
 
+    const previouslyProcessingEvents = await eventsDB.findAllOfStatus(Status.PROCESSING);
+    previouslyProcessingEvents.forEach(({event_type, uuid}) => {
+        Status.addAsUnprocessed(event_type, uuid);
+        // noinspection JSIgnoredPromiseFromCall
+        eventsDB.persistAsUnprocessed(uuid);
+    });
+    c3prLOG2({
+        msg: `Initialization complete. Previously UNPROCESSED events: ${previouslyUnprocessedEvents.length}. Previously PROCESSING events: ${previouslyProcessingEvents.length}`, logMetas
+    });
+
+    /**
+     * Marks as UNPROCESSED all events that have status = PROCESSING for longer than config.c3pr.hub.uncollectTimeoutInMs.
+     */
+    setTimeout(() => {
+        const allTimedOut = Status.retrieveAllTimedOut(config.c3pr.hub.uncollectTimeoutInMs);
+        allTimedOut.forEach(({event_type, uuid}) => patchAsUnprocessed(event_type, uuid))
+    }, config.c3pr.hub.uncollectPollingInMs).unref();
+}
 
 module.exports = {
     register,
@@ -94,3 +113,5 @@ module.exports = {
     patchAsProcessed,
     patchAsUnprocessed
 };
+
+initializeEventsOnStartup().catch(e => c3prLOG2({msg: 'Error on initializing events on startup.', logMetas, meta: {e}}));
