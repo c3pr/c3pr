@@ -11,7 +11,7 @@ c3prHubClient.login({
     ],
     logMetas: [{nodeName: 'c3pr-brain', moduleName: 'login'}]
 }).then(jwt => {
-    config.c3pr.jwt = jwt;
+    config.c3pr.auth.jwt = jwt;
 }).catch(e => {
     throw e;
 });

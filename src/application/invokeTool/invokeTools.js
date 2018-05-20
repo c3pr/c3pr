@@ -28,7 +28,7 @@ function invokeToolForFiles(parent, repository, tool_id, files) {
         eventType: `ToolInvocationRequested`,
         payload: toolInvocationRequested,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
-        jwt: config.c3pr.jwt,
+        jwt: config.c3pr.auth.jwt,
         logMetas
     })
     .catch(e => {

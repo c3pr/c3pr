@@ -20,7 +20,7 @@ const invokeTools = require('./invokeTools').c3prBrain.invokeTools;
 
 function configureFetchAllToolAgents(agents) {
     axiosMock
-        .onGet(config.c3pr.hub.registryUrl, {headers: {Authorization: `Bearer ${config.c3pr.jwt}`}})
+        .onGet(config.c3pr.hub.registryUrl, {headers: {Authorization: `Bearer ${config.c3pr.auth.jwt}`}})
         .reply(200, agents, {'content-type': 'application/json'});
 }
 

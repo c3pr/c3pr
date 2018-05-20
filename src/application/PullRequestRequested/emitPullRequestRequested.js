@@ -18,7 +18,7 @@ function emitPullRequestRequested(pullRequestRequested, outerLogMetas) {
         eventType: `PullRequestRequested`,
         payload: pullRequestRequested,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
-        jwt: config.c3pr.jwt,
+        jwt: config.c3pr.auth.jwt,
         logMetas
     })
         .catch(e => {

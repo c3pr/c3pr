@@ -6,7 +6,9 @@ const C3PR_BRAIN_URL = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:50
 
 module.exports = {
     c3pr: {
-        jwt: null,
+        auth: {
+            jwt: null,
+        },
 
         hub: {
             c3prHubUrl: C3PR_HUB_URL,
