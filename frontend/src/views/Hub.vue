@@ -73,32 +73,32 @@ export default {
         _id: false,
         uuid: true,
         event_type: true,
-        meta: {status: true, processor: true, dateTime: true},
+        meta: { status: true, processor: true, dateTime: true },
         payload: true,
       },
       listeners: [],
-      registry: []
+      registry: [],
     };
   },
   created() { this.fetchAll(); },
   methods: {
     async fetchBusListeners() {
-      let {data} = await axios.get('/api/hub/api/v1/bus/listeners');
+      const { data } = await axios.get('/api/hub/api/v1/bus/listeners');
       this.listeners = data;
     },
     async fetchRegistry() {
-      let {data} = await axios.get('/api/hub/api/v1/registry');
+      const { data } = await axios.get('/api/hub/api/v1/registry');
       this.registry = data;
     },
     async fetchEvents() {
       this.fetchStatus = 'Fetching Events...';
       try {
-        let {data} = await axios.get('/api/hub/api/v1/events');
+        const { data } = await axios.get('/api/hub/api/v1/events');
         data.sort((a, b) => a.meta.dateTime.localeCompare(b.meta.dateTime) * -1);
         this.events = data;
         this.fetchStatus = 'Click to re-fetch events';
-      } catch(e) {
-          // eslint-disable-next-line
+      } catch (e) {
+        // eslint-disable-next-line
           alert('Error: ' + e);
       }
     },
@@ -106,7 +106,7 @@ export default {
       this.fetchBusListeners();
       this.fetchRegistry();
       this.fetchEvents();
-    }
+    },
   },
 };
 </script>
