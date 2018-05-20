@@ -59,11 +59,11 @@ services:
     build:
       context: ../../../c3pr-repo-gitlab
     ports:
-      - 5003:5003
+      - 5003:5004
     environment:
       C3PR_MONGO_URL: http://mongo:27017
-      PORT: 5003
-      C3PR_REPO_GITLAB_URL: http://c3pr-repo-gitlab:5003
+      PORT: 5004
+      C3PR_REPO_GITLAB_URL: http://c3pr-repo-gitlab:5004
       C3PR_HUB_URL: http://c3pr-hub:5000
       GITLAB_URL: http://c3prgitlab:8888
       GITLAB_API_TOKEN: TKbVFC57TM27HcVnqK55
