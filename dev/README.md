@@ -41,3 +41,10 @@
             environment:
               ...
               GITLAB_API_TOKEN: TKbVFC57TM27HcVnqK55
+
+7. Start:
+    - hub
+    - brain
+    - dashboard
+    - dashboard/frontend (Vue)
+    - repo-gitlab
