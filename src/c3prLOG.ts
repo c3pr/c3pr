@@ -8,7 +8,7 @@ function wrap(arr, prefix = `[`, suffix = `]`) {
 let warningShown = false;
 function showWarningIfDatabaseNotDefined() {
     if (!config.c3pr.logger.mongoUrl && !warningShown) {
-        console.log('Logs: MONGO_LOGS_URI env var is not defined. Printing to STDOUT only. (This message will be printed only once every 5 minutes.)');
+        console.log('Logs: C3PR_MONGO_URL env var is not defined. Printing to STDOUT only. (This message will be printed only once every 5 minutes.)');
         warningShown = true;
         setTimeout(() => warningShown = false, 5 * 60 * 1000).unref();
     }
