@@ -1,12 +1,6 @@
 const decodeToken = require("./auth").decodeToken;
 
-let authDisabled = true;
-
 function authExpressMiddleware(request, response, next) {
-    if (authDisabled) {
-        next();
-        return;
-    }
     if (!request.headers.authorization || request.headers.authorization.split(' ')[0] !== 'Bearer') {
         response.status(401).send(`Please send a "Authorization: Bearer TOKEN-JWT" header.`);
     } else {
@@ -15,7 +9,7 @@ function authExpressMiddleware(request, response, next) {
             next();
         } catch (e) {
             let errorStatus = (e.toString() === 'Error: Signature verification failed') ? 401 : 500;
-            response.send(errorStatus).send(e.toString());
+            response.status(errorStatus).send(e.toString());
         }
     }
 }
