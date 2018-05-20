@@ -12,9 +12,9 @@ async function notifyC3prBotOfChanges(config, changes, ...logs) {
         return;
     }
     try {
-        c3prLOG(`Notifying ${config.c3pr.changesUrl} of changes to ${changes.repository.url}...`, ...logMetas);
+        c3prLOG(`Notifying BRAIN (${config.c3pr.changesUrl}) of changes to ${changes.repository.url}...`, ...logMetas);
         await axios.post(config.c3pr.changesUrl, changes);
-        c3prLOG(`Notified ${config.c3pr.changesUrl} of changes to ${changes.repository.url}.`, { changes }, ...logMetas);
+        c3prLOG(`Notified BRAIN (${config.c3pr.changesUrl}) of changes to ${changes.repository.url}.`, { changes }, ...logMetas);
     }
     catch (e) {
         c3prLOG(`Error while notifying bot.
