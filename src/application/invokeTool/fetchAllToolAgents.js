@@ -7,7 +7,7 @@ async function fetchAllToolAgents() {
 
     let {data: registry} = await axios.get(config.c3pr.hub.registryUrl, {headers});
 
-    return registry.filter(({key}) => key.startsWith("agent://")).map(({value}) => value);
+    return Object.entries(registry).filter(([key]) => key.startsWith("agent://")).map(([key, value]) => value);
 }
 
 module.exports = fetchAllToolAgents;
