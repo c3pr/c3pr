@@ -17,7 +17,7 @@ async function collectEventAndMarkAsProcessing({event_type, c3prHubUrl, jwt, log
 
     try {
         await axios.patch(`${c3prHubUrl}/api/v1/events/${event_type}/${event.uuid}/meta/processing`, {}, {headers});
-        return {uuid: event.uuid, payload: event.payload};
+        return {uuid: event.uuid, event_type, payload: event.payload};
     } catch (e) {
         c3prLOG2({
             msg: `Error while marking event ${event.uuid} of type ${event_type} as processing. Reason: '${e}'. Data: ${e.response && e.response.data}`,
