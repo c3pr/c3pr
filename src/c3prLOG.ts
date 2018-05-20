@@ -6,11 +6,17 @@ function wrap(arr, prefix = `[`, suffix = `]`) {
 }
 
 let warningShown = false;
-function showWarningIfDatabaseNotDefined() {
-    if (!config.c3pr.logger.mongoUrl && !warningShown) {
-        console.log('Logs: C3PR_MONGO_URL env var is not defined. Printing to STDOUT only. (This message will be printed only once every 5 minutes.)');
+function showWarning (warningMsg: string) {
+    if (!warningShown) {
+        console.log(`${warningMsg} (This message will be printed only once every 5 minutes.)`);
         warningShown = true;
         setTimeout(() => warningShown = false, 5 * 60 * 1000).unref();
+    }
+}
+
+function showWarningIfDatabaseNotDefined() {
+    if (!config.c3pr.logger.mongoUrl) {
+        showWarning('Logs: C3PR_MONGO_URL env var is not defined. Printing to STDOUT only.');
     }
 }
 
@@ -36,12 +42,16 @@ async function log(nodeName: string, correlationIds: string[], moduleNames: stri
     if (!config.c3pr.logger.mongoUrl) {
         return;
     }
-    const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl);
+    try {
+        const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl);
 
-    let logs = client.db(config.c3pr.logger.database).collection(config.c3pr.logger.collection + ((c3prLOG as any).testModeActivated ? "-test" : ""));
+        let logs = client.db(config.c3pr.logger.database).collection(config.c3pr.logger.collection + ((c3prLOG as any).testModeActivated ? "-test" : ""));
 
-    await logs.insertOne({node: nodeName, dateTime: new Date().toISOString(), correlationIds, moduleNames, message, metadata});
-    await client.close();
+        await logs.insertOne({node: nodeName, dateTime: new Date().toISOString(), correlationIds, moduleNames, message, metadata});
+        await client.close();
+    } catch (e) {
+        showWarning(`Error while attempting to connect/save log message: ${e}`);
+    }
 }
 
 interface C3prLOG {
