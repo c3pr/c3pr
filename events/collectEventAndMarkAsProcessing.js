@@ -6,21 +6,21 @@ const logMeta = {nodeName: 'node-c3pr-hub-client', moduleName: 'collectEventAndM
 /**
  * When getting the return from this function, make sure you handle when it returns null, because it will be a common result.
  */
-async function collectEventAndMarkAsProcessing({eventType, c3prHubUrl, jwt, logMetas: outerLogMetas}) {
+async function collectEventAndMarkAsProcessing({event_type, c3prHubUrl, jwt, logMetas: outerLogMetas}) {
     const headers = {Authorization: `Bearer ${jwt}`};
 
     /** @namespace event.payload */
-    let {data: event, status} = await axios.get(`${c3prHubUrl}/api/v1/events/${eventType}/peek/unprocessed`, {headers});
+    let {data: event, status} = await axios.get(`${c3prHubUrl}/api/v1/events/${event_type}/peek/unprocessed`, {headers});
     if (status !== 200) {
         return null;
     }
 
     try {
-        await axios.patch(`${c3prHubUrl}/api/v1/events/${eventType}/${event.uuid}/meta/processing`, {}, {headers});
-        return event.payload;
+        await axios.patch(`${c3prHubUrl}/api/v1/events/${event_type}/${event.uuid}/meta/processing`, {}, {headers});
+        return {uuid: event.uuid, payload: event.payload};
     } catch (e) {
         c3prLOG2({
-            msg: `Error while marking event ${event.uuid} of type ${eventType} as processing. Reason: '${e}'. Data: ${e.response && e.response.data}`,
+            msg: `Error while marking event ${event.uuid} of type ${event_type} as processing. Reason: '${e}'. Data: ${e.response && e.response.data}`,
             logMetas: [...(outerLogMetas || []), logMeta],
             meta: {error: require('util').inspect(e)}
         });
@@ -29,7 +29,7 @@ async function collectEventAndMarkAsProcessing({eventType, c3prHubUrl, jwt, logM
 }
 
 module.exports = {
-    c3prCEAMAP: {
+    collectEventAndMarkAsProcessing: {
         collectEventAndMarkAsProcessing
     }
 };

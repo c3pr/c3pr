@@ -1,5 +1,5 @@
 const login = require('../login').c3prHubClient.login;
-const collectEventAndMarkAsProcessing = require('./collectEventAndMarkAsProcessing').c3prCEAMAP.collectEventAndMarkAsProcessing;
+const collectEventAndMarkAsProcessing = require('./collectEventAndMarkAsProcessing').collectEventAndMarkAsProcessing.collectEventAndMarkAsProcessing;
 
 (async () => {
 
@@ -9,7 +9,7 @@ const collectEventAndMarkAsProcessing = require('./collectEventAndMarkAsProcessi
     collectEventAndMarkAsProcessing({
         c3prHubUrl: 'http://localhost:5000',
         jwt,
-        eventType: 'ChangesCommitted'
+        event_type: 'ChangesCommitted'
     })
         .then(s => console.log('Success.', s))
         .catch(e => console.error('ERROR.', e));
