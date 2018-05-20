@@ -1,7 +1,7 @@
 {
-  "name": "c3pr",
+  "name": "c3pr-hub",
   "version": "1.0.0",
-  "description": "C-3PR Dashboard and Configuration Management Module",
+  "description": "C-3PR Configuration Management Module",
   "scripts": {
     "start": "node src/index.js",
     "debug": "node %NODE_DEBUG_OPTION% src/index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/c3pr/c3pr.git"
+    "url": "git+https://github.com/c3pr/c3pr-hub.git"
   },
   "keywords": [
     "c3pr"
@@ -17,9 +17,9 @@
   "author": "acdcjunior",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/c3pr/c3pr/issues"
+    "url": "https://github.com/c3pr/c3pr-hub/issues"
   },
-  "homepage": "https://github.com/c3pr/c3pr",
+  "homepage": "https://github.com/c3pr/c3pr-hub",
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
@@ -27,7 +27,7 @@
     "express": "^4.16.2",
     "jwt-simple": "^0.5.1",
     "mongodb": "^3.0.4",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.0.1",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.0.3",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
