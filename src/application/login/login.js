@@ -8,7 +8,7 @@ c3prHubClient.login({
         {eventType: "PullRequestRequested",    callbackUrl: config.c3pr.repoGitlab.c3prRepoGitlabUrl + config.c3pr.repoGitlab.PullRequestRequestedCallbackUrl}
     ],
     logMetas: [{nodeName: 'c3pr-repo-gitlab', moduleName: 'login'}]
-}).then(({data: jwt}) => {
+}).then(jwt => {
     config.c3pr.jwt = jwt;
 }).catch(e => {
     throw e;
