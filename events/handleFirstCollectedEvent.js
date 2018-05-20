@@ -7,6 +7,8 @@ const logMeta = {nodeName: 'node-c3pr-hub-client', moduleName: 'handleFirstColle
 async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUrl, jwt, logMetas: outerLogMetas}) {
     const logMetas = [...(outerLogMetas || []), logMeta];
 
+    c3prLOG2({msg: `Handling ${event_type}.`, logMetas});
+
     let event;
     try {
         event = await collectEventAndMarkAsProcessing({event_type, c3prHubUrl, jwt, logMetas})
