@@ -1,84 +1,120 @@
 <template>
   <div class="about">
-    <button @click="fetchAll">{{ fetchStatus }}</button>
-
-    <button @click="displayedMeta = {}" :disabled="Object.keys(displayedMeta).length === 0">
-      clear displayedMeta
-    </button>
-    <pre>
-      {{ displayedMeta }}
-    </pre>
+    <h1>Bus Listeners</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Event Type</th>
+          <th>Module URL</th>
+          <th>Callback URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="listener of listeners" :key="listener.event_type + listener.callbackUrl">
+          <td>{{ listener.event_type }}</td>
+          <td>{{ listener.callbackUrl.substring(0, listener.callbackUrl.replace("http://", "").indexOf("/") + "http://".length) }}</td>
+          <td>{{ listener.callbackUrl }}</td>
+        </tr>
+      </tbody>
+    </table>
     <hr>
+
+    <h1>Registry</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(key, value) of registry" :key="key">
+          <td>{{ key }}</td>
+          <td>{{ value }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+
+    <button @click="fetchEvents">{{ fetchStatus }}</button>
+
+    <hr>
+
+    <h1>Events</h1>
     <div>
     <span v-for="prop of Object.keys(display)" :key="prop">
       <input type="checkbox" v-model="display[prop]">{{ prop }}
     </span>
     </div>
     <table>
-      <tr v-for="log of logs" :class="log.node" :key="log._id">
-        <td v-if="display._id">{{ log._id }}</td>
-        <td v-if="display.node">{{ log.node }}</td>
-        <td v-if="display.dateTime">{{ log.dateTime }}</td>
-        <td v-if="display.correlationIds">{{ unique(log.correlationIds) }}</td>
-        <td v-if="display.moduleNames">{{ log.moduleNames }}</td>
-        <td v-if="display.message" :title="log.message" class="message" style="cursor: pointer"
-          @click="displayedMeta = log.metadata">
-          {{ log.message.substr(0, 100) }}
-        </td>
-        <td v-if="display.meta">{{ log.metadata }}</td>
+      <tr v-for="event of events" :class="event.node" :key="event._id">
+        <td v-if="display._id">{{ event._id }}</td>
+        <td v-if="display.uuid">{{ event.uuid }}</td>
+        <td v-if="display.event_type">{{ event.event_type }}</td>
+        <td v-if="display.meta.status">{{ event.meta.status }}</td>
+        <td v-if="display.meta.processor">{{ event.meta.processor }}</td>
+        <td v-if="display.meta.dateTime">{{ event.meta.dateTime }}</td>
+        <td v-if="display.payload">{{ event.payload }}</td>
       </tr>
     </table>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Logs',
   data() {
     return {
-      fetchStatus: 'Click to re-fetch logs',
-      logs: [],
-      displayedMeta: {},
+      fetchStatus: 'Click to re-fetch events',
+      events: [],
       display: {
         _id: false,
-        node: true,
-        dateTime: true,
-        correlationIds: true,
-        moduleNames: true,
-        message: true,
-        meta: false,
+        uuid: true,
+        event_type: true,
+        meta: {status: true, processor: true, dateTime: true},
+        payload: true,
       },
+      listeners: [],
+      registry: []
     };
   },
   created() { this.fetchAll(); },
   methods: {
-    fetchAll() {
+    async fetchBusListeners() {
+      let {data} = await axios.get('/api/hub/api/v1/bus/listeners');
+      this.listeners = data;
+    },
+    async fetchRegistry() {
+      let {data} = await axios.get('/api/hub/api/v1/registry');
+      this.registry = data;
+    },
+    async fetchEvents() {
       this.fetchStatus = 'Fetching Events...';
-      fetch('/api/hub/api/v1/events')
-        .then(r => r.json())
-        .then((r) => {
-          r.sort((a, b) => a.dateTime.localeCompare(b.dateTime) * -1);
-          this.logs = r;
-          this.fetchStatus = 'Click to re-fetch logs';
-        }).catch((e) => {
+      try {
+        let {data} = await axios.get('/api/hub/api/v1/events');
+        data.sort((a, b) => a.meta.dateTime.localeCompare(b.meta.dateTime) * -1);
+        this.events = data;
+        this.fetchStatus = 'Click to re-fetch events';
+      } catch(e) {
           // eslint-disable-next-line
           alert('Error: ' + e);
-        });
+      }
     },
-    unique(a) {
-      return a.filter((item, pos) => a.indexOf(item) === pos);
-    },
+    fetchAll() {
+      this.fetchBusListeners();
+      this.fetchRegistry();
+      this.fetchEvents();
+    }
   },
 };
 </script>
 
 <style scoped>
-  td { border: 1px solid black; border-collapse: collapse; }
-  table { font-family: sans-serif; font-size: small; }
-  .message { text-align: left; font-family: monospace; }
-  .c3pr-repo-github { color: purple; }
-  .c3pr { color: blue; }
-  .c3pr-agent { color: green; }
+  td, th { border: 1px solid black; border-collapse: collapse; padding: 0 5px 0 5px }
+  th { background-color: #ededed }
+  table { font-family: monospace; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
   pre {
     text-align: initial;
     white-space: pre-wrap;
