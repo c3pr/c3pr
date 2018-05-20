@@ -1,6 +1,6 @@
 {
   "name": "node-git-client",
-  "version": "6.0.6",
+  "version": "6.0.7",
   "description": "Node.js layer above shell git command line",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "homepage": "https://github.com/c3pr/node-git-client#readme",
   "dependencies": {
     "mkdirp": "^0.5.1",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.0.1",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.0.3",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
