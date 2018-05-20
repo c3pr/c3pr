@@ -24,7 +24,7 @@ function invokeToolForFiles(parent, repository, tool_id, files) {
         meta: {payload: toolInvocationRequested}
     });
 
-    c3prRNE.registerNewEvent({
+    return c3prRNE.registerNewEvent({
         eventType: `ToolInvocationRequested`,
         payload: toolInvocationRequested,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
@@ -67,6 +67,7 @@ async function invokeTools({parent, repository, files}) {
     });
 
     let changedAndNotRefactoredFiles = [...files];
+    let invocations = [];
 
     while(changedAndNotRefactoredFiles.length && applicableToolAgents.length) {
         let tool = applicableToolAgents.pop();
@@ -76,9 +77,11 @@ async function invokeTools({parent, repository, files}) {
 
         if (filesForThisTool.length) {
             changedAndNotRefactoredFiles = changedAndNotRefactoredFiles.filter(f => !filesForThisTool.includes(f));
-            invokeToolForFiles(parent, repository, tool.tool_id, filesForThisTool);
+            invocations.push(invokeToolForFiles(parent, repository, tool.tool_id, filesForThisTool));
         }
     }
+
+    return Promise.all(invocations);
 }
 
 module.exports = {
