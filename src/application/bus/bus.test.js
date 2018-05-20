@@ -66,7 +66,7 @@ describe('bus', function () {
         /// then
         // because it is not called again, then the retryCount number didn't change from when the retryCountHasReachedMaxRetries promise resolved
         expect(retryCount).to.equal(config.c3pr.hub.bus.maxRetries);
-    }).timeout(99 * 1000);
+    }).timeout(15 * 1000);
 
     it('getListeners()', async () => {
         /// setup
@@ -110,9 +110,9 @@ describe('bus', function () {
 
         /// then
         expect(c3prBus.getListeners()).to.deep.equal([]);
-    }).timeout(99 * 1000);
+    }).timeout(15 * 1000);
 
-    it.only('subscribeTo should subscribe each url just once per event type', async () => {
+    it('subscribeTo should subscribe each url just once per event type', async () => {
         /// setup
         c3prBus.subscribeTo(event_type, "http://bob.com/subscriberAAA");
         c3prBus.subscribeTo(event_type, "http://bob.com/subscriberAAA");
