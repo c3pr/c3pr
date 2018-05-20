@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <button @click="fetchEvents">{{ fetchStatus }}</button>
+    <button @click="fetchAll">{{ fetchStatus }}</button>
 
     <hr>
 
