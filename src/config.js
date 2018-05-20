@@ -7,6 +7,10 @@ module.exports = {
     c3pr: {
         port: PORT,
 
+        auth: {
+            jwt: null
+        },
+
         dashboard: {
             c3prDashboardPort: PORT,
 
@@ -16,7 +20,8 @@ module.exports = {
         },
 
         hub: {
-            c3prHubUrl: C3PR_HUB_URL
+            c3prHubUrl: C3PR_HUB_URL,
+            loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
         }
     }
 };
