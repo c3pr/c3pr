@@ -7,13 +7,15 @@ module.exports = function (app) {
 
     // curl -sD - -X POST http://127.0.0.1:5000/api/v1/login
     app.post('/api/v1/login', function (request, response) {
-        if (!Array.isArray(request.body)) {
-            response.status(400).send(`Your request payload must be a subscriptions array with the format: [{eventType, callbackUrl}].`);
-            return;
+        if (request.body && request.body.length) {
+            if (!Array.isArray(request.body) || !request.body.every(({eventType, callbackUrl}) => eventType && callbackUrl)) {
+                response.status(400).send(`Your request payload must be a subscriptions array with the format: [{eventType, callbackUrl}].`);
+                return;
+            }
+            request.body.forEach(({eventType, callbackUrl}) => {
+                c3prBus.subscribeTo(eventType, callbackUrl);
+            });
         }
-        request.body.forEach(({eventType, callbackUrl}) => {
-            c3prBus.subscribeTo(eventType, callbackUrl);
-        });
         response.json(encodeUuidToken());
     });
 
