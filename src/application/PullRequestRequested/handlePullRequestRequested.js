@@ -12,10 +12,13 @@ function handlePullRequestRequested() {
 
     c3prCEAMAP.collectEventAndMarkAsProcessing(
         {eventType: `PullRequestRequested`, c3prHubUrl: config.c3pr.hub.c3prHubUrl, jwt: config.c3pr.jwt, logMetas: [logMeta]}
-    ).catch(() => {
-        c3prLOG2({msg: `Couldn't collect PullRequestRequested. Skipping.`, logMetas: [logMeta]});
+    ).catch((e) => {
+        c3prLOG2({msg: `Couldn't collect PullRequestRequested. Skipping.`, logMetas: [logMeta], meta: {error: require('util').inspect(e)}});
     }).then(async (pullRequestRequested) => {
-
+        if (!pullRequestRequested) {
+            c3prLOG2({msg: `No PullRequestRequested collected (possibly due to concurrent attempts to collect the same event). Skipping.`, logMetas, meta: {pullRequestRequested}});
+            return;
+        }
         const prr = pullRequestRequested.payload;
         const repository = prr.repository;
 
