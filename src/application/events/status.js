@@ -20,6 +20,14 @@ function addAsUnprocessed(event_type, uuid) {
     EVENTS_UNPROCESSED.set(event_type, unprocessedEventsOfType);
 }
 
+function removeAsUnprocessed(event_type, uuid) {
+    const unprocessedEventsOfType = EVENTS_UNPROCESSED.get(event_type) || new Set();
+    if (!unprocessedEventsOfType.has(uuid)) {
+        throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is not currently with unprocessed status.`)
+    }
+    unprocessedEventsOfType.delete(uuid);
+}
+
 function addAsProcessing(event_type, uuid, processorUUID) {
     assert.ok(event_type && uuid && processorUUID);
 
@@ -28,6 +36,9 @@ function addAsProcessing(event_type, uuid, processorUUID) {
     const processingEvent = processingEventsOfType.get(uuid);
     if (processingEvent && processingEvent.processorUUID !== processorUUID) {
         throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is already being processed by processorUUID '${processingEvent.processorUUID}'. processorUUID you sent me: '${processorUUID}'.`)
+    }
+    if (!processingEvent) {
+        removeAsUnprocessed(event_type, uuid);
     }
 
     processingEventsOfType.set(uuid, {dateTime: new Date().toISOString(), processorUUID});

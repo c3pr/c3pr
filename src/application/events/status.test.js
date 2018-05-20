@@ -37,6 +37,18 @@ describe('status', function () {
         expect(evt.processorUUID).to.equal(processorUUID);
     });
 
+    it('addAsProcessing should remove event from unprocessed list', () => {
+        /// given
+        Status.addAsUnprocessed(EVENT_TYPE, uuid);
+        Status.addAsProcessing(EVENT_TYPE, uuid, processorUUID);
+        let evt = Status.currentlyProcessing(EVENT_TYPE, uuid);
+        expect(evt.processorUUID).to.equal(processorUUID);
+        /// when
+        const unprocessed = Status.peekUnprocessedEventOfType(EVENT_TYPE);
+        /// then
+        expect(unprocessed).to.equal(undefined);
+    });
+
     it('retrieveAllTimedOut big timeout', () => {
         /// given
         Status.addAsUnprocessed(EVENT_TYPE, uuid);
