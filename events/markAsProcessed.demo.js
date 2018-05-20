@@ -25,6 +25,10 @@ const markAsProcessed = require('./markAsProcessed').markAsProcessed.markAsProce
     await markAsProcessed({jwt, c3prHubUrl, event_type, uuid: event.uuid});
     console.log('Done marking as processed!');
 
+    await markAsProcessed({jwt, c3prHubUrl, event_type, uuid: event.uuid});
+    await markAsProcessed({jwt, c3prHubUrl, event_type, uuid: event.uuid});
+    console.log('Marking more than once was okay!!');
+
 })()
     .then(s => console.log('Success.', s))
     .catch(e => console.error('ERROR.', e));
