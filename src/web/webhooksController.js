@@ -1,6 +1,7 @@
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 const handleWebhook = require('../application/webhook/handleWebhook').c3pr.handleWebhook;
 
+
 module.exports = function (app) {
 
     app.post('/webhooks', function (request, response) {
@@ -14,7 +15,7 @@ module.exports = function (app) {
             });
             handleWebhook(webhookPayload);
         } else {
-            c3prLOG({
+            c3prLOG2({
                 msg: `Received webhook. Not a push: ${webhookPayload.object_kind}.`,
                 logMetas: [{nodeName: 'c3pr-repo-gitlab', moduleName: 'webhooksController'}],
                 meta: {webhookPayload},
