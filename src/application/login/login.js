@@ -10,7 +10,7 @@ c3prHubClient.login({
         {eventType: "PullRequestUpdated",      callbackUrl: config.c3pr.brain.c3prBrainUrl + config.c3pr.brain.PullRequestUpdatedCallbackUrl}
     ],
     logMetas: [{nodeName: 'c3pr-brain', moduleName: 'login'}]
-}).then(({data: jwt}) => {
+}).then(jwt => {
     config.c3pr.jwt = jwt;
 }).catch(e => {
     throw e;
