@@ -12,9 +12,13 @@ function handleToolInvocationCompleted() {
 
     c3prCEAMAP.collectEventAndMarkAsProcessing(
         {eventType: `ToolInvocationCompleted`, c3prHubUrl: config.c3pr.hub.c3prHubUrl, jwt: config.c3pr.jwt, logMetas: [logMeta]}
-    ).catch(() => {
-        c3prLOG2({msg: `Couldn't collect ToolInvocationCompleted. Skipping.`, logMetas: [logMeta]});
+    ).catch((e) => {
+        c3prLOG2({msg: `Couldn't collect ToolInvocationCompleted. Skipping.`, logMetas: [logMeta], meta: {error: require('util').inspect(e)}});
     }).then((toolInvocationCompleted) => {
+        if (!toolInvocationCompleted) {
+            c3prLOG2({msg: `No ToolInvocationCompleted collected (possibly due to concurrent attempts to collect the same event). Skipping.`, logMetas, meta: {toolInvocationCompleted}});
+            return;
+        }
         createAndEmitPullRequestRequested(toolInvocationCompleted);
     });
 }

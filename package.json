@@ -25,8 +25,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "mongodb": "^3.0.4",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.0.3",
-    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#3.0.2"
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#3.0.3",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.0.3"
   },
   "devDependencies": {
     "@types/express": "^4.11.1",

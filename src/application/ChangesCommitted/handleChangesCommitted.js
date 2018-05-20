@@ -12,9 +12,13 @@ function handleChangesCommitted() {
 
     c3prCEAMAP.collectEventAndMarkAsProcessing(
         {eventType: `ChangesCommitted`, c3prHubUrl: config.c3pr.hub.c3prHubUrl, jwt: config.c3pr.jwt, logMetas}
-    ).catch(() => {
-        c3prLOG2({msg: `Couldn't collect ChangesCommitted. Skipping.`, logMetas});
+    ).catch((e) => {
+        c3prLOG2({msg: `Couldn't collect ChangesCommitted. Skipping.`, logMetas, meta: {error: require('util').inspect(e)}});
     }).then((changesCommitted) => {
+        if (!changesCommitted) {
+            c3prLOG2({msg: `No ChangesCommitted collected (possibly due to concurrent attempts to collect the same event). Skipping.`, logMetas, meta: {changesCommitted}});
+            return;
+        }
         const parent = {
             event_type: `ChangesCommitted`,
             uuid: changesCommitted.uuid
