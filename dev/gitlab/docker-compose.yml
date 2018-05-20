@@ -20,7 +20,7 @@ services:
     ports:
       - 5000:5000
     environment:
-      C3PR_MONGO_URL: http://mongo:27017
+      C3PR_MONGO_URL: mongodb://mongo:27017
       PORT: 5000
 
   c3pr-brain:
@@ -29,7 +29,7 @@ services:
     ports:
       - 5001:5001
     environment:
-      C3PR_MONGO_URL: http://mongo:27017
+      C3PR_MONGO_URL: mongodb://mongo:27017
       C3PR_BRAIN_URL: http://c3pr-brain:5001
       C3PR_HUB_URL: http://c3pr-hub:5000
 
@@ -39,7 +39,7 @@ services:
     ports:
       - 5005:5005
     environment:
-      C3PR_MONGO_URL: http://mongo:27017
+      C3PR_MONGO_URL: mongodb://mongo:27017
       PORT: 5005
       C3PR_HUB_URL: http://c3pr-hub:5000
 
@@ -49,7 +49,7 @@ services:
 #    ports:
 #      - 5002:5002
 #    environment:
-#      C3PR_MONGO_URL: http://mongo:27017
+#      C3PR_MONGO_URL: mongodb://mongo:27017
 #      PORT: 5003
 #      C3PR_REPO_GITHUB_URL: http://c3pr-repo-github:5003
 #      C3PR_HUB_URL: http://c3pr-hub:5000
@@ -61,7 +61,7 @@ services:
     ports:
       - 5003:5004
     environment:
-      C3PR_MONGO_URL: http://mongo:27017
+      C3PR_MONGO_URL: mongodb://mongo:27017
       PORT: 5004
       C3PR_REPO_GITLAB_URL: http://c3pr-repo-gitlab:5004
       C3PR_HUB_URL: http://c3pr-hub:5000
@@ -74,6 +74,6 @@ services:
     ports:
       - 5003:5003
     environment:
-      C3PR_MONGO_URL: http://mongo:27017
+      C3PR_MONGO_URL: mongodb://mongo:27017
       C3PR_HUB_URL: http://c3pr-hub:5000
       C3PR_AGENT_URL: http://c3pr-tool-walkmod-sonar:5003
