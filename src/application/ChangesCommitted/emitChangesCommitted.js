@@ -5,7 +5,7 @@ const config = require('../../config');
 
 
 function emitChangesCommitted(changesCommitted, outerLogMetas) {
-    const logMeta = {nodeName: 'c3pr-brain', correlationId: changesCommitted.repository.revision, moduleName: 'emitChangesCommitted'};
+    const logMeta = {nodeName: 'c3pr-repo-gitlab', correlationId: changesCommitted.repository.revision, moduleName: 'emitChangesCommitted'};
     const logMetas = [...(outerLogMetas || []), logMeta];
 
     c3prLOG2({
