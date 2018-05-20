@@ -33,9 +33,27 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(key, value) of registry" :key="key">
+        <tr v-for="(value, key) of registry" :key="key">
           <td>{{ key }}</td>
-          <td>{{ value }}</td>
+          <td>
+            <table v-if="value[0] && value[0].tool_id">
+              <thead>
+              <tr>
+                <th>tool_id</th>
+                <th>extensions</th>
+                <th>tags</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="tool of value" :key="key">
+                <td>{{ tool.tool_id }}</td>
+                <td>{{ tool.extensions }}</td>
+                <td>{{ tool.tags }}</td>
+              </tr>
+              </tbody>
+            </table>
+            <span v-else>{{ value }}</span>
+          </td>
         </tr>
       </tbody>
     </table>
