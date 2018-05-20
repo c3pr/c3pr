@@ -9,24 +9,27 @@ Have a look at [`src`](src) folder to understand what functions are available.
 ### Usage:
 
 ```bash
-# Change 7.0.2 below with the desired version tag
-npm i -S c3pr/node-c3pr-logger#8.0.1
+# Change 9.0.2 below with the desired version tag
+npm i -S c3pr/node-c3pr-logger#9.0.2
 ```
 
-The `MONGO_LOGS_URI` must be defined to something like 
+The `C3PR_MONGO_URL` must be defined to something like: `mongodb://user:pass@host:port`.
 
 Example at a JavaScript file:
 
 ```javascript
-const c3prLOG = require("node-c3pr-logger");
+const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 
 let logMeta = {nodeName: 'my-node', correlationId: 'SHA121313', moduleName: 'my-script'};
-c3prLOG('message', logMeta);
-// or
-c3prLOG('message', {meta: 'some specific data'}, logMeta);
-// or
-let logMeta2 = {correlationId: 'some subID', moduleName: 'my-reusable-script'};
-c3prLOG('message', logMeta, logMeta2);
+c3prLOG2({
+    msg: `message.`,
+    logMetas: [logMeta],
+    meta: {meta: 'some specific data'},
+});
 ```
 
-See [test file](src/log.test.js) for usages.
+See [test file](src/c3prLOG.test.js) for usages.
+
+# Tests
+
+Note: this repo requires the env var `C3PR_MONGO_URL` set to run the tests.
