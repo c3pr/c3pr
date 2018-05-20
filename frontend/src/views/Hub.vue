@@ -33,7 +33,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(value, key) of registry" :key="key">
+        <tr v-for="(value, key) of registry">
           <td>{{ key }}</td>
           <td>
             <table v-if="value[0] && value[0].tool_id">
@@ -45,7 +45,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="tool of value" :key="key">
+              <tr v-for="tool of value">
                 <td>{{ tool.tool_id }}</td>
                 <td>{{ tool.extensions }}</td>
                 <td>{{ tool.tags }}</td>
@@ -74,7 +74,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="event of events" :class="event.node" :key="event.uuid">
+        <tr v-for="event of events" :class="event.node">
           <td>{{ event.uuid }}</td>
           <td>{{ event.event_type }}</td>
           <td>{{ event.meta.status }}</td>
