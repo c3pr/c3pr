@@ -9,7 +9,7 @@ c3prHubClient.login({
         {eventType: "ToolInvocationCompleted", callbackUrl: config.c3pr.brain.c3prBrainUrl + config.c3pr.brain.ToolInvocationCompletedCallbackUrl},
         {eventType: "PullRequestUpdated",      callbackUrl: config.c3pr.brain.c3prBrainUrl + config.c3pr.brain.PullRequestUpdatedCallbackUrl}
     ],
-    logMetas: [{nodeName: 'c3pr-brain'}]
+    logMetas: [{nodeName: 'c3pr-brain', moduleName: 'login'}]
 }).then(({data: jwt}) => {
     config.c3pr.jwt = jwt;
 }).catch(e => {
