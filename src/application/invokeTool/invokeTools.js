@@ -81,6 +81,13 @@ async function invokeTools({parent, repository, files}) {
         }
     }
 
+    if (!changedAndNotRefactoredFiles.length) {
+        c3prLOG2({msg: `All files have been handled. Tool invocations complete. Remaining applicable tool agents: ${applicableToolAgents.length}`, logMetas});
+    }
+    if (!applicableToolAgents.length) {
+        c3prLOG2({msg: `All tool applicable agents have been invoked. Tool invocations complete. Remaining changed and not refactored files: ${changedAndNotRefactoredFiles.length}`, logMetas});
+    }
+
     return Promise.all(invocations);
 }
 
