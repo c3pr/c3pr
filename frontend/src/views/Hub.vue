@@ -91,6 +91,7 @@
 <script>
 import axios from 'axios';
 
+const proxyPrefix = '/api/hub';
 export default {
   name: 'Logs',
   data() {
@@ -104,17 +105,22 @@ export default {
   created() { this.fetchAll(); },
   methods: {
     async fetchBusListeners() {
-      const { data } = await axios.get('/api/hub/api/v1/bus/listeners');
+      const { data } = await axios.get(proxyPrefix + '/api/v1/bus/listeners');
       this.listeners = data;
     },
     async fetchRegistry() {
-      const { data } = await axios.get('/api/hub/api/v1/registry');
+      const { data } = await axios.get(proxyPrefix + '/api/v1/registry');
       this.registry = data;
     },
     async fetchEvents() {
-      const { data } = await axios.get('/api/hub/api/v1/events');
-      data.sort((a, b) => a && a.meta && a.meta.dateTime && b && b.meta && b.meta.dateTime && a.meta.dateTime.localeCompare(b.meta.dateTime) * -1);
-      this.events = data;
+      const {data} = await axios.get(proxyPrefix + '/api/v1/events');
+      if (Array.isArray(data)) {
+        data.sort((a, b) => a && a.meta && a.meta.dateTime && b && b.meta && b.meta.dateTime && a.meta.dateTime.localeCompare(b.meta.dateTime) * -1);
+        this.events = data;
+      } else {
+        this.events = [];
+        throw new Error(data);
+      }
     },
     fetchAll() {
       this.fetchStatus = 'Fetching all...';
@@ -122,7 +128,7 @@ export default {
         this.fetchStatus = 'Click to re-fetch all';
       }).catch(e => {
         // eslint-disable-next-line
-        alert('Error: ' + e);
+        alert('xError: ' + e);
       });
     },
     formatPayload(event_type, payload) {
