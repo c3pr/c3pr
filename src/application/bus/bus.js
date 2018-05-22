@@ -37,11 +37,11 @@ function subscribeTo(event_type, callbackUrl) {
     c3prLOG2({msg: `Subscribing to event '${event_type}' the URL ${callbackUrl}.`, logMetas});
     if (listeners.find(ls => ls.event_type === event_type && ls.callbackUrl === callbackUrl)) {
         c3prLOG2({msg: `URL ${callbackUrl} already subscribed to event '${event_type}'. Skipping.`, logMetas});
-        return;
+    } else {
+        const listener = () => notify(callbackUrl, 1, event_type, listener);
+        hub.on(event_type, listener);
+        listeners.push(Object.freeze({listener, event_type, callbackUrl}));
     }
-    const listener = () => notify(callbackUrl, 1, event_type, listener);
-    hub.on(event_type, listener);
-    listeners.push(Object.freeze({listener, event_type, callbackUrl}));
 
     newSubscribers.emit(NEW_SUBSCRIBER, event_type);
 }
