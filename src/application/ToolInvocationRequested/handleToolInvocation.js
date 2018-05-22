@@ -1,29 +1,43 @@
+const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+
 const invokeToolAtGitRepo = require("./invokeToolAtGitRepo");
 const createPatchesPayload = require("./patch/createPatchesPayload");
 const sendPatchToBot = require("./patch/sendPatchToBot");
-const c3prLOG = require("node-c3pr-logger");
 
-async function handleToolInvocation(toolInvocation) {
+async function handleToolInvocation(toolInvocationEvent) {
 
-    const logMeta = {nodeName: 'c3pr-agent', correlationId: toolInvocation.meta.correlationId, moduleName: 'handleToolInvocation'};
-    c3prLOG(`C3PR Agent received invocation: ${toolInvocation.tool.toolId}. Files: ${JSON.stringify(toolInvocation.files)}`, {toolInvocation}, logMeta);
+    const toolInvocation = toolInvocationEvent.payload;
+    const logMetas = [{nodeName: 'c3pr-agent', correlationId: toolInvocation.repository.revision, moduleName: 'handleToolInvocation'}];
 
-    try { // if (request.repository.type === "git")
-        const toolInvocationResult = await invokeToolAtGitRepo(toolInvocation);
+    c3prLOG2({
+        msg: `C-3PR Agent received invocation: ${toolInvocation.tool_id}. Files: ${JSON.stringify(toolInvocation.files)}`,
+        logMetas,
+        meta: {toolInvocationEvent}
+    });
+
+    try {
+        const toolInvocationResult = await invokeToolAtGitRepo(toolInvocationEvent);
         const aPatchHasBeenGenerated = toolInvocationResult.files.length;
 
         if (aPatchHasBeenGenerated) {
-            const patchesPayload = createPatchesPayload(toolInvocation, toolInvocationResult);
-            await sendPatchToBot(toolInvocation.c3pr.patchesUrl, patchesPayload);
-            c3prLOG(`Tool invocation complete. A patch has been generated and sent.`, logMeta);
+            if (false) {
+                const patchesPayload = createPatchesPayload(toolInvocationEvent, toolInvocationResult);
+                await sendPatchToBot(toolInvocationEvent.c3pr.patchesUrl, patchesPayload);
+            }
+            c3prLOG2({msg: `Tool invocation complete. A patch has been generated and sent.`, logMetas});
+            // create TIC saying files were handled
+            // status(200).send({files: toolInvocationResult.files, description: 'This tool invocation completed successfully and has generated a diff.'});
         } else {
-            c3prLOG(`Tool invocation complete. No patch has been generated.`, logMeta);
+            c3prLOG2({msg: `Tool invocation complete. No patch has been generated.`, logMetas});
+            // create TIC saying files were NOT handled
+            // status(204).send({files: toolInvocationResult.files, description: 'This tool invocation completed successfully and has NOT generated a diff.'});
         }
-
-        return toolInvocationResult;
     } catch (e) {
-        c3prLOG('c3pr-agent', [toolInvocation.meta.correlationId], 'handleToolInvocation', `Error while invoking tool. \n${e}\n`);
-        return '';
+        c3prLOG2({
+            msg: `Error while invoking tool. Reason: '${e}'. Data: ${e.response && e.response.data}`,
+            logMetas,
+            meta: {error: require('util').inspect(e)}
+        });
     }
 }
 
