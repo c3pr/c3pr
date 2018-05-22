@@ -29,12 +29,12 @@ async function handlerFunction(pullRequestRequestedEvent) {
         meta: {pullRequestRequestedEvent}
     });
 
-    /** @namespace repository.fullpath */
+    /** @namespace repository.full_path */
     /** @namespace prr.pr_body */
     /** @namespace prr.diff_base64 */
     /** @namespace prr.pr_title */
     await createGitLabMR({
-        mainRepoOrgRepo: repository.fullpath,
+        mainRepoOrgRepo: repository.full_path,
         mainRepoBranch: repository.branch,
         mainRepoHash: repository.revision,
         gitLabUrl: config.c3pr.repoGitlab.gitlab.url,
