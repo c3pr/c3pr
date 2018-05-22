@@ -6,6 +6,7 @@ const createGitLabMR = require('../pr/createGitLabMR');
 const config = require('../../config');
 
 const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handlePullRequestRequested'}];
+const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'handlePullRequestRequested'}];
 
 function handlePullRequestRequested() {
     return handleFirstCollectedEvent({
@@ -24,7 +25,7 @@ async function handlerFunction(pullRequestRequestedEvent) {
 
     c3prLOG2({
         msg: `Handling MR request title '${prr.pr_title}' rev '${repository.revision}'`,
-        logMetas,
+        logMetas: logMetaz(repository.revision),
         meta: {pullRequestRequestedEvent}
     });
 
@@ -48,7 +49,7 @@ async function handlerFunction(pullRequestRequestedEvent) {
 
     c3prLOG2({
         msg: `MR created successfully.`,
-        logMetas,
+        logMetas: logMetaz(repository.revision),
         meta: {pullRequestRequestedEvent}
     });
 
