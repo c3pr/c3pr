@@ -15,7 +15,7 @@ function emitPullRequestRequested(pullRequestRequested, outerLogMetas) {
     });
 
     return c3prRNE.registerNewEvent({
-        eventType: `PullRequestRequested`,
+        event_type: `PullRequestRequested`,
         payload: pullRequestRequested,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,

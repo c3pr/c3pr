@@ -26,7 +26,7 @@ function invokeToolForFiles(parent, repository, tool_id, files) {
     });
 
     return c3prRNE.registerNewEvent({
-        eventType: `ToolInvocationRequested`,
+        event_type: `ToolInvocationRequested`,
         payload: toolInvocationRequested,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
