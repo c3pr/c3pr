@@ -1,9 +1,9 @@
-const invokeToolAtGitRepo = require('./invokeToolAtGitRepo');
 require("node-c3pr-logger").testMode();
+const invokeToolAtGitRepo = require('./invokeToolAtGitRepo');
 
 const expect = require('chai').expect;
 
-const config = require('../config');
+const config = require('../../config');
 
 config.c3pr.agent.cloneDir = '/tmp/c3pr/test';
 config.c3pr.agent.cloneDepth = 5;

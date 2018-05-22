@@ -2,7 +2,7 @@ const config = require('../../config');
 
 const c3prHubClient = require('node-c3pr-hub-client/login').c3prHubClient;
 
-const hubRegistryBroadcast = require('../hubRegistryBroadcast');
+const hubRegistryBroadcast = require('./hubRegistryBroadcast');
 
 c3prHubClient.login({
     loginUrl: config.c3pr.hub.loginUrl,

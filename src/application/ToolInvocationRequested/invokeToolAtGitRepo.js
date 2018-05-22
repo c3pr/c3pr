@@ -5,7 +5,7 @@ const uuidv4 = require('uuid/v4');
 
 const c3prLOG = require("node-c3pr-logger");
 
-const config = require('../config');
+const config = require('../../config');
 
 const CLONE_DIR = config.c3pr.agent.cloneDir;
 const CLONE_DEPTH = config.c3pr.agent.cloneDepth;

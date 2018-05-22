@@ -1,8 +1,8 @@
 const axios = require('axios');
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 
-const config = require('../config');
-const loadToolsSummary = require('./loadToolsSummary');
+const config = require('../../config');
+const loadToolsSummary = require('../tools/loadToolsSummary');
 
 const logMeta = {nodeName: 'c3pr-agent', correlationIds: 'boot', moduleName: 'hubRegistryBroadcast'};
 

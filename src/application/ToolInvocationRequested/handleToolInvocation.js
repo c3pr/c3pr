@@ -1,6 +1,6 @@
-const invokeToolAtGitRepo = require("../domain/invokeToolAtGitRepo");
-const createPatchesPayload = require("../domain/createPatchesPayload");
-const sendPatchToBot = require("../domain/sendPatchToBot");
+const invokeToolAtGitRepo = require("./invokeToolAtGitRepo");
+const createPatchesPayload = require("./patch/createPatchesPayload");
+const sendPatchToBot = require("./patch/sendPatchToBot");
 const c3prLOG = require("node-c3pr-logger");
 
 async function handleToolInvocation(toolInvocation) {

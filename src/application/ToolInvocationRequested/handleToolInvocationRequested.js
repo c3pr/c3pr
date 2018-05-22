@@ -1,4 +1,4 @@
-const handleToolInvocation = require('../handleToolInvocation');
+const handleToolInvocation = require('./handleToolInvocation');
 const c3prLOG = require("node-c3pr-logger");
 
 function handleToolInvocationRequested() {
