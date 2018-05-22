@@ -1,7 +1,18 @@
-const handleToolInvocation = require('../application/handleToolInvocation');
+const handleToolInvocation = require('../handleToolInvocation');
 const c3prLOG = require("node-c3pr-logger");
 
-module.exports = function (app) {
+function handleToolInvocationRequested() {
+
+}
+
+module.exports = {
+    handleToolInvocationRequested: {
+        handleToolInvocationRequested
+    }
+};
+
+
+function old(app) {
 
     app.post('/c3pr', function(request, response){
         const toolInvocation = request.body;
@@ -26,4 +37,4 @@ module.exports = function (app) {
         });
     });
 
-};
+}

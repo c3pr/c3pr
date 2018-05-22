@@ -15,6 +15,7 @@ module.exports = {
             jwt: null
         },
         hub:{
+            loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
             registryUrl: `${C3PR_HUB_URL}/api/v1/registry`,
 
             broadcastTimeoutInMs: 10 * 60 * 60 * 1000, // 10 hours
@@ -26,7 +27,9 @@ module.exports = {
             port: require('url').parse(C3PR_AGENT_URL).port || 80,
             agentId: C3PR_AGENT_ID,
             cloneDir: C3PR_CLONE_DIR,
-            cloneDepth: C3PR_CLONE_DEPTH
+            cloneDepth: C3PR_CLONE_DEPTH,
+
+            ToolInvocationRequestedCallbackUrl: `/callbacks/ToolInvocationRequested`
         }
     }
 };

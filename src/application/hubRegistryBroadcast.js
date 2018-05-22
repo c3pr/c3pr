@@ -7,12 +7,15 @@ const loadToolsSummary = require('./loadToolsSummary');
 const logMeta = {nodeName: 'c3pr-agent', correlationIds: 'boot', moduleName: 'hubRegistryBroadcast'};
 
 function broadcast(summary) {
+    const headers = {Authorization: `Bearer ${config.c3pr.auth.jwt}`};
+
     axios.patch(config.c3pr.hub.registryUrl,
         {
             key: `agent://${config.c3pr.agent.agentId}`,
             value: summary,
             timeout: config.c3pr.hub.broadcastTimeoutInMs
-        }
+        },
+        {headers}
     ).then(({data}) => {
         c3prLOG2({
             msg: `Successfully broadcasted to registry. URL: ${config.c3pr.hub.registryUrl}.`,
