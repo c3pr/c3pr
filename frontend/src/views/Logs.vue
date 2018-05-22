@@ -5,7 +5,7 @@
     <button @click="displayedMeta = {}" :disabled="Object.keys(displayedMeta).length === 0">
       clear displayedMeta
     </button>
-    <pre>{{ (JSON.stringify(displayedMeta || "", null, 2)).replace(/\\n/g, "\n") }}</pre>
+    <pre>{{ (JSON.stringify(displayedMeta || "", null, 2)).replace(/([^\\])\\n/g, "$1\n") }}</pre>
     <hr>
     <div>
     <span v-for="prop of Object.keys(display)" :key="prop">
