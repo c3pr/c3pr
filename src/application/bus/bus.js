@@ -7,6 +7,9 @@ const logMetas = [{nodeName: 'c3pr-hub', moduleName: 'bus'}];
 
 const hub = new EventEmitter();
 
+const NEW_SUBSCRIBER = 'NEW_SUBSCRIBER';
+const newSubscribers = new EventEmitter();
+
 let listeners = [];
 
 function removeListener(event_type, callbackUrl, listener) {
@@ -17,7 +20,8 @@ function removeListener(event_type, callbackUrl, listener) {
 }
 
 function notify(callbackUrl, tryNumber, event_type, listener) {
-    c3prLOG2({msg: `Notifying for event '${event_type}' the URL ${callbackUrl}. Try number ${tryNumber} of ${config.c3pr.hub.bus.maxRetries + 1}.`, logMetas});
+    c3prLOG2({msg: `Notifying for event '${event_type}' the URL ${callbackUrl}.` + (tryNumber > 1 ? ` Try number ${tryNumber} of ${config.c3pr.hub.bus.maxRetries + 1}.` : ``), logMetas});
+    // noinspection JSUnresolvedFunction
     axios.post(callbackUrl).catch(() => {
         if (tryNumber > config.c3pr.hub.bus.maxRetries) {
             removeListener(event_type, callbackUrl, listener);
@@ -38,6 +42,8 @@ function subscribeTo(event_type, callbackUrl) {
     const listener = () => notify(callbackUrl, 1, event_type, listener);
     hub.on(event_type, listener);
     listeners.push(Object.freeze({listener, event_type, callbackUrl}));
+
+    newSubscribers.emit(NEW_SUBSCRIBER, event_type);
 }
 
 function emit(event_type) {
@@ -55,6 +61,7 @@ module.exports = {
         subscribeTo,
         emit,
         clearListeners,
-        getListeners: () => listeners.map(({event_type, callbackUrl}) => ({event_type, callbackUrl}))
+        getListeners: () => listeners.map(({event_type, callbackUrl}) => ({event_type, callbackUrl})),
+        onNewSubscribers: (listener) => newSubscribers.on(NEW_SUBSCRIBER, (event_type) => listener(event_type))
     }
 };

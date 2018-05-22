@@ -7,6 +7,12 @@ const Status = require('./status');
 const assert = require('assert');
 
 const c3prBus = require('../../application/bus/bus').c3prBus;
+c3prBus.onNewSubscribers((event_type) => {
+    let uuid = Status.peekUnprocessedEventOfType(event_type);
+    if (uuid) {
+        return c3prBus.emit(event_type);
+    }
+});
 
 async function register(event_type, payload) {
     assert.ok(event_type && payload, "Missing required arguments");
