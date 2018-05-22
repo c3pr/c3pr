@@ -8,9 +8,10 @@ const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
 
 const config = require('../../config');
 
-const logMetas = [{nodeName: 'c3pr-brain', moduleName: 'invokeTools'}];
+const logMetaz = (correlationId) => [{nodeName: 'c3pr-brain', correlationId, moduleName: 'invokeTools'}];
 
 function invokeToolForFiles(parent, repository, tool_id, files) {
+    const logMetas = logMetaz(repository.revision);
     const toolInvocationRequested = {
         parent,
         repository,
@@ -49,6 +50,7 @@ function invokeToolForFiles(parent, repository, tool_id, files) {
  * - Create ToolInvocationRequested for such tool agent.
  */
 async function invokeTools({parent, repository, files}) {
+    const logMetas = logMetaz(repository.revision);
     const availableAgents = await fetchAllToolAgents();
 
     if (availableAgents.length === 0) {
