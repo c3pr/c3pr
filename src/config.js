@@ -5,7 +5,7 @@ const C3PR_REPO_GITLAB_URL = process.env.C3PR_REPO_GITLAB_URL || `http://localho
 
 const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
 
-const GITLAB_URL = 'http://127.0.0.1:8090';
+const GITLAB_URL = process.env.GITLAB_URL || 'http://c3prgitlab:8888';
 const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3';
 
 const WEBHOOKS_URL = `/webhooks`;

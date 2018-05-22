@@ -13,7 +13,7 @@ const changesCommittedONE = {
     "repository": {
         "full_path": "c3pr/sample-project-java-maven",
         "author": "root",
-        "clone_url_http": "http://127.0.0.1:8090/c3pr/sample-project-java-maven.git",
+        "clone_url_http": "http://c3prgitlab:8888/c3pr/sample-project-java-maven.git",
         "branch": "master",
         "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
     },
