@@ -15,7 +15,7 @@ function emitChangesCommitted(changesCommitted, outerLogMetas) {
     });
 
     return c3prRNE.registerNewEvent({
-        eventType: `ChangesCommitted`,
+        event_type: `ChangesCommitted`,
         payload: changesCommitted,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.jwt,
