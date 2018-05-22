@@ -15,6 +15,7 @@ module.exports = {
             jwt: null
         },
         hub:{
+            c3prHubUrl: C3PR_HUB_URL,
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
             registryUrl: `${C3PR_HUB_URL}/api/v1/registry`,
 

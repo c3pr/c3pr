@@ -1,8 +1,11 @@
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
 
 const invokeToolAtGitRepo = require("./invokeToolAtGitRepo");
-const createPatchesPayload = require("./patch/createPatchesPayload");
-const sendPatchToBot = require("./patch/sendPatchToBot");
+
+const config = require('../../config');
+
+const loadTools = require('../tools/loadTools');
 
 async function handleToolInvocation(toolInvocationEvent) {
 
@@ -15,29 +18,44 @@ async function handleToolInvocation(toolInvocationEvent) {
         meta: {toolInvocationEvent}
     });
 
-    try {
-        const toolInvocationResult = await invokeToolAtGitRepo(toolInvocationEvent);
-        const aPatchHasBeenGenerated = toolInvocationResult.files.length;
+    const toolInvocationResult = await invokeToolAtGitRepo(toolInvocation, loadTools);
 
-        if (aPatchHasBeenGenerated) {
-            if (false) {
-                const patchesPayload = createPatchesPayload(toolInvocationEvent, toolInvocationResult);
-                await sendPatchToBot(toolInvocationEvent.c3pr.patchesUrl, patchesPayload);
-            }
-            c3prLOG2({msg: `Tool invocation complete. A patch has been generated and sent.`, logMetas});
-            // create TIC saying files were handled
-            // status(200).send({files: toolInvocationResult.files, description: 'This tool invocation completed successfully and has generated a diff.'});
-        } else {
-            c3prLOG2({msg: `Tool invocation complete. No patch has been generated.`, logMetas});
-            // create TIC saying files were NOT handled
-            // status(204).send({files: toolInvocationResult.files, description: 'This tool invocation completed successfully and has NOT generated a diff.'});
-        }
-    } catch (e) {
+    const parent = {event_type: toolInvocationEvent.event_type, uuid: toolInvocationEvent.uuid};
+
+    const changed_files = toolInvocationResult.files;
+    const unmodified_files = toolInvocation.files.filter(f => !toolInvocationResult.files.includes(f));
+
+    const tool = loadTools.toolsHash[toolInvocation.tool_id];
+    const pr_title = tool.pr_title;
+    const pr_body = tool.pr_body;
+    const diff_base64 = toolInvocationResult.diff;
+
+    await c3prRNE.registerNewEvent({
+        event_type: `ToolInvocationCompleted`,
+        payload: {
+            parent,
+            repository: toolInvocation.repository,
+            changed_files,
+            unmodified_files,
+            pr_title,
+            pr_body,
+            diff_base64
+        },
+        c3prHubUrl: config.c3pr.hub.c3prHubUrl,
+        jwt: config.c3pr.auth.jwt,
+        logMetas
+    }).catch(e => {
         c3prLOG2({
-            msg: `Error while invoking tool. Reason: '${e}'. Data: ${e.response && e.response.data}`,
+            msg: `Error while registering new event: ToolInvocationCompleted. Reason: '${e}'. Data: ${e.response.data}.`,
             logMetas,
             meta: {error: require('util').inspect(e)}
         });
+    });
+
+    if (toolInvocationResult.files.length) {
+        c3prLOG2({msg: `Tool invocation complete. A patch has been generated and sent.`, logMetas});
+    } else {
+        c3prLOG2({msg: `Tool invocation complete. No patch has been generated.`, logMetas});
     }
 }
 

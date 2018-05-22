@@ -8,6 +8,10 @@ const config = require('../../config');
 config.c3pr.agent.cloneDir = '/tmp/c3pr/test';
 config.c3pr.agent.cloneDepth = 5;
 
+const loadTools = {
+    toolsHash: {}
+};
+
 describe('invokeToolAtGitRepo', () => {
 
     it('invokeToolAtGitRepo', async () => {
@@ -38,7 +42,7 @@ describe('invokeToolAtGitRepo', () => {
                     "rule": "sonar:StringCheckOnLeft"
                 }
             }
-        });
+        }, loadTools);
 
         expect(toolInvocationResult.files).to.deep.equal(["README.md", "pom.xml"]);
 
@@ -96,7 +100,7 @@ index ad8bb19..78c4a56 100644
                     "rule": "sonar:StringCheckOnLeft"
                 }
             }
-        });
+        }, loadTools);
 
         expect(toolInvocationResult.files).to.deep.equal([]);
         expect(toolInvocationResult.diff).to.be.equal('');

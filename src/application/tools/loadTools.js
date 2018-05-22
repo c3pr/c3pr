@@ -53,7 +53,7 @@ function loadTools() {
 
 const tools = loadTools();
 const toolsSummary = tools.map(({tool_id, extensions, tags}) => ({tool_id, extensions, tags}));
-const toolsHash = toolsSummary.reduce((_toolsHash, tool) => {
+const toolsHash = tools.reduce((_toolsHash, tool) => {
     return { ..._toolsHash, [tool.tool_id]: {extensions: tool.extensions, tags: tool.tags, command: tool.command, pr_title: tool.pr_title, pr_body: tool.pr_body} };
 }, {});
 
