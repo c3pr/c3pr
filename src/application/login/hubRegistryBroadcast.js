@@ -2,13 +2,14 @@ const axios = require('axios');
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 
 const config = require('../../config');
-const loadToolsSummary = require('../tools/loadToolsSummary');
+const loadTools = require('../tools/loadTools');
 
 const logMeta = {nodeName: 'c3pr-agent', correlationIds: 'boot', moduleName: 'hubRegistryBroadcast'};
 
 function broadcast(summary) {
     const headers = {Authorization: `Bearer ${config.c3pr.auth.jwt}`};
 
+    // noinspection JSUnresolvedFunction
     axios.patch(config.c3pr.hub.registryUrl,
         {
             key: `agent://${config.c3pr.agent.agentId}`,
@@ -32,7 +33,7 @@ function broadcast(summary) {
 }
 
 function hubRegistryBroadcast() {
-    const summary = loadToolsSummary();
+    const summary = loadTools.toolsSummary;
     c3prLOG2({
         msg: `Now broadcasting to C-3PR registry API: ${config.c3pr.hub.registryUrl}.`,
         logMetas: [logMeta],
