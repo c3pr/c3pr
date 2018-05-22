@@ -7,7 +7,7 @@ const hubRegistryBroadcast = require('./hubRegistryBroadcast');
 c3prHubClient.login({
     loginUrl: config.c3pr.hub.loginUrl,
     subscriptions: [
-        {eventType: "ToolInvocationRequested", callbackUrl: config.c3pr.agent.agentUrl + config.c3pr.brain.ChangesCommittedCallbackUrl}
+        {eventType: "ToolInvocationRequested", callbackUrl: config.c3pr.agent.agentUrl + config.c3pr.agent.ToolInvocationRequestedCallbackUrl}
     ],
     logMetas: [{nodeName: 'c3pr-agent', moduleName: 'login'}]
 }).then(jwt => {
