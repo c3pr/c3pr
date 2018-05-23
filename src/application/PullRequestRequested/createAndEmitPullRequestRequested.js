@@ -2,35 +2,29 @@ const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 const createPullRequestRequested = require('../PullRequestRequested/createPullRequestRequested').c3pr.createPullRequestRequested;
 const emitPullRequestRequested = require('../PullRequestRequested/emitPullRequestRequested');
 
-const c3prRTI = require('../invokeTool/invokeTools').c3prBrain;
+const invokeToolsForRemainingFiles = require('./invokeToolsForRemainingFiles');
 
-const logMetaz = (correlationId) => [{nodeName: 'c3pr-brain', correlationId, moduleName: 'createAndEmitPullRequestRequested'}];
+function createAndEmitPullRequestRequested(toolInvocationCompletedEvent, logMetas) {
+    const lms = [...(logMetas || []), {nodeName: 'c3pr-brain', correlationId: toolInvocationCompletedEvent.payload.repository.revision, moduleName: 'createAndEmitPullRequestRequested'}];
 
-function invokeToolsForRemainingFiles(toolInvocationCompleted) {
-    c3prRTI.invokeTools({
-        parent: {
-            event_type: toolInvocationCompleted.event_type,
-            uuid: toolInvocationCompleted.uuid
-        },
-        changes_committed_root: toolInvocationCompleted.changes_committed_root,
-        repository: toolInvocationCompleted.repository,
-        files: toolInvocationCompleted.unmodified_files
-    }).catch(e => {
+    if (toolInvocationCompletedEvent.payload.unmodified_files.length) {
         c3prLOG2({
-            msg: `Error while invoking tools. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
-            logMetas: logMetaz(toolInvocationCompleted.repository.revision),
-            meta: {toolInvocationCompleted, error: require('util').inspect(e)}
+            msg: `ToolInvocationCompleted has unmodified files. I will now attempt to invoke new tools.`,
+            logMetas: lms,
+            meta: {toolInvocationCompletedEvent}
         });
-    });
-}
-
-function createAndEmitPullRequestRequested(toolInvocationCompleted, logMetas) {
-    if (toolInvocationCompleted.unmodified_files.length) {
-        invokeToolsForRemainingFiles(toolInvocationCompleted);
+        invokeToolsForRemainingFiles(toolInvocationCompletedEvent, lms);
     }
 
-    const pullRequestRequested = createPullRequestRequested(toolInvocationCompleted);
-    emitPullRequestRequested(pullRequestRequested, logMetas);
+    if (toolInvocationCompletedEvent.payload.changed_files.length) {
+        c3prLOG2({
+            msg: `ToolInvocationCompleted modified files. I will now issue a PullRequestRequested event.`,
+            logMetas: lms,
+            meta: {toolInvocationCompletedEvent}
+        });
+        const pullRequestRequested = createPullRequestRequested(toolInvocationCompletedEvent);
+        emitPullRequestRequested(pullRequestRequested, lms);
+    }
 }
 
 module.exports = createAndEmitPullRequestRequested;
