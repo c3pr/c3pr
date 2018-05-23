@@ -7,25 +7,25 @@ const config = require('../../config');
 
 const loadTools = require('../tools/loadTools');
 
-async function handleToolInvocation(toolInvocationEvent) {
+async function handleToolInvocation(toolInvocationRequestedEvent) {
 
-    const toolInvocation = toolInvocationEvent.payload;
-    const logMetas = [{nodeName: 'c3pr-agent', correlationId: toolInvocation.repository.revision, moduleName: 'handleToolInvocation'}];
+    const toolInvocationRequested = toolInvocationRequestedEvent.payload;
+    const logMetas = [{nodeName: 'c3pr-agent', correlationId: toolInvocationRequested.repository.revision, moduleName: 'handleToolInvocation'}];
 
     c3prLOG2({
-        msg: `C-3PR Agent received invocation: ${toolInvocation.tool_id}. Files: ${JSON.stringify(toolInvocation.files)}`,
+        msg: `C-3PR Agent received invocation: ${toolInvocationRequested.tool_id}. Files: ${JSON.stringify(toolInvocationRequested.files)}`,
         logMetas,
-        meta: {toolInvocationEvent}
+        meta: {toolInvocationRequestedEvent}
     });
 
-    const toolInvocationResult = await invokeToolAtGitRepo(toolInvocation, loadTools);
+    const toolInvocationResult = await invokeToolAtGitRepo(toolInvocationRequested, loadTools);
 
-    const parent = {event_type: toolInvocationEvent.event_type, uuid: toolInvocationEvent.uuid};
+    const parent = {event_type: toolInvocationRequestedEvent.event_type, uuid: toolInvocationRequestedEvent.uuid};
 
     const changed_files = toolInvocationResult.files;
-    const unmodified_files = toolInvocation.files.filter(f => !toolInvocationResult.files.includes(f));
+    const unmodified_files = toolInvocationRequested.files.filter(f => !toolInvocationResult.files.includes(f));
 
-    const tool = loadTools.toolsHash[toolInvocation.tool_id];
+    const tool = loadTools.toolsHash[toolInvocationRequested.tool_id];
     const pr_title = tool.pr_title;
     const pr_body = tool.pr_body;
     const diff_base64 = toolInvocationResult.diff;
@@ -33,8 +33,9 @@ async function handleToolInvocation(toolInvocationEvent) {
     await c3prRNE.registerNewEvent({
         event_type: `ToolInvocationCompleted`,
         payload: {
+            changes_committed_root: toolInvocationRequestedEvent.changes_committed_root,
             parent,
-            repository: toolInvocation.repository,
+            repository: toolInvocationRequested.repository,
             changed_files,
             unmodified_files,
             pr_title,
