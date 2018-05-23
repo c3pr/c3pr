@@ -23,12 +23,14 @@ async function handlerFunction(changesCommittedEvent) {
         uuid: changesCommittedEvent.uuid
     };
     try {
-        await c3prRTI.invokeTools({parent, repository: changesCommittedEvent.payload.repository, files: changesCommittedEvent.payload.changed_files});
+        await c3prRTI.invokeTools({
+            parent, changes_committed_root: changesCommittedEvent.uuid, repository: changesCommittedEvent.payload.repository, files: changesCommittedEvent.payload.changed_files
+        });
     } catch (e) {
         c3prLOG2({
             msg: `Error while invoking tools. Reason: '${e}'. Data: ${e.response && e.response.data}.`,
             logMetas,
-            meta: {args: {parent, repository: changesCommittedEvent.repository, files: changesCommittedEvent.changed_files}, error: require('util').inspect(e)}
+            meta: {changesCommittedEvent, error: require('util').inspect(e)}
         });
         throw e;
     }
