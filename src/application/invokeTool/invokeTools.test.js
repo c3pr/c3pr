@@ -30,6 +30,7 @@ describe('invokeTools', () => {
     it('should emit a ToolInvocationRequested for each file that have a tool available', async () => {
 
         const parent = {event_type: "ChangesCommitted", uuid: "uuid-12312-3123123-12312" };
+        const changes_committed_root = "uuid-....123123123...";
         const changes = {
             repository: {
                 full_path: "c3pr/sample-project-java-maven",
@@ -41,10 +42,10 @@ describe('invokeTools', () => {
             changed_files: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js', 'src/boo.txt'],
         };
 
-        const agents = [
-            {key: "agent://one", value: {tool_id: "one", extensions: ["java", "js"], tags: ["java", "js"]}, timeout: "2028-05-15T15:30:27.667Z"},
-            {key: "agent://two", value: {tool_id: "two", extensions: ["js"], tags: ["js"]}, timeout: "2028-05-15T15:30:28.667Z"},
-        ];
+        const agents = {
+            "agent://one": {tool_id: "one", extensions: ["java", "js"], tags: ["java", "js"]},
+            "agent://two": [{tool_id: "two", extensions: ["js"], tags: ["js"]}],
+        };
         configureFetchAllToolAgents(agents);
 
         let toolOneCalled = false;
@@ -52,15 +53,15 @@ describe('invokeTools', () => {
         axiosMock
             .onPost(
                 `${config.c3pr.hub.c3prHubUrl}/api/v1/events/ToolInvocationRequested`,
-                {parent, repository: changes.repository, tool_id: "two", files: ['src/main/a/b/c/Main.js']}
+                {parent, changes_committed_root, repository: changes.repository, tool_id: "two", files: ['src/main/a/b/c/Main.js']}
             ).reply(() => { toolTwoCalled = true; return [200]; })
             .onPost(
                 `${config.c3pr.hub.c3prHubUrl}/api/v1/events/ToolInvocationRequested`,
-                {parent, repository: changes.repository, tool_id: "one", files: ['src/main/a/b/c/Main.java']}
+                {parent, changes_committed_root, repository: changes.repository, tool_id: "one", files: ['src/main/a/b/c/Main.java']}
             ).reply(() => { toolOneCalled = true; return [200]; });
 
         // execute
-        await invokeTools({parent, repository: changes.repository, files: changes.changed_files});
+        await invokeTools({parent, changes_committed_root, repository: changes.repository, files: changes.changed_files});
 
         // verify
         expect(toolOneCalled).to.equal(true);
