@@ -66,6 +66,7 @@
         <tr>
           <th>uuid</th>
           <th>event_type</th>
+          <th>changes_committed_root</th>
           <th>status</th>
           <th>processor</th>
           <th>created</th>
@@ -77,11 +78,14 @@
         <tr v-for="event of events" :class="event.node">
           <td>{{ event.uuid }}</td>
           <td>{{ event.event_type }}</td>
+          <td>{{ event.changes_committed_root }}</td>
           <td>{{ event.meta.status }}</td>
           <td>{{ event.meta.processorUUID }}</td>
           <td>{{ event.meta.created }}</td>
           <td>{{ event.meta.modified }}</td>
-          <td>{{ formatPayload(event.event_type, event.payload) }}</td>
+          <td>
+            <event-detail :event_type="event.event_type" :payload="event.payload"></event-detail>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -90,6 +94,7 @@
 
 <script>
 import axios from 'axios';
+import EventDetail from '../components/EventDetail.vue';
 
 const proxyPrefix = '/api/hub';
 export default {
@@ -131,19 +136,12 @@ export default {
         alert('xError: ' + e);
       });
     },
-    formatPayload(event_type, payload) {
-      switch (event_type) {
-        case "ChangesCommitted": {
-          return {url: payload.repository.clone_url_http, changed_files: payload.changed_files}
-        }
-      }
-      return payload;
-    },
   },
+  components: {EventDetail}
 };
 </script>
 
-<style scoped>
+<style>
   td, th { border: 1px solid black; border-collapse: collapse; padding: 0 5px 0 5px }
   th { background-color: #ededed }
   table { font-family: monospace; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
