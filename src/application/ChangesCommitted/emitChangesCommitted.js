@@ -23,7 +23,7 @@ function emitChangesCommitted(changesCommitted, outerLogMetas) {
     })
         .catch(e => {
             c3prLOG2({
-                msg: `Error while registering new event: ChangesCommitted. Reason: '${e}'. Data: ${e.response && e.response.data}.`,
+                msg: `Error while registering new event: ChangesCommitted. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
                 logMetas,
                 meta: {error: require('util').inspect(e)}
             });
