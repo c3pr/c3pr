@@ -16,7 +16,7 @@ async function markAsProcessed({event_type, uuid, c3prHubUrl, jwt, logMetas: out
         await client.patch(`/api/v1/events/${event_type}/${uuid}/meta/processed`, {}, {headers});
     } catch (e) {
         c3prLOG2({
-            msg: `Error while marking event ${uuid} of type ${event_type} as PROCESSED. Reason: '${e}'. Data: ${e.response && e.response.data}`,
+            msg: `Error while marking event ${uuid} of type ${event_type} as PROCESSED. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}`,
             logMetas: [...(outerLogMetas || []), logMeta],
             meta: {error: require('util').inspect(e)}
         });

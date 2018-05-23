@@ -14,7 +14,7 @@ async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUr
         event = await collectEventAndMarkAsProcessing({event_type, c3prHubUrl, jwt, logMetas})
     } catch (e) {
         c3prLOG2({
-            msg: `Couldn't collect ${event_type}. Skipping. Error reason: '${e}'. Data: ${e.response && e.response.data}.`,
+            msg: `Couldn't collect ${event_type}. Skipping. Error reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
             logMetas,
             meta: {error: require('util').inspect(e)}
         });
@@ -35,7 +35,7 @@ async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUr
 
     } catch (e) {
         c3prLOG2({
-            msg: `Error while executing handlerFunction() for event handling. Reason: '${e}'. Data: ${e.response && e.response.data}.`,
+            msg: `Error while executing handlerFunction() for event handling. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
             logMetas,
             meta: {event, error: require('util').inspect(e)}
         });
@@ -48,7 +48,7 @@ async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUr
     } catch (e) {
         c3prLOG2({
             msg: `Couldn't mark ${event_type}/${event.uuid} as COMPLETED. You must do it **MANUALLY**. If you don't, the PROCESSING status will `+
-                `timeout and the event will be reprocessed, possibly generating duplicated effects. Error reason: '${e}'. Data: ${e.response && e.response.data}.`,
+                `timeout and the event will be reprocessed, possibly generating duplicated effects. Error reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
             logMetas,
             meta: {event, error: require('util').inspect(e)}
         });

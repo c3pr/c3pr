@@ -20,7 +20,7 @@ async function collectEventAndMarkAsProcessing({event_type, c3prHubUrl, jwt, log
         return {uuid: event.uuid, event_type, payload: event.payload};
     } catch (e) {
         c3prLOG2({
-            msg: `Error while marking event ${event.uuid} of type ${event_type} as processing. Reason: '${e}'. Data: ${e.response && e.response.data}`,
+            msg: `Error while marking event ${event.uuid} of type ${event_type} as processing. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}`,
             logMetas: [...(outerLogMetas || []), logMeta],
             meta: {error: require('util').inspect(e)}
         });

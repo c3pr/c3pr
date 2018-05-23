@@ -22,7 +22,7 @@ async function registerNewEvent({event_type, payload, c3prHubUrl, jwt, logMetas:
         await client.post(`/api/v1/events/${event_type}`, payload, {headers});
     } catch (e) {
         c3prLOG2({
-            msg: `Error while registering new event of type '${event_type}'. Reason: '${e}'. Data: ${e.response && e.response.data}.`,
+            msg: `Error while registering new event of type '${event_type}'. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
             logMetas,
             meta: {payload, error: require('util').inspect(e)}
         });
