@@ -3,6 +3,7 @@
     "event_type": "ChangesCommitted OR ToolInvocationCompleted",
     "uuid": "uuid-12312-3123123-12312"
   },
+  "changes_committed_root": "cc-uuid-12312-3123123-12312",
 
   "repository": {
     "full_path": "c3pr/sample-project-java-maven",
