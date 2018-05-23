@@ -66,9 +66,7 @@
         <tr>
           <th>uuid</th>
           <th>event_type</th>
-          <th>changes_committed_root</th>
           <th>status</th>
-          <th>processor</th>
           <th>created</th>
           <th>modified</th>
           <th>payload</th>
@@ -78,9 +76,7 @@
         <tr v-for="event of events" :class="event.node">
           <td>{{ event.uuid }}</td>
           <td>{{ event.event_type }}</td>
-          <td>{{ event.changes_committed_root }}</td>
           <td>{{ event.meta.status }}</td>
-          <td>{{ event.meta.processorUUID }}</td>
           <td>{{ event.meta.created }}</td>
           <td>{{ event.meta.modified }}</td>
           <td>
@@ -120,7 +116,7 @@ export default {
     async fetchEvents() {
       const {data} = await axios.get(proxyPrefix + '/api/v1/events');
       if (Array.isArray(data)) {
-        data.sort((a, b) => a && a.meta && a.meta.dateTime && b && b.meta && b.meta.dateTime && a.meta.dateTime.localeCompare(b.meta.dateTime) * -1);
+        data.sort((a, b) => a && a.meta && a.meta.modified && b && b.meta && b.meta.modified && a.meta.modified.localeCompare(b.meta.modified) * -1);
         this.events = data;
       } else {
         this.events = [];
