@@ -17,7 +17,7 @@ function invokeToolsForRemainingFiles(toolInvocationCompleted) {
         files: toolInvocationCompleted.unmodified_files
     }).catch(e => {
         c3prLOG2({
-            msg: `Error while invoking tools. Reason: '${e}'. Data: ${e.response && e.response.data}.`,
+            msg: `Error while invoking tools. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
             logMetas: logMetaz(toolInvocationCompleted.repository.revision),
             meta: {toolInvocationCompleted, error: require('util').inspect(e)}
         });

@@ -28,7 +28,7 @@ async function handlerFunction(changesCommittedEvent) {
         });
     } catch (e) {
         c3prLOG2({
-            msg: `Error while invoking tools. Reason: '${e}'. Data: ${e.response && e.response.data}.`,
+            msg: `Error while invoking tools. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
             logMetas,
             meta: {changesCommittedEvent, error: require('util').inspect(e)}
         });
