@@ -25,7 +25,7 @@ function broadcast(summary) {
         });
     }).catch((e) => {
         c3prLOG2({
-            msg: `Error while broadcasting to registry. URL: ${config.c3pr.hub.registryUrl}. Reason: '${e}'. Data: ${e.response && e.response.data}`,
+            msg: `Error while broadcasting to registry. URL: ${config.c3pr.hub.registryUrl}. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}`,
             logMetas: [logMeta],
             meta: {error: require('util').inspect(e)}
         });
