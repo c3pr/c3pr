@@ -10,7 +10,7 @@ module.exports = function (app) {
         if (webhookPayload.object_kind === "push") {
             //console.log(JSON.stringify(webhookPayload));
             c3prLOG2({
-                msg: `Received webhook for ${webhookPayload.repository.url}. Message: '${webhookPayload.commits && webhookPayload.commits[0].message}'.`,
+                msg: `Received webhook for ${webhookPayload.repository.url}. Message: '${webhookPayload.commits && webhookPayload.commits[0].message.trim()}'.`,
                 logMetas: [{nodeName: 'c3pr-repo-gitlab', correlationId: webhookPayload.after, moduleName: 'webhooksController'}]
             });
             handleWebhook(webhookPayload);

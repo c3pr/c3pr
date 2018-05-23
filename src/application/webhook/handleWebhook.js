@@ -9,7 +9,7 @@ function handleWebhook(webhookPayload) {
     // noinspection JSUnresolvedFunction
     const lastCommit = sortCommits(webhookPayload.commits).pop();
     c3prLOG2({
-        msg: `Handling webhook invoked for ${webhookPayload.repository.url}. Message: '${lastCommit.message}'.`,
+        msg: `Handling webhook invoked for ${webhookPayload.repository.url}. Message: '${lastCommit.message.trim()}'.`,
         logMetas,
         meta: {webhookPayload}
     });
