@@ -15,6 +15,7 @@ module.exports = {
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
 
             registryUrl: `${C3PR_HUB_URL}/api/v1/registry`,
+            toolInvocationRequestedForRoot: `${C3PR_HUB_URL}/api/v1/events/ToolInvocationRequested?payload.changes_committed_root=`,
         },
 
         brain: {

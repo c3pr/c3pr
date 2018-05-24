@@ -1,4 +1,6 @@
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+const axios = require('axios');
+const config = require('../../config');
 
 const filterApplicableToolAgents = require('./filterApplicableToolAgents');
 const fetchAllToolAgents = require('./fetchAllToolAgents');
@@ -10,11 +12,14 @@ function __shuffleArray(array) {
     }
 }
 
-// noinspection JSUnusedLocalSymbols
+/**
+ * Fetchs from HUB all TIR events having this changes_committed_root arg as their changes_committed_root property.
+ */
 async function calculateAlreadyInvokedTools(changes_committed_root) {
-    // TODO fetch from HUB all TIR events having this changes_committed_root arg as their changes_committed_root property.
-    // return their tool_id in a string array
-    return [];
+    const headers = {Authorization: `Bearer ${config.c3pr.auth.jwt}`};
+    let {data: toolInvocationRequestedEvents} = await axios.get(config.c3pr.hub.toolInvocationRequestedForRoot + changes_committed_root, {headers});
+
+    return toolInvocationRequestedEvents.map(tire => tire.payload.tool_id);
 }
 
 async function decideApplicableToolAgents(changes_committed_root, files, logMetas) {
