@@ -36,9 +36,9 @@ function findAll() {
     return eventsDB.findAll();
 }
 
-function findAllOfType(event_type) {
+function findAllOfType(event_type, query) {
     assert.ok(event_type, "event_type is required");
-    return eventsDB.findAllOfType(event_type);
+    return eventsDB.findAllOfType(event_type, query);
 }
 
 function peekUnprocessed(event_type) {
