@@ -1,6 +1,6 @@
 const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').handleFirstCollectedEvent.handleFirstCollectedEvent;
 
-const createAndEmitPullRequestRequested = require('../PullRequestRequested/createAndEmitPullRequestRequested');
+const createAndEmitPullRequestRequested = require('./createAndEmitPullRequestRequested');
 
 const config = require('../../config');
 

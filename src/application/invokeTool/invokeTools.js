@@ -12,8 +12,8 @@ const logMetaz = (correlationId) => [{nodeName: 'c3pr-brain', correlationId, mod
 function invokeToolForFiles(parent, changes_committed_root, repository, tool_id, files) {
     const logMetas = logMetaz(repository.revision);
     const toolInvocationRequested = {
-        changes_committed_root,
         parent,
+        changes_committed_root,
         repository,
         tool_id,
         files
