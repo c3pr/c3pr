@@ -16,8 +16,8 @@ export default {
   data() {
       return {
           ChangesCommitted: ['changed_files', 'repository.clone_url_http'],
-          ToolInvocationRequested: ['parent.event_type', 'parent.uuid', 'tool_id', 'files', 'repository.clone_url_http'],
-          ToolInvocationCompleted: ['parent.event_type', 'parent.uuid', 'changed_files', 'unmodified_files', 'pr_title', 'diff_base64', 'repository.clone_url_http'],
+          ToolInvocationRequested: ['parent.event_type', 'parent.uuid', 'changes_committed_root', 'tool_id', 'files', 'repository.clone_url_http'],
+          ToolInvocationCompleted: ['parent.event_type', 'parent.uuid', 'changes_committed_root', 'changed_files', 'unmodified_files', 'pr_title', 'diff_base64', 'repository.clone_url_http'],
           PullRequestRequested: ['parent.event_type', 'parent.uuid', 'assignee', 'pr_title', 'repository.clone_url_http'],
           PullRequestUpdated: []
       }
