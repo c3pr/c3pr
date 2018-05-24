@@ -10,7 +10,7 @@ function invokeToolsForRemainingFiles(toolInvocationCompletedEvent, outerLogMeta
             event_type: toolInvocationCompletedEvent.event_type,
             uuid: toolInvocationCompletedEvent.uuid
         },
-        changes_committed_root: toolInvocationCompletedEvent.changes_committed_root,
+        changes_committed_root: toolInvocationCompletedEvent.payload.changes_committed_root,
         repository: toolInvocationCompletedEvent.payload.repository,
         files: toolInvocationCompletedEvent.payload.unmodified_files
     }).catch(e => {
