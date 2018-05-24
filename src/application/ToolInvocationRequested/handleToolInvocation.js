@@ -33,8 +33,8 @@ async function handleToolInvocation(toolInvocationRequestedEvent) {
     await c3prRNE.registerNewEvent({
         event_type: `ToolInvocationCompleted`,
         payload: {
-            changes_committed_root: toolInvocationRequestedEvent.changes_committed_root,
             parent,
+            changes_committed_root: toolInvocationRequested.changes_committed_root,
             repository: toolInvocationRequested.repository,
             changed_files,
             unmodified_files,
