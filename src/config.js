@@ -4,6 +4,8 @@ const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
 
 const C3PR_BRAIN_URL = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:5001`;
 
+const C3PR_MONGO_URL = process.env.C3PR_MONGO_URL;
+
 module.exports = {
     c3pr: {
         auth: {
@@ -25,6 +27,10 @@ module.exports = {
             ChangesCommittedCallbackUrl:        `/callbacks/ChangesCommitted`,
             ToolInvocationCompletedCallbackUrl: `/callbacks/ToolInvocationCompleted`,
             PullRequestUpdatedCallbackUrl:      `/callbacks/PullRequestUpdated`,
+
+            c3prBrainMongoUrl: C3PR_MONGO_URL,
+            c3prBrainMongoDatabase: 'c3pr',
+            c3prBrainMongoCollectionProjects: 'projects',
         }
     }
 };
