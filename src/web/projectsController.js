@@ -7,8 +7,8 @@ module.exports = function (app) {
 
     app.use('/api/v1/projects', authExpressMiddleware);
 
-    app.get('/api/v1/projects/', function (req, response) {
-        projectsDB.findAll().then((projects) => {
+    app.get('/api/v1/projects/', function ({query}, response) {
+        projectsDB.findBy(query).then((projects) => {
             response.status(200).send(projects);
         }).catch((e) => {
             console.error(e);
