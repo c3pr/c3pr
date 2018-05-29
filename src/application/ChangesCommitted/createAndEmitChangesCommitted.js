@@ -1,8 +1,8 @@
 const convertWebhookToChanges = require('../ChangesCommitted/convertWebhookToChanges');
 const emitChangesCommitted = require('../ChangesCommitted/emitChangesCommitted');
 
-function createAndEmitChangesCommitted(webhookPayload, logMetas) {
-    const changesCommitted = convertWebhookToChanges(webhookPayload);
+async function createAndEmitChangesCommitted(webhookPayload, logMetas) {
+    const changesCommitted = await convertWebhookToChanges(webhookPayload);
     emitChangesCommitted(changesCommitted, logMetas);
 }
 
