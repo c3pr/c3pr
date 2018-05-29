@@ -23,6 +23,7 @@ async function newProject({clone_url_http, name, tags}) {
         clone_url_http,
         name,
         tags,
+        should_analyze_pushes: true // should analyze regular pushes/commits (Not just PRs)
     });
 }
 
