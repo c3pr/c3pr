@@ -17,7 +17,9 @@ module.exports = {
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
 
             registryUrl: `${C3PR_HUB_URL}/api/v1/registry`,
+            changesCommittedOfUuidUrl: `${C3PR_HUB_URL}/api/v1/events/ChangesCommitted/:uuid`,
             toolInvocationRequestedForRoot: `${C3PR_HUB_URL}/api/v1/events/ToolInvocationRequested?payload.changes_committed_root=`,
+            filesWithOpenPRsForProjectUrl: `${C3PR_HUB_URL}/api/v1/projects/:project_uuid/prs/open/changed_files`,
         },
 
         brain: {
