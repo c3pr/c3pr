@@ -1,5 +1,6 @@
 const uuidv4 = require('uuid/v4');
 
+const config = require('../../config');
 const client = require('./db');
 
 const projects = client.then(cli => cli.db(config.c3pr.brain.c3prBrainMongoDatabase).collection(config.c3pr.brain.c3prBrainMongoCollectionProjects));
@@ -23,7 +24,8 @@ async function newProject({clone_url_http, name, tags}) {
         clone_url_http,
         name,
         tags,
-        should_analyze_pushes: true // should analyze regular pushes/commits (Not just PRs)
+        should_analyze_pushes: true, // should analyze regular pushes/commits (Not just PRs)
+        should_analyze_prs: true
     });
 }
 
