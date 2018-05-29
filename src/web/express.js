@@ -14,6 +14,7 @@ require('./busController')(app);
 require('./registryController')(app);
 require('./eventsController')(app);
 require('./loginController')(app);
+require('./projectsController')(app);
 
 // The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
