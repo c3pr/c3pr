@@ -27,11 +27,6 @@ module.exports = {
             ChangesCommittedCallbackUrl:        `/callbacks/ChangesCommitted`,
             ToolInvocationCompletedCallbackUrl: `/callbacks/ToolInvocationCompleted`,
             PullRequestUpdatedCallbackUrl:      `/callbacks/PullRequestUpdated`,
-
-            c3prBrainMongoUrl: C3PR_MONGO_URL,
-            c3prBrainMongoDatabase: 'c3pr',
-            c3prBrainMongoCollectionProjects: 'projects',
-            c3prBrainMongoCollectionPRs: 'prs',
         }
     }
 };
