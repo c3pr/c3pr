@@ -13,6 +13,10 @@ async function findBy(query) {
     return (await projects).find(query).toArray();
 }
 
+function findAll() {
+    return findBy({});
+}
+
 async function newProject({clone_url_http, name, tags}) {
     const projectOfUrl = await findBy({clone_url_http});
     if (projectOfUrl.length > 0) {
@@ -30,7 +34,9 @@ async function newProject({clone_url_http, name, tags}) {
 }
 
 module.exports = {
-    newProject
+    newProject,
+    findBy,
+    findAll
 };
 
 // noinspection BadExpressionStatementJS
