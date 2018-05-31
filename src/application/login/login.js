@@ -6,6 +6,8 @@ const hubRegistryBroadcast = require('./hubRegistryBroadcast');
 
 c3prHubClient.login({
     loginUrl: config.c3pr.hub.loginUrl,
+    username: config.c3pr.agent.agentId,
+    password: 'not-used',
     subscriptions: [
         {eventType: "ToolInvocationRequested", callbackUrl: config.c3pr.agent.agentUrl + config.c3pr.agent.ToolInvocationRequestedCallbackUrl}
     ],
