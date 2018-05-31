@@ -9,7 +9,7 @@ function authExpressMiddleware(request, response, next) {
             next();
         } catch (e) {
             let errorStatus = (e.toString() === 'Error: Signature verification failed') ? 401 : 500;
-            response.status(errorStatus).send(e.toString());
+            response.status(errorStatus).send('Error while decoding JWT Token of Authorization header "'+request.headers.authorization+'". ' + e.toString());
         }
     }
 }
