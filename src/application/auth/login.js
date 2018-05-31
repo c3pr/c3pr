@@ -27,8 +27,8 @@ function login(body) {
         return anonymous();
     }
 
-    if (!body.username) { throw new Error('Login requires a username.'); }
-    if (!body.password) { throw new Error('Login requires a password.'); }
+    if (!body.username) { throw new Error('Login requires a username. Received: ' + JSON.stringify(body)); }
+    if (!body.password) { throw new Error('Login requires a password. Received: ' + JSON.stringify(body)); }
     subscribe(body.subscriptions);
 
     // TODO validate username + password here
