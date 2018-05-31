@@ -9,13 +9,14 @@ const logMeta = {nodeName: 'c3pr-agent', correlationIds: 'boot', moduleName: 'hu
 function broadcast(summary) {
     const headers = {Authorization: `Bearer ${config.c3pr.auth.jwt}`};
 
-    // noinspection JSUnresolvedFunction
-    axios.patch(config.c3pr.hub.agentsUrl,
-        {
-            tool_ids: summary,
-            expiration_time: new Date(Date.now() + config.c3pr.hub.broadcastTimeoutInMs).toISOString()
-        },
-        {headers}
+    const expirationTime = new Date(Date.now() + config.c3pr.hub.broadcastTimeoutInMs).toISOString();
+
+    const toolSubmissions = summary.map(tool => {
+        // noinspection JSUnresolvedFunction
+        return axios.patch(config.c3pr.hub.agentsUrl, {...tool, expiration_time: expirationTime}, {headers})
+    });
+    Promise.all(
+        toolSubmissions
     ).then(({data}) => {
         c3prLOG2({
             msg: `Successfully broadcasted to registry. URL: ${config.c3pr.hub.agentsUrl}.`,
