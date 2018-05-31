@@ -43,7 +43,7 @@ async function decideApplicableToolAgents(changes_committed_root, files, logMeta
         return [];
     }
 
-    const filesWithOpenPRs = retrieveFilesWithOpenPRs(changes_committed_root);
+    const filesWithOpenPRs = await retrieveFilesWithOpenPRs(changes_committed_root);
 
     const filesWithoutOpenPRs = files.filter(file => !filesWithOpenPRs.includes(file));
 
