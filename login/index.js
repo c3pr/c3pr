@@ -3,11 +3,11 @@ const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 
 const LOGIN_RETRY_TIME = 5 * 1000;
 
-async function login({loginUrl, subscriptions, logMetas: outerLogMetas}) {
+async function login({loginUrl, username, password, subscriptions, logMetas: outerLogMetas}) {
     const logMetas = [...(outerLogMetas || []), {nodeName: 'node-c3pr-hub-client', correlationId: 'login', moduleName: 'login'}];
 
     try {
-        const {data: jwt} = await axios.post(loginUrl, subscriptions);
+        const {data: jwt} = await axios.post(loginUrl, {username, password, subscriptions});
         c3prLOG2({
             msg: `Successfully logged in at ${loginUrl}.`,
             logMetas,
@@ -21,7 +21,7 @@ async function login({loginUrl, subscriptions, logMetas: outerLogMetas}) {
         });
         return new Promise(resolve => {
             setTimeout(() => {
-                resolve(login({loginUrl, subscriptions, logMetas: outerLogMetas}));
+                resolve(login({loginUrl, username, password, subscriptions, logMetas: outerLogMetas}));
             }, LOGIN_RETRY_TIME);
         })
     }
