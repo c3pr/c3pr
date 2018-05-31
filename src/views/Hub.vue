@@ -28,32 +28,22 @@
     <table>
       <thead>
         <tr>
-          <th>Key</th>
-          <th>Value</th>
+          <th>tool_id</th>
+          <th>extensions</th>
+          <th>tags</th>
+          <th>agent_id</th>
+          <th>expiration_time</th>
+          <th>last_updated</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(value, key) of registry">
-          <td>{{ key }}</td>
-          <td>
-            <table v-if="value[0] && value[0].tool_id">
-              <thead>
-              <tr>
-                <th>tool_id</th>
-                <th>extensions</th>
-                <th>tags</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="tool of value">
-                <td>{{ tool.tool_id }}</td>
-                <td>{{ tool.extensions }}</td>
-                <td>{{ tool.tags }}</td>
-              </tr>
-              </tbody>
-            </table>
-            <span v-else>{{ value }}</span>
-          </td>
+        <tr v-for="agent of registry">
+          <td>{{ agent.tool_id }}</td>
+          <td>{{ agent.extensions }}</td>
+          <td>{{ agent.tags }}</td>
+          <td>{{ agent.agent_id }}</td>
+          <td :title="agent.expiration_time">{{ ago(agent.expiration_time) }}</td>
+          <td :title="agent.last_updated">{{ ago(agent.last_updated) }}</td>
         </tr>
       </tbody>
     </table>
@@ -91,6 +81,7 @@
 <script>
 import axios from 'axios';
 import EventDetail from '../components/EventDetail.vue';
+import moment from 'moment';
 
 const proxyPrefix = '/api/hub';
 export default {
@@ -134,6 +125,9 @@ export default {
         alert('xError: ' + e);
       });
     },
+    ago(date) {
+      return moment(date).fromNow();
+    }
   },
   components: {EventDetail}
 };
