@@ -110,7 +110,7 @@ export default {
       this.listeners = data;
     },
     async fetchRegistry() {
-      const { data } = await axios.get(proxyPrefix + '/api/v1/registry');
+      const { data } = await axios.get(proxyPrefix + '/api/v1/agents');
       this.registry = data;
     },
     async fetchEvents() {
