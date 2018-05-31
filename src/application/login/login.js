@@ -9,7 +9,7 @@ c3prHubClient.login({
     ],
     logMetas: [{nodeName: 'c3pr-repo-gitlab', moduleName: 'login'}]
 }).then(jwt => {
-    config.c3pr.jwt = jwt;
+    config.c3pr.hub.auth.jwt = jwt;
 }).catch(e => {
     throw e;
 });

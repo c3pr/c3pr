@@ -14,6 +14,10 @@ module.exports = {
     c3pr: {
 
         hub: {
+            auth: {
+                jwt: null,
+            },
+
             c3prHubUrl: C3PR_HUB_URL,
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
             projectByCloneUrlHttp: `${C3PR_HUB_URL}/api/v1/projects/?clone_url_http=:clone_url_http`,

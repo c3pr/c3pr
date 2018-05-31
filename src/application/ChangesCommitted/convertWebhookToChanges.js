@@ -19,15 +19,17 @@ function extractChangedFiles(webhookCommits) {
 }
 
 async function convertWebhookToChanges(webhookPayload) {
+    const headers = {Authorization: `Bearer ${config.c3pr.hub.auth.jwt}`};
+
     const changed_files = extractChangedFiles(webhookPayload.commits);
 
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
 
-    const {data} = await axios.get(config.c3pr.hub.projectByCloneUrlHttp.replace(/:clone_url_http/, clone_url_http));
+    const {data} = await axios.get(config.c3pr.hub.projectByCloneUrlHttp.replace(/:clone_url_http/, clone_url_http), {headers});
     if (!data.length) {
         throw new Error('Project with URL ' + clone_url_http + ' not found.');
     }
-    const {uuid: project_uuid} = data;
+    const [{uuid: project_uuid}] = data;
 
     const gitSHA = webhookPayload.after;
     return {

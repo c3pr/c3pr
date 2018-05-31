@@ -18,7 +18,7 @@ function emitChangesCommitted(changesCommitted, outerLogMetas) {
         event_type: `ChangesCommitted`,
         payload: changesCommitted,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
-        jwt: config.c3pr.jwt,
+        jwt: config.c3pr.hub.auth.jwt,
         logMetas
     })
         .catch(e => {
