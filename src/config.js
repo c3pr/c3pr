@@ -17,7 +17,7 @@ module.exports = {
         hub:{
             c3prHubUrl: C3PR_HUB_URL,
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
-            registryUrl: `${C3PR_HUB_URL}/api/v1/registry`,
+            agentsUrl: `${C3PR_HUB_URL}/api/v1/agents`,
 
             broadcastTimeoutInMs: 10 * 60 * 60 * 1000, // 10 hours
             broadcastIntervalInMs: 8 * 60 * 60 * 1000, // 8 hours

@@ -10,22 +10,21 @@ function broadcast(summary) {
     const headers = {Authorization: `Bearer ${config.c3pr.auth.jwt}`};
 
     // noinspection JSUnresolvedFunction
-    axios.patch(config.c3pr.hub.registryUrl,
+    axios.patch(config.c3pr.hub.agentsUrl,
         {
-            key: `agent://${config.c3pr.agent.agentId}`,
-            value: summary,
-            timeout: config.c3pr.hub.broadcastTimeoutInMs
+            tool_ids: summary,
+            expiration_time: new Date(Date.now() + config.c3pr.hub.broadcastTimeoutInMs).toISOString()
         },
         {headers}
     ).then(({data}) => {
         c3prLOG2({
-            msg: `Successfully broadcasted to registry. URL: ${config.c3pr.hub.registryUrl}.`,
+            msg: `Successfully broadcasted to registry. URL: ${config.c3pr.hub.agentsUrl}.`,
             logMetas: [logMeta],
             meta: {data, summary}
         });
     }).catch((e) => {
         c3prLOG2({
-            msg: `Error while broadcasting to registry. URL: ${config.c3pr.hub.registryUrl}. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}`,
+            msg: `Error while broadcasting to registry. URL: ${config.c3pr.hub.agentsUrl}. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}`,
             logMetas: [logMeta],
             meta: {error: require('util').inspect(e)}
         });
@@ -35,7 +34,7 @@ function broadcast(summary) {
 function hubRegistryBroadcast() {
     const summary = loadTools.toolsSummary;
     c3prLOG2({
-        msg: `Now broadcasting to C-3PR registry API: ${config.c3pr.hub.registryUrl}.`,
+        msg: `Now broadcasting to C-3PR registry API: ${config.c3pr.hub.agentsUrl}.`,
         logMetas: [logMeta],
         meta: {summary}
     });
