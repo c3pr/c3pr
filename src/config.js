@@ -14,7 +14,7 @@ module.exports = {
 
             mongoProjectsCollection: 'projects',
             mongoPRsCollection: 'prs',
-            mongoRegistryCollection: 'prs',
+            mongoAgentRegistryCollection: 'agents',
 
             bus: {
                 maxRetries: 2,

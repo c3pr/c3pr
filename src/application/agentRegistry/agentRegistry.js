@@ -1,25 +1,17 @@
 const agentRegistryDB = require('./agentRegistryDB');
 const config = require('../../config');
 
-/**
- * Agent may have a single `tool_id` or a `tool_ids` - an array of `tool_id`s.
- */
 async function putAgent(auth, agent) {
-    if (!agent || (!agent.tool_id && !agent.tool_ids) || !agent.expiration_time) {
-        throw new Error("Agent must have a (tool_id or tool_ids) and expiration_time. Received: " + JSON.stringify(agent));
-    }
-    if (agent.tool_ids) {
-        const agents = agent.tool_ids.map(tid => ({...agent, tool_id: tid}));
-
-        return Promise.all(agents.map(a => putAgentToolId(auth, a)));
+    if (!agent || !agent.tool_id || !Array.isArray(agent.extensions) || !Array.isArray(agent.tags) || !agent.expiration_time) {
+        throw new Error("Agent must of the format {tool_id, extensions, tags, expiration_time}. Received: " + JSON.stringify(agent));
     }
     return putAgentToolId(auth, agent);
 }
 
-function putAgentToolId({sub: agent_id}, {tool_id, expiration_time}) {
+function putAgentToolId({sub: agent_id}, {tool_id, extensions, tags, expiration_time}) {
     return agentRegistryDB.replaceOne(
         {tool_id, agent_id},
-        {tool_id, agent_id, expiration_time: new Date(expiration_time)},
+        {tool_id, agent_id, extensions, tags, expiration_time: new Date(expiration_time)},
         {upsert: true}
     );
 }
