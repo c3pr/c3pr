@@ -40,7 +40,7 @@ async function decideApplicableToolAgents(changes_committed_root, files, logMeta
             msg: `No available agents at the moment. Skipping.`,
             logMetas,
         });
-        return;
+        return [];
     }
 
     const filesWithOpenPRs = retrieveFilesWithOpenPRs(changes_committed_root);
@@ -53,7 +53,7 @@ async function decideApplicableToolAgents(changes_committed_root, files, logMeta
             logMetas,
             meta: {filesWithOpenPRs, files}
         });
-        return;
+        return [];
     }
 
     const applicableToolAgents = filterApplicableToolAgents(availableAgents, filesWithoutOpenPRs);
