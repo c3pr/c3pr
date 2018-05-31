@@ -4,7 +4,7 @@
 
     <hr>
 
-    <h1>Bus Listeners</h1>
+    <h1>Bus Listeners ({{ listeners.length }})</h1>
     <table>
       <thead>
         <tr>
@@ -24,7 +24,7 @@
 
     <hr>
 
-    <h1>Registry</h1>
+    <h1>Tool Agents Registry ({{ Object.keys(registry).length }})</h1>
     <table>
       <thead>
         <tr>
@@ -60,7 +60,7 @@
 
     <hr>
 
-    <h1>Events</h1>
+    <h1>Events ({{ events.length }})</h1>
     <table>
       <thead>
         <tr>
@@ -74,11 +74,11 @@
       </thead>
       <tbody>
         <tr v-for="event of events" :class="event.node">
-          <td>{{ event.uuid }}</td>
+          <td>{{ event.uuid.split("-")[0] }}</td>
           <td>{{ event.event_type }}</td>
           <td>{{ event.meta.status }}</td>
-          <td>{{ event.meta.created }}</td>
-          <td>{{ event.meta.modified }}</td>
+          <td>{{ event.meta.created.replace("T", " ") }}</td>
+          <td>{{ event.meta.modified.replace("T", " ") }}</td>
           <td>
             <event-detail :event_type="event.event_type" :payload="event.payload"></event-detail>
           </td>
@@ -139,7 +139,7 @@ export default {
 
 <style>
   td, th { border: 1px solid black; border-collapse: collapse; padding: 0 5px 0 5px }
-  th { background-color: #ededed }
+  th, .grayed { background-color: #ededed; font-weight: bold; }
   table { font-family: monospace; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
   pre {
     text-align: initial;
