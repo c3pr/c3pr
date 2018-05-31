@@ -1,0 +1,25 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+GET http://localhost:5000/api/v1/agents
+Accept: application/json
+
+###
+
+PATCH http://localhost:5000/api/v1/agents
+Content-Type: application/json
+
+{"tool_id": "my-tool-id", "expiration_time": "2020-01-12T20:15:32Z", "agent_id": "my-agent-id"}
+
+###
+
+PATCH http://localhost:5000/api/v1/agents
+Content-Type: application/json
+
+{"tool_id": "my-tool-id-quick-expire", "exxpiration_time": "2018-05-31T17:31:33Z", "agent_id": "my-agent-id-quick-expire"}
+
+###

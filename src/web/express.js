@@ -10,8 +10,8 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
+require('./agentRegistryController')(app);
 require('./busController')(app);
-require('./registryController')(app);
 require('./eventsController')(app);
 require('./loginController')(app);
 require('./projectsController')(app);
