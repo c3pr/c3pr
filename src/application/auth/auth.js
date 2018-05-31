@@ -6,11 +6,11 @@ let secret = Buffer.from(uuidv4(), 'hex');
 function encodeToken(payload) {
     return jwt.encode(payload, secret);
 }
-function encodeUuidToken() {
+function encodeUuidToken(sub) {
     return encodeToken({
-        sub: uuidv4(),
+        sub,
         iss: 'c3pr-hub',
-        permissions: 'register-events'
+        permissions: 'anything'
     });
 }
 function decodeToken(token) {
