@@ -77,8 +77,8 @@
           <td>{{ event.uuid.split("-")[0] }}</td>
           <td>{{ event.event_type }}</td>
           <td>{{ event.meta.status }}</td>
-          <td>{{ event.meta.created.replace("T", " ") }}</td>
-          <td>{{ event.meta.modified.replace("T", " ") }}</td>
+          <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
+          <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
           <td>
             <event-detail :event_type="event.event_type" :payload="event.payload"></event-detail>
           </td>
