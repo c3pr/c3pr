@@ -1,3 +1,4 @@
+const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 const agentRegistryDB = require('./agentRegistryDB');
 const config = require('../../config');
 
@@ -21,7 +22,13 @@ function removeExpiredAgents() {
     return agentRegistryDB.remove({expiration_time: {$lte: now}});
 }
 
-removeExpiredAgents(); // initial run
+const logMetas = [{nodeName: 'c3pr-hub', moduleName: 'agentRegistry'}];
+removeExpiredAgents().then(async () => {
+    c3prLOG2({
+        msg: 'Agents initialized. Database has ' + (await agentRegistryDB.findAll()).length + ' agents.', logMetas
+    });
+});
+
 setInterval(removeExpiredAgents, config.c3pr.hub.agentRegistry.cleanRegistryStepInMs).unref();
 
 module.exports = {
