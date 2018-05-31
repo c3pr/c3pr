@@ -9,12 +9,19 @@ function handleWebhook(webhookPayload) {
     // noinspection JSUnresolvedFunction
     const lastCommit = sortCommits(webhookPayload.commits).pop();
     c3prLOG2({
-        msg: `Handling webhook invoked for ${webhookPayload.repository.url}. Message: '${lastCommit.message.trim()}'.`,
+        msg: `Handling webhook invoked for ${webhookPayload.repository.git_http_url}. Message: '${lastCommit.message.trim()}'.`,
         logMetas,
         meta: {webhookPayload}
     });
 
-    createAndEmitChangesCommitted(webhookPayload);
+    createAndEmitChangesCommitted(webhookPayload)
+        .catch(e => {
+            c3prLOG2({
+                msg: `Error while handling webhook. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
+                logMetas,
+                meta: {webhookPayload, error: require('util').inspect(e)}
+            });
+        })
 }
 
 module.exports = {
