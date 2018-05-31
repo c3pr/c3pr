@@ -11,8 +11,7 @@ module.exports = function (app) {
         projectsDB.findBy(query).then((projects) => {
             response.status(200).send(projects);
         }).catch((e) => {
-            console.error(e);
-            response.status(500).send(e);
+            response.status(500).send(e.toString());
         });
     });
 
@@ -20,8 +19,7 @@ module.exports = function (app) {
         prsDB.findAllOfProject(projectUUID).then((prs) => {
             response.status(200).send(prs);
         }).catch((e) => {
-            console.error(e);
-            response.status(500).send(e);
+            response.status(500).send(e.toString());
         });
     });
 
@@ -29,8 +27,7 @@ module.exports = function (app) {
         prsDB.findFilesWithOpenPR(projectUUID).then((prs) => {
             response.status(200).send(prs);
         }).catch((e) => {
-            console.error(e);
-            response.status(500).send(e);
+            response.status(500).send(e.toString());
         });
     });
 

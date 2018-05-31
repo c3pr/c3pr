@@ -15,8 +15,7 @@ module.exports = function (app) {
                 response.status(204).send();
             }
         }).catch((e) => {
-            console.error(e);
-            response.status(500).send(e);
+            response.status(500).send(e.toString());
         });
     });
 
@@ -29,8 +28,7 @@ module.exports = function (app) {
                 response.status(404).send();
             }
         }).catch((e) => {
-            console.error(e);
-            response.status(500).send(e);
+            response.status(500).send(e.toString());
         });
     });
 
@@ -39,8 +37,7 @@ module.exports = function (app) {
         events.findAll().then((evts) => {
             response.status(200).send(evts);
         }).catch((e) => {
-            console.error(e);
-            response.status(500).send(e);
+            response.status(500).send(e.toString());
         });
     });
 
@@ -50,8 +47,7 @@ module.exports = function (app) {
         events.findAllOfType(eventType, query).then((evts) => {
             response.status(200).send(evts);
         }).catch((e) => {
-            console.error(e);
-            response.status(500).send(e);
+            response.status(500).send(e.toString());
         });
     });
 
@@ -60,8 +56,7 @@ module.exports = function (app) {
         events.register(request.params.eventType, request.body).then((uuid) => {
             response.status(200).send(uuid);
         }).catch((e) => {
-            console.error(e);
-            response.status(500).send(e);
+            response.status(500).send(e.toString());
         });
     });
 
@@ -71,8 +66,7 @@ module.exports = function (app) {
         events.patchAsProcessing(eventType, uuid, processorUUID).then(() => {
             response.status(200).send();
         }).catch((e) => {
-            console.error(e);
-            response.status(500).send(e);
+            response.status(500).send(e.toString());
         });
     });
 
@@ -81,8 +75,7 @@ module.exports = function (app) {
         events.patchAsProcessed(eventType, uuid, processorUUID).then(() => {
             response.status(200).send();
         }).catch((e) => {
-            console.error(e);
-            response.status(500).send(e);
+            response.status(500).send(e.toString());
         });
     });
 
