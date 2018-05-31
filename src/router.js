@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Dashboard from './views/Dashboard.vue';
 import Logs from './views/Logs.vue';
 import Hub from './views/Hub.vue';
+import Projects from './views/Projects.vue';
 
 Vue.use(Router);
 
@@ -23,5 +24,10 @@ export default new Router({
       name: 'hub',
       component: Hub,
     },
+    {
+      path: '/projects',
+      name: 'projects',
+      component: Projects,
+    }
   ],
 });
