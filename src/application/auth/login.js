@@ -27,13 +27,13 @@ function login(body) {
         return anonymous();
     }
 
-    if (!body.user) { throw new Error('Login requires a user.'); }
+    if (!body.username) { throw new Error('Login requires a username.'); }
     if (!body.password) { throw new Error('Login requires a password.'); }
     subscribe(body.subscriptions);
 
-    // TODO validate user + password here
+    // TODO validate username + password here
 
-    return encodeUuidToken(body.user);
+    return encodeUuidToken(body.username);
 }
 
 module.exports = login;
