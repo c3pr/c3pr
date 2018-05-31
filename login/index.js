@@ -15,7 +15,7 @@ async function login({loginUrl, username, password, subscriptions, logMetas: out
         return jwt;
     } catch (e) {
         c3prLOG2({
-            msg: `Error while logging in at ${loginUrl}. Reason: '${e}'.`,
+            msg: `Error while logging in at ${loginUrl}. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}`,
             logMetas,
             meta: {error: require('util').inspect(e)}
         });
