@@ -20,7 +20,7 @@ const invokeTools = require('./invokeTools').c3prBrain.invokeTools;
 
 function configureFetchAllToolAgents(agents) {
     axiosMock
-        .onGet(config.c3pr.hub.registryUrl, {headers: {Authorization: `Bearer ${config.c3pr.auth.jwt}`}})
+        .onGet(config.c3pr.hub.agentsUrl, {headers: {Authorization: `Bearer ${config.c3pr.auth.jwt}`}})
         .reply(200, agents, {'content-type': 'application/json'});
 }
 
@@ -42,10 +42,10 @@ describe('invokeTools', () => {
             changed_files: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js', 'src/boo.txt'],
         };
 
-        const agents = {
-            "agent://one": {tool_id: "one", extensions: ["java", "js"], tags: ["java", "js"]},
-            "agent://two": [{tool_id: "two", extensions: ["js"], tags: ["js"]}],
-        };
+        const agents = [
+            {tool_id: "one", extensions: ["java", "js"], tags: ["java", "js"]},
+            {tool_id: "two", extensions: ["js"],         tags: ["js"]},
+        ];
         configureFetchAllToolAgents(agents);
 
         let toolOneCalled = false;
@@ -66,10 +66,6 @@ describe('invokeTools', () => {
         // verify
         expect(toolOneCalled).to.equal(true);
         expect(toolTwoCalled).to.equal(true);
-    });
-
-    it('should not send file forward if it was modified by previous tool invocation', async () => {
-
     });
 
 });
