@@ -7,7 +7,7 @@ module.exports = function (app) {
             const jwtToken = login(request.body);
             response.json(jwtToken);
         } catch (e) {
-            response.status(400).send(e);
+            response.status(400).send(e.toString());
         }
     });
 
