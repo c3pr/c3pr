@@ -116,7 +116,9 @@ export default {
     async fetchEvents() {
       const {data} = await axios.get(proxyPrefix + '/api/v1/events');
       if (Array.isArray(data)) {
-        data.sort((a, b) => a && a.meta && a.meta.modified && b && b.meta && b.meta.modified && a.meta.modified.localeCompare(b.meta.modified) * -1);
+        data.sort((a, b) => {
+          return a && a.meta && a.meta.created && b && b.meta && b.meta.created && a.meta.created.localeCompare(b.meta.created) * -1;
+        });
         this.events = data;
       } else {
         this.events = [];
