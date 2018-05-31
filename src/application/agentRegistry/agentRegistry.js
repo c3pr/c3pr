@@ -12,7 +12,7 @@ async function putAgent(auth, agent) {
 function putAgentToolId({sub: agent_id}, {tool_id, extensions, tags, expiration_time}) {
     return agentRegistryDB.replaceOne(
         {tool_id, agent_id},
-        {tool_id, agent_id, extensions, tags, expiration_time: new Date(expiration_time)},
+        {tool_id, agent_id, extensions, tags, expiration_time: new Date(expiration_time), last_updated: new Date()},
         {upsert: true}
     );
 }
