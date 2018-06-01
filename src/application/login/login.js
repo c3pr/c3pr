@@ -4,6 +4,8 @@ const c3prHubClient = require('node-c3pr-hub-client/login').c3prHubClient;
 
 c3prHubClient.login({
     loginUrl: config.c3pr.hub.loginUrl,
+    username: 'c3pr-brain',
+    password: 'unused',
     subscriptions: [
         {eventType: "ChangesCommitted",        callbackUrl: config.c3pr.brain.c3prBrainUrl + config.c3pr.brain.ChangesCommittedCallbackUrl},
         {eventType: "ToolInvocationCompleted", callbackUrl: config.c3pr.brain.c3prBrainUrl + config.c3pr.brain.ToolInvocationCompletedCallbackUrl},
