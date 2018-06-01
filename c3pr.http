@@ -9,10 +9,11 @@ POST http://127.0.0.1:5000/api/v1/login
 Content-Type: application/json
 
 {
-  "token": "my-secret-token"
+  "username": "intellij",
+  "password": "unused"
 }
 
-> {% client.global.set("auth_jwt_token", response.body.json); %}
+> {% client.global.set("auth_jwt_token", response.body); %}
 
 ###
 
@@ -22,32 +23,32 @@ Authorization: Bearer {{auth_jwt_token}}
 ###
 
 GET http://127.0.0.1:5000/api/v1/projects/7ac33816-c794-4cf3-a5b4-5f7e2ff06543/prs
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZmQ1ZmVhOC02MjI0LTQzODMtYTVmYy0wN2Q2ZTFhOTRjNzAiLCJpc3MiOiJjM3ByLWh1YiIsInBlcm1pc3Npb25zIjoicmVnaXN0ZXItZXZlbnRzIn0.B0EIp8Iud4bpaJuAjZ6PMvTikFzJ0kAHzw1YzJYSUuk
+Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
 GET http://127.0.0.1:5000/api/v1/projects/7ac33816-c794-4cf3-a5b4-5f7e2ff06543/prs/open/changed_files
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZmQ1ZmVhOC02MjI0LTQzODMtYTVmYy0wN2Q2ZTFhOTRjNzAiLCJpc3MiOiJjM3ByLWh1YiIsInBlcm1pc3Npb25zIjoicmVnaXN0ZXItZXZlbnRzIn0.B0EIp8Iud4bpaJuAjZ6PMvTikFzJ0kAHzw1YzJYSUuk
+Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
 GET http://127.0.0.1:5000/api/v1/projects/
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZmQ1ZmVhOC02MjI0LTQzODMtYTVmYy0wN2Q2ZTFhOTRjNzAiLCJpc3MiOiJjM3ByLWh1YiIsInBlcm1pc3Npb25zIjoicmVnaXN0ZXItZXZlbnRzIn0.B0EIp8Iud4bpaJuAjZ6PMvTikFzJ0kAHzw1YzJYSUuk
+Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
 GET http://127.0.0.1:5000/api/v1/projects/?name=c-3po-project
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZmQ1ZmVhOC02MjI0LTQzODMtYTVmYy0wN2Q2ZTFhOTRjNzAiLCJpc3MiOiJjM3ByLWh1YiIsInBlcm1pc3Npb25zIjoicmVnaXN0ZXItZXZlbnRzIn0.B0EIp8Iud4bpaJuAjZ6PMvTikFzJ0kAHzw1YzJYSUuk
+Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
 GET http://127.0.0.1:5000/api/v1/projects/?clone_url_http=http://example.com/starwars/c-3po-project.git
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZmQ1ZmVhOC02MjI0LTQzODMtYTVmYy0wN2Q2ZTFhOTRjNzAiLCJpc3MiOiJjM3ByLWh1YiIsInBlcm1pc3Npb25zIjoicmVnaXN0ZXItZXZlbnRzIn0.B0EIp8Iud4bpaJuAjZ6PMvTikFzJ0kAHzw1YzJYSUuk
+Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
 GET http://localhost:5000/api/v1/projects/?clone_url_http=http://c3prgitlab:8888/sample_user/sample-project-java-maven.git
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZmQ1ZmVhOC02MjI0LTQzODMtYTVmYy0wN2Q2ZTFhOTRjNzAiLCJpc3MiOiJjM3ByLWh1YiIsInBlcm1pc3Npb25zIjoicmVnaXN0ZXItZXZlbnRzIn0.B0EIp8Iud4bpaJuAjZ6PMvTikFzJ0kAHzw1YzJYSUuk
+Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
