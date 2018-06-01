@@ -1,6 +1,6 @@
 {
   "name": "node-c3pr-repo",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Reusable functions for C3PR repo implementations in node",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.0.3",
-    "node-git-client": "github:c3pr/node-git-client#6.0.7",
+    "node-git-client": "github:c3pr/node-git-client#6.1.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
