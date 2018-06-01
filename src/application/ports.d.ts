@@ -10,5 +10,6 @@ declare const ports: {
     fetchAllToolAgents(): Promise<Agent[]>;
     // noinspection JSUnusedLocalSymbols
     shuffleArray<T>(arr: T[]): T[];
+    retrieveFilesWithOpenPRs(changes_committed_root: string): string[];
 };
 export = ports;

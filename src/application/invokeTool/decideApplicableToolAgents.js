@@ -15,16 +15,6 @@ async function calculateAlreadyInvokedTools(changes_committed_root) {
     return toolInvocationRequestedEvents.map(tire => tire.payload.tool_id);
 }
 
-/**
- * Returns all files with an open PR that was created by the bot.
- */
-async function retrieveFilesWithOpenPRs(changes_committed_root) {
-    const headers = {Authorization: `Bearer ${config.c3pr.auth.jwt}`};
-    let {data: {project_uuid}} = await axios.get(config.c3pr.hub.changesCommittedOfUuidUrl.replace(/:uuid/, changes_committed_root), {headers});
-    let {data: filesWithOpenPRs} = await axios.get(config.c3pr.hub.filesWithOpenPRsForProjectUrl.replace(/:project_uuid/, project_uuid), {headers});
-    return filesWithOpenPRs;
-}
-
 async function decideApplicableToolAgents(changes_committed_root, files, logMetas) {
     const availableAgents = await ports.fetchAllToolAgents();
 
@@ -36,7 +26,7 @@ async function decideApplicableToolAgents(changes_committed_root, files, logMeta
         return [];
     }
 
-    const filesWithOpenPRs = await retrieveFilesWithOpenPRs(changes_committed_root);
+    const filesWithOpenPRs = await ports.retrieveFilesWithOpenPRs(changes_committed_root);
 
     const filesWithoutOpenPRs = files.filter(file => !filesWithOpenPRs.includes(file));
 
