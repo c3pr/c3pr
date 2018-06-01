@@ -23,16 +23,13 @@ async function handlerFunction(changesCommittedEvent) {
         uuid: changesCommittedEvent.uuid
     };
     try {
-        await c3prRTI.invokeTools({
+        let result = await c3prRTI.invokeTools({
             parent, changes_committed_root: changesCommittedEvent.uuid, repository: changesCommittedEvent.payload.repository, files: changesCommittedEvent.payload.changed_files
         });
-    } catch (e) {
-        c3prLOG2({
-            msg: `Error while invoking tools. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
-            logMetas,
-            meta: {changesCommittedEvent, error: require('util').inspect(e)}
-        });
-        throw e;
+        return {new_status: 'PROCESSED', result};
+    } catch (error) {
+        c3prLOG2({msg: `Error while invoking tools.`, logMetas, error, meta: {changesCommittedEvent}});
+        throw error;
     }
 }
 
