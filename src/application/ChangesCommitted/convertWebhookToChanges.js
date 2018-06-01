@@ -1,17 +1,35 @@
-const axios = require('axios');
+const axios = require('axios').default;
 const config = require('../../config');
 const sortCommits = require('../gitlab/sortCommits');
 
-function extractChangedFiles(webhookCommits) {
+async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits) {
     /** @type {Array} */
     const commits = sortCommits(webhookCommits);
 
     const changesetFiles = new Set();
-    commits.forEach(commit => {
-        commit.added.forEach(added => changesetFiles.add(added));
-        commit.modified.forEach(modified => changesetFiles.add(modified));
-        commit.removed.forEach(removed => changesetFiles.delete(removed));
-    });
+    for(let commit of commits) {
+        const {data: modifiedFiles} = await axios.get(
+            `${config.c3pr.repoGitlab.gitlab.url}/api/v4/projects/${urlEncodedOrgNameProjectName}/repository/commits/${commit.id}/diff`,
+            {headers: {"PRIVATE-TOKEN": config.c3pr.repoGitlab.gitlab.apiToken}}
+        );
+        modifiedFiles.forEach(modifiedFile => {
+            /** @namespace modifiedFile.old_path */
+            /** @namespace modifiedFile.new_path */
+            /** @namespace modifiedFile.new_file */
+            /** @namespace modifiedFile.renamed_file */
+            /** @namespace modifiedFile.deleted_file */
+            if (modifiedFile.new_file) {
+                changesetFiles.add(modifiedFile.new_path);
+            } else if (modifiedFile.renamed_file) {
+                changesetFiles.delete(modifiedFile.old_path);
+                changesetFiles.add(modifiedFile.new_path);
+            } else if (modifiedFile.deleted_file) {
+                changesetFiles.delete(modifiedFile.new_path);
+            } else {
+                changesetFiles.add(modifiedFile.new_path);
+            }
+        });
+    }
 
     const changeset = Array.from(changesetFiles.values());
     changeset.sort();
@@ -21,7 +39,7 @@ function extractChangedFiles(webhookCommits) {
 async function convertWebhookToChanges(webhookPayload) {
     const headers = {Authorization: `Bearer ${config.c3pr.hub.auth.jwt}`};
 
-    const changed_files = extractChangedFiles(webhookPayload.commits);
+    const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits);
 
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
 
