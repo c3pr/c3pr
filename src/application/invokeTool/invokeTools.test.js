@@ -4,8 +4,8 @@ process.env.NODE_ENV = 'test';
 const expect = require('chai').expect;
 require('chai').should();
 
-const decideApplicableToolAgents = require('./decideApplicableToolAgents');
-decideApplicableToolAgents.__shuffleArray = a => a; // shuffleArray won't shuffle a thing
+const ports = require('../ports');
+ports.shuffleArray = a => a; // shuffleArray won't shuffle a thing
 
 const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');

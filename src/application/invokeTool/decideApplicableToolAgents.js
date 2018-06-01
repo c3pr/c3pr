@@ -1,16 +1,9 @@
 const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
-const axios = require('axios');
+const axios = require('axios').default;
 const config = require('../../config');
+const ports = require('../ports');
 
 const filterApplicableToolAgents = require('./filterApplicableToolAgents');
-const fetchAllToolAgents = require('./fetchAllToolAgents');
-
-function __shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
 
 /**
  * Fetchs from HUB all TIR events having this changes_committed_root arg as their changes_committed_root property.
@@ -33,7 +26,7 @@ async function retrieveFilesWithOpenPRs(changes_committed_root) {
 }
 
 async function decideApplicableToolAgents(changes_committed_root, files, logMetas) {
-    const availableAgents = await fetchAllToolAgents();
+    const availableAgents = await ports.fetchAllToolAgents();
 
     if (availableAgents.length === 0) {
         c3prLOG2({
@@ -56,14 +49,12 @@ async function decideApplicableToolAgents(changes_committed_root, files, logMeta
         return [];
     }
 
-    const applicableToolAgents = filterApplicableToolAgents(availableAgents, filesWithoutOpenPRs);
-    decideApplicableToolAgents.__shuffleArray(applicableToolAgents);
+    let applicableToolAgents = filterApplicableToolAgents(availableAgents, filesWithoutOpenPRs);
+    applicableToolAgents = ports.shuffleArray(applicableToolAgents);
 
     const alreadyInvokedTools = await calculateAlreadyInvokedTools(changes_committed_root);
 
     return applicableToolAgents.filter(tool => !alreadyInvokedTools.includes(tool.tool_id));
 }
-// exposed for testing
-decideApplicableToolAgents.__shuffleArray = __shuffleArray;
 
 module.exports = decideApplicableToolAgents;
