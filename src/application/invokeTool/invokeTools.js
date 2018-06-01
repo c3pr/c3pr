@@ -56,7 +56,7 @@ async function invokeTools({parent, changes_committed_root, repository, files}) 
     const applicableToolAgents = await decideApplicableToolAgents(changes_committed_root, files, logMetas);
 
     c3prLOG2({
-        msg: `Applicable tools agents ${applicableToolAgents.length}: ${JSON.stringify(applicableToolAgents.map(tool => tool.tool_id))}`,
+        msg: `Applicable tool agents: ${applicableToolAgents.length}.`,
         meta: {applicableToolAgents},
         logMetas
     });
