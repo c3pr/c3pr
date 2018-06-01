@@ -33,7 +33,7 @@
     "mkdirp": "^0.5.1",
     "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#5.1.1",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.0.3",
-    "node-git-client": "github:c3pr/node-git-client#6.0.7",
+    "node-git-client": "github:c3pr/node-git-client#6.1.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
