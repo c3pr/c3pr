@@ -13,15 +13,15 @@ async function determineGitDiffBase64(correlationId, localUniqueCorrelationId, c
 
     let fileNames = await c3prSH(`git diff --staged --name-only`, {cwd: cloneFolder}, {logMeta});
 
-    await c3prSH(`git diff --staged > ${patchFileName}`, {cwd: cloneFolder}, {logMeta});
+    await c3prSH(`git diff --staged --ignore-space-change > ${patchFileName}`, {cwd: cloneFolder}, {logMeta});
 
     // this hex thing is to handle possible ISOvsUTF conflicts in accented diffs
     const diffViaFile = Buffer.from(fs.readFileSync(diffFilePath, 'hex'), 'hex').toString('base64');
     fs.unlinkSync(diffFilePath);
 
     const files = fileNames.trim().split('\n').filter(f => f);
-    return {files, diff: diffViaFile};
 
+    return {files, diff: diffViaFile};
 }
 
 module.exports = determineGitDiffBase64;
