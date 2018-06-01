@@ -13,7 +13,7 @@ function handlePullRequestRequested() {
         event_type: `PullRequestRequested`,
         handlerFunction,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
-        jwt: config.c3pr.jwt,
+        jwt: config.c3pr.hub.auth.jwt,
         logMetas
     });
 }
