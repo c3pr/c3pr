@@ -26,8 +26,8 @@ async function handleToolInvocation(toolInvocationRequestedEvent) {
     const unmodified_files = toolInvocationRequested.files.filter(f => !toolInvocationResult.files.includes(f));
 
     const tool = loadTools.toolsHash[toolInvocationRequested.tool_id];
-    const pr_title = tool.pr_title;
-    const pr_body = tool.pr_body;
+    const pr_title = toolInvocationResult.files.length ? tool.pr_title : '<no diff>';
+    const pr_body = toolInvocationResult.files.length ? tool.pr_body : '<no diff>';
     const diff_base64 = toolInvocationResult.diff;
 
     await c3prRNE.registerNewEvent({
