@@ -33,7 +33,7 @@ async function createGitLabMR({
 
     const tokenReplacementForLogFunction = {regex: new RegExp(gitLabApiToken, "g"), replaceWith: "<GITLAB_API_TOKEN>"};
 
-    await createPR({
+    return await createPR({
         createPullRequest: createMergeRequest,
         createForkIfNotExists,
         addAuthenticationToCloneUrl,
