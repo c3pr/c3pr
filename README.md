@@ -9,8 +9,8 @@ Have a look at [`src`](src) folder to understand what functions are available.
 ### Usage:
 
 ```bash
-# Change 9.0.3 below with the desired version tag
-npm i -S c3pr/node-c3pr-logger#9.0.3
+# Change 1.2.3 below with the desired version tag
+npm i -S c3pr/node-c3pr-logger#1.2.3
 ```
 
 The `C3PR_MONGO_URL` must be defined to something like: `mongodb://user:pass@host:port`.
