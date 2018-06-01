@@ -68,9 +68,7 @@ async function createPR({
     await c3prSH(`git push -u fork ${forkRepoBranch}`, {cwd: stagingFolder}, {logMeta});
 
     // CREATE PULL REQUEST VIA API
-    await createPullRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBody);
-
+    return createPullRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBody);
 }
-
 
 module.exports = createPR;
