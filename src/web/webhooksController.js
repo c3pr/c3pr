@@ -5,24 +5,8 @@ const handleWebhook = require('../application/handleWebhook/handleWebhook');
 module.exports = function (app) {
 
     app.post('/webhooks', function (request, response) {
-        const webhookPayload = request.body;
-
-        if (webhookPayload.object_kind === "push") {
-            //console.log(JSON.stringify(webhookPayload));
-            c3prLOG2({
-                msg: `Received webhook for ${webhookPayload.repository.git_http_url}. Message: '${webhookPayload.commits && webhookPayload.commits[0].message.trim()}'.`,
-                logMetas: [{nodeName: 'c3pr-repo-gitlab', correlationId: webhookPayload.after, moduleName: 'webhooksController'}]
-            });
-            handleWebhook(webhookPayload);
-        } else {
-            c3prLOG2({
-                msg: `Received webhook. Not a push: ${webhookPayload.object_kind}.`,
-                logMetas: [{nodeName: 'c3pr-repo-gitlab', moduleName: 'webhooksController'}],
-                meta: {webhookPayload},
-            });
-        }
-
-        response.send('Ok, thanks.');
+        handleWebhook(request.body);
+        response.send('Webhook received, thanks.');
     });
 
 };
