@@ -79,5 +79,13 @@ module.exports = function (app) {
         });
     });
 
+    app.patch('/api/v1/events/:eventType/:uuid/meta/unprocessed', function ({params: {eventType, uuid}, decodedJwtToken}, response) {
+        let processorUUID = decodedJwtToken.sub;
+        events.patchAsUnprocessed(eventType, uuid, processorUUID).then(() => {
+            response.status(200).send();
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
 
 };

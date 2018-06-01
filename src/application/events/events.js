@@ -77,7 +77,9 @@ async function patchAsProcessed(event_type, uuid, processorUUID) {
     return eventsDB.persistAsProcessed(uuid, processorUUID);
 }
 
-function patchAsUnprocessed(event_type, uuid) {
+// noinspection JSUnusedLocalSymbols
+function patchAsUnprocessed(event_type, uuid, processorUUID) {
+    // TODO maybe only mark it as unprocessed if processorUUID is the same (this makes sense when we call this function from the controller. don't know if it makes sense for the other places)
     assert.ok(event_type && uuid, "Missing required arguments");
     Status.removeAsProcessing(event_type, uuid, '<TIMED_OUT>');
     Status.addAsUnprocessed(event_type, uuid);
