@@ -9,13 +9,14 @@ const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handlePullRequestR
 const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'handlePullRequestRequested'}];
 
 function handlePullRequestRequested() {
-    return handleFirstCollectedEvent({
+    let createMrResult = handleFirstCollectedEvent({
         event_type: `PullRequestRequested`,
         handlerFunction,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.hub.auth.jwt,
         logMetas
     });
+    console.log('createMrResult',createMrResult);
 }
 
 async function handlerFunction(pullRequestRequestedEvent) {
@@ -33,7 +34,7 @@ async function handlerFunction(pullRequestRequestedEvent) {
     /** @namespace prr.pr_body */
     /** @namespace prr.diff_base64 */
     /** @namespace prr.pr_title */
-    await createGitLabMR({
+    let createMrResult = await createGitLabMR({
         mainRepoOrgRepo: repository.full_path,
         mainRepoBranch: repository.branch,
         mainRepoHash: repository.revision,
@@ -53,6 +54,7 @@ async function handlerFunction(pullRequestRequestedEvent) {
         meta: {pullRequestRequestedEvent}
     });
 
+    return {new_status: 'PROCESSED', result: createMrResult}
 }
 
 module.exports = handlePullRequestRequested;
