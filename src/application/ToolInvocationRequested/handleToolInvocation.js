@@ -30,7 +30,7 @@ async function handleToolInvocation(toolInvocationRequestedEvent) {
     const pr_body = toolInvocationResult.files.length ? tool.pr_body : '<no diff>';
     const diff_base64 = toolInvocationResult.diff;
 
-    await c3prRNE.registerNewEvent({
+    let result = await c3prRNE.registerNewEvent({
         event_type: `ToolInvocationCompleted`,
         payload: {
             parent,
@@ -58,6 +58,8 @@ async function handleToolInvocation(toolInvocationRequestedEvent) {
     } else {
         c3prLOG2({msg: `Tool invocation complete. No patch has been generated.`, logMetas});
     }
+
+    return {new_status: 'PROCESSED', result};
 }
 
 module.exports = handleToolInvocation;
