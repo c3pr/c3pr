@@ -28,7 +28,8 @@ module.exports = {
 
             ChangesCommittedCallbackUrl:        `/callbacks/ChangesCommitted`,
             ToolInvocationCompletedCallbackUrl: `/callbacks/ToolInvocationCompleted`,
-            PullRequestUpdatedCallbackUrl:      `/callbacks/PullRequestUpdated`,
+            PullRequestCreatedCallbackUrl:      `/callbacks/PullRequestCreated`,
+            PullRequestUpdatedCallbackUrl:      `/callbacks/PullRequestUpdated`
         }
     }
 };
