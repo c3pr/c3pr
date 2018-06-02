@@ -1,2 +1,2 @@
-import { HubClient } from "../types/HubClient";
-export declare let _fetchProjectUuidForCloneUrl: HubClient['fetchProjectUuidForCloneUrl'];
+declare function fetchProjectUuidForCloneUrl(clone_url_http: string): Promise<string>;
+export { fetchProjectUuidForCloneUrl };

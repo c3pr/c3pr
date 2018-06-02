@@ -21,5 +21,7 @@ function fetchProjectUuidForCloneUrl(clone_url_http) {
         return project_uuid;
     });
 }
-exports._fetchProjectUuidForCloneUrl = fetchProjectUuidForCloneUrl;
+exports.fetchProjectUuidForCloneUrl = fetchProjectUuidForCloneUrl;
+// noinspection JSUnusedLocalSymbols
+const variableToGuaranteeTheFunctionMatchesTheInterface = fetchProjectUuidForCloneUrl;
 //# sourceMappingURL=fetchProjectUuidForCloneUrl.js.map

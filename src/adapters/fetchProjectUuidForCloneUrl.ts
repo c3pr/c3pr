@@ -13,4 +13,7 @@ async function fetchProjectUuidForCloneUrl(clone_url_http: string): Promise<stri
     return project_uuid;
 }
 
-export let _fetchProjectUuidForCloneUrl: HubClient['fetchProjectUuidForCloneUrl'] = fetchProjectUuidForCloneUrl;
+// noinspection JSUnusedLocalSymbols
+const variableToGuaranteeTheFunctionMatchesTheInterface: HubClient['fetchProjectUuidForCloneUrl'] = fetchProjectUuidForCloneUrl;
+
+export { fetchProjectUuidForCloneUrl }
