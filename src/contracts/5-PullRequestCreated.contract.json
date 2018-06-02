@@ -1,0 +1,17 @@
+{
+  "parent": {
+    "event_type": "PullRequestRequested",
+    "uuid": "tic-uuid-12312-3123123-12312"
+  },
+
+  "repository": {
+    "full_path": "c3pr/sample-project-java-maven",
+    "author": null,
+    "clone_url_http": "https://github.com/c3pr/sample-project-java-maven.git",
+    "branch": "branch-for-clone-tests",
+    "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
+  },
+
+  "pr_id": 123,
+  "pr_url": "https://github.com/c3pr/sample-project-java-maven/pull/23"
+}
