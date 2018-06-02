@@ -1,5 +1,4 @@
-import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
-import handleWebhook = require('../application/handleWebhook/handleWebhook');
+import handleWebhook from '../application/handleWebhook/handleWebhook';
 
 
 export = function (app) {

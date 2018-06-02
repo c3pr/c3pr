@@ -2,7 +2,7 @@ import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 
 
 // TODO check if author is bot
-function handleMergeRequest(webhookPayload) {
+export default function handleMergeRequest(webhookPayload) {
     const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handleMergeRequest'}];
 
     c3prLOG2({
@@ -19,5 +19,3 @@ function handleMergeRequest(webhookPayload) {
      */
 
 }
-
-export = handleMergeRequest;

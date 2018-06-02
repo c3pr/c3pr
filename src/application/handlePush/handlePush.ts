@@ -3,7 +3,7 @@ import sortCommits = require('../gitlab/sortCommits');
 
 import createAndEmitChangesCommitted = require('../ChangesCommitted/createAndEmitChangesCommitted');
 
-function handlePush(webhookPayload) {
+export default function handlePush(webhookPayload) {
     const logMetas = [{nodeName: 'c3pr-repo-gitlab', correlationId: webhookPayload.after, moduleName: 'handlePush'}];
 
     const lastCommit = sortCommits(webhookPayload.commits).pop();
@@ -22,5 +22,3 @@ function handlePush(webhookPayload) {
             });
         })
 }
-
-export = handlePush;
