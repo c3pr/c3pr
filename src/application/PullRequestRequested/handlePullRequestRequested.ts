@@ -1,4 +1,5 @@
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import {Event} from '../../ports/types/Event';
 import hfce = require('node-c3pr-hub-client/events/handleFirstCollectedEvent');
 
 let handleFirstCollectedEvent = hfce.handleFirstCollectedEvent.handleFirstCollectedEvent;
@@ -6,24 +7,24 @@ let handleFirstCollectedEvent = hfce.handleFirstCollectedEvent.handleFirstCollec
 import createGitLabMR = require('../pr/createGitLabMR');
 
 import config from '../../config';
+import {createAndEmitPullRequestCreated} from "../PullRequestCreated/createAndEmitPullRequestCreated";
 
 const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handlePullRequestRequested'}];
 const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'handlePullRequestRequested'}];
 
-import createPullRequestCreated = require('./createPullRequestCreated');
 
 async function handlePullRequestRequested() {
-    let createMrResult = await handleFirstCollectedEvent({
+    let {pullRequestRequestedEvent, createMrResult} = await handleFirstCollectedEvent({
         event_type: `PullRequestRequested`,
         handlerFunction,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.hub.auth.jwt,
         logMetas
     });
-    createPullRequestCreated(createMrResult);
+    return createAndEmitPullRequestCreated(pullRequestRequestedEvent, createMrResult);
 }
 
-async function handlerFunction(pullRequestRequestedEvent) {
+async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
 
     const prr = pullRequestRequestedEvent.payload;
     const repository = prr.repository;
@@ -58,7 +59,7 @@ async function handlerFunction(pullRequestRequestedEvent) {
         meta: {pullRequestRequestedEvent}
     });
 
-    return {new_status: 'PROCESSED', result: createMrResult}
+    return {new_status: 'PROCESSED', result: {pullRequestRequestedEvent, createMrResult}}
 }
 
 export = handlePullRequestRequested;
