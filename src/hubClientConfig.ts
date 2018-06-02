@@ -5,7 +5,7 @@ const hubClientConfig = {
 
         hub: {
             auth: {
-                jwt: UNCONFIGURED
+                jwt: (): string => {throw new Error(UNCONFIGURED)},
             },
             c3prHubUrl: UNCONFIGURED,
             loginUrl: UNCONFIGURED,
@@ -13,7 +13,7 @@ const hubClientConfig = {
         },
 
     },
-    init(C3PR_HUB_URL, jwt) {
+    init(C3PR_HUB_URL: string, jwt: () => string) {
         hubClientConfig.c3pr.hub.c3prHubUrl = C3PR_HUB_URL;
         hubClientConfig.c3pr.hub.loginUrl = `${C3PR_HUB_URL}/api/v1/login`;
         hubClientConfig.c3pr.hub.projectsByCloneUrlHttp = (clone_url_http) => `${C3PR_HUB_URL}/api/v1/projects/?clone_url_http=${clone_url_http}`;

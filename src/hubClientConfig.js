@@ -5,7 +5,7 @@ const hubClientConfig = {
     c3pr: {
         hub: {
             auth: {
-                jwt: UNCONFIGURED
+                jwt: () => { throw new Error(UNCONFIGURED); },
             },
             c3prHubUrl: UNCONFIGURED,
             loginUrl: UNCONFIGURED,

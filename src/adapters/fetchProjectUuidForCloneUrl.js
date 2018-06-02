@@ -12,7 +12,7 @@ const axios_1 = require("axios");
 const hubClientConfig_1 = require("../hubClientConfig");
 function fetchProjectUuidForCloneUrl(clone_url_http) {
     return __awaiter(this, void 0, void 0, function* () {
-        const headers = { Authorization: `Bearer ${hubClientConfig_1.default.c3pr.hub.auth.jwt}` };
+        const headers = { Authorization: `Bearer ${hubClientConfig_1.default.c3pr.hub.auth.jwt()}` };
         const { data } = yield axios_1.default.get(hubClientConfig_1.default.c3pr.hub.projectsByCloneUrlHttp(clone_url_http), { headers });
         if (!data.length) {
             throw new Error('Project with URL ' + clone_url_http + ' not found.');
