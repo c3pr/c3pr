@@ -1,8 +1,15 @@
 const util = require('util');
 const c3prLOG_original = require('../src/c3prLOG');
 
+export interface Log {
+    msg: string;
+    logMetas?: any[];
+    meta?: any;
+    error?: Error;
+}
+
 export const c3pr = {
-    c3prLOG2({msg, logMetas, meta, error: e}) {
+    c3prLOG2({msg, logMetas, meta, error: e}: Log) {
         if (arguments.length !== 1) {
             throw new Error(`c3prLOG2() called with different number or arguments. Wanted: 1. Passed: ${arguments.length} - ${JSON.stringify(arguments)}`);
         }
