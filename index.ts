@@ -22,3 +22,5 @@ const hubClientConfig = {
 };
 
 export { hubClientConfig };
+
+export * from './types/Event';

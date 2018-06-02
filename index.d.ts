@@ -12,3 +12,4 @@ declare const hubClientConfig: {
     init(C3PR_HUB_URL: string, jwt: () => string): void;
 };
 export { hubClientConfig };
+export * from './types/Event';
