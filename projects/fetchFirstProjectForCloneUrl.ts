@@ -1,8 +1,7 @@
 import axios from "axios";
-import {HubClient} from "../types/HubClient";
-import hubClientConfig from "../hubClientConfig";
+import {hubClientConfig} from "../";
 
-async function fetchProjectUuidForCloneUrl(clone_url_http: string): Promise<string> {
+async function fetchFirstProjectForCloneUrl(clone_url_http: string): Promise<string> {
     const headers = {Authorization: `Bearer ${hubClientConfig.c3pr.hub.auth.jwt()}`};
 
     const {data} = await axios.get(hubClientConfig.c3pr.hub.projectsByCloneUrlHttp(clone_url_http), {headers});
@@ -13,7 +12,4 @@ async function fetchProjectUuidForCloneUrl(clone_url_http: string): Promise<stri
     return project_uuid;
 }
 
-// noinspection JSUnusedLocalSymbols
-const variableToGuaranteeTheFunctionMatchesTheInterface: HubClient['fetchProjectUuidForCloneUrl'] = fetchProjectUuidForCloneUrl;
-
-export { fetchProjectUuidForCloneUrl }
+export { fetchFirstProjectForCloneUrl }
