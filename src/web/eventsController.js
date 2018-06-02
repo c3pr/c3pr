@@ -62,8 +62,8 @@ module.exports = function (app) {
 
     // curl --data '{"key": "added", "value": "booo", "timeout": 10000}' --header "Content-Type: application/json" -X PATCH http://127.0.0.1:5000/api/registry
     app.patch('/api/v1/events/:eventType/:uuid/meta/processing', function ({params: {eventType, uuid}, decodedJwtToken}, response) {
-        let processorUUID = decodedJwtToken.sub;
-        events.patchAsProcessing(eventType, uuid, processorUUID).then(() => {
+        let processor_uuid = decodedJwtToken.sub;
+        events.patchAsProcessing(eventType, uuid, processor_uuid).then(() => {
             response.status(200).send();
         }).catch((e) => {
             response.status(500).send(e.toString());
@@ -71,8 +71,8 @@ module.exports = function (app) {
     });
 
     app.patch('/api/v1/events/:eventType/:uuid/meta/processed', function ({params: {eventType, uuid}, decodedJwtToken}, response) {
-        let processorUUID = decodedJwtToken.sub;
-        events.patchAsProcessed(eventType, uuid, processorUUID).then(() => {
+        let processor_uuid = decodedJwtToken.sub;
+        events.patchAsProcessed(eventType, uuid, processor_uuid).then(() => {
             response.status(200).send();
         }).catch((e) => {
             response.status(500).send(e.toString());
@@ -80,8 +80,8 @@ module.exports = function (app) {
     });
 
     app.patch('/api/v1/events/:eventType/:uuid/meta/unprocessed', function ({params: {eventType, uuid}, decodedJwtToken}, response) {
-        let processorUUID = decodedJwtToken.sub;
-        events.patchAsUnprocessed(eventType, uuid, processorUUID).then(() => {
+        let processor_uuid = decodedJwtToken.sub;
+        events.patchAsUnprocessed(eventType, uuid, processor_uuid).then(() => {
             response.status(200).send();
         }).catch((e) => {
             response.status(500).send(e.toString());

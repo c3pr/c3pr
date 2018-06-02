@@ -28,20 +28,20 @@ function removeAsUnprocessed(event_type, uuid) {
     unprocessedEventsOfType.delete(uuid);
 }
 
-function addAsProcessing(event_type, uuid, processorUUID) {
-    assert.ok(event_type && uuid && processorUUID);
+function addAsProcessing(event_type, uuid, processor_uuid) {
+    assert.ok(event_type && uuid && processor_uuid);
 
     const processingEventsOfType = EVENTS_PROCESSING.get(event_type) || new Map();
 
     const processingEvent = processingEventsOfType.get(uuid);
-    if (processingEvent && processingEvent.processorUUID !== processorUUID) {
-        throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is already being processed by processorUUID '${processingEvent.processorUUID}'. processorUUID you sent me: '${processorUUID}'.`)
+    if (processingEvent && processingEvent.processor_uuid !== processor_uuid) {
+        throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is already being processed by processor_uuid '${processingEvent.processor_uuid}'. processor_uuid you sent me: '${processor_uuid}'.`)
     }
     if (!processingEvent) {
         removeAsUnprocessed(event_type, uuid);
     }
 
-    processingEventsOfType.set(uuid, {dateTime: new Date().toISOString(), processorUUID});
+    processingEventsOfType.set(uuid, {dateTime: new Date().toISOString(), processor_uuid});
     EVENTS_PROCESSING.set(event_type, processingEventsOfType);
 }
 
@@ -50,14 +50,14 @@ function currentlyProcessing(event_type, uuid) {
     return processingEventsOfType.get(uuid);
 }
 
-function removeAsProcessing(event_type, uuid, processorUUID) {
+function removeAsProcessing(event_type, uuid, processor_uuid) {
     const processingEventsOfType = EVENTS_PROCESSING.get(event_type) || new Map();
     const processingEvent = processingEventsOfType.get(uuid);
     if (!processingEvent) {
         throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is not currently being processed.`)
     }
-    if (processorUUID !== '<TIMED_OUT>' && processingEvent.processorUUID !== processorUUID) {
-        throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is being processed by a different processorUUID ('${processingEvent.processorUUID}'), not the one you sent me ('${processorUUID}').`)
+    if (processor_uuid !== '<TIMED_OUT>' && processingEvent.processor_uuid !== processor_uuid) {
+        throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is being processed by a different processor_uuid ('${processingEvent.processor_uuid}'), not the one you sent me ('${processor_uuid}').`)
     }
     processingEventsOfType.delete(uuid);
 }

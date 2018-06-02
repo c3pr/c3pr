@@ -19,7 +19,7 @@ async function register(event_type, payload) {
     let uuid = uuidv4();
     let status = Status.UNPROCESSED;
 
-    await eventsDB.insert({uuid, event_type, meta: {status, processorUUID: null, created: new Date().toISOString()}, payload});
+    await eventsDB.insert({uuid, event_type, meta: {status, processor_uuid: null, created: new Date().toISOString()}, payload});
     Status.addAsUnprocessed(event_type, uuid);
 
     c3prBus.emit(event_type);
@@ -50,36 +50,36 @@ function peekUnprocessed(event_type) {
     return eventsDB.find(uuid);
 }
 
-function patchAsProcessing(event_type, uuid, processorUUID) {
-    assert.ok(event_type && uuid && processorUUID, "Missing required arguments");
-    Status.addAsProcessing(event_type, uuid, processorUUID);
-    return eventsDB.persistAsProcessing(uuid, processorUUID);
+function patchAsProcessing(event_type, uuid, processor_uuid) {
+    assert.ok(event_type && uuid && processor_uuid, "Missing required arguments");
+    Status.addAsProcessing(event_type, uuid, processor_uuid);
+    return eventsDB.persistAsProcessing(uuid, processor_uuid);
 }
 
 /**
  * If the uuid is not at EVENTS_PROCESSING, it errors.
  */
-async function patchAsProcessed(event_type, uuid, processorUUID) {
-    assert.ok(event_type && uuid && processorUUID, "Missing required arguments");
+async function patchAsProcessed(event_type, uuid, processor_uuid) {
+    assert.ok(event_type && uuid && processor_uuid, "Missing required arguments");
     if (!Status.currentlyProcessing(event_type, uuid)) {
         let evt = await eventsDB.find(uuid);
         if (!evt) {
             throw new Error(`Event of UUID '${uuid}' and type '${event_type}' doesn't exist.`)
         }
-        if (evt.meta.status === Status.PROCESSED && evt.meta.processorUUID === processorUUID) {
+        if (evt.meta.status === Status.PROCESSED && evt.meta.processor_uuid === processor_uuid) {
             return;
         }
-        if (evt.meta.status === Status.PROCESSED && evt.meta.processorUUID !== processorUUID) {
-            throw new Error(`Event of UUID '${uuid}' and type '${event_type}' has been processed by a different processorUUID: ${evt.meta.processorUUID}. processorUUID you sent me: ${processorUUID}.`)
+        if (evt.meta.status === Status.PROCESSED && evt.meta.processor_uuid !== processor_uuid) {
+            throw new Error(`Event of UUID '${uuid}' and type '${event_type}' has been processed by a different processor_uuid: ${evt.meta.processor_uuid}. processor_uuid you sent me: ${processor_uuid}.`)
         }
     }
-    Status.removeAsProcessing(event_type, uuid, processorUUID);
-    return eventsDB.persistAsProcessed(uuid, processorUUID);
+    Status.removeAsProcessing(event_type, uuid, processor_uuid);
+    return eventsDB.persistAsProcessed(uuid, processor_uuid);
 }
 
 // noinspection JSUnusedLocalSymbols
-function patchAsUnprocessed(event_type, uuid, processorUUID) {
-    // TODO maybe only mark it as unprocessed if processorUUID is the same (this makes sense when we call this function from the controller. don't know if it makes sense for the other places)
+function patchAsUnprocessed(event_type, uuid, processor_uuid) {
+    // TODO maybe only mark it as unprocessed if processor_uuid is the same (this makes sense when we call this function from the controller. don't know if it makes sense for the other places)
     assert.ok(event_type && uuid, "Missing required arguments");
     Status.removeAsProcessing(event_type, uuid, '<TIMED_OUT>');
     Status.addAsUnprocessed(event_type, uuid);

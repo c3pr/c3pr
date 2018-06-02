@@ -10,12 +10,12 @@ describe('status', function () {
 
     let EVENT_TYPE;
     let uuid;
-    let processorUUID;
+    let processor_uuid;
 
     before(() => {
         EVENT_TYPE = "evtType" + Math.random();
         uuid = uuidv4();
-        processorUUID = uuidv4();
+        processor_uuid = uuidv4();
     });
 
     it('addAsUnprocessed', () => {
@@ -31,18 +31,18 @@ describe('status', function () {
         /// given
         Status.addAsUnprocessed(EVENT_TYPE, uuid);
         /// when
-        Status.addAsProcessing(EVENT_TYPE, uuid, processorUUID);
+        Status.addAsProcessing(EVENT_TYPE, uuid, processor_uuid);
         /// then
         let evt = Status.currentlyProcessing(EVENT_TYPE, uuid);
-        expect(evt.processorUUID).to.equal(processorUUID);
+        expect(evt.processor_uuid).to.equal(processor_uuid);
     });
 
     it('addAsProcessing should remove event from unprocessed list', () => {
         /// given
         Status.addAsUnprocessed(EVENT_TYPE, uuid);
-        Status.addAsProcessing(EVENT_TYPE, uuid, processorUUID);
+        Status.addAsProcessing(EVENT_TYPE, uuid, processor_uuid);
         let evt = Status.currentlyProcessing(EVENT_TYPE, uuid);
-        expect(evt.processorUUID).to.equal(processorUUID);
+        expect(evt.processor_uuid).to.equal(processor_uuid);
         /// when
         const unprocessed = Status.peekUnprocessedEventOfType(EVENT_TYPE);
         /// then
@@ -52,7 +52,7 @@ describe('status', function () {
     it('retrieveAllTimedOut big timeout', () => {
         /// given
         Status.addAsUnprocessed(EVENT_TYPE, uuid);
-        Status.addAsProcessing(EVENT_TYPE, uuid, processorUUID);
+        Status.addAsProcessing(EVENT_TYPE, uuid, processor_uuid);
         /// when
         const timedOut = Status.retrieveAllTimedOut(999999999999);
         /// then
@@ -62,7 +62,7 @@ describe('status', function () {
     it('retrieveAllTimedOut tiny timeout', () => {
         /// given
         Status.addAsUnprocessed(EVENT_TYPE, uuid);
-        Status.addAsProcessing(EVENT_TYPE, uuid, processorUUID);
+        Status.addAsProcessing(EVENT_TYPE, uuid, processor_uuid);
         /// when
         const timedOut = Status.retrieveAllTimedOut(-1);
         /// then
