@@ -20,7 +20,7 @@ export default {
 
             c3prHubUrl: C3PR_HUB_URL,
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
-            projectByCloneUrlHttp: (clone_url_http) => `${C3PR_HUB_URL}/api/v1/projects/?clone_url_http=${clone_url_http}`,
+            projectsByCloneUrlHttp: (clone_url_http) => `${C3PR_HUB_URL}/api/v1/projects/?clone_url_http=${clone_url_http}`,
         },
 
         repoGitlab: {
