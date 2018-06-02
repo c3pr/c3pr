@@ -1,5 +1,5 @@
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
-import {Event} from '../../ports/types/Event';
+import {Event} from 'node-c3pr-hub-client';
 import hfce = require('node-c3pr-hub-client/events/handleFirstCollectedEvent');
 
 let handleFirstCollectedEvent = hfce.handleFirstCollectedEvent.handleFirstCollectedEvent;

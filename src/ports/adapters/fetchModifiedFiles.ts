@@ -12,4 +12,7 @@ async function fetchModifiedFiles(urlEncodedOrgNameProjectName, commit): Promise
     return modifiedFiles;
 }
 
-export let _fetchModifiedFiles: Ports['fetchModifiedFiles'] = fetchModifiedFiles;
+// noinspection JSUnusedLocalSymbols
+const variableToGuaranteeTheFunctionMatchesTheInterface: Ports['fetchModifiedFiles'] = fetchModifiedFiles;
+
+export { fetchModifiedFiles }

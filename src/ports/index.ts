@@ -1,9 +1,9 @@
 import {Ports} from "./types/Ports";
-import {_fetchModifiedFiles as fetchModifiedFiles} from "./adapters/fetchModifiedFiles";
-import {_fetchProjectUuidForCloneUrl as fetchProjectUuidForCloneUrl} from "./adapters/fetchProjectUuidForCloneUrl";
+import {fetchModifiedFiles} from "./adapters/fetchModifiedFiles";
+import {fetchFirstProjectForCloneUrl} from "node-c3pr-hub-client/projects/fetchFirstProjectForCloneUrl";
 
 const index: Ports = {
     fetchModifiedFiles,
-    fetchProjectUuidForCloneUrl
+    fetchFirstProjectForCloneUrl
 };
 export default index;
