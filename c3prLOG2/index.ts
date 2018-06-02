@@ -5,7 +5,7 @@ export interface Log {
     msg: string;
     logMetas?: any[];
     meta?: any;
-    error?: Error;
+    error?: any;
 }
 
 export const c3pr = {
