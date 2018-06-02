@@ -1,23 +1,14 @@
-import axios from 'axios';
 import config from '../../config';
+import ports from "../../ports";
 import sortCommits = require('../gitlab/sortCommits');
 
 async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits) {
-    /** @type {Array} */
     const commits = sortCommits(webhookCommits);
 
     const changesetFiles = new Set();
     for(let commit of commits) {
-        const {data: modifiedFiles} = await axios.get(
-            `${config.c3pr.repoGitlab.gitlab.url}/api/v4/projects/${urlEncodedOrgNameProjectName}/repository/commits/${commit.id}/diff`,
-            {headers: {"PRIVATE-TOKEN": config.c3pr.repoGitlab.gitlab.apiToken}}
-        );
+        const modifiedFiles = await ports.fetchModifiedFiles(urlEncodedOrgNameProjectName, commit);
         modifiedFiles.forEach(modifiedFile => {
-            /** @namespace modifiedFile.old_path */
-            /** @namespace modifiedFile.new_path */
-            /** @namespace modifiedFile.new_file */
-            /** @namespace modifiedFile.renamed_file */
-            /** @namespace modifiedFile.deleted_file */
             if (modifiedFile.new_file) {
                 changesetFiles.add(modifiedFile.new_path);
             } else if (modifiedFile.renamed_file) {
@@ -37,17 +28,10 @@ async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits)
 }
 
 async function convertWebhookToChanges(webhookPayload) {
-    const headers = {Authorization: `Bearer ${config.c3pr.hub.auth.jwt}`};
-
     const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits);
 
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
-
-    const {data} = await axios.get(config.c3pr.hub.projectByCloneUrlHttp.replace(/:clone_url_http/, clone_url_http), {headers});
-    if (!data.length) {
-        throw new Error('Project with URL ' + clone_url_http + ' not found.');
-    }
-    const [{uuid: project_uuid}] = data;
+    const project_uuid = await ports.fetchProjectUuidForCloneUrl(clone_url_http);
 
     const gitSHA = webhookPayload.after;
     return {
