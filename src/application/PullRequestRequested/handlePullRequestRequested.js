@@ -8,15 +8,17 @@ const config = require('../../config');
 const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handlePullRequestRequested'}];
 const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'handlePullRequestRequested'}];
 
-function handlePullRequestRequested() {
-    let createMrResult = handleFirstCollectedEvent({
+const createPullRequestCreated = require('./createPullRequestCreated');
+
+async function handlePullRequestRequested() {
+    let createMrResult = await handleFirstCollectedEvent({
         event_type: `PullRequestRequested`,
         handlerFunction,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.hub.auth.jwt,
         logMetas
     });
-    console.log('createMrResult',createMrResult);
+    createPullRequestCreated(createMrResult);
 }
 
 async function handlerFunction(pullRequestRequestedEvent) {
