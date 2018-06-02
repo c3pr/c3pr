@@ -1,7 +1,7 @@
-const axios = require('axios');
-const config = require('../../config');
+import axios from 'axios';
+import config from '../../config';
 
-const encodeGroupProjectPath = require('./encodeGroupProjectPath');
+import encodeGroupProjectPath = require('./encodeGroupProjectPath');
 
 async function getGitLabProject(projectId) {
     let {data: getProject} = await axios.get(
@@ -11,4 +11,4 @@ async function getGitLabProject(projectId) {
     return getProject;
 }
 
-module.exports = getGitLabProject;
+export = getGitLabProject;

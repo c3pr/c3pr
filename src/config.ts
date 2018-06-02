@@ -1,4 +1,4 @@
-const os = require("os");
+import os = require("os");
 
 const PORT = process.env.PORT || 5004;
 const C3PR_REPO_GITLAB_URL = process.env.C3PR_REPO_GITLAB_URL || `http://localhost:${PORT}` || `http://${os.hostname()}:${PORT}`;
@@ -10,7 +10,7 @@ const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3';
 
 const WEBHOOKS_URL = `/webhooks`;
 
-module.exports = {
+export default {
     c3pr: {
 
         hub: {

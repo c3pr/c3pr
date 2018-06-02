@@ -11,4 +11,4 @@ function sortCommits(commits) {
     });
     return commitsClone;
 }
-module.exports = sortCommits;
+export = sortCommits;

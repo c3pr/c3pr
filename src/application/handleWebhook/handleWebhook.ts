@@ -1,6 +1,6 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
-const handlePush = require('../handlePush/handlePush');
-const handleMergeRequest = require('../handleMergeRequest/handleMergeRequest');
+import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import handlePush = require('../handlePush/handlePush');
+import handleMergeRequest = require('../handleMergeRequest/handleMergeRequest');
 
 
 function handleWebhook(webhookPayload) {
@@ -25,4 +25,4 @@ function handleWebhook(webhookPayload) {
     }
 }
 
-module.exports = handleWebhook;
+export = handleWebhook;

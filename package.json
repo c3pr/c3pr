@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "C3PR Repository Adapter for GitLab",
   "scripts": {
-    "start": "node src/index.js",
-    "debug": "node %NODE_DEBUG_OPTION% src/index.js",
-    "test": "mocha src/**/*.test.js"
+    "start": "node --require ts-node/register src/index.ts",
+    "debug": "node %NODE_DEBUG_OPTION% --require ts-node/register src/index.ts",
+    "test": "mocha --require ts-node/register src/**/*.test.ts",
+    "ts-node": "ts-node"
   },
   "repository": {
     "type": "git",
@@ -27,13 +28,16 @@
     "express": "^4.16.2",
     "github-webhook-handler": "^0.7.1",
     "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#6.0.0",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.1.0",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.1.1",
     "node-c3pr-repo": "github:c3pr/node-c3pr-repo#4.2.1",
     "node-git-client": "github:c3pr/node-git-client#6.1.1",
     "octonode": "^0.9.1",
+    "ts-node": "^6.0.5",
+    "typescript": "^2.9.1",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
+    "@types/jasmine": "^2.8.8",
     "@types/request": "^2.47.0",
     "@types/sinon-chai": "^2.7.29",
     "axios-mock-adapter": "^1.15.0",

@@ -1,8 +1,8 @@
-const createMergeRequest = require("../gitlab/createMergeRequest");
-const createForkIfNotExists = require("../gitlab/createForkIfNotExists");
-const createPR = require("node-c3pr-repo/create-pr/create-pr");
+import createMergeRequest = require("../gitlab/createMergeRequest");
+import createForkIfNotExists = require("../gitlab/createForkIfNotExists");
+import createPR = require("node-c3pr-repo/create-pr/create-pr");
 
-const c3prLOG = require("node-c3pr-logger");
+import c3prLOG = require("node-c3pr-logger");
 
 async function createGitLabMR({
                             mainRepoOrgRepo,
@@ -52,4 +52,4 @@ async function createGitLabMR({
     });
 }
 
-module.exports = createGitLabMR;
+export = createGitLabMR;

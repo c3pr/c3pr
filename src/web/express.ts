@@ -1,8 +1,10 @@
-const c3prLOG = require("node-c3pr-logger");
-const express = require('express');
-const bodyParser = require('body-parser');
+// import c3prLOG = require("node-c3pr-logger");
+import * as c3prLOG from "node-c3pr-logger";
 
-const config = require('../config');
+import express = require('express');
+import bodyParser = require('body-parser');
+
+import config from '../config';
 
 const app = express();
 

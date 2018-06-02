@@ -1,14 +1,16 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
-const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').handleFirstCollectedEvent.handleFirstCollectedEvent;
+import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import hfce = require('node-c3pr-hub-client/events/handleFirstCollectedEvent');
 
-const createGitLabMR = require('../pr/createGitLabMR');
+let handleFirstCollectedEvent = hfce.handleFirstCollectedEvent.handleFirstCollectedEvent;
 
-const config = require('../../config');
+import createGitLabMR = require('../pr/createGitLabMR');
+
+import config from '../../config';
 
 const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handlePullRequestRequested'}];
 const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'handlePullRequestRequested'}];
 
-const createPullRequestCreated = require('./createPullRequestCreated');
+import createPullRequestCreated = require('./createPullRequestCreated');
 
 async function handlePullRequestRequested() {
     let createMrResult = await handleFirstCollectedEvent({
@@ -59,4 +61,4 @@ async function handlerFunction(pullRequestRequestedEvent) {
     return {new_status: 'PROCESSED', result: createMrResult}
 }
 
-module.exports = handlePullRequestRequested;
+export = handlePullRequestRequested;

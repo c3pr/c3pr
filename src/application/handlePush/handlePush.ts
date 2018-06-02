@@ -1,7 +1,7 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
-const sortCommits = require('../gitlab/sortCommits');
+import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import sortCommits = require('../gitlab/sortCommits');
 
-const createAndEmitChangesCommitted = require('../ChangesCommitted/createAndEmitChangesCommitted');
+import createAndEmitChangesCommitted = require('../ChangesCommitted/createAndEmitChangesCommitted');
 
 function handlePush(webhookPayload) {
     const logMetas = [{nodeName: 'c3pr-repo-gitlab', correlationId: webhookPayload.after, moduleName: 'handlePush'}];
@@ -23,4 +23,4 @@ function handlePush(webhookPayload) {
         })
 }
 
-module.exports = handlePush;
+export = handlePush;

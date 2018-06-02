@@ -1,9 +1,9 @@
-const axios = require('axios').default;
-const config = require('../../config');
+import axios from 'axios';
+import config from '../../config';
 
-const encodeGroupProjectPath = require('./encodeGroupProjectPath');
-const getGitLabProject = require('./getGitLabProject');
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3prLOG2;
+import encodeGroupProjectPath = require('./encodeGroupProjectPath');
+import getGitLabProject = require('./getGitLabProject');
+import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -59,8 +59,8 @@ function generateForkName(urlEncodedOrgNameProjectName) {
 /**
  * Forks the given project under the gitlab bot user account.
  */
-async function createForkIfNotExists(orgNameProjectName, outerLogMetas) {
-    const logMetas = [...(outerLogMetas || []), {nodeName: 'c3pr-repo-gitlab', correlationId: orgNameProjectName, moduleName: 'createForkIfNotExists'}];
+async function createForkIfNotExists(orgNameProjectName, outerLogMetas = []) {
+    const logMetas = [...outerLogMetas, {nodeName: 'c3pr-repo-gitlab', correlationId: orgNameProjectName, moduleName: 'createForkIfNotExists'}];
 
     let urlEncodedOrgNameProjectName = encodeGroupProjectPath(orgNameProjectName);
 
@@ -108,4 +108,4 @@ async function createForkIfNotExists(orgNameProjectName, outerLogMetas) {
 
 }
 
-module.exports = createForkIfNotExists;
+export = createForkIfNotExists;

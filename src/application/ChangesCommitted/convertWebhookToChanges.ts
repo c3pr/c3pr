@@ -1,6 +1,6 @@
-const axios = require('axios').default;
-const config = require('../../config');
-const sortCommits = require('../gitlab/sortCommits');
+import axios from 'axios';
+import config from '../../config';
+import sortCommits = require('../gitlab/sortCommits');
 
 async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits) {
     /** @type {Array} */
@@ -66,4 +66,4 @@ async function convertWebhookToChanges(webhookPayload) {
     }
 }
 
-module.exports = convertWebhookToChanges;
+export = convertWebhookToChanges;

@@ -1,9 +1,8 @@
-const expect = require('chai').expect;
-const sinon = require('sinon');
+import { expect } from 'chai';
+import sinon = require('sinon');
 
-const convertWebhookToChanges = require('./convertWebhookToChanges');
-const webhookRequestExample = require('./webhookRequestExample.json');
-const config = require('../../config');
+import convertWebhookToChanges = require('./convertWebhookToChanges');
+let webhookRequestExample = require('./webhookRequestExample.json');
 
 const now = new Date();
 
@@ -43,8 +42,6 @@ describe('convertWebhookToChanges', function () {
     beforeEach(() => {
         sandbox = sinon.sandbox.create();
         clock = sinon.useFakeTimers(now.getTime());
-
-        config.c3pr.prsUrl = "http://prs/prs";
     });
 
     afterEach(() => {

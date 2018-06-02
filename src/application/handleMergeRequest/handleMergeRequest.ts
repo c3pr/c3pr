@@ -1,4 +1,4 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 
 
 // TODO check if author is bot
@@ -20,4 +20,4 @@ function handleMergeRequest(webhookPayload) {
 
 }
 
-module.exports = handleMergeRequest;
+export = handleMergeRequest;

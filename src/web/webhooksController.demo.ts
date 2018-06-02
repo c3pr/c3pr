@@ -52,8 +52,8 @@ let webhookPayload = {
     }
 };
 
-const axios = require('axios');
-const config = require('../config');
+import axios from 'axios';
+import config from '../config';
 
 axios.post(config.c3pr.webhooksUrl, webhookPayload).then(response => {
     console.log('OK');

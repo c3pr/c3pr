@@ -1,12 +1,13 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
-const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
-
-const config = require('../../config');
+import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import { c3prRNE } from 'node-c3pr-hub-client/events/registerNewEvent';
 
 
-function emitChangesCommitted(changesCommitted, outerLogMetas) {
+import config from '../../config';
+
+
+function emitChangesCommitted(changesCommitted, outerLogMetas = []) {
     const logMeta = {nodeName: 'c3pr-repo-gitlab', correlationId: changesCommitted.repository.revision, moduleName: 'emitChangesCommitted'};
-    const logMetas = [...(outerLogMetas || []), logMeta];
+    const logMetas = [...outerLogMetas, logMeta];
 
     c3prLOG2({
         msg: `Registering new event of type 'ChangesCommitted' for repository ${changesCommitted.repository.clone_url_http} and rev ${changesCommitted.repository.revision}.`,
@@ -30,4 +31,4 @@ function emitChangesCommitted(changesCommitted, outerLogMetas) {
         })
 }
 
-module.exports = emitChangesCommitted;
+export = emitChangesCommitted;

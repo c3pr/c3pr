@@ -1,7 +1,7 @@
-const axios = require('axios').default;
-const config = require('../../config');
+import axios from 'axios';
+import config from '../../config';
 
-const getGitLabProject = require('./getGitLabProject');
+import getGitLabProject = require('./getGitLabProject');
 
 async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBodyMarkdown) {
 
@@ -29,4 +29,4 @@ async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, 
     return mergeRequestCreation;
 }
 
-module.exports = createMergeRequest;
+export = createMergeRequest;

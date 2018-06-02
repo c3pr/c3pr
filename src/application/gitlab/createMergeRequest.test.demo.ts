@@ -1,4 +1,4 @@
-const createMergeRequest = require('./createMergeRequest');
+import createMergeRequest = require('./createMergeRequest');
 
 (async () => {
 
