@@ -12,7 +12,7 @@ function handleWebhook(webhookPayload) {
         handlePush(webhookPayload);
     } else if (webhookPayload.object_kind === "merge_request") {
         c3prLOG2({
-            msg: `Received webhook for MERGE REQUEST from ${webhookPayload.project.git_http_url}. Message: '${webhookPayload.object_attributes && webhookPayload.object_attributes.description.trim()}'.`,
+            msg: `Received webhook for MERGE REQUEST from ${webhookPayload.project.git_http_url}. Message: '${webhookPayload.object_attributes && webhookPayload.object_attributes.title.trim()}'.`,
             logMetas: [{nodeName: 'c3pr-repo-gitlab', correlationId: webhookPayload.after, moduleName: 'handleWebhook'}]
         });
         handleMergeRequest(webhookPayload);
