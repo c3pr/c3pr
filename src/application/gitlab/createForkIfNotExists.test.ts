@@ -8,7 +8,7 @@ import createForkIfNotExists = require('./createForkIfNotExists');
  */
 describe('createForkIfNotExists', () => {
 
-    (it('createForkIfNotExists', async () => {
+    it('createForkIfNotExists', async () => {
 
         let r = await createForkIfNotExists('sample_user/sample-project-java-maven');
 
@@ -18,6 +18,6 @@ describe('createForkIfNotExists', () => {
             "cloneUrl":"http://d52b4bc956cd/c3pr-bot/sample_user__sample-project-java-maven.git"
         });
 
-    }) as any).timeout(10 * 1000);
+    }).timeout(10 * 1000);
 
 });
