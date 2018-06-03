@@ -25,14 +25,15 @@ const PR_STATUS = {
 
 
 // before creating a TIR, brain must fetch all PRs with OPEN status of that project and remove the changed_files of these PRs from the eligible files
-async function newPR({project_uuid, pr_id, pr_url, PullRequestRequested, changed_files}) {
-    assert.ok(project_uuid && pr_id && pr_url && PullRequestRequested && changed_files, "Missing required args.");
+async function newPR({project_uuid, pr_id, pr_url, PullRequestRequested, changed_files, assignee}) {
+    assert.ok(project_uuid && pr_id && pr_url && PullRequestRequested && changed_files && assignee, "Missing required args.");
     return insert({
         project_uuid,
         pr_id,
         pr_url,
         PullRequestRequested,
         changed_files,
+        assignee,
         status: PR_STATUS.OPEN,
         comments_count: {}
     });
