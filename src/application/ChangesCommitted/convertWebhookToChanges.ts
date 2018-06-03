@@ -8,7 +8,7 @@ async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits)
 
     const changesetFiles = new Set();
     for(let commit of commits) {
-        const modifiedFiles = await ports.fetchModifiedFiles(urlEncodedOrgNameProjectName, commit);
+        const modifiedFiles = await ports.getGitLabCommitDiff(urlEncodedOrgNameProjectName, commit.id);
         modifiedFiles.forEach(modifiedFile => {
             if (modifiedFile.new_file) {
                 changesetFiles.add(modifiedFile.new_path);
