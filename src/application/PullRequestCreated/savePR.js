@@ -9,16 +9,17 @@ async function savePR(pullRequestCreatedEvent) {
         project_uuid,
         pr_id: pullRequestCreatedEvent.payload.pr_id,
         pr_url: pullRequestCreatedEvent.payload.pr_url,
-        PullRequestRequested: pullRequestCreatedEvent.parent.uuid,
+        PullRequestRequested: pullRequestCreatedEvent.payload.parent.uuid,
         changed_files
     };
 
-    let r = await ports.postNewPrForProject(project_uuid, pr);
+    let result = await ports.postNewPrForProject(project_uuid, pr);
     c3prLOG2({
         msg: `Created PR in database for ${pullRequestCreatedEvent.payload.pr_url}`,
         logMetas: [{nodeName: 'c3pr-brain', moduleName: 'savePR'}],
         meta: {pullRequestCreatedEvent, project_uuid, changed_files}
     });
+    return {new_status: 'PROCESSED', result};
 }
 
 module.exports = savePR;
