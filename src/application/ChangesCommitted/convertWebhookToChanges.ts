@@ -31,7 +31,7 @@ async function convertWebhookToChanges(webhookPayload) {
     const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits);
 
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
-    const project_uuid = await ports.fetchProjectUuidForCloneUrl(clone_url_http);
+    const project_uuid = await ports.fetchFirstProjectForCloneUrl(clone_url_http);
 
     const gitSHA = webhookPayload.after;
     return {
