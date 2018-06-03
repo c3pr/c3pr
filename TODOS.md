@@ -1,7 +1,6 @@
 # TODOs
 
-- BRAIN: save commit status in the database, so we can keep track of what has been created for each commit
-- HUB-CLIENT: handleFirstCollectedEvent - uncollect upon error.
+### Next: repo emit PullRequestUpdated so brain can update PR status @ hub
 
 - GITLAB: add new project if project of given url not found (when creating ChangesCommitted, see `convertWebhookToChanges()`)
 
