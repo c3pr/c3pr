@@ -5,5 +5,6 @@ export interface PR {
     PullRequestRequested: string;
     changed_files: string[];
     status: 'OPEN' | 'CLOSED' | 'MERGED',
-    comments_count: { [username: string]: number }
+    comments_count: { [username: string]: number },
+    assignee: {id: number, username: string}
 }
