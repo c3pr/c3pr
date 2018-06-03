@@ -102,3 +102,7 @@ Current nodes:
 [214]: N.A.
 [215]: https://img.shields.io/docker/build/c3pr/c3pr-tool-walkmod-sonar.svg
 
+
+# Notes
+
+At the moment, the assignee (field of the PRR event) is the push user. We may change that in the future.
