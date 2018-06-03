@@ -25,7 +25,7 @@ function convertWebhookToChanges(webhookPayload) {
         changeset,
         repository: {
             full_path: webhookPayload.repository.full_name,
-            get author() { throw new Error() },
+            get push_user() { /* TODO implement. this was added later, which is why it doesnt exist here */ throw new Error() },
             clone_url_http: webhookPayload.repository.clone_url,
             // TODO maybe it would be more secure to send down the refs and git fetch the refs instead of the branch... This seems rather sketchy
             branch: webhookPayload.ref.replace(/refs\/heads\//, ''),
