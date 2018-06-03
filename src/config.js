@@ -1,4 +1,5 @@
 const os = require("os");
+const hubClientConfig = require('node-c3pr-hub-client').hubClientConfig;
 
 const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
 
@@ -6,7 +7,7 @@ const C3PR_BRAIN_URL = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:50
 
 const C3PR_MONGO_URL = process.env.C3PR_MONGO_URL;
 
-module.exports = {
+const config = {
     c3pr: {
         auth: {
             jwt: null,
@@ -33,3 +34,6 @@ module.exports = {
         }
     }
 };
+
+hubClientConfig.init(C3PR_HUB_URL, () => config.c3pr.hub.auth.jwt);
+module.exports = config;
