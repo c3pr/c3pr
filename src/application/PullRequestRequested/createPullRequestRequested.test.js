@@ -18,7 +18,7 @@ const toolInvocationCompleted = {
         parent: {event_type: "ToolInvocationRequested", uuid: "tir-uuid-111"},
         "repository": {
             "full_path": "c3pr/sample-project-java-maven",
-            "author": "someusername",
+            "push_user": {"id": 395, "username": "someusername"},
             "clone_url_http": "https://github.com/c3pr/sample-project-java-maven.git",
             "branch": "branch-for-clone-tests",
             "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
@@ -40,7 +40,7 @@ const pullRequestRequested = {
 
     "repository": {
         "full_path": "c3pr/sample-project-java-maven",
-        "author": "someusername",
+        "push_user": {"id": 395, "username": "someusername"},
         "clone_url_http": "https://github.com/c3pr/sample-project-java-maven.git",
         "branch": "branch-for-clone-tests",
         "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
