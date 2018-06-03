@@ -1,9 +1,11 @@
 const os = require("os");
+const hubClientConfig = require('node-c3pr-hub-client').hubClientConfig;
+
 const PORT = process.env.PORT || 5005;
 
 const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
 
-module.exports = {
+const config = {
     c3pr: {
         port: PORT,
 
@@ -25,3 +27,6 @@ module.exports = {
         }
     }
 };
+
+hubClientConfig.init(C3PR_HUB_URL, () => config.c3pr.hub.auth.jwt);
+module.exports = config;

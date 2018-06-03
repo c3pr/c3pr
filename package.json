@@ -27,7 +27,7 @@
     "express": "^4.16.2",
     "mongodb": "^3.0.4",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.1.0",
-    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#6.0.0",
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#9.3.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
