@@ -39,9 +39,9 @@ async function newPR({project_uuid, pr_id, pr_url, PullRequestRequested, changed
 }
 
 async function updatePR({project_uuid, pr_id, status, assignee}) {
-    assert.ok(project_uuid && pr_id && status && assignee, "Missing required args for updatePR().");
+    assert.ok(project_uuid && +pr_id && status && assignee, "Missing required args for updatePR().");
     return (await prsDB).update(
-        {project_uuid, pr_id},
+        {project_uuid, pr_id: +pr_id},
         {$set: {'status': status, 'assignee': assignee}}
     );
 }
