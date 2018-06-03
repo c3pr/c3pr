@@ -1,23 +1,31 @@
 const UNCONFIGURED = 'call hubClientConfig.init() before using any functions from node-c3pr-hub-client.';
+const UNCONFIGURED_ARG0 = (): string => {throw new Error(UNCONFIGURED)};
+const UNCONFIGURED_ARG1 = (ignore): string => {throw new Error(UNCONFIGURED)};
+
 
 const hubClientConfig = {
     c3pr: {
 
         hub: {
             auth: {
-                jwt: (): string => {throw new Error(UNCONFIGURED)},
+                jwt: UNCONFIGURED_ARG0,
             },
             c3prHubUrl: UNCONFIGURED,
             loginUrl: UNCONFIGURED,
-            projectsByCloneUrlHttp: (ignore): string => {throw new Error(UNCONFIGURED)},
+            eventsUrl: UNCONFIGURED_ARG1,
+            projectsByCloneUrlHttp: UNCONFIGURED_ARG1,
         },
 
     },
     init(C3PR_HUB_URL: string, jwt: () => string) {
         hubClientConfig.c3pr.hub.c3prHubUrl = C3PR_HUB_URL;
         hubClientConfig.c3pr.hub.loginUrl = `${C3PR_HUB_URL}/api/v1/login`;
+        hubClientConfig.c3pr.hub.eventsUrl = ({event_type, uuid}) => `${C3PR_HUB_URL}/api/v1/events/${event_type}/${uuid}`;
         hubClientConfig.c3pr.hub.projectsByCloneUrlHttp = (clone_url_http) => `${C3PR_HUB_URL}/api/v1/projects/?clone_url_http=${clone_url_http}`;
         hubClientConfig.c3pr.hub.auth.jwt = jwt;
+    },
+    headers() {
+        return {Authorization: `Bearer ${hubClientConfig.c3pr.hub.auth.jwt()}`};
     }
 };
 
