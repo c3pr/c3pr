@@ -4,6 +4,7 @@ const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 const c3prHCC = require('../application/ChangesCommitted/handleChangesCommitted').c3pr;
 const c3prHTIC = require('../application/ToolInvocationCompleted/handleToolInvocationCompleted').c3pr;
 const handlePullRequestCreated = require('../application/PullRequestCreated/handlePullRequestCreated');
+const handlePullRequestUpdated = require('../application/PullRequestUpdated/handlePullRequestUpdated');
 
 const logMetas = [{nodeName: 'c3pr-brain', moduleName: 'c3prHubListenerController'}];
 
@@ -29,6 +30,7 @@ module.exports = function (app) {
 
     app.post(config.c3pr.brain.PullRequestUpdatedCallbackUrl, function (request, response) {
         c3prLOG2({msg: `'PullRequestUpdated' received.`, logMetas});
+        handlePullRequestUpdated();
         response.send();
     });
 
