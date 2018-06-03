@@ -1,8 +1,8 @@
 import axios from 'axios';
 import config from '../../config';
+import ports from "../../ports";
 
 import encodeGroupProjectPath = require('./encodeGroupProjectPath');
-import getGitLabProject = require('./getGitLabProject');
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 
 
@@ -28,7 +28,7 @@ async function waitForForkCompletion(projectId, logMetas) {
     let wait = true;
     while (wait) {
         await timeout(100);
-        let {import_status} = await getGitLabProject(projectId);
+        let {import_status} = await ports.getGitLabProject(projectId);
         wait = import_status !== 'finished';
     }
     c3prLOG2({
@@ -68,7 +68,7 @@ async function createForkIfNotExists(orgNameProjectName, outerLogMetas = []) {
     const forkName = generateForkName(urlEncodedOrgNameProjectName);
     const forkId = encodeURIComponent(config.c3pr.repoGitlab.gitlab.botUserName + '/' + forkName);
     try {
-        let projectData = await getGitLabProject(forkId);
+        let projectData = await ports.getGitLabProject(forkId);
         c3prLOG2({
             msg: `Fork '${forkId}' already exists, returning.`,
             logMetas,
