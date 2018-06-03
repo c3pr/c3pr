@@ -16,7 +16,7 @@ function createPullRequestUpdated(gitLabMergeRequestUpdatedWebhook: GitLabMergeR
 
         pr_id: gitLabMergeRequestUpdatedWebhook.object_attributes.iid,
         status: gitLabMergeRequestUpdatedWebhook.object_attributes.state,
-        assignee: {
+        assignee: gitLabMergeRequestUpdatedWebhook.assignee && {
             id: gitLabMergeRequestUpdatedWebhook.object_attributes.assignee_id,
             username: gitLabMergeRequestUpdatedWebhook.assignee && gitLabMergeRequestUpdatedWebhook.assignee.username
         },

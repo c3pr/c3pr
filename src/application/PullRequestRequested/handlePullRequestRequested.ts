@@ -48,7 +48,7 @@ async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
         gitUserName: config.c3pr.repoGitlab.gitlab.botUserName,
         gitUserEmail: config.c3pr.repoGitlab.gitlab.botUserEmail,
         prCommitMessage: prr.pr_title,
-        pr_assignee: repository.push_user,
+        pr_assignee: prr.assignee,
         prTitle: prr.pr_title,
         prBody: prr.pr_body,
         patchContent: prr.diff_base64
