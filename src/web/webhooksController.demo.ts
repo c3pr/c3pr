@@ -55,7 +55,7 @@ let webhookPayload = {
 import axios from 'axios';
 import config from '../config';
 
-axios.post(config.c3pr.webhooksUrl, webhookPayload).then(response => {
+axios.post(config.c3pr.repoGitlab.c3prRepoGitlabUrl + "/webhooks", webhookPayload).then(response => {
     console.log('OK');
     console.log(response.data);
 }).catch(response => {

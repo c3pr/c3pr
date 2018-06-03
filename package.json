@@ -28,7 +28,7 @@
     "express": "^4.16.2",
     "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#9.3.0",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.1.1",
-    "node-c3pr-repo": "github:c3pr/node-c3pr-repo#4.2.1",
+    "node-c3pr-repo": "github:c3pr/node-c3pr-repo#5.0.0",
     "node-git-client": "github:c3pr/node-git-client#6.1.1",
     "ts-node": "^6.0.5",
     "typescript": "^2.9.1",

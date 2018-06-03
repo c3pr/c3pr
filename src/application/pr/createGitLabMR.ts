@@ -1,8 +1,9 @@
-import createMergeRequest = require("../gitlab/createMergeRequest");
-import createForkIfNotExists = require("../gitlab/createForkIfNotExists");
-import createPR = require("node-c3pr-repo/create-pr/create-pr");
+import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 
-import c3prLOG = require("node-c3pr-logger");
+import forkAndApplyPatch from "node-c3pr-repo/forkAndApplyPatch";
+import {createMergeRequest} from "../gitlab/createMergeRequest";
+import {createForkIfNotExists} from "../gitlab/createForkIfNotExists";
+
 
 async function createGitLabMR({
                             mainRepoOrgRepo,
@@ -13,18 +14,18 @@ async function createGitLabMR({
                             gitUserName,
                             gitUserEmail,
                             prCommitMessage,
-                            pr_assignee,// TODO pass this to createPR and modify it to pass to createMergeRequest
+                            pr_assignee,
                             prTitle,
                             prBody,
                             patchContent
                         }) {
 
     const logMeta = {nodeName: 'c3pr-repo-gitlab', correlationId: mainRepoHash, moduleName: 'createGitLabMR'};
-    c3prLOG(
-        `Initiating MR creation.`,
-        {mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitLabUrl, gitLabApiToken, gitUserName, gitUserEmail, prCommitMessage, prTitle, prBody, patchContent},
-        logMeta
-    );
+    c3prLOG2({
+        msg: `Initiating MR creation.`,
+        meta: {mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitLabUrl, gitLabApiToken, gitUserName, gitUserEmail, prCommitMessage, prTitle, prBody, patchContent},
+        logMetas: [logMeta]
+    });
 
     const addAuthenticationToCloneUrl = (cloneUrl) => {
         return cloneUrl.replace(/^http(s?):\/\//, `http$1://clone:${gitLabApiToken}@`)
@@ -34,8 +35,7 @@ async function createGitLabMR({
 
     const tokenReplacementForLogFunction = {regex: new RegExp(gitLabApiToken, "g"), replaceWith: "<GITLAB_API_TOKEN>"};
 
-    return await createPR({
-        createPullRequest: createMergeRequest,
+    let {forkRepoOrg, forkRepoProject, forkRepoBranch} = await forkAndApplyPatch({
         createForkIfNotExists,
         addAuthenticationToCloneUrl,
         tokenReplacementForLogFunction,
@@ -45,12 +45,11 @@ async function createGitLabMR({
         gitUserName,
         gitUserEmail,
         prCommitMessage,
-        prTitle,
-        prBody,
         patchContent,
         mainRepoCloneUrl,
         logMetas: [logMeta]
     });
+    return createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBody, pr_assignee);
 }
 
 export { createGitLabMR };

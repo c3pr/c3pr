@@ -3,7 +3,7 @@ import config from '../../config';
 
 import getGitLabProject = require('./getGitLabProject');
 
-async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBodyMarkdown) {
+async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBodyMarkdown, pr_assignee) {
 
     let {id: mainRepoId} = await getGitLabProject(mainRepoOrgRepo);
     let forkRepoId = encodeURIComponent(forkRepoOrg+"/"+forkRepoProject);
@@ -15,7 +15,7 @@ async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, 
             "source_branch": forkRepoBranch,  // string	       yes	The source branch
             "target_branch": mainRepoBranch,  // string	       yes	The target branch
             "title": prTitle,                 // string	       yes	Title of MR
-            //"assignee_id": "",              // integer       no	Assignee user ID
+            "assignee_id": pr_assignee.id,    // integer       no	Assignee user ID
             "description": prBodyMarkdown,    // string	       no	Description of MR
             "target_project_id": mainRepoId,  // integer       no	The target project (numeric id)
             //"labels": "",                   // string	       no	Labels for MR as a comma-separated list
@@ -29,4 +29,4 @@ async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, 
     return mergeRequestCreation;
 }
 
-export = createMergeRequest;
+export { createMergeRequest };

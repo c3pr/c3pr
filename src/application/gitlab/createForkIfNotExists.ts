@@ -5,6 +5,7 @@ import encodeGroupProjectPath = require('./encodeGroupProjectPath');
 import getGitLabProject = require('./getGitLabProject');
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 
+
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -108,4 +109,4 @@ async function createForkIfNotExists(orgNameProjectName, outerLogMetas = []) {
 
 }
 
-export = createForkIfNotExists;
+export { createForkIfNotExists };
