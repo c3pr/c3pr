@@ -15,16 +15,25 @@ module.exports = function (app) {
         });
     });
 
-    app.get('/api/v1/projects/:projectUUID/prs', function ({params: {projectUUID}}, response) {
-        prsDB.findAllOfProject(projectUUID).then((prs) => {
+    app.get('/api/v1/projects/:processor_uuid/prs', function ({params: {processor_uuid}}, response) {
+        prsDB.findAllOfProject(processor_uuid).then((prs) => {
             response.status(200).send(prs);
         }).catch((e) => {
             response.status(500).send(e.toString());
         });
     });
 
-    app.get('/api/v1/projects/:projectUUID/prs/open/changed_files', function ({params: {projectUUID}}, response) {
-        prsDB.findFilesWithOpenPR(projectUUID).then((prs) => {
+    app.get('/api/v1/projects/:processor_uuid/prs/open/changed_files', function ({params: {processor_uuid}}, response) {
+        prsDB.findFilesWithOpenPR(processor_uuid).then((prs) => {
+            response.status(200).send(prs);
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
+    app.post('/api/v1/projects/:processor_uuid/prs', function ({body, params: {processor_uuid}}, response) {
+        // noinspection JSCheckFunctionSignatures
+        prsDB.newPR({...body, processor_uuid}).then((prs) => {
             response.status(200).send(prs);
         }).catch((e) => {
             response.status(500).send(e.toString());
