@@ -44,7 +44,8 @@ async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUr
     }
 
     if (!handlerFunctionResult || !handlerFunctionResult.new_status) {
-        throw new Error('Handler function should return an object of format {new_status, result}, being new_status mandatory. Received: ' + JSON.stringify(handlerFunctionResult));
+        throw new Error(`<handleFirstCollectedEvent> Handler function should return an object of format {new_status, result}, being new_status mandatory.
+        handlerFunction was ${handlerFunction}. handlerFunction result received: ${JSON.stringify(handlerFunctionResult)}`);
     }
 
     switch (handlerFunctionResult.new_status.toUpperCase()) {
@@ -65,7 +66,8 @@ async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUr
             }
             break;
         default:
-            throw new Error('Handler function returned a new_status of unsupported value. handlerFunctionResult received: ' + JSON.stringify(handlerFunctionResult));
+            throw new Error(`<handleFirstCollectedEvent> Handler function returned a new_status of unsupported value. 
+            handlerFunction was ${handlerFunction}. handlerFunction result received: ${JSON.stringify(handlerFunctionResult)}`);
     }
 
     return handlerFunctionResult.result;
