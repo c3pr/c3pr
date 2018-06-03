@@ -39,4 +39,12 @@ module.exports = function (app) {
         });
     });
 
+    app.patch('/api/v1/projects/:project_uuid/prs/:pr_id', function ({body, params: {project_uuid, pr_id}}, response) {
+        prsDB.updatePR({...body, project_uuid, pr_id}).then((prs) => {
+            response.status(200).send(prs);
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
 };

@@ -18,15 +18,14 @@ async function findAllOfProject(processor_uuid) {
 }
 
 const PR_STATUS = {
-    OPEN: 'OPEN',
-    MERGED: 'MERGED',
-    CLOSED: 'CLOSED'
+    OPEN: 'open',
+    MERGED: 'merged',
+    CLOSED: 'closed'
 };
 
 
-// before creating a TIR, brain must fetch all PRs with OPEN status of that project and remove the changed_files of these PRs from the eligible files
 async function newPR({project_uuid, pr_id, pr_url, PullRequestRequested, changed_files, assignee}) {
-    assert.ok(project_uuid && pr_id && pr_url && PullRequestRequested && changed_files && assignee, "Missing required args.");
+    assert.ok(project_uuid && pr_id && pr_url && PullRequestRequested && changed_files && assignee, "Missing required args for newPR().");
     return insert({
         project_uuid,
         pr_id,
@@ -39,6 +38,14 @@ async function newPR({project_uuid, pr_id, pr_url, PullRequestRequested, changed
     });
 }
 
+async function updatePR({project_uuid, pr_id, status, assignee}) {
+    assert.ok(project_uuid && pr_id && status && assignee, "Missing required args for updatePR().");
+    return (await prsDB).update(
+        {project_uuid, pr_id},
+        {$set: {'status': status, 'assignee': assignee}}
+    );
+}
+
 async function findFilesWithOpenPR(project_uuid) {
     const openPRs = await findBy({project_uuid, status: PR_STATUS.OPEN});
     return openPRs.reduce((changedFiles, openPR) => [...changedFiles, ...openPR.changed_files], [])
@@ -46,6 +53,7 @@ async function findFilesWithOpenPR(project_uuid) {
 
 module.exports = {
     newPR,
+    updatePR,
     findAllOfProject,
     findFilesWithOpenPR
 };
