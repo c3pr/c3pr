@@ -13,5 +13,9 @@
   },
 
   "pr_id": 123,
-  "pr_url": "https://github.com/c3pr/sample-project-java-maven/pull/23"
+  "pr_url": "https://github.com/c3pr/sample-project-java-maven/pull/23",
+  "assignee": {
+    "id": 1,
+    "username": "root"
+  }
 }
