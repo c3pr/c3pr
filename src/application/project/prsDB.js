@@ -5,6 +5,7 @@ const config = require('../../config');
 const prsDB = client.then(cli => cli.db(config.c3pr.hub.mongoC3prDatabase).collection(config.c3pr.hub.mongoPRsCollection));
 
 async function insert(data) {
+    // noinspection JSUnresolvedFunction
     return (await prsDB).insertOne(data);
 }
 
@@ -37,8 +38,8 @@ async function newPR({project_uuid, pr_id, pr_url, PullRequestRequested, changed
     });
 }
 
-async function findFilesWithOpenPR(processor_uuid) {
-    const openPRs = await findBy({processor_uuid, status: PR_STATUS.OPEN});
+async function findFilesWithOpenPR(project_uuid) {
+    const openPRs = await findBy({project_uuid, status: PR_STATUS.OPEN});
     return openPRs.reduce((changedFiles, openPR) => [...changedFiles, ...openPR.changed_files], [])
 }
 
@@ -47,4 +48,3 @@ module.exports = {
     findAllOfProject,
     findFilesWithOpenPR
 };
-
