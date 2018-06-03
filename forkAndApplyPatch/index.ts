@@ -3,10 +3,9 @@ const path = require('path');
 const uuidv4 = require('uuid/v4');
 const c3prSH = require("node-git-client").c3prSH;
 
-const STAGE_REPOS_FOLDER = process.env.STAGE_REPOS_FOLDER || '/tmp/';
+const C3PR_CLONES_FOLDER = process.env.C3PR_CLONES_FOLDER || '/tmp/';
 
-async function createPR({
-                            createPullRequest,
+async function forkAndApplyPatch({
                             createForkIfNotExists,
                             addAuthenticationToCloneUrl,
                             tokenReplacementForLogFunction,
@@ -16,16 +15,14 @@ async function createPR({
                             gitUserName,
                             gitUserEmail,
                             prCommitMessage,
-                            prTitle,
-                            prBody,
                             patchContent,
                             mainRepoCloneUrl,
-                            logMetas
+                            logMetas = []
                         }) {
-    const logMeta = [...(logMetas || []), {nodeName: 'node-c3pr-repo', correlationIds: mainRepoHash, moduleName: 'createPR'}];
+    const logMeta = [...logMetas, {nodeName: 'node-c3pr-repo', correlationIds: mainRepoHash, moduleName: 'forkAndApplyPatch'}];
 
     const stagingFolderName = `${mainRepoHash}_${uuidv4()}`;
-    const stagingFolder = path.resolve(`${STAGE_REPOS_FOLDER}/${stagingFolderName}`);
+    const stagingFolder = path.resolve(`${C3PR_CLONES_FOLDER}/${stagingFolderName}`);
 
     const forkInfo = await createForkIfNotExists(mainRepoOrgRepo, logMeta);
 
@@ -67,8 +64,8 @@ async function createPR({
     // push changes
     await c3prSH(`git push -u fork ${forkRepoBranch}`, {cwd: stagingFolder}, {logMeta});
 
-    // CREATE PULL REQUEST VIA API
-    return createPullRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBody);
+    return {forkRepoOrg, forkRepoProject, forkRepoBranch};
 }
 
-module.exports = createPR;
+// noinspection JSUnusedGlobalSymbols
+export default forkAndApplyPatch;
