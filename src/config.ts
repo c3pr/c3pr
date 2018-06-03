@@ -9,6 +9,11 @@ const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
 const GITLAB_URL = process.env.GITLAB_URL || 'http://c3prgitlab:8888';
 const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3';
 
+// used as (1) commit author, (2) mr author, and (3) namespace for the forks
+const GITLAB_BOT_USER_ID = process.env.GITLAB_BOT_USER_ID || 15;
+const GITLAB_BOT_USER_USERNAME = process.env.GITLAB_BOT_USER_USERNAME || 'c3pr-bot';
+const GITLAB_BOT_USER_EMAIL = process.env.GITLAB_BOT_USER_EMAIL || 'c3prbot@gmail.com';
+
 const WEBHOOKS_URL = `/webhooks`;
 
 const config = {
@@ -21,7 +26,6 @@ const config = {
 
             c3prHubUrl: C3PR_HUB_URL,
             loginUrl: `${C3PR_HUB_URL}/api/v1/login`,
-            projectsByCloneUrlHttp: (clone_url_http) => `${C3PR_HUB_URL}/api/v1/projects/?clone_url_http=${clone_url_http}`,
         },
 
         repoGitlab: {
@@ -36,8 +40,9 @@ const config = {
                 url: GITLAB_URL,
                 apiToken: GITLAB_API_TOKEN, // api + read_user token for the gitUserName gitlab user
 
-                botUserName: 'c3pr-bot', // used as (1) commit author, (2) mr author, and (3) namespace for the forks
-                botUserEmail: 'c3prbot@gmail.com',
+                bot_user_id: GITLAB_BOT_USER_ID,
+                botUserName: GITLAB_BOT_USER_USERNAME,
+                botUserEmail: GITLAB_BOT_USER_EMAIL,
 
                 normalizeGitLabUrl(url) {
                     let gitlabUrl = GITLAB_URL;
