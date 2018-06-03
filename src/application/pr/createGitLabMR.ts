@@ -13,6 +13,7 @@ async function createGitLabMR({
                             gitUserName,
                             gitUserEmail,
                             prCommitMessage,
+                            pr_assignee,// TODO pass this to createPR and modify it to pass to createMergeRequest
                             prTitle,
                             prBody,
                             patchContent
@@ -52,4 +53,4 @@ async function createGitLabMR({
     });
 }
 
-export = createGitLabMR;
+export { createGitLabMR };

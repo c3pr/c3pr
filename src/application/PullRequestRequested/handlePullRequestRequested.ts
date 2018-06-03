@@ -4,7 +4,7 @@ import hfce = require('node-c3pr-hub-client/events/handleFirstCollectedEvent');
 
 let handleFirstCollectedEvent = hfce.handleFirstCollectedEvent.handleFirstCollectedEvent;
 
-import createGitLabMR = require('../pr/createGitLabMR');
+import { createGitLabMR } from '../pr/createGitLabMR';
 
 import config from '../../config';
 import {createAndEmitPullRequestCreated} from "../PullRequestCreated/createAndEmitPullRequestCreated";
@@ -48,6 +48,7 @@ async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
         gitUserName: config.c3pr.repoGitlab.gitlab.botUserName,
         gitUserEmail: config.c3pr.repoGitlab.gitlab.botUserEmail,
         prCommitMessage: prr.pr_title,
+        pr_assignee: repository.push_user,
         prTitle: prr.pr_title,
         prBody: prr.pr_body,
         patchContent: prr.diff_base64

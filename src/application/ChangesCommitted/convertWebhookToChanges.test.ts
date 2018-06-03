@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon = require('sinon');
 
 import convertWebhookToChanges = require('./convertWebhookToChanges');
-let webhookRequestExample = require('./webhookRequestExample.json');
+let webhookRequestExample = require('../../ports/types/GitLabPush/webhookRequestExample.json');
 
 const now = new Date();
 
@@ -11,7 +11,7 @@ const changesCommittedONE = {
 
     "repository": {
         "full_path": "c3pr/sample-project-java-maven",
-        "author": "root",
+        "push_user": {"id": 1, "username": "root"},
         "clone_url_http": "http://c3prgitlab:8888/c3pr/sample-project-java-maven.git",
         "branch": "master",
         "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
@@ -25,7 +25,7 @@ const changesCommittedTWO = {
 
     "repository": {
         "full_path": "!fullpath!",
-        "author": "someusername",
+        "push_user": {"id": 395, "username": "someusername"},
         "clone_url_http": "!git_http_url!",
         "branch": "w00t-a-branch",
         "revision": "after-hash"

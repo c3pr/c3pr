@@ -1,6 +1,7 @@
 import config from '../../config';
 import ports from "../../ports";
 import sortCommits = require('../gitlab/sortCommits');
+import {GitLabPush} from "../../ports/types/GitLabPush/GitLabPush";
 
 async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits) {
     const commits = sortCommits(webhookCommits);
@@ -27,7 +28,7 @@ async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits)
     return changeset;
 }
 
-async function convertWebhookToChanges(webhookPayload) {
+async function convertWebhookToChanges(webhookPayload: GitLabPush) {
     const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits);
 
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
@@ -39,7 +40,7 @@ async function convertWebhookToChanges(webhookPayload) {
         project_uuid,
         changed_files,
         repository: {
-            author: webhookPayload.user_username,
+            push_user: {id: webhookPayload.user_id, username: webhookPayload.user_username},
             full_path: webhookPayload.project.path_with_namespace,
             clone_url_http,
 
