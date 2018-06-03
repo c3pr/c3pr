@@ -11,8 +11,8 @@ export interface GitLabMergeRequestCreated {
     source_branch: string;
     upvotes: number;
     downvotes: number;
-    author: Author;
-    assignee?: null;
+    author: User;
+    assignee?: User;
     source_project_id: number;
     target_project_id: number;
     labels?: (null)[] | null;
@@ -40,7 +40,7 @@ export interface GitLabMergeRequestCreated {
     first_deployed_to_production_at?: null;
     pipeline?: null;
 }
-export interface Author {
+export interface User {
     id: number;
     name: string;
     username: string;

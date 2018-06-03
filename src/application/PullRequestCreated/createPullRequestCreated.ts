@@ -10,6 +10,7 @@ export function createPullRequestCreated(pullRequestRequestedEvent: Event<any>, 
         },
         repository: pullRequestRequestedEvent.payload.repository,
         pr_id: createMrResult.iid,
-        pr_url: createMrResult.web_url
+        pr_url: createMrResult.web_url,
+        assignee: createMrResult.assignee && {id: createMrResult.assignee.id, username: createMrResult.assignee.username}
     }
 }
