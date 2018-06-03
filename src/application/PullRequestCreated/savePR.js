@@ -10,7 +10,8 @@ async function savePR(pullRequestCreatedEvent) {
         pr_id: pullRequestCreatedEvent.payload.pr_id,
         pr_url: pullRequestCreatedEvent.payload.pr_url,
         PullRequestRequested: pullRequestCreatedEvent.payload.parent.uuid,
-        changed_files
+        changed_files,
+        assignee: pullRequestCreatedEvent.payload.assignee
     };
 
     let result = await ports.postNewPrForProject(project_uuid, pr);
