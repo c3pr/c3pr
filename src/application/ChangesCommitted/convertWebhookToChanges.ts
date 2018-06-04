@@ -1,13 +1,27 @@
 import config from '../../config';
 import ports from "../../ports";
-import sortCommits = require('../gitlab/sortCommits');
-import {GitLabPush} from "../../ports/types/GitLabPush/GitLabPush";
+import {Commit, GitLabPush} from "../../ports/types/GitLabPush/GitLabPush";
+import {sortCommits} from "../gitlab/sortCommits";
+import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 
-async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits) {
+const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'convertWebhookToChanges'}];
+
+async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits: Commit[]) {
     const commits = sortCommits(webhookCommits);
 
     const changesetFiles = new Set();
     for(let commit of commits) {
+        const logMetas = logMetaz(commit.id);
+        if (commit.author.email === config.c3pr.repoGitlab.gitlab.botUserEmail) {
+            c3prLOG2({msg: `Skipping commit ${commit.id}, since its author is the bot (${commit.author.email}).`, meta: {commit}, logMetas});
+            continue;
+        }
+        const gitLabCommit = await ports.getGitLabCommit(urlEncodedOrgNameProjectName, commit.id);
+        if (gitLabCommit.parent_ids.length > 1) {
+            c3prLOG2({msg: `Skipping commit ${commit.id}, because it is a merge.`, meta: {commit, gitLabCommit}, logMetas});
+            continue;
+        }
+
         const modifiedFiles = await ports.getGitLabCommitDiff(urlEncodedOrgNameProjectName, commit.id);
         modifiedFiles.forEach(modifiedFile => {
             if (modifiedFile.new_file) {
@@ -31,10 +45,16 @@ async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits)
 async function convertWebhookToChanges(webhookPayload: GitLabPush) {
     const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits);
 
+    const gitSHA = webhookPayload.after;
+    const logMetas = logMetaz(gitSHA);
+    if (changed_files) {
+        c3prLOG2({msg: `Push skipped due to no changed_files (sha: ${gitSHA} / project: (${webhookPayload.repository.git_http_url}).`, meta: {webhookPayload}, logMetas});
+        return null;
+    }
+
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
     const project_uuid = await ports.fetchFirstProjectForCloneUrl(clone_url_http);
 
-    const gitSHA = webhookPayload.after;
     return {
         date: new Date().toISOString(),
         project_uuid,

@@ -1,6 +1,6 @@
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 
-import createAndEmitChangesCommitted = require('../ChangesCommitted/createAndEmitChangesCommitted');
+import { createAndEmitChangesCommitted } from '../ChangesCommitted/createAndEmitChangesCommitted';
 import {sortCommits} from "../gitlab/sortCommits";
 
 export default function handlePush(webhookPayload) {
