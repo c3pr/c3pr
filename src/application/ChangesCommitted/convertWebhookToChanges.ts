@@ -47,8 +47,8 @@ async function convertWebhookToChanges(webhookPayload: GitLabPush) {
 
     const gitSHA = webhookPayload.after;
     const logMetas = logMetaz(gitSHA);
-    if (changed_files) {
-        c3prLOG2({msg: `Push skipped due to no changed_files (sha: ${gitSHA} / project: (${webhookPayload.repository.git_http_url}).`, meta: {webhookPayload}, logMetas});
+    if (changed_files.length === 0) {
+        c3prLOG2({msg: `Push skipped due to no changed_files (sha: ${gitSHA} / project: (${webhookPayload.repository.git_http_url}).`, meta: {webhookPayload, changed_files}, logMetas});
         return null;
     }
 
