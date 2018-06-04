@@ -3,6 +3,7 @@ import handlePush from '../handlePush/handlePush';
 import handleMergeRequest from '../handleMergeRequest/handleMergeRequest';
 import {GitLabPush} from "../../ports/outbound/types/GitLabPush/GitLabPush";
 import {GitLabMergeRequestUpdated} from "../../ports/outbound/types/GitLabMergeRequestUpdated/GitLabMergeRequestUpdated";
+import {InboundPorts} from "../../ports/inbound/InboundPorts";
 
 
 function logMetaz(correlationId?: string) {
@@ -31,4 +32,6 @@ function handleWebhook(webhookPayload: GitLabPush | GitLabMergeRequestUpdated): 
     });
 }
 
+// noinspection JSUnusedLocalSymbols
+const variableToGuaranteeTheFunctionMatchesTheInterface: InboundPorts['handleWebhook'] = handleWebhook;
 export { handleWebhook };

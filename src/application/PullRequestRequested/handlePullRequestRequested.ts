@@ -8,6 +8,7 @@ import { createGitLabMR } from '../pr/createGitLabMR';
 
 import config from '../../config';
 import {createAndEmitPullRequestCreated} from "../PullRequestCreated/createAndEmitPullRequestCreated";
+import {InboundPorts} from "../../ports/inbound/InboundPorts";
 
 const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handlePullRequestRequested'}];
 const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'handlePullRequestRequested'}];
@@ -63,4 +64,7 @@ async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
     return {new_status: 'PROCESSED', result: {pullRequestRequestedEvent, createMrResult}}
 }
 
+
+// noinspection JSUnusedLocalSymbols
+const variableToGuaranteeTheFunctionMatchesTheInterface: InboundPorts['handlePullRequestRequested'] = handlePullRequestRequested;
 export { handlePullRequestRequested };

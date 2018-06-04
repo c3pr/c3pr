@@ -1,17 +1,14 @@
 import { handlePullRequestRequested } from '../../application/PullRequestRequested/handlePullRequestRequested';
-import {GitLabMergeRequestUpdated} from "../outbound/types/GitLabMergeRequestUpdated/GitLabMergeRequestUpdated";
-import {GitLabPush} from "../outbound/types/GitLabPush/GitLabPush";
 import {handleWebhook} from "../../application/handleWebhook/handleWebhook";
+import {InboundPorts} from "./InboundPorts";
 
 
-export interface InboundPorts {
-    handlePullRequestRequested(): Promise<any>;
-    handleWebhook(webhookPayload: GitLabPush | GitLabMergeRequestUpdated): Promise<any>;
-}
+
 
 
 const inboundPorts: InboundPorts = {
     handlePullRequestRequested,
     handleWebhook
 };
+// noinspection JSUnusedGlobalSymbols
 export default inboundPorts;
