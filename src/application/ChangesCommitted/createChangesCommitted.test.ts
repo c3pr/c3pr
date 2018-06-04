@@ -66,7 +66,7 @@ describe('convertWebhookToChanges', function () {
                 {timestamp: '3', added: [],     removed: ['f2'], modified: ['f1']},
                 {timestamp: '2', added: [],     removed: [],     modified: ['f2']},
             ]
-        });
+        } as any);
         expect(changes).to.deep.equal(changesCommittedTWO);
     });
 

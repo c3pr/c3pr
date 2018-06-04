@@ -4,7 +4,9 @@ import {Commit, GitLabPush} from "../../ports/types/GitLabPush/GitLabPush";
 import {sortCommits} from "../gitlab/sortCommits";
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 
+
 const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'convertWebhookToChanges'}];
+
 
 async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits: Commit[]) {
     const commits = sortCommits(webhookCommits);
@@ -42,15 +44,15 @@ async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits:
     return changeset;
 }
 
-async function convertWebhookToChanges(webhookPayload: GitLabPush) {
+async function createChangesCommitted(webhookPayload: GitLabPush) {
     const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits);
 
     const gitSHA = webhookPayload.after;
     const logMetas = logMetaz(gitSHA);
-    if (changed_files.length === 0) {
-        c3prLOG2({msg: `Push skipped due to no changed_files (sha: ${gitSHA} / project: (${webhookPayload.repository.git_http_url}).`, meta: {webhookPayload, changed_files}, logMetas});
-        return null;
-    }
+    // if (changed_files.length === 0) {
+    //     c3prLOG2({msg: `Push skipped due to no changed_files (sha: ${gitSHA} / project: (${webhookPayload.repository.git_http_url}).`, meta: {webhookPayload, changed_files}, logMetas});
+    //     return null;
+    // }
 
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
     const project_uuid = await ports.fetchFirstProjectForCloneUrl(clone_url_http);
@@ -58,7 +60,6 @@ async function convertWebhookToChanges(webhookPayload: GitLabPush) {
     return {
         date: new Date().toISOString(),
         project_uuid,
-        changed_files,
         repository: {
             push_user: {id: webhookPayload.user_id, username: webhookPayload.user_username},
             full_path: webhookPayload.project.path_with_namespace,
@@ -67,8 +68,10 @@ async function convertWebhookToChanges(webhookPayload: GitLabPush) {
             // TODO maybe it would be more secure to send down the refs and git fetch the refs instead of the branch... This seems rather sketchy
             branch: webhookPayload.ref.replace(/refs\/heads\//, ''),
             revision: gitSHA
-        }
+        },
+        changed_files,
+        'source-webhook': webhookPayload
     }
 }
 
-export = convertWebhookToChanges;
+export { createChangesCommitted };

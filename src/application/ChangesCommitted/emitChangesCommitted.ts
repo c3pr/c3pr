@@ -5,9 +5,9 @@ import { c3prRNE } from 'node-c3pr-hub-client/events/registerNewEvent';
 import config from '../../config';
 
 
-function emitChangesCommitted(changesCommitted, outerLogMetas = []) {
+function emitChangesCommitted(changesCommitted) {
     const logMeta = {nodeName: 'c3pr-repo-gitlab', correlationId: changesCommitted.repository.revision, moduleName: 'emitChangesCommitted'};
-    const logMetas = [...outerLogMetas, logMeta];
+    const logMetas = [logMeta];
 
     c3prLOG2({
         msg: `Registering new event of type 'ChangesCommitted' for repository ${changesCommitted.repository.clone_url_http} and rev ${changesCommitted.repository.revision}.`,
@@ -22,13 +22,9 @@ function emitChangesCommitted(changesCommitted, outerLogMetas = []) {
         jwt: config.c3pr.hub.auth.jwt,
         logMetas
     })
-        .catch(e => {
-            c3prLOG2({
-                msg: `Error while registering new event: ChangesCommitted. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
-                logMetas,
-                meta: {error: require('util').inspect(e)}
-            });
+        .catch(error => {
+            c3prLOG2({msg: `Error while registering new event: ChangesCommitted.`, logMetas, error});
         })
 }
 
-export = emitChangesCommitted;
+export { emitChangesCommitted };
