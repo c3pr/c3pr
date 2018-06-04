@@ -1,8 +1,8 @@
-import {GitLabModifiedFile} from "./GitLabModifiedFile";
-import {GitLabProject} from "./GitLabProject/GitLabProject";
-import {GitLabCommit} from "./GitLabCommit/GitLabCommit";
+import {GitLabModifiedFile} from "./types/GitLabModifiedFile";
+import {GitLabProject} from "./types/GitLabProject/GitLabProject";
+import {GitLabCommit} from "./types/GitLabCommit/GitLabCommit";
 
-export interface Ports {
+export interface OutboundPorts {
     getGitLabCommitDiff(urlEncodedOrgNameProjectName, sha: string): Promise<GitLabModifiedFile[]>;
     fetchFirstProjectForCloneUrl(clone_url_http: string): Promise<string>;
     getGitLabProject(project_id: string | number): Promise<GitLabProject>;

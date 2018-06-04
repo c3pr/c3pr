@@ -1,7 +1,7 @@
 import axios from "axios";
-import config from "../../config";
+import config from "../../../config";
 import {GitLabModifiedFile} from "../types/GitLabModifiedFile";
-import {Ports} from "../types/Ports";
+import {OutboundPorts} from "../OutboundPorts";
 
 
 async function getGitLabCommitDiff(urlEncodedOrgNameProjectName, sha: string): Promise<GitLabModifiedFile[]> {
@@ -13,6 +13,6 @@ async function getGitLabCommitDiff(urlEncodedOrgNameProjectName, sha: string): P
 }
 
 // noinspection JSUnusedLocalSymbols
-const variableToGuaranteeTheFunctionMatchesTheInterface: Ports['getGitLabCommitDiff'] = getGitLabCommitDiff;
+const variableToGuaranteeTheFunctionMatchesTheInterface: OutboundPorts['getGitLabCommitDiff'] = getGitLabCommitDiff;
 
 export { getGitLabCommitDiff }

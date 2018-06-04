@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '../../config';
-import ports from "../../ports";
+import ports from "../../ports/outbound";
 
 import encodeGroupProjectPath = require('./encodeGroupProjectPath');
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";

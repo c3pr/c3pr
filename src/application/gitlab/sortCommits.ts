@@ -1,4 +1,4 @@
-import {Commit} from "../../ports/types/GitLabPush/GitLabPush";
+import {Commit} from "../../ports/outbound/types/GitLabPush/GitLabPush";
 
 /**
  * Sorts an array of GitLab commits.

@@ -1,6 +1,6 @@
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 import {createAndEmitPullRequestUpdated} from "../PullRequestUpdated/createAndEmitPullRequestUpdated";
-import {GitLabMergeRequestUpdated} from "../../ports/types/GitLabMergeRequestUpdated/GitLabMergeRequestUpdated";
+import {GitLabMergeRequestUpdated} from "../../ports/outbound/types/GitLabMergeRequestUpdated/GitLabMergeRequestUpdated";
 import config from "../../config";
 
 

@@ -1,8 +1,8 @@
 import axios from 'axios';
-import config from '../../config';
+import config from '../../../config';
 import {GitLabCommit} from "../types/GitLabCommit/GitLabCommit";
-import {Ports} from "../types/Ports";
-import encodeGroupProjectPath = require('../../application/gitlab/encodeGroupProjectPath');
+import {OutboundPorts} from "../OutboundPorts";
+import encodeGroupProjectPath = require('../../../application/gitlab/encodeGroupProjectPath');
 
 
 async function getGitLabCommit(project_id: string | number, sha: string): Promise<GitLabCommit> {
@@ -14,6 +14,6 @@ async function getGitLabCommit(project_id: string | number, sha: string): Promis
 }
 
 // noinspection JSUnusedLocalSymbols
-const variableToGuaranteeTheFunctionMatchesTheInterface: Ports['getGitLabCommit'] = getGitLabCommit;
+const variableToGuaranteeTheFunctionMatchesTheInterface: OutboundPorts['getGitLabCommit'] = getGitLabCommit;
 
 export { getGitLabCommit };

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '../../config';
-import ports from "../../ports";
+import ports from "../../ports/outbound";
 
 async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBodyMarkdown, pr_assignee) {
 

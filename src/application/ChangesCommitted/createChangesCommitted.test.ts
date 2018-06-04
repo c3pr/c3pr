@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import sinon = require('sinon');
+import {createChangesCommitted} from "./createChangesCommitted";
 
-import convertWebhookToChanges = require('./convertWebhookToChanges');
-let webhookRequestExample = require('../../ports/types/GitLabPush/webhookRequestExample.json');
+let webhookRequestExample = require('../../ports/outbound/types/GitLabPush/webhookRequestExample.json');
 
 const now = new Date();
 
@@ -49,13 +49,13 @@ describe('convertWebhookToChanges', function () {
         clock.restore();
     });
 
-    it('should consolidate changeset and get repo information', function () {
-        const changes = convertWebhookToChanges(webhookRequestExample);
+    it('should consolidate changeset and get repo information', async function () {
+        const changes = await createChangesCommitted(webhookRequestExample);
         expect(changes).to.deep.equal(changesCommittedONE);
     });
 
-    it('more elaborate example', function () {
-        const changes = convertWebhookToChanges({
+    it('more elaborate example', async function () {
+        const changes = await createChangesCommitted({
             user_username: "someusername",
             ref: "refs/heads/w00t-a-branch",
             after: "after-hash",

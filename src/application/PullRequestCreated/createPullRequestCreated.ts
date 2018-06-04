@@ -1,5 +1,5 @@
 import {Event} from 'node-c3pr-hub-client';
-import {GitLabMergeRequestCreated} from "../../ports/types/GitLabMergeRequestCreated/GitLabMergeRequestCreated";
+import {GitLabMergeRequestCreated} from "../../ports/outbound/types/GitLabMergeRequestCreated/GitLabMergeRequestCreated";
 
 
 export function createPullRequestCreated(pullRequestRequestedEvent: Event<any>, createMrResult: GitLabMergeRequestCreated) {

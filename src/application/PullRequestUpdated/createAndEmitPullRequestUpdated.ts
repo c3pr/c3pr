@@ -1,6 +1,6 @@
 import {c3prLOG2} from "node-c3pr-logger/c3prLOG2";
 import {c3prRNE} from 'node-c3pr-hub-client/events/registerNewEvent';
-import {GitLabMergeRequestUpdated} from "../../ports/types/GitLabMergeRequestUpdated/GitLabMergeRequestUpdated";
+import {GitLabMergeRequestUpdated} from "../../ports/outbound/types/GitLabMergeRequestUpdated/GitLabMergeRequestUpdated";
 import config from '../../config';
 
 export function createAndEmitPullRequestUpdated(gitLabMergeRequestUpdatedWebhook: GitLabMergeRequestUpdated) {
