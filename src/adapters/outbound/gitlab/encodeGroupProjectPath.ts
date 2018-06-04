@@ -16,4 +16,4 @@ function encodeGroupProjectPath(projectId) {
     }
 }
 
-export = encodeGroupProjectPath;
+export { encodeGroupProjectPath };

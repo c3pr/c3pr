@@ -1,8 +1,6 @@
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import outboundPorts from "../../ports/outbound";
 
-import forkAndApplyPatch from "node-c3pr-repo/forkAndApplyPatch";
-import {createMergeRequest} from "../gitlab/createMergeRequest";
-import {createForkIfNotExists} from "../gitlab/createForkIfNotExists";
 
 
 async function createGitLabMR({
@@ -35,8 +33,8 @@ async function createGitLabMR({
 
     const tokenReplacementForLogFunction = {regex: new RegExp(gitLabApiToken, "g"), replaceWith: "<GITLAB_API_TOKEN>"};
 
-    let {forkRepoOrg, forkRepoProject, forkRepoBranch} = await forkAndApplyPatch({
-        createForkIfNotExists,
+    let {forkRepoOrg, forkRepoProject, forkRepoBranch} = await outboundPorts.forkAndApplyPatch({
+        createForkIfNotExists: outboundPorts.createForkIfNotExists,
         addAuthenticationToCloneUrl,
         tokenReplacementForLogFunction,
         mainRepoOrgRepo,
@@ -49,7 +47,7 @@ async function createGitLabMR({
         mainRepoCloneUrl,
         logMetas: [logMeta]
     });
-    return createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBody, pr_assignee);
+    return outboundPorts.createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBody, pr_assignee);
 }
 
 export { createGitLabMR };

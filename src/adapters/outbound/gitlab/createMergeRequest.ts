@@ -1,10 +1,11 @@
 import axios from 'axios';
-import config from '../../config';
-import ports from "../../ports/outbound";
+import config from '../../../config';
+import {GitLabMergeRequestCreated} from "../../../ports/outbound/types/GitLabMergeRequestCreated/GitLabMergeRequestCreated";
+import {getGitLabProject} from "./getGitLabProject";
 
-async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBodyMarkdown, pr_assignee) {
+async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBodyMarkdown, pr_assignee): Promise<GitLabMergeRequestCreated> {
 
-    let {id: mainRepoId} = await ports.getGitLabProject(mainRepoOrgRepo);
+    let {id: mainRepoId} = await getGitLabProject(mainRepoOrgRepo);
     let forkRepoId = encodeURIComponent(forkRepoOrg+"/"+forkRepoProject);
 
     let {data: mergeRequestCreation} = await axios.post(

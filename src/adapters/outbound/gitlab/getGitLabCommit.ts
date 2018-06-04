@@ -2,7 +2,7 @@ import axios from 'axios';
 import config from '../../../config';
 import {GitLabCommit} from "../../../ports/outbound/types/GitLabCommit/GitLabCommit";
 import {OutboundPorts} from "../../../ports/outbound/OutboundPorts";
-import encodeGroupProjectPath = require('../../../application/gitlab/encodeGroupProjectPath');
+import {encodeGroupProjectPath} from "./encodeGroupProjectPath";
 
 
 async function getGitLabCommit(project_id: string | number, sha: string): Promise<GitLabCommit> {

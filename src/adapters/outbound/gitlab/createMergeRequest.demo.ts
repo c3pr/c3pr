@@ -1,4 +1,4 @@
-import createMergeRequest = require('./createMergeRequest');
+import {createMergeRequest} from "./createMergeRequest";
 
 (async () => {
 
@@ -15,7 +15,8 @@ import createMergeRequest = require('./createMergeRequest');
             'sample_user__sample-project-java-maven',
             'prCreationTestBranch',
             'my pr title',
-            'my pr `desc`'
+            'my pr `desc`',
+            {id: 1, username: 'root'}
         );
         console.log(JSON.stringify(r));
 

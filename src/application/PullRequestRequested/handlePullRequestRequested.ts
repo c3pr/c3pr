@@ -65,6 +65,4 @@ async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
 }
 
 
-// noinspection JSUnusedLocalSymbols
-const variableToGuaranteeTheFunctionMatchesTheInterface: InboundPorts['handlePullRequestRequested'] = handlePullRequestRequested;
 export { handlePullRequestRequested };

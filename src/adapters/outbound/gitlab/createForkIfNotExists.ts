@@ -1,9 +1,10 @@
 import axios from 'axios';
-import config from '../../config';
-import ports from "../../ports/outbound";
+import config from '../../../config';
 
-import encodeGroupProjectPath = require('./encodeGroupProjectPath');
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import {encodeGroupProjectPath} from "./encodeGroupProjectPath";
+import {GitLabForkCreation} from "../../../ports/outbound/types/GitLabForkCreation/GitLabForkCreation";
+import {getGitLabProject} from "./getGitLabProject";
 
 
 function timeout(ms) {
@@ -11,11 +12,12 @@ function timeout(ms) {
 }
 
 async function scheduleForkCreation(urlEncodedOrgNameProjectName, logMetas) {
-    let {data: createForkResponse} = await axios.post(
+    let {data} = await axios.post(
         `${config.c3pr.repoGitlab.gitlab.url}/api/v4/projects/${urlEncodedOrgNameProjectName}/fork`,
         {namespace: config.c3pr.repoGitlab.gitlab.botUserName},
         {headers: {"PRIVATE-TOKEN": config.c3pr.repoGitlab.gitlab.apiToken}}
     );
+    let createForkResponse: GitLabForkCreation = data;
     c3prLOG2({
         msg: `Fork '${urlEncodedOrgNameProjectName}' scheduled.`,
         logMetas,
@@ -28,7 +30,7 @@ async function waitForForkCompletion(projectId, logMetas) {
     let wait = true;
     while (wait) {
         await timeout(100);
-        let {import_status} = await ports.getGitLabProject(projectId);
+        let {import_status} = await getGitLabProject(projectId);
         wait = import_status !== 'finished';
     }
     c3prLOG2({
@@ -60,7 +62,7 @@ function generateForkName(urlEncodedOrgNameProjectName) {
 /**
  * Forks the given project under the gitlab bot user account.
  */
-async function createForkIfNotExists(orgNameProjectName, outerLogMetas = []) {
+async function createForkIfNotExists(orgNameProjectName, outerLogMetas: any[] = []): Promise<{organization: string, forkName: string, cloneUrl: string}> {
     const logMetas = [...outerLogMetas, {nodeName: 'c3pr-repo-gitlab', correlationId: orgNameProjectName, moduleName: 'createForkIfNotExists'}];
 
     let urlEncodedOrgNameProjectName = encodeGroupProjectPath(orgNameProjectName);
@@ -68,7 +70,7 @@ async function createForkIfNotExists(orgNameProjectName, outerLogMetas = []) {
     const forkName = generateForkName(urlEncodedOrgNameProjectName);
     const forkId = encodeURIComponent(config.c3pr.repoGitlab.gitlab.botUserName + '/' + forkName);
     try {
-        let projectData = await ports.getGitLabProject(forkId);
+        let projectData = await getGitLabProject(forkId);
         c3prLOG2({
             msg: `Fork '${forkId}' already exists, returning.`,
             logMetas,

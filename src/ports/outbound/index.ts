@@ -3,11 +3,17 @@ import {getGitLabCommitDiff} from "../../adapters/outbound/gitlab/getGitLabCommi
 import {fetchFirstProjectForCloneUrl} from "node-c3pr-hub-client/projects/fetchFirstProjectForCloneUrl";
 import {getGitLabProject} from "../../adapters/outbound/gitlab/getGitLabProject";
 import {getGitLabCommit} from "../../adapters/outbound/gitlab/getGitLabCommit";
+import forkAndApplyPatch from "node-c3pr-repo/forkAndApplyPatch";
+import {createMergeRequest} from "../../adapters/outbound/gitlab/createMergeRequest";
+import {createForkIfNotExists} from "../../adapters/outbound/gitlab/createForkIfNotExists";
 
-const index: OutboundPorts = {
+const outboundPorts: OutboundPorts = {
     getGitLabCommitDiff,
     fetchFirstProjectForCloneUrl,
     getGitLabProject,
-    getGitLabCommit
+    getGitLabCommit,
+    forkAndApplyPatch,
+    createMergeRequest,
+    createForkIfNotExists
 };
-export default index;
+export default outboundPorts;

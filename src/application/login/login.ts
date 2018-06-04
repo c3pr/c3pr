@@ -19,6 +19,4 @@ function c3prRepoGitLabLogin(): Promise<void> {
     });
 }
 
-// noinspection JSUnusedLocalSymbols
-const variableToGuaranteeTheFunctionMatchesTheInterface: InboundPorts['c3prRepoGitLabLogin'] = c3prRepoGitLabLogin;
 export { c3prRepoGitLabLogin };

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
+import {createForkIfNotExists} from "./createForkIfNotExists";
 require("node-c3pr-logger").testMode();
 
-import createForkIfNotExists = require('./createForkIfNotExists');
 
 /**
  * NOTE: this requires the source project exists. And this CREATES a fork permanently.
