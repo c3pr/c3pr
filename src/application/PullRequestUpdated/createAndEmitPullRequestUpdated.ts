@@ -8,6 +8,13 @@ export function createAndEmitPullRequestUpdated(gitLabMergeRequestUpdatedWebhook
     return emitPullRequestUpdated(pullRequestUpdated);
 }
 
+function getStatus(gitLabMergeRequestUpdatedWebhook: GitLabMergeRequestUpdated) {
+    switch (gitLabMergeRequestUpdatedWebhook.object_attributes.state) {
+        case 'opened': return 'open';
+        default: return gitLabMergeRequestUpdatedWebhook.object_attributes.state;
+    }
+}
+
 function createPullRequestUpdated(gitLabMergeRequestUpdatedWebhook: GitLabMergeRequestUpdated) {
     return {
         repository: {
@@ -15,7 +22,7 @@ function createPullRequestUpdated(gitLabMergeRequestUpdatedWebhook: GitLabMergeR
         },
 
         pr_id: gitLabMergeRequestUpdatedWebhook.object_attributes.iid,
-        status: gitLabMergeRequestUpdatedWebhook.object_attributes.state,
+        status: getStatus(gitLabMergeRequestUpdatedWebhook),
         assignee: gitLabMergeRequestUpdatedWebhook.assignee && {
             id: gitLabMergeRequestUpdatedWebhook.object_attributes.assignee_id,
             username: gitLabMergeRequestUpdatedWebhook.assignee && gitLabMergeRequestUpdatedWebhook.assignee.username
