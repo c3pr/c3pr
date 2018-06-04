@@ -1,5 +1,5 @@
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
-import outboundPorts from "../../ports/outbound";
+import outboundPorts from "../../ports/outbound/index";
 
 
 

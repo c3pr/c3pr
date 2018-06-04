@@ -1,7 +1,7 @@
 import config from '../../config';
 import ports from "../../ports/outbound";
 import {Commit, GitLabPush} from "../../ports/outbound/types/GitLabPush/GitLabPush";
-import {sortCommits} from "../gitlab/sortCommits";
+import {sortCommits} from "./sortCommits";
 import {c3prLOG2} from "node-c3pr-logger/c3prLOG2";
 
 

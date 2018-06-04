@@ -4,11 +4,10 @@ import hfce = require('node-c3pr-hub-client/events/handleFirstCollectedEvent');
 
 let handleFirstCollectedEvent = hfce.handleFirstCollectedEvent.handleFirstCollectedEvent;
 
-import { createGitLabMR } from '../pr/createGitLabMR';
+import { createGitLabMR } from './createGitLabMR';
 
 import config from '../../config';
 import {createAndEmitPullRequestCreated} from "../PullRequestCreated/createAndEmitPullRequestCreated";
-import {InboundPorts} from "../../ports/inbound/InboundPorts";
 
 const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handlePullRequestRequested'}];
 const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'handlePullRequestRequested'}];
