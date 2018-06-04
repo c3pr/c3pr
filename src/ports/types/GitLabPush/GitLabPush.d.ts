@@ -13,7 +13,7 @@
   user_avatar: string;
   project_id: number;
   project: Project;
-  commits?: (CommitsEntity)[] | null;
+  commits?: (Commit)[] | null;
   total_commits_count: number;
   repository: Repository;
 }
@@ -35,7 +35,7 @@ export interface Project {
   ssh_url: string;
   http_url: string;
 }
-export interface CommitsEntity {
+export interface Commit {
   id: string;
   message: string;
   timestamp: string;

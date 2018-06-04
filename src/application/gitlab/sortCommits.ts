@@ -1,14 +1,15 @@
+import {Commit} from "../../ports/types/GitLabPush/GitLabPush";
 
 /**
  * Sorts an array of GitLab commits.
- * @param {Array} commits, unsorted.
- * @returns {Array} a different commits array, sorted.
+ * @param commits the commits, unsorted.
+ * @returns a different commits array, sorted.
  */
-function sortCommits(commits) {
+function sortCommits(commits: Commit[]): Commit[] {
     const commitsClone = [...commits]; // clones before because .sort() sorts in place
     commitsClone.sort((a, b) => {
         return a.timestamp.localeCompare(b.timestamp);
     });
     return commitsClone;
 }
-export = sortCommits;
+export { sortCommits };
