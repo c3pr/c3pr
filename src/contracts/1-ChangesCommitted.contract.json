@@ -10,5 +10,7 @@
     "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
   },
 
-  "changed_files": ["src/main/resources/second.java", "src/main/resources/third.txt"]
+  "changed_files": ["src/main/resources/second.java", "src/main/resources/third.txt"],
+
+  "source-webhook": {"source-webhook": "here"}
 }
