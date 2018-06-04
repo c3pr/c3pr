@@ -23,15 +23,11 @@ function removeExpiredAgents() {
 }
 
 const logMetas = [{nodeName: 'c3pr-hub', moduleName: 'agentRegistry'}];
-removeExpiredAgents().then(async () => {
-    c3prLOG2({
-        msg: 'Agents initialized. Database has ' + (await agentRegistryDB.findAll()).length + ' agents.', logMetas
-    });
-});
 
 setInterval(removeExpiredAgents, config.c3pr.hub.agentRegistry.cleanRegistryStepInMs).unref();
 
 module.exports = {
+    init: removeExpiredAgents().then(async () => { c3prLOG2({msg: 'Agents initialized. Database has ' + (await agentRegistryDB.findAll()).length + ' agents.', logMetas}); }),
     putAgent,
     findAll: agentRegistryDB.findAll
 };

@@ -115,6 +115,7 @@ async function initializeEventsOnStartup() {
 }
 
 module.exports = {
+    init: initializeEventsOnStartup().catch(e => c3prLOG2({msg: 'Error on initializing events on startup.', logMetas, meta: {e}})),
     register,
     find,
     findAll,
@@ -125,4 +126,3 @@ module.exports = {
     patchAsUnprocessed
 };
 
-initializeEventsOnStartup().catch(e => c3prLOG2({msg: 'Error on initializing events on startup.', logMetas, meta: {e}}));
