@@ -3,7 +3,7 @@ import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
 import { createAndEmitChangesCommitted } from '../ChangesCommitted/createAndEmitChangesCommitted';
 import {sortCommits} from "../gitlab/sortCommits";
 
-export default function handlePush(webhookPayload) {
+function handlePush(webhookPayload) {
     const logMetas = [{nodeName: 'c3pr-repo-gitlab', correlationId: webhookPayload.after, moduleName: 'handlePush'}];
 
     const lastCommit = sortCommits(webhookPayload.commits).pop();
@@ -13,7 +13,7 @@ export default function handlePush(webhookPayload) {
         meta: {webhookPayload}
     });
 
-    createAndEmitChangesCommitted(webhookPayload)
+    return createAndEmitChangesCommitted(webhookPayload)
         .catch(e => {
             c3prLOG2({
                 msg: `Error while handling webhook. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
@@ -22,3 +22,5 @@ export default function handlePush(webhookPayload) {
             });
         })
 }
+
+export default handlePush;

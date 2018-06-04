@@ -1,2 +1,2 @@
 require('./application/login/login');
-require('./web/express');
+require('./ports/inbound/adapters/web/express');

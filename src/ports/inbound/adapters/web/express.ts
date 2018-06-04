@@ -1,10 +1,10 @@
-// import c3prLOG = require("node-c3pr-logger");
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import * as c3prLOG from "node-c3pr-logger";
 
-import express = require('express');
-import bodyParser = require('body-parser');
-
-import config from '../config';
+import config from '../../../../config';
+import c3prHubListenerController from "./c3prHubListenerController";
+import webhooksController from "./webhooksController";
 
 const app = express();
 
@@ -12,8 +12,8 @@ app.use(express.static('resources/public'));
 
 app.use(bodyParser.json());
 
-require('./c3prHubListenerController')(app);
-require('./webhooksController')(app);
+c3prHubListenerController(app);
+webhooksController(app);
 
 app.get('*', function(req, res){
     // The 404 Route (ALWAYS Keep this as the last route)

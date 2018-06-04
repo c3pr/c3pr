@@ -13,7 +13,7 @@ const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handlePullRequestR
 const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'handlePullRequestRequested'}];
 
 
-async function handlePullRequestRequested() {
+async function handlePullRequestRequested(): Promise<any> {
     let {pullRequestRequestedEvent, createMrResult} = await handleFirstCollectedEvent({
         event_type: `PullRequestRequested`,
         handlerFunction,
@@ -63,4 +63,4 @@ async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
     return {new_status: 'PROCESSED', result: {pullRequestRequestedEvent, createMrResult}}
 }
 
-export = handlePullRequestRequested;
+export { handlePullRequestRequested };
