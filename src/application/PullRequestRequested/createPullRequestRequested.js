@@ -5,6 +5,7 @@ function createPullRequestRequested(toolInvocationCompleted) {
             event_type: toolInvocationCompleted.event_type,
             uuid: toolInvocationCompleted.uuid
         },
+        changes_committed_root: toolInvocationCompleted.payload.changes_committed_root,
 
         repository: toolInvocationCompleted.payload.repository,
 
