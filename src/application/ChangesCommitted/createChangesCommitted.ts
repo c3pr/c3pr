@@ -2,7 +2,7 @@ import config from '../../config';
 import ports from "../../ports";
 import {Commit, GitLabPush} from "../../ports/types/GitLabPush/GitLabPush";
 import {sortCommits} from "../gitlab/sortCommits";
-import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import {c3prLOG2} from "node-c3pr-logger/c3prLOG2";
 
 
 const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'convertWebhookToChanges'}];
@@ -47,13 +47,6 @@ async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits:
 async function createChangesCommitted(webhookPayload: GitLabPush) {
     const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits);
 
-    const gitSHA = webhookPayload.after;
-    const logMetas = logMetaz(gitSHA);
-    // if (changed_files.length === 0) {
-    //     c3prLOG2({msg: `Push skipped due to no changed_files (sha: ${gitSHA} / project: (${webhookPayload.repository.git_http_url}).`, meta: {webhookPayload, changed_files}, logMetas});
-    //     return null;
-    // }
-
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
     const project_uuid = await ports.fetchFirstProjectForCloneUrl(clone_url_http);
 
@@ -67,7 +60,7 @@ async function createChangesCommitted(webhookPayload: GitLabPush) {
 
             // TODO maybe it would be more secure to send down the refs and git fetch the refs instead of the branch... This seems rather sketchy
             branch: webhookPayload.ref.replace(/refs\/heads\//, ''),
-            revision: gitSHA
+            revision: webhookPayload.after
         },
         changed_files,
         'source-webhook': webhookPayload
