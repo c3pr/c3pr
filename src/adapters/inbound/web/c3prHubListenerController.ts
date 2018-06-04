@@ -1,6 +1,6 @@
-import config from '../../../../config';
+import config from '../../../config';
 import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
-import inboundPorts from "../../";
+import inboundPorts from "../../../ports/inbound";
 
 
 const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'c3prHubListenerController'}];

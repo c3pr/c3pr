@@ -1,7 +1,7 @@
-import axios from "axios";
-import config from "../../../config";
-import {GitLabModifiedFile} from "../types/GitLabModifiedFile";
-import {OutboundPorts} from "../OutboundPorts";
+import axios from 'axios';
+import config from '../../../config';
+import {OutboundPorts} from "../../../ports/outbound/OutboundPorts";
+import {GitLabModifiedFile} from "../../../ports/outbound/types/GitLabModifiedFile";
 
 
 async function getGitLabCommitDiff(urlEncodedOrgNameProjectName, sha: string): Promise<GitLabModifiedFile[]> {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '../../../config';
-import {GitLabCommit} from "../types/GitLabCommit/GitLabCommit";
-import {OutboundPorts} from "../OutboundPorts";
+import {GitLabCommit} from "../../../ports/outbound/types/GitLabCommit/GitLabCommit";
+import {OutboundPorts} from "../../../ports/outbound/OutboundPorts";
 import encodeGroupProjectPath = require('../../../application/gitlab/encodeGroupProjectPath');
 
 

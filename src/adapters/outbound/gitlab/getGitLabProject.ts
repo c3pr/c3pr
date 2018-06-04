@@ -1,8 +1,8 @@
 import axios from 'axios';
 import config from '../../../config';
+import {OutboundPorts} from "../../../ports/outbound/OutboundPorts";
+import {GitLabProject} from "../../../ports/outbound/types/GitLabProject/GitLabProject";
 import encodeGroupProjectPath = require('../../../application/gitlab/encodeGroupProjectPath');
-import {GitLabProject} from "../types/GitLabProject/GitLabProject";
-import {OutboundPorts} from "../OutboundPorts";
 
 
 async function getGitLabProject(project_id: string | number): Promise<GitLabProject> {

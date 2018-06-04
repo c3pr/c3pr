@@ -1,4 +1,4 @@
-import inboundPorts from "../../";
+import inboundPorts from "../../../ports/inbound";
 
 
 export default function (app) {

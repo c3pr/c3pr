@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as c3prLOG from "node-c3pr-logger";
 
-import config from '../../../../config';
+import config from '../../../config';
 import c3prHubListenerController from "./c3prHubListenerController";
 import webhooksController from "./webhooksController";
 
