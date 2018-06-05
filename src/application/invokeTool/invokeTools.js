@@ -20,7 +20,8 @@ function invokeToolForFiles(parent, changes_committed_root, repository, tool_id,
     };
 
     c3prLOG2({
-        msg: `Registering new event of type 'ToolInvocationRequested' for repository ${repository.clone_url_http} and rev ${repository.revision}.`,
+        msg: `Registering new event of type 'ToolInvocationRequested' for repository ${repository.clone_url_http} and rev ${repository.revision
+        }. Tool id: ${tool_id}. Files: ${JSON.stringify(files)}`,
         logMetas,
         meta: {payload: toolInvocationRequested}
     });
