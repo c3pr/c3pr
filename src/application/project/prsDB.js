@@ -25,7 +25,7 @@ const PR_STATUS = {
 
 
 async function newPR({project_uuid, pr_id, pr_url, PullRequestRequested, changed_files, assignee}) {
-    assert.ok(project_uuid && pr_id && pr_url && PullRequestRequested && changed_files && assignee, "Missing required args for newPR().");
+    assert.ok(project_uuid && pr_id && pr_url && PullRequestRequested && changed_files, `Missing required args for newPR(): ${JSON.stringify({project_uuid, pr_id, pr_url, PullRequestRequested, changed_files, assignee})}`);
     return insert({
         project_uuid,
         pr_id,
@@ -39,7 +39,7 @@ async function newPR({project_uuid, pr_id, pr_url, PullRequestRequested, changed
 }
 
 async function updatePR({project_uuid, pr_id, status, assignee}) {
-    assert.ok(project_uuid && +pr_id && status && assignee, "Missing required args for updatePR().");
+    assert.ok(project_uuid && +pr_id && status, `Missing required args for updatePR(): ${JSON.stringify({project_uuid, pr_id, status, assignee})}`);
     return (await prsDB).update(
         {project_uuid, pr_id: +pr_id},
         {$set: {'status': status, 'assignee': assignee}}
