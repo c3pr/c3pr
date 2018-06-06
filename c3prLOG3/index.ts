@@ -17,6 +17,19 @@ function uniq(arr = []) {
     return [...new Set(sarr)];
 }
 
+function fileAndModule(lines, level: number) {
+    const file = lines[level].match(/\\([^\\]+)\.\w+:\d+:\d+\)$/)[1]; // '    at awaw (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\src\\c3prLOG3-demo.js:4:5)' --> 'c3prLOG3-demo.js:4:5'
+    let module = file;
+    lines.forEach(line => {
+        // '    at Object.<anonymous> (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\src\\c3prLOG3-demo2.ts:7:1)'  --> 'node-c3pr-logger'
+        const c3prModuleMatch = lines[lines.length - 1].match(/\\([^\\]+)\\src/);
+        if (c3prModuleMatch && c3prModuleMatch[1]) {
+            module = c3prModuleMatch[1];
+        }
+    });
+    return {file, module};
+}
+
 function c3prLOG3({msg, level = 0, ids, meta = {}, error}: {msg: string; level?: number, ids?: (string|number)[]; meta?: any; error?: Error;}) {
     if (arguments.length !== 1) {
         throw new Error(`c3prLOG3() called with different number or arguments. Wanted: 1. Passed: ${arguments.length} - ${JSON.stringify(arguments)}`);
@@ -27,8 +40,7 @@ function c3prLOG3({msg, level = 0, ids, meta = {}, error}: {msg: string; level?:
     }
 
     const lines = getStackLines();
-    const file = lines[level].match(/\\([^\\]+)\.\w+:\d+:\d+\)$/)[1]; // '    at awaw (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\src\\c3prLOG3-demo.js:4:5)' --> 'c3prLOG3-demo.js:4:5'
-    const module = lines[lines.length-1].match(/\\([^\\]+)\\src/)[1]; // '    at Object.<anonymous> (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\src\\c3prLOG3-demo2.ts:7:1)'  --> 'node-c3pr-logger'
+    const {file, module} = fileAndModule(lines, level);
 
     let msgMsg = msg || '';
     let metaMeta = {stack: lines, ...meta};
