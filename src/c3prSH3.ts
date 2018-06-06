@@ -23,17 +23,16 @@ async function c3prSH3(shCommand: string,
                        ) {
     const hideTokens = s => replaceTokens(s, replacements || []);
 
-    c3prLOG3({msg: `\$ ${hideTokens(shCommand)}`, ids});
+    c3prLOG3(`\$ ${hideTokens(shCommand)}`, {ids});
 
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (shouldStdOut) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        c3prLOG3({msg: hideTokens(stdout), ids});
+        c3prLOG3(hideTokens(stdout), {ids});
     }
     if (error) {
-        c3prLOG3({
-            msg: `
+        c3prLOG3(`
             [ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             COMMAND: ${hideTokens(shCommand)}
             OPTIONS: ${hideTokens(JSON.stringify(shOptions))}
@@ -45,8 +44,8 @@ async function c3prSH3(shCommand: string,
             STDERR:
             ${hideTokens(stderr)}
             [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`,
-            ids
-        });
+            {ids}
+        );
         throw new Error(hideTokens(error));
     }
     return (hideTokens(stdout) || '').trim();
