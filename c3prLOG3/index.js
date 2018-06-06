@@ -28,17 +28,17 @@ function fileAndModule(lines, level) {
     });
     return { file, module };
 }
-function c3prLOG3({ msg, level = 0, ids, meta = {}, error }) {
-    if (arguments.length !== 1) {
-        throw new Error(`c3prLOG3() called with different number or arguments. Wanted: 1. Passed: ${arguments.length} - ${JSON.stringify(arguments)}`);
+function c3prLOG3(message, { ids, meta = {}, error, level = 0 }) {
+    if (arguments.length !== 1 && arguments.length !== 2) {
+        throw new Error(`c3prLOG3() called with different number or arguments. Wanted: 1 or 2. Passed: ${arguments.length} - ${JSON.stringify(arguments)}`);
     }
-    const extraKeys = Object.keys(arguments[0]).filter(key => !["msg", "level", "ids", "meta", "error"].includes(key));
+    const extraKeys = Object.keys(arguments[1] || {}).filter(key => !["level", "ids", "meta", "error"].includes(key));
     if (extraKeys.length) {
-        throw new Error(`c3prLOG3() argument must be of format {msg: string; level: number, ids?: string[]; meta?: any; error?: Error;}. Additional keys passed: ${JSON.stringify(extraKeys)}. Full arg: ${JSON.stringify(arguments[0])}`);
+        throw new Error(`c3prLOG3() second argument must be of format {level: number, ids?: string[]; meta?: any; error?: Error;}. Additional keys passed: ${JSON.stringify(extraKeys)}. Full args: ${JSON.stringify(arguments)}`);
     }
     const lines = getStackLines();
     const { file, module } = fileAndModule(lines, level);
-    let msgMsg = msg || '';
+    let msgMsg = message || '';
     let metaMeta = Object.assign({ stack: lines }, meta);
     let logMetas = [{ nodeName: module, correlationIds: uniq(ids), moduleName: file }];
     if (error) {
