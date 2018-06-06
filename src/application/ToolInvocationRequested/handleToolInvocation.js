@@ -1,4 +1,4 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
 const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
 
 const invokeToolAtGitRepo = require("./invokeToolAtGitRepo");
@@ -7,19 +7,7 @@ const config = require('../../config');
 
 const loadTools = require('../tools/loadTools');
 
-async function handleToolInvocation(toolInvocationRequestedEvent) {
-
-    const toolInvocationRequested = toolInvocationRequestedEvent.payload;
-    const logMetas = [{nodeName: 'c3pr-agent', correlationId: toolInvocationRequested.repository.revision, moduleName: 'handleToolInvocation'}];
-
-    c3prLOG2({
-        msg: `C-3PR Agent received invocation: ${toolInvocationRequested.tool_id}. Files: ${JSON.stringify(toolInvocationRequested.files)}`,
-        logMetas,
-        meta: {toolInvocationRequestedEvent}
-    });
-
-    const toolInvocationResult = await invokeToolAtGitRepo(toolInvocationRequested, loadTools);
-
+async function emitToolInvocationCompleted(toolInvocationRequestedEvent, toolInvocationResult, toolInvocationRequested, ids) {
     const parent = {event_type: toolInvocationRequestedEvent.event_type, uuid: toolInvocationRequestedEvent.uuid};
 
     const changed_files = toolInvocationResult.files;
@@ -44,22 +32,60 @@ async function handleToolInvocation(toolInvocationRequestedEvent) {
         },
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        logMetas
-    }).catch(e => {
-        c3prLOG2({
-            msg: `Error while registering new event: ToolInvocationCompleted. Reason: '${e}'. Data: ${e.response.data}.`,
-            logMetas,
-            meta: {error: require('util').inspect(e)}
-        });
+        logMetas: [{nodeName: 'c3pr-agent', correlationIds: ids, moduleName: 'handleToolInvocation'}]
+    }).catch(error => {
+        const meta = {toolInvocationRequestedEvent, toolInvocationResult, toolInvocationRequested};
+        c3prLOG3(`Error while registering new event: ToolInvocationCompleted.`, {ids, error, meta});
+        return {new_status: 'UNPROCESSED', result: {error, meta}};
     });
 
     if (toolInvocationResult.files.length) {
-        c3prLOG2({msg: `Tool invocation complete. A patch has been generated and sent.`, logMetas});
+        c3prLOG3(`Tool invocation complete. A patch has been generated and sent.`, {ids});
     } else {
-        c3prLOG2({msg: `Tool invocation complete. No patch has been generated.`, logMetas});
+        c3prLOG3(`Tool invocation complete. No patch has been generated.`, {ids});
     }
 
     return {new_status: 'PROCESSED', result};
+}
+
+async function emitToolInvocationFailed(toolInvocationRequestedEvent, failure_message, toolInvocationRequested, ids) {
+    const meta = {toolInvocationRequestedEvent, failure_message, toolInvocationRequested};
+    const parent = {event_type: toolInvocationRequestedEvent.event_type, uuid: toolInvocationRequestedEvent.uuid};
+
+    let result = await c3prRNE.registerNewEvent({
+        event_type: `ToolInvocationFailed`,
+        payload: {
+            parent,
+            changes_committed_root: toolInvocationRequested.changes_committed_root,
+            repository: toolInvocationRequested.repository,
+            failure_message
+        },
+        c3prHubUrl: config.c3pr.hub.c3prHubUrl,
+        jwt: config.c3pr.auth.jwt,
+        logMetas: [{nodeName: 'c3pr-agent', correlationIds: ids, moduleName: 'handleToolInvocation'}]
+    }).catch(error => {
+        c3prLOG3(`Error while registering new event: ToolInvocationCompleted.`, {ids, error, meta});
+        return {new_status: 'UNPROCESSED', result: {error, meta}};
+    });
+
+    c3prLOG3(`Tool invocation failed. Reason: ${failure_message}`, {ids, meta});
+    return {new_status: 'PROCESSED', result};
+}
+
+async function handleToolInvocation(toolInvocationRequestedEvent) {
+
+    const toolInvocationRequested = toolInvocationRequestedEvent.payload;
+
+    const ids = [toolInvocationRequested.repository.revision];
+    c3prLOG3(`C-3PR Agent received invocation: ${toolInvocationRequested.tool_id}. Files: ${JSON.stringify(toolInvocationRequested.files)}`, {ids, meta: {toolInvocationRequestedEvent}});
+
+    let toolInvocationResult;
+    try {
+        toolInvocationResult = await invokeToolAtGitRepo(toolInvocationRequested, loadTools);
+    } catch (error) {
+        return await emitToolInvocationFailed(toolInvocationRequestedEvent, error.toString(), toolInvocationRequested, ids);
+    }
+    return await emitToolInvocationCompleted(toolInvocationRequestedEvent, toolInvocationResult, toolInvocationRequested, ids);
 }
 
 module.exports = handleToolInvocation;
