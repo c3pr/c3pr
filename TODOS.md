@@ -1,6 +1,6 @@
 # TODOs
 
-### Next: repo emit PullRequestUpdated so brain can update PR status @ hub
+- BRAIN: listen to ToolInvocationFailed and behave the same as TIC
 
 - GITLAB: add new project if project of given url not found (when creating ChangesCommitted, see `convertWebhookToChanges()`)
 
