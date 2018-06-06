@@ -14,14 +14,17 @@ const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationI
 
 
 async function handlePullRequestRequested(): Promise<any> {
-    let {pullRequestRequestedEvent, createMrResult} = await handleFirstCollectedEvent({
+    let handleResult = await handleFirstCollectedEvent({
         event_type: `PullRequestRequested`,
         handlerFunction,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.hub.auth.jwt,
         logMetas
     });
-    return createAndEmitPullRequestCreated(pullRequestRequestedEvent, createMrResult);
+    if (handleResult) {
+        let {pullRequestRequestedEvent, createMrResult} = handleResult;
+        return createAndEmitPullRequestCreated(pullRequestRequestedEvent, createMrResult);
+    }
 }
 
 async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
@@ -35,10 +38,6 @@ async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
         meta: {pullRequestRequestedEvent}
     });
 
-    /** @namespace repository.full_path */
-    /** @namespace prr.pr_body */
-    /** @namespace prr.diff_base64 */
-    /** @namespace prr.pr_title */
     let createMrResult = await createGitLabMR({
         mainRepoOrgRepo: repository.full_path,
         mainRepoBranch: repository.branch,
