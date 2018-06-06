@@ -5,6 +5,7 @@ const markAsUnprocessed = require('./markAs').markAs.markAsUnprocessed;
 
 const logMeta = {nodeName: 'node-c3pr-hub-client', moduleName: 'handleFirstCollectedEvent'};
 
+// TODO document this can return null (not the result) when no event is collected
 async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUrl, jwt, logMetas: outerLogMetas}) {
     const logMetas = [...(outerLogMetas || []), logMeta];
 
