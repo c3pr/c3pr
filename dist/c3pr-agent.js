@@ -4866,6 +4866,9 @@ var timestamp = Timestamp;
 var Timestamp_1 = Timestamp;
 timestamp.Timestamp = Timestamp_1;
 
+// Custom inspect property name / symbol.
+var inspect = 'inspect';
+
 /**
  * Machine id.
  *
@@ -4881,7 +4884,10 @@ var checkForHexRegExp = new RegExp('^[0-9a-fA-F]{24}$');
 
 // Check if buffer exists
 try {
-  if (Buffer && Buffer.from) var hasBufferType = true;
+  if (Buffer && Buffer.from) {
+    var hasBufferType = true;
+    inspect = util.inspect.custom || 'inspect';
+  }
 } catch (err) {
   hasBufferType = false;
 }
@@ -5064,7 +5070,7 @@ ObjectID.prototype.toString = function(format) {
 * @return {String} return the 24 byte hex string representation.
 * @ignore
 */
-ObjectID.prototype.inspect = ObjectID.prototype.toString;
+ObjectID.prototype[inspect] = ObjectID.prototype.toString;
 
 /**
 * Converts to its JSON representation.
@@ -5285,6 +5291,9 @@ var regexp = BSONRegExp;
 var BSONRegExp_1 = BSONRegExp;
 regexp.BSONRegExp = BSONRegExp_1;
 
+// Custom inspect property name / symbol.
+var inspect$1 = Buffer ? util.inspect.custom || 'inspect' : 'inspect';
+
 /**
  * A class representation of the BSON Symbol type.
  *
@@ -5319,7 +5328,7 @@ Symbol$1.prototype.toString = function() {
 /**
  * @ignore
  */
-Symbol$1.prototype.inspect = function() {
+Symbol$1.prototype[inspect$1] = function() {
   return this.value;
 };
 
@@ -6304,6 +6313,16 @@ if (typeof commonjsGlobal !== 'undefined') {
  */
 function Binary(buffer, subType) {
   if (!(this instanceof Binary)) return new Binary(buffer, subType);
+
+  if (
+    buffer != null &&
+    !(typeof buffer === 'string') &&
+    !Buffer$1.isBuffer(buffer) &&
+    !(buffer instanceof Uint8Array) &&
+    !Array.isArray(buffer)
+  ) {
+    throw new Error('only String, Buffer, Uint8Array or Array accepted');
+  }
 
   this._bsontype = 'Binary';
 
@@ -7556,10 +7575,24 @@ var float_parser = {
 	writeIEEE754: writeIEEE754_1
 };
 
+/**
+ * Normalizes our expected stringified form of a function across versions of node
+ * @param {Function} fn The function to stringify
+ */
+function normalizedFunctionString(fn) {
+  return fn.toString().replace('function(', 'function (');
+}
+
+var utils$1 = {
+  normalizedFunctionString
+};
+
 var writeIEEE754$1 = float_parser.writeIEEE754,
   Long$2 = long_1.Long,
   MinKey$2 = min_key.MinKey,
   Binary$2 = binary.Binary;
+
+const normalizedFunctionString$1 = utils$1.normalizedFunctionString;
 
 // try {
 //   var _Buffer = Uint8Array;
@@ -7998,7 +8031,8 @@ var serializeFunction = function(buffer, key, value, index, checkKeys, depth, is
   index = index + numberOfWrittenBytes;
   buffer[index++] = 0;
   // Function string
-  var functionString = value.toString();
+  var functionString = normalizedFunctionString$1(value);
+
   // Write the string
   var size = buffer.write(functionString, index + 4, 'utf8') + 1;
   // Write the size of the string to buffer
@@ -8745,6 +8779,8 @@ var Long$3 = long_1.Long,
   DBRef$2 = db_ref.DBRef,
   Binary$3 = binary.Binary;
 
+var normalizedFunctionString$2 = utils$1.normalizedFunctionString;
+
 // To ensure that 0.4 of node works correctly
 var isDate$2 = function isDate(d) {
   return typeof d === 'object' && Object.prototype.toString.call(d) === '[object Date]';
@@ -8953,7 +8989,7 @@ function calculateElement(name, value, serializeFunctions, isArray, ignoreUndefi
             1 +
             4 +
             4 +
-            Buffer.byteLength(value.toString(), 'utf8') +
+            Buffer.byteLength(normalizedFunctionString$2(value), 'utf8') +
             1 +
             calculateObjectSize(value.scope, serializeFunctions, ignoreUndefined)
           );
@@ -8962,7 +8998,7 @@ function calculateElement(name, value, serializeFunctions, isArray, ignoreUndefi
             (name != null ? Buffer.byteLength(name, 'utf8') + 1 : 0) +
             1 +
             4 +
-            Buffer.byteLength(value.toString(), 'utf8') +
+            Buffer.byteLength(normalizedFunctionString$2(value), 'utf8') +
             1
           );
         }
@@ -11130,7 +11166,7 @@ var debugOptions_1 = debugOptions;
 var retrieveBSON_1 = retrieveBSON;
 var retrieveSnappy_1 = retrieveSnappy;
 
-var utils$1 = {
+var utils$2 = {
 	setProperty: setProperty_1,
 	getProperty: getProperty_1,
 	getSingleProperty: getSingleProperty_1,
@@ -11363,7 +11399,7 @@ var shared = {
   parseHeader: parseHeader
 };
 
-var Snappy = utils$1.retrieveSnappy();
+var Snappy = utils$2.retrieveSnappy();
 
 var compressorIDs = {
   snappy: 1,
@@ -11434,7 +11470,7 @@ var compression = {
   decompress: decompress
 };
 
-var retrieveBSON$1 = utils$1.retrieveBSON;
+var retrieveBSON$1 = utils$2.retrieveBSON;
 var BSON$4 = retrieveBSON$1();
 var Long$4 = BSON$4.Long;
 
@@ -12176,7 +12212,7 @@ var logger = Logger;
 var inherits = util.inherits,
   EventEmitter = require$$0$1.EventEmitter,
   f$2 = util.format,
-  debugOptions$1 = utils$1.debugOptions,
+  debugOptions$1 = utils$2.debugOptions,
   parseHeader$1 = shared.parseHeader,
   decompress$1 = compression.decompress,
   Response$1 = commands.Response,
@@ -14177,7 +14213,7 @@ X509.prototype.reauthenticate = function(server, connections, callback) {
 var x509 = X509;
 
 var f$6 = util.format,
-  retrieveBSON$2 = utils$1.retrieveBSON,
+  retrieveBSON$2 = utils$2.retrieveBSON,
   Query$3 = commands.Query,
   MongoError$5 = error.MongoError;
 
@@ -15043,7 +15079,7 @@ SSPI.prototype.reauthenticate = function(server, connections, callback) {
 var sspi = SSPI;
 
 var f$9 = util.format,
-  retrieveBSON$3 = utils$1.retrieveBSON,
+  retrieveBSON$3 = utils$2.retrieveBSON,
   Query$6 = commands.Query,
   MongoError$8 = error.MongoError;
 
@@ -17067,8 +17103,8 @@ Pool._execute = _execute;
 
 var pool = Pool;
 
-var copy$1 = utils$1.copy,
-  retrieveBSON$4 = utils$1.retrieveBSON,
+var copy$1 = utils$2.copy,
+  retrieveBSON$4 = utils$2.retrieveBSON,
   KillCursor$2 = commands.KillCursor,
   GetMore$2 = commands.GetMore,
   Query$8 = commands.Query,
@@ -17435,7 +17471,7 @@ var setupCommand = function(bson, ns, cmd, cursorState, topology, options) {
 var _2_6_support = WireProtocol;
 
 var Query$9 = commands.Query,
-  retrieveBSON$5 = utils$1.retrieveBSON,
+  retrieveBSON$5 = utils$2.retrieveBSON,
   f$12 = util.format,
   MongoError$11 = error.MongoError,
   MongoNetworkError$3 = error.MongoNetworkError,
@@ -18034,7 +18070,7 @@ var setupCommand$1 = function(bson, ns, cmd, cursorState, topology, options) {
 
 var _3_2_support = WireProtocol$1;
 
-var retrieveBSON$6 = utils$1.retrieveBSON,
+var retrieveBSON$6 = utils$2.retrieveBSON,
   MongoError$12 = error.MongoError,
   MongoNetworkError$4 = error.MongoNetworkError,
   f$13 = util.format;
@@ -18848,8 +18884,8 @@ var cursor = Cursor;
 var inherits$2 = util.inherits,
   f$14 = util.format,
   EventEmitter$2 = require$$0$1.EventEmitter,
-  debugOptions$2 = utils$1.debugOptions,
-  retrieveBSON$7 = utils$1.retrieveBSON,
+  debugOptions$2 = utils$2.debugOptions,
+  retrieveBSON$7 = utils$2.retrieveBSON,
   Query$10 = commands.Query,
   MongoError$13 = error.MongoError,
   MongoNetworkError$5 = error.MongoNetworkError,
@@ -21048,7 +21084,7 @@ var replset_state = ReplSetState;
 var inherits$4 = util.inherits,
   f$16 = util.format,
   EventEmitter$4 = require$$0$1.EventEmitter,
-  retrieveBSON$8 = utils$1.retrieveBSON,
+  retrieveBSON$8 = utils$2.retrieveBSON,
   MongoError$15 = error.MongoError,
   clone$1 = shared$1.clone,
   Timeout$1 = shared$1.Timeout,
@@ -22771,7 +22807,7 @@ var replset = ReplSet;
 const inherits$5 = util.inherits,
   f$17 = util.format,
   EventEmitter$5 = require$$0$1.EventEmitter,
-  retrieveBSON$9 = utils$1.retrieveBSON,
+  retrieveBSON$9 = utils$2.retrieveBSON,
   MongoError$16 = error.MongoError,
   clone$2 = shared$1.clone,
   diff$2 = shared$1.diff,
@@ -24279,14 +24315,14 @@ const uuidV4 = () => {
   return result;
 };
 
-var utils$2 = {
+var utils$3 = {
   uuidV4: uuidV4
 };
 
-const retrieveBSON$10 = utils$1.retrieveBSON,
+const retrieveBSON$10 = utils$2.retrieveBSON,
   BSON$13 = retrieveBSON$10(),
   Binary$6 = BSON$13.Binary,
-  uuidV4$1 = utils$2.uuidV4;
+  uuidV4$1 = utils$3.uuidV4;
 
 /**
  *
@@ -25478,7 +25514,7 @@ function parseConnectionString$1(url$$1, options) {
   return object;
 }
 
-var utils$3 = createCommonjsModule(function (module, exports) {
+var utils$4 = createCommonjsModule(function (module, exports) {
 
 const MongoError = mongodbCore.MongoError;
 const ReadPreference = mongodbCore.ReadPreference;
@@ -25986,37 +26022,37 @@ exports.translateReadPreference = translateReadPreference;
 exports.executeOperation = executeOperation;
 exports.applyWriteConcern = applyWriteConcern;
 });
-var utils_1$2 = utils$3.formatSortValue;
-var utils_2$1 = utils$3.formattedOrderClause;
-var utils_3$1 = utils$3.isObject;
-var utils_4$1 = utils$3.filterOptions;
-var utils_5$1 = utils$3.mergeOptions;
-var utils_6$1 = utils$3.translateOptions;
-var utils_7$1 = utils$3.shallowClone;
-var utils_8$1 = utils$3.getSingleProperty;
-var utils_9$1 = utils$3.checkCollectionName;
-var utils_10$1 = utils$3.toError;
-var utils_11$1 = utils$3.parseIndexOptions;
-var utils_12$1 = utils$3.normalizeHintField;
-var utils_13$1 = utils$3.handleCallback;
-var utils_14$1 = utils$3.decorateCommand;
-var utils_15$1 = utils$3.debugOptions;
-var utils_16$1 = utils$3.MAX_JS_INT;
-var utils_17$1 = utils$3.mergeOptionsAndWriteConcern;
-var utils_18$1 = utils$3.translateReadPreference;
-var utils_19$1 = utils$3.executeOperation;
-var utils_20$1 = utils$3.applyWriteConcern;
+var utils_1$3 = utils$4.formatSortValue;
+var utils_2$1 = utils$4.formattedOrderClause;
+var utils_3$1 = utils$4.isObject;
+var utils_4$1 = utils$4.filterOptions;
+var utils_5$1 = utils$4.mergeOptions;
+var utils_6$1 = utils$4.translateOptions;
+var utils_7$1 = utils$4.shallowClone;
+var utils_8$1 = utils$4.getSingleProperty;
+var utils_9$1 = utils$4.checkCollectionName;
+var utils_10$1 = utils$4.toError;
+var utils_11$1 = utils$4.parseIndexOptions;
+var utils_12$1 = utils$4.normalizeHintField;
+var utils_13$1 = utils$4.handleCallback;
+var utils_14$1 = utils$4.decorateCommand;
+var utils_15$1 = utils$4.debugOptions;
+var utils_16$1 = utils$4.MAX_JS_INT;
+var utils_17$1 = utils$4.mergeOptionsAndWriteConcern;
+var utils_18$1 = utils$4.translateReadPreference;
+var utils_19$1 = utils$4.executeOperation;
+var utils_20$1 = utils$4.applyWriteConcern;
 
 const inherits$6 = util.inherits;
 const f$19 = util.format;
-const formattedOrderClause = utils$3.formattedOrderClause;
-const handleCallback$1 = utils$3.handleCallback;
+const formattedOrderClause = utils$4.formattedOrderClause;
+const handleCallback$1 = utils$4.handleCallback;
 const ReadPreference$2 = mongodbCore.ReadPreference;
 const MongoError$17 = mongodbCore.MongoError;
 const Readable = stream.Readable;
 const CoreCursor = mongodbCore.Cursor;
 const Map = mongodbCore.BSON.Map;
-const executeOperation = utils$3.executeOperation;
+const executeOperation = utils$4.executeOperation;
 
 /**
  * @fileOverview The **Cursor** class is an internal class that embodies a cursor on MongoDB
@@ -27363,7 +27399,7 @@ var require$$3 = ( _package$5 && _package$4 ) || _package$5;
 
 const MongoError$18 = mongodbCore.MongoError,
   f$20 = util.format,
-  translateReadPreference = utils$3.translateReadPreference,
+  translateReadPreference = utils$4.translateReadPreference,
   ClientSession$1 = mongodbCore.Sessions.ClientSession;
 
 // The store of ops
@@ -27826,10 +27862,10 @@ const CServer = mongodbCore.Server;
 const TopologyBase$1 = topology_base.TopologyBase;
 const Store$1 = topology_base.Store;
 const MongoError$19 = mongodbCore.MongoError;
-const MAX_JS_INT = utils$3.MAX_JS_INT;
-const translateOptions = utils$3.translateOptions;
-const filterOptions = utils$3.filterOptions;
-const mergeOptions = utils$3.mergeOptions;
+const MAX_JS_INT = utils$4.MAX_JS_INT;
+const translateOptions = utils$4.translateOptions;
+const filterOptions = utils$4.filterOptions;
+const mergeOptions = utils$4.mergeOptions;
 
 /**
  * @fileOverview The **Server** class is a class that represents a single server topology and is
@@ -28282,10 +28318,10 @@ const CMongos = mongodbCore.Mongos;
 
 
 const Store$2 = topology_base.Store;
-const MAX_JS_INT$1 = utils$3.MAX_JS_INT;
-const translateOptions$1 = utils$3.translateOptions;
-const filterOptions$1 = utils$3.filterOptions;
-const mergeOptions$1 = utils$3.mergeOptions;
+const MAX_JS_INT$1 = utils$4.MAX_JS_INT;
+const translateOptions$1 = utils$4.translateOptions;
+const filterOptions$1 = utils$4.filterOptions;
+const mergeOptions$1 = utils$4.mergeOptions;
 
 /**
  * @fileOverview The **Mongos** class is a class that represents a Mongos Proxy topology and is
@@ -28731,10 +28767,10 @@ const MongoError$21 = mongodbCore.MongoError;
 const TopologyBase$3 = topology_base.TopologyBase;
 const Store$3 = topology_base.Store;
 const CReplSet = mongodbCore.ReplSet;
-const MAX_JS_INT$2 = utils$3.MAX_JS_INT;
-const translateOptions$2 = utils$3.translateOptions;
-const filterOptions$2 = utils$3.filterOptions;
-const mergeOptions$2 = utils$3.mergeOptions;
+const MAX_JS_INT$2 = utils$4.MAX_JS_INT;
+const translateOptions$2 = utils$4.translateOptions;
+const filterOptions$2 = utils$4.filterOptions;
+const mergeOptions$2 = utils$4.mergeOptions;
 
 /**
  * @fileOverview The **ReplSet** class is a class that represents a Replicaset topology and is
@@ -29544,10 +29580,10 @@ CommandCursor.CLOSED = 2;
 
 var command_cursor = CommandCursor;
 
-const toError = utils$3.toError;
-const shallowClone = utils$3.shallowClone;
-const executeOperation$1 = utils$3.executeOperation;
-const applyWriteConcern = utils$3.applyWriteConcern;
+const toError = utils$4.toError;
+const shallowClone = utils$4.shallowClone;
+const executeOperation$1 = utils$4.executeOperation;
+const applyWriteConcern = utils$4.applyWriteConcern;
 
 /**
  * @fileOverview The **Admin** class is an internal class that allows convenient access to
@@ -30724,17 +30760,17 @@ var common = {
 	REMOVE: REMOVE_1
 };
 
-const toError$1 = utils$3.toError;
-const handleCallback$2 = utils$3.handleCallback;
-const shallowClone$1 = utils$3.shallowClone;
+const toError$1 = utils$4.toError;
+const handleCallback$2 = utils$4.handleCallback;
+const shallowClone$1 = utils$4.shallowClone;
 const BulkWriteResult$1 = common.BulkWriteResult;
 const ObjectID$3 = mongodbCore.BSON.ObjectID;
 const BSON$15 = mongodbCore.BSON;
 const Batch$1 = common.Batch;
 const mergeBatchResults$1 = common.mergeBatchResults;
-const executeOperation$2 = utils$3.executeOperation;
+const executeOperation$2 = utils$4.executeOperation;
 const BulkWriteError$1 = common.BulkWriteError;
-const applyWriteConcern$1 = utils$3.applyWriteConcern;
+const applyWriteConcern$1 = utils$4.applyWriteConcern;
 
 var bson$2 = new BSON$15([
   BSON$15.Binary,
@@ -31357,17 +31393,17 @@ var unordered = initializeUnorderedBulkOp;
 var Bulk = UnorderedBulkOperation;
 unordered.Bulk = Bulk;
 
-const toError$2 = utils$3.toError;
-const handleCallback$3 = utils$3.handleCallback;
-const shallowClone$2 = utils$3.shallowClone;
+const toError$2 = utils$4.toError;
+const handleCallback$3 = utils$4.handleCallback;
+const shallowClone$2 = utils$4.shallowClone;
 const BulkWriteResult$2 = common.BulkWriteResult;
 const ObjectID$4 = mongodbCore.BSON.ObjectID;
 const BSON$16 = mongodbCore.BSON;
 const Batch$2 = common.Batch;
 const mergeBatchResults$2 = common.mergeBatchResults;
-const executeOperation$3 = utils$3.executeOperation;
+const executeOperation$3 = utils$4.executeOperation;
 const BulkWriteError$2 = common.BulkWriteError;
-const applyWriteConcern$2 = utils$3.applyWriteConcern;
+const applyWriteConcern$2 = utils$4.applyWriteConcern;
 
 var bson$3 = new BSON$16([
   BSON$16.Binary,
@@ -32333,27 +32369,27 @@ var processNewChange = function(self, err, change, callback) {
 
 var change_stream = ChangeStream;
 
-const checkCollectionName = utils$3.checkCollectionName;
+const checkCollectionName = utils$4.checkCollectionName;
 const ObjectID$5 = mongodbCore.BSON.ObjectID;
 const Long$9 = mongodbCore.BSON.Long;
 const Code$3 = mongodbCore.BSON.Code;
 const f$21 = util.format;
 
 const MongoError$25 = mongodbCore.MongoError;
-const shallowClone$3 = utils$3.shallowClone;
-const isObject$1 = utils$3.isObject;
-const toError$3 = utils$3.toError;
-const normalizeHintField = utils$3.normalizeHintField;
-const handleCallback$4 = utils$3.handleCallback;
-const decorateCommand = utils$3.decorateCommand;
-const formattedOrderClause$1 = utils$3.formattedOrderClause;
+const shallowClone$3 = utils$4.shallowClone;
+const isObject$1 = utils$4.isObject;
+const toError$3 = utils$4.toError;
+const normalizeHintField = utils$4.normalizeHintField;
+const handleCallback$4 = utils$4.handleCallback;
+const decorateCommand = utils$4.decorateCommand;
+const formattedOrderClause$1 = utils$4.formattedOrderClause;
 const ReadPreference$4 = mongodbCore.ReadPreference;
 
 
 
 
-const executeOperation$4 = utils$3.executeOperation;
-const applyWriteConcern$3 = utils$3.applyWriteConcern;
+const executeOperation$4 = utils$4.executeOperation;
+const applyWriteConcern$3 = utils$4.applyWriteConcern;
 
 /**
  * @fileOverview The **Collection** class is an internal class that embodies a MongoDB collection
@@ -35355,14 +35391,14 @@ var collection = Collection;
 
 const EventEmitter$7 = require$$0$1.EventEmitter;
 const inherits$10 = util.inherits;
-const getSingleProperty$1 = utils$3.getSingleProperty;
-const shallowClone$4 = utils$3.shallowClone;
-const parseIndexOptions = utils$3.parseIndexOptions;
-const debugOptions$3 = utils$3.debugOptions;
+const getSingleProperty$1 = utils$4.getSingleProperty;
+const shallowClone$4 = utils$4.shallowClone;
+const parseIndexOptions = utils$4.parseIndexOptions;
+const debugOptions$3 = utils$4.debugOptions;
 
-const handleCallback$5 = utils$3.handleCallback;
-const filterOptions$3 = utils$3.filterOptions;
-const toError$4 = utils$3.toError;
+const handleCallback$5 = utils$4.handleCallback;
+const filterOptions$3 = utils$4.filterOptions;
+const toError$4 = utils$4.toError;
 const ReadPreference$5 = mongodbCore.ReadPreference;
 const f$22 = util.format;
 
@@ -35372,9 +35408,9 @@ const ObjectID$6 = mongodbCore.ObjectID;
 const Logger$2 = mongodbCore.Logger;
 
 
-const mergeOptionsAndWriteConcern = utils$3.mergeOptionsAndWriteConcern;
-const executeOperation$5 = utils$3.executeOperation;
-const applyWriteConcern$4 = utils$3.applyWriteConcern;
+const mergeOptionsAndWriteConcern = utils$4.mergeOptionsAndWriteConcern;
+const executeOperation$5 = utils$4.executeOperation;
+const applyWriteConcern$4 = utils$4.applyWriteConcern;
 
 var debugFields$2 = [
   'authSource',
@@ -37092,8 +37128,8 @@ Db.SYSTEM_JS_COLLECTION = 'system.js';
 
 var db = Db;
 
-var shallowClone$5 = utils$3.shallowClone,
-  handleCallback$6 = utils$3.handleCallback,
+var shallowClone$5 = utils$4.shallowClone,
+  handleCallback$6 = utils$4.handleCallback,
   MongoError$27 = mongodbCore.MongoError,
   f$23 = util.format;
 
@@ -37226,13 +37262,13 @@ const inherits$11 = util.inherits;
 const ReadPreference$6 = mongodbCore.ReadPreference;
 const Logger$3 = mongodbCore.Logger;
 const MongoError$28 = mongodbCore.MongoError;
-const handleCallback$7 = utils$3.handleCallback;
+const handleCallback$7 = utils$4.handleCallback;
 
 const f$24 = util.format;
-const shallowClone$6 = utils$3.shallowClone;
+const shallowClone$6 = utils$4.shallowClone;
 
 const ServerSessionPool$1 = mongodbCore.Sessions.ServerSessionPool;
-const executeOperation$6 = utils$3.executeOperation;
+const executeOperation$6 = utils$4.executeOperation;
 
 /**
  * @fileOverview The **MongoClient** class is a class that allows for making Connections to MongoDB.
@@ -38444,8 +38480,8 @@ const util$1 = util;
 const MongoError$29 = mongodbCore.MongoError;
 const inherits$12 = util$1.inherits;
 const Duplex = stream.Duplex;
-const shallowClone$7 = utils$3.shallowClone;
-const executeOperation$7 = utils$3.executeOperation;
+const shallowClone$7 = utils$4.shallowClone;
+const executeOperation$7 = utils$4.executeOperation;
 
 var REFERENCE_BY_FILENAME = 0,
   REFERENCE_BY_ID = 1;
@@ -41237,10 +41273,10 @@ function checkAborted(_this, callback) {
 var Emitter = require$$0$1.EventEmitter;
 
 
-var shallowClone$8 = utils$3.shallowClone;
-var toError$5 = utils$3.toError;
+var shallowClone$8 = utils$4.shallowClone;
+var toError$5 = utils$4.toError;
 
-var executeOperation$8 = utils$3.executeOperation;
+var executeOperation$8 = utils$4.executeOperation;
 
 var DEFAULT_GRIDFS_BUCKET_OPTIONS = {
   bucketName: 'fs',
@@ -56829,7 +56865,7 @@ function typeChecker$2 (type) {
   }
 }
 
-var utils$4 = createCommonjsModule(function (module, exports) {
+var utils$5 = createCommonjsModule(function (module, exports) {
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -57032,14 +57068,14 @@ exports.isBuffer = function isBuffer(obj) {
     return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
 };
 });
-var utils_1$3 = utils$4.arrayToObject;
-var utils_2$2 = utils$4.merge;
-var utils_3$2 = utils$4.assign;
-var utils_4$2 = utils$4.decode;
-var utils_5$2 = utils$4.encode;
-var utils_6$2 = utils$4.compact;
-var utils_7$2 = utils$4.isRegExp;
-var utils_8$2 = utils$4.isBuffer;
+var utils_1$4 = utils$5.arrayToObject;
+var utils_2$2 = utils$5.merge;
+var utils_3$2 = utils$5.assign;
+var utils_4$2 = utils$5.decode;
+var utils_5$2 = utils$5.encode;
+var utils_6$2 = utils$5.compact;
+var utils_7$2 = utils$5.isRegExp;
+var utils_8$2 = utils$5.isBuffer;
 
 var replace = String.prototype.replace;
 var percentTwenties = /%20/g;
@@ -57075,7 +57111,7 @@ var toISO = Date.prototype.toISOString;
 var defaults$1 = {
     delimiter: '&',
     encode: true,
-    encoder: utils$4.encode,
+    encoder: utils$5.encode,
     encodeValuesOnly: false,
     serializeDate: function serializeDate(date) { // eslint-disable-line func-name-matching
         return toISO.call(date);
@@ -57111,7 +57147,7 @@ var stringify = function stringify( // eslint-disable-line func-name-matching
         obj = '';
     }
 
-    if (typeof obj === 'string' || typeof obj === 'number' || typeof obj === 'boolean' || utils$4.isBuffer(obj)) {
+    if (typeof obj === 'string' || typeof obj === 'number' || typeof obj === 'boolean' || utils$5.isBuffer(obj)) {
         if (encoder) {
             var keyValue = encodeValuesOnly ? prefix : encoder(prefix, defaults$1.encoder);
             return [formatter(keyValue) + '=' + formatter(encoder(obj, defaults$1.encoder))];
@@ -57178,7 +57214,7 @@ var stringify = function stringify( // eslint-disable-line func-name-matching
 
 var stringify_1 = function (object, opts) {
     var obj = object;
-    var options = opts ? utils$4.assign({}, opts) : {};
+    var options = opts ? utils$5.assign({}, opts) : {};
 
     if (options.encoder !== null && options.encoder !== undefined && typeof options.encoder !== 'function') {
         throw new TypeError('Encoder has to be a function.');
@@ -57270,7 +57306,7 @@ var defaults$2 = {
     allowDots: false,
     allowPrototypes: false,
     arrayLimit: 20,
-    decoder: utils$4.decode,
+    decoder: utils$5.decode,
     delimiter: '&',
     depth: 5,
     parameterLimit: 1000,
@@ -57398,14 +57434,14 @@ var parseKeys = function parseQueryStringKeys(givenKey, val, options) {
 };
 
 var parse$5 = function (str, opts) {
-    var options = opts ? utils$4.assign({}, opts) : {};
+    var options = opts ? utils$5.assign({}, opts) : {};
 
     if (options.decoder !== null && options.decoder !== undefined && typeof options.decoder !== 'function') {
         throw new TypeError('Decoder has to be a function.');
     }
 
     options.ignoreQueryPrefix = options.ignoreQueryPrefix === true;
-    options.delimiter = typeof options.delimiter === 'string' || utils$4.isRegExp(options.delimiter) ? options.delimiter : defaults$2.delimiter;
+    options.delimiter = typeof options.delimiter === 'string' || utils$5.isRegExp(options.delimiter) ? options.delimiter : defaults$2.delimiter;
     options.depth = typeof options.depth === 'number' ? options.depth : defaults$2.depth;
     options.arrayLimit = typeof options.arrayLimit === 'number' ? options.arrayLimit : defaults$2.arrayLimit;
     options.parseArrays = options.parseArrays !== false;
@@ -57429,10 +57465,10 @@ var parse$5 = function (str, opts) {
     for (var i = 0; i < keys.length; ++i) {
         var key = keys[i];
         var newObj = parseKeys(key, tempObj[key], options);
-        obj = utils$4.merge(obj, newObj, options);
+        obj = utils$5.merge(obj, newObj, options);
     }
 
-    return utils$4.compact(obj);
+    return utils$5.compact(obj);
 };
 
 var lib$1 = {
@@ -66569,7 +66605,7 @@ function trustSingle (subnet) {
 proxyAddr.all = all;
 proxyAddr.compile = compile_1;
 
-var utils$5 = createCommonjsModule(function (module, exports) {
+var utils$6 = createCommonjsModule(function (module, exports) {
 
 /**
  * Module dependencies.
@@ -66869,17 +66905,17 @@ function newObject() {
   return {};
 }
 });
-var utils_1$4 = utils$5.etag;
-var utils_2$3 = utils$5.wetag;
-var utils_3$3 = utils$5.isAbsolute;
-var utils_4$3 = utils$5.flatten;
-var utils_5$3 = utils$5.normalizeType;
-var utils_6$3 = utils$5.normalizeTypes;
-var utils_7$3 = utils$5.contentDisposition;
-var utils_8$3 = utils$5.compileETag;
-var utils_9$2 = utils$5.compileQueryParser;
-var utils_10$2 = utils$5.compileTrust;
-var utils_11$2 = utils$5.setCharset;
+var utils_1$5 = utils$6.etag;
+var utils_2$3 = utils$6.wetag;
+var utils_3$3 = utils$6.isAbsolute;
+var utils_4$3 = utils$6.flatten;
+var utils_5$3 = utils$6.normalizeType;
+var utils_6$3 = utils$6.normalizeTypes;
+var utils_7$3 = utils$6.contentDisposition;
+var utils_8$3 = utils$6.compileETag;
+var utils_9$2 = utils$6.compileQueryParser;
+var utils_10$2 = utils$6.compileTrust;
+var utils_11$2 = utils$6.setCharset;
 
 var application = createCommonjsModule(function (module, exports) {
 
@@ -66896,9 +66932,9 @@ var application = createCommonjsModule(function (module, exports) {
 var debug = src$3('express:application');
 
 
-var compileETag = utils$5.compileETag;
-var compileQueryParser = utils$5.compileQueryParser;
-var compileTrust = utils$5.compileTrust;
+var compileETag = utils$6.compileETag;
+var compileQueryParser = utils$6.compileQueryParser;
+var compileTrust = utils$6.compileTrust;
 var deprecate = depd_1('express');
 
 
@@ -69793,15 +69829,15 @@ var deprecate$3 = depd_1('express');
 
 
 
-var isAbsolute = utils$5.isAbsolute;
+var isAbsolute = utils$6.isAbsolute;
 
 
 
 
 var sign = cookieSignature.sign;
-var normalizeType$1 = utils$5.normalizeType;
-var normalizeTypes = utils$5.normalizeTypes;
-var setCharset = utils$5.setCharset;
+var normalizeType$1 = utils$6.normalizeType;
+var normalizeTypes = utils$6.normalizeTypes;
+var setCharset = utils$6.setCharset;
 
 
 var extname$2 = path.extname;
@@ -71718,11 +71754,18 @@ function uniq(arr = []) {
     return [...new Set(sarr)];
 }
 function fileAndModule(lines, level) {
-    const file = lines[level].match(/\\([^\\]+)\.\w+:\d+:\d+\)$/)[1]; // '    at awaw (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\src\\c3prLOG3-demo.js:4:5)' --> 'c3prLOG3-demo.js:4:5'
+    const fileNameAtLine = lines[level].match(/\\([^\\]+)\.\w+:\d+:\d+\)$/); // '    at awaw (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\src\\c3prLOG3-demo.js:4:5)' --> 'c3prLOG3-demo.js:4:5'
+    let file;
+    if (fileNameAtLine) {
+        file = fileNameAtLine[1];
+    }
+    else {
+        file = lines[level].split("\\(")[0].replace(/^\s*at\s+/, '').trim(); // at fileAndModule (evalmachine.<anonymous>:71721:66)
+    }
     let module = file;
     lines.forEach(line => {
         // '    at Object.<anonymous> (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\src\\c3prLOG3-demo2.ts:7:1)'  --> 'node-c3pr-logger'
-        const c3prModuleMatch = lines[lines.length - 1].match(/\\([^\\]+)\\src/);
+        const c3prModuleMatch = line.match(/\\([^\\]+)\\src/);
         if (c3prModuleMatch && c3prModuleMatch[1]) {
             module = c3prModuleMatch[1];
         }
@@ -71887,6 +71930,81 @@ mkdirP.sync = function sync (p, opts, made) {
     return made;
 };
 
+const C3PR_MONGO_URL$1 = process.env.C3PR_MONGO_URL;
+
+var config$2 = {
+    c3pr: {
+        logger: {
+            mongoUrl: C3PR_MONGO_URL$1,
+            database: 'c3pr',
+            collection: 'logs'
+        }
+    }
+};
+
+function wrap$2(arr, prefix = `[`, suffix = `]`) {
+    return arr.map(i => `${prefix}${i}${suffix}`).join(' ');
+}
+let warningShown$1 = false;
+function showWarning$1(warningMsg) {
+    if (!warningShown$1) {
+        console.log(`${warningMsg} (This message will be printed only once every 5 minutes.)`);
+        warningShown$1 = true;
+        setTimeout(() => warningShown$1 = false, 5 * 60 * 1000).unref();
+    }
+}
+function showWarningIfDatabaseNotDefined$1() {
+    if (!config$2.c3pr.logger.mongoUrl) {
+        showWarning$1('Logs: C3PR_MONGO_URL env var is not defined. Printing to STDOUT only.');
+    }
+}
+const emptyLogMeta$1 = [{ nodeName: "empty-logMeta-nodeName", correlationIds: ["empty-logMeta-correlationIds"], moduleNames: ["empty-logMeta-moduleNames"] }];
+const emptyNodeName$1 = { nodeName: "empty-nodeName" };
+async function logWithMeta$1(message, metadata, logMetasArg) {
+    let logMetas = logMetasArg.filter(log => log);
+    if (!logMetas.length) {
+        console.log("WARNING: Called c3prLOG with no LogMeta.");
+        logMetas = emptyLogMeta$1;
+    }
+    const nodeName = (logMetas.find(logMeta => !!logMeta.nodeName) || emptyNodeName$1).nodeName;
+    const correlationIds = logMetas.reduce((acc, { correlationId, correlationIds }) => acc.concat(correlationId || []).concat(correlationIds || []), []);
+    const moduleNames = logMetas.reduce((acc, { moduleName, moduleNames }) => acc.concat(moduleName || []).concat(moduleNames || []), []);
+    await log$3(nodeName, correlationIds, moduleNames, message, metadata);
+}
+async function log$3(nodeName, correlationIds, moduleNames, message, metadata) {
+    showWarningIfDatabaseNotDefined$1();
+    console.log(wrap$2(correlationIds), wrap$2(moduleNames, '<', '>'), message);
+    if (!config$2.c3pr.logger.mongoUrl) {
+        return;
+    }
+    try {
+        const client = await mongodb.MongoClient.connect(config$2.c3pr.logger.mongoUrl);
+        let logs = client.db(config$2.c3pr.logger.database).collection(config$2.c3pr.logger.collection + (c3prLOG$1.testModeActivated ? "-test" : ""));
+        await logs.insertOne({ node: nodeName, dateTime: new Date().toISOString(), correlationIds, moduleNames, message, metadata });
+        await client.close();
+    }
+    catch (e) {
+        showWarning$1(`Error while attempting to connect/save log message: ${e}`);
+    }
+}
+function isLogMeta$1(o) {
+    return o && (!!o.correlationId || !!o.correlationIds) && (!!o.moduleName || !!o.moduleNames);
+}
+const c3prLOG$1 = async function (message, ...metas) {
+    if (!isLogMeta$1(metas[0])) {
+        let metadata = metas.shift();
+        return logWithMeta$1(message, metadata, metas);
+    }
+    else {
+        return logWithMeta$1(message, {}, metas);
+    }
+};
+c3prLOG$1.testMode = () => c3prLOG$1.testModeActivated = true;
+c3prLOG$1.isEnvVarSet = () => !!config$2 && !!config$2.c3pr && !!config$2.c3pr.logger.mongoUrl;
+var c3prLOG_1$1 = c3prLOG$1;
+
+var nodeC3prLogger$1 = c3prLOG_1$1;
+
 const exec = child_process.exec;
 
 function sh(command, options) {
@@ -71907,18 +72025,18 @@ const shellLogMeta = { moduleName: 'c3prSH' };
 async function c3prSH(shCommand, shOptions, { logMeta, stdout: shouldStdOut, replacements, thirdArgNotProvided } = { logMeta: undefined, stdout: undefined, replacements: undefined, thirdArgNotProvided: true }) {
     const r = s => replaceTokens(s, replacements || []);
     if (thirdArgNotProvided) {
-        nodeC3prLogger(`WARNING: no third arg provided when SH'ing \`${r(shCommand)}\``, shellLogMeta);
+        nodeC3prLogger$1(`WARNING: no third arg provided when SH'ing \`${r(shCommand)}\``, shellLogMeta);
     }
     const logMetaArr = Array.isArray(logMeta) ? logMeta : [logMeta];
-    nodeC3prLogger(`\$ ${r(shCommand)}`, ...logMetaArr, shellLogMeta);
+    nodeC3prLogger$1(`\$ ${r(shCommand)}`, ...logMetaArr, shellLogMeta);
     let { error, stdout, stderr } = await sh(shCommand, shOptions);
     if (shouldStdOut) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        nodeC3prLogger(r(stdout), ...logMetaArr, shellLogMeta);
+        nodeC3prLogger$1(r(stdout), ...logMetaArr, shellLogMeta);
     }
     if (error) {
-        nodeC3prLogger(`
+        nodeC3prLogger$1(`
             [ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             COMMAND: ${r(shCommand)}
             OPTIONS: ${r(JSON.stringify(shOptions))}
@@ -71940,12 +72058,12 @@ async function createClonesDir(cloneDir, ...logMeta) {
     return new Promise(resolve => {
         const resolvedClonesDir = path.resolve(cloneDir);
         if (fs.existsSync(resolvedClonesDir)) {
-            nodeC3prLogger(`${resolvedClonesDir} already exists.`, ...logMeta);
+            nodeC3prLogger$1(`${resolvedClonesDir} already exists.`, ...logMeta);
             resolve();
         } else {
-            nodeC3prLogger(`${resolvedClonesDir} does not exist, creating.`, ...logMeta);
+            nodeC3prLogger$1(`${resolvedClonesDir} does not exist, creating.`, ...logMeta);
             mkdirp(resolvedClonesDir, () => {
-                nodeC3prLogger(`Clones dir created at ${resolvedClonesDir}`, ...logMeta);
+                nodeC3prLogger$1(`Clones dir created at ${resolvedClonesDir}`, ...logMeta);
                 resolve();
             });
         }
@@ -71958,7 +72076,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
 
     await createClonesDir(cloneBaseDir, ...logMeta);
 
-    nodeC3prLogger(`Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`, ...logMetas, gitCloneLogMeta);
+    nodeC3prLogger$1(`Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`, ...logMetas, gitCloneLogMeta);
 
     // clones that single branch (maybe there is a somewhat slightly faster way of doing this with --mirror, though I feel it probably won't pay off)
     await c3prSH_1(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {logMeta});
@@ -71980,7 +72098,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
 
     await c3prSH_1(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {logMeta});
 
-    nodeC3prLogger(`Clone/reset completed.`, ...logMeta);
+    nodeC3prLogger$1(`Clone/reset completed.`, ...logMeta);
 }
 
 async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, url: url$$1, branch, revision, cloneDepth}, ...logMetas) {

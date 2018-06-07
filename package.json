@@ -31,8 +31,8 @@
     "is-docker": "^1.1.0",
     "js-yaml": "^3.11.0",
     "mkdirp": "^0.5.1",
-    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#9.6.0",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#10.0.0",
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#9.6.1",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#10.0.1",
     "node-git-client": "github:c3pr/node-git-client#6.2.1",
     "uuid": "^3.2.1"
   },
