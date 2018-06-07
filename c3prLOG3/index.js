@@ -17,11 +17,18 @@ function uniq(arr = []) {
     return [...new Set(sarr)];
 }
 function fileAndModule(lines, level) {
-    const file = lines[level].match(/\\([^\\]+)\.\w+:\d+:\d+\)$/)[1]; // '    at awaw (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\src\\c3prLOG3-demo.js:4:5)' --> 'c3prLOG3-demo.js:4:5'
+    const fileNameAtLine = lines[level].match(/\\([^\\]+)\.\w+:\d+:\d+\)$/); // '    at awaw (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\src\\c3prLOG3-demo.js:4:5)' --> 'c3prLOG3-demo.js:4:5'
+    let file;
+    if (fileNameAtLine) {
+        file = fileNameAtLine[1];
+    }
+    else {
+        file = lines[level].split("\\(")[0].replace(/^\s*at\s+/, '').trim(); // at fileAndModule (evalmachine.<anonymous>:71721:66)
+    }
     let module = file;
     lines.forEach(line => {
         // '    at Object.<anonymous> (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\src\\c3prLOG3-demo2.ts:7:1)'  --> 'node-c3pr-logger'
-        const c3prModuleMatch = lines[lines.length - 1].match(/\\([^\\]+)\\src/);
+        const c3prModuleMatch = line.match(/\\([^\\]+)\\src/);
         if (c3prModuleMatch && c3prModuleMatch[1]) {
             module = c3prModuleMatch[1];
         }
