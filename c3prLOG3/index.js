@@ -23,7 +23,7 @@ function fileAndModule(lines, level) {
         file = fileNameAtLine[1];
     }
     else {
-        file = lines[level].split("\\(")[0].replace(/^\s*at\s+/, '').trim(); // at fileAndModule (evalmachine.<anonymous>:71721:66)
+        file = lines[level].split(/\(/)[0].replace(/^\s*at\s+/, '').trim(); // at fileAndModule (evalmachine.<anonymous>:71721:66)
     }
     let module = file;
     lines.forEach(line => {
