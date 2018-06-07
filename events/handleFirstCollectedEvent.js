@@ -33,7 +33,7 @@ async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUr
         handlerFunctionResult = await handlerFunction(event);
 
     } catch (error) {
-        c3prLOG2({msg: `Error while executing handlerFunction() for event handling.`, logMetas, error});
+        c3prLOG2({msg: `Error while executing handlerFunction() for event handling.`, logMetas, error, meta: {handlerFunction, event}});
 
         try {
             await markAsUnprocessed({event_type, uuid: event.uuid, c3prHubUrl, jwt, logMetas});
