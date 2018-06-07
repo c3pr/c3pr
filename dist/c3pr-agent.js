@@ -44,6 +44,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const UNCONFIGURED = 'call hubClientConfig.init() before using any functions from node-c3pr-hub-client.';
 const UNCONFIGURED_ARG0 = () => { throw new Error(UNCONFIGURED); };
 const UNCONFIGURED_ARG1 = (ignore) => { throw new Error(UNCONFIGURED); };
+const UNCONFIGURED_ARG2 = (ignore, ignore2) => { throw new Error(UNCONFIGURED); };
 const hubClientConfig = {
     c3pr: {
         hub: {
@@ -55,6 +56,7 @@ const hubClientConfig = {
             eventsUrl: UNCONFIGURED_ARG1,
             projectsByCloneUrlHttp: UNCONFIGURED_ARG1,
             prsForProjectUrl: UNCONFIGURED_ARG1,
+            prOfProjectUrl: UNCONFIGURED_ARG2,
         },
     },
     init(C3PR_HUB_URL, jwt) {
@@ -64,6 +66,7 @@ const hubClientConfig = {
         hubClientConfig.c3pr.hub.eventsUrl = ({ event_type, uuid }) => `${C3PR_HUB_URL}/api/v1/events/${event_type}/${uuid}`;
         hubClientConfig.c3pr.hub.projectsByCloneUrlHttp = (clone_url_http) => `${C3PR_HUB_URL}/api/v1/projects/?clone_url_http=${clone_url_http}`;
         hubClientConfig.c3pr.hub.prsForProjectUrl = (project_uuid) => `${C3PR_HUB_URL}/api/v1/projects/${project_uuid}/prs`;
+        hubClientConfig.c3pr.hub.prOfProjectUrl = (project_uuid, pr_id) => `${C3PR_HUB_URL}/api/v1/projects/${project_uuid}/prs/${pr_id}`;
     },
     headers() {
         return { Authorization: `Bearer ${hubClientConfig.c3pr.hub.auth.jwt()}` };
@@ -41770,109 +41773,6 @@ var login_1 = {
     }
 };
 
-const C3PR_MONGO_URL$1 = process.env.C3PR_MONGO_URL;
-
-var config$2 = {
-    c3pr: {
-        logger: {
-            mongoUrl: C3PR_MONGO_URL$1,
-            database: 'c3pr',
-            collection: 'logs'
-        }
-    }
-};
-
-function wrap$2(arr, prefix = `[`, suffix = `]`) {
-    return arr.map(i => `${prefix}${i}${suffix}`).join(' ');
-}
-let warningShown$1 = false;
-function showWarning$1(warningMsg) {
-    if (!warningShown$1) {
-        console.log(`${warningMsg} (This message will be printed only once every 5 minutes.)`);
-        warningShown$1 = true;
-        setTimeout(() => warningShown$1 = false, 5 * 60 * 1000).unref();
-    }
-}
-function showWarningIfDatabaseNotDefined$1() {
-    if (!config$2.c3pr.logger.mongoUrl) {
-        showWarning$1('Logs: C3PR_MONGO_URL env var is not defined. Printing to STDOUT only.');
-    }
-}
-const emptyLogMeta$1 = [{ nodeName: "empty-logMeta-nodeName", correlationIds: ["empty-logMeta-correlationIds"], moduleNames: ["empty-logMeta-moduleNames"] }];
-const emptyNodeName$1 = { nodeName: "empty-nodeName" };
-async function logWithMeta$1(message, metadata, logMetasArg) {
-    let logMetas = logMetasArg.filter(log => log);
-    if (!logMetas.length) {
-        console.log("WARNING: Called c3prLOG with no LogMeta.");
-        logMetas = emptyLogMeta$1;
-    }
-    const nodeName = (logMetas.find(logMeta => !!logMeta.nodeName) || emptyNodeName$1).nodeName;
-    const correlationIds = logMetas.reduce((acc, { correlationId, correlationIds }) => acc.concat(correlationId || []).concat(correlationIds || []), []);
-    const moduleNames = logMetas.reduce((acc, { moduleName, moduleNames }) => acc.concat(moduleName || []).concat(moduleNames || []), []);
-    await log$1(nodeName, correlationIds, moduleNames, message, metadata);
-}
-async function log$1(nodeName, correlationIds, moduleNames, message, metadata) {
-    showWarningIfDatabaseNotDefined$1();
-    console.log(wrap$2(correlationIds), wrap$2(moduleNames, '<', '>'), message);
-    if (!config$2.c3pr.logger.mongoUrl) {
-        return;
-    }
-    try {
-        const client = await mongodb.MongoClient.connect(config$2.c3pr.logger.mongoUrl);
-        let logs = client.db(config$2.c3pr.logger.database).collection(config$2.c3pr.logger.collection + (c3prLOG$1.testModeActivated ? "-test" : ""));
-        await logs.insertOne({ node: nodeName, dateTime: new Date().toISOString(), correlationIds, moduleNames, message, metadata });
-        await client.close();
-    }
-    catch (e) {
-        showWarning$1(`Error while attempting to connect/save log message: ${e}`);
-    }
-}
-function isLogMeta$1(o) {
-    return o && (!!o.correlationId || !!o.correlationIds) && (!!o.moduleName || !!o.moduleNames);
-}
-const c3prLOG$1 = async function (message, ...metas) {
-    if (!isLogMeta$1(metas[0])) {
-        let metadata = metas.shift();
-        return logWithMeta$1(message, metadata, metas);
-    }
-    else {
-        return logWithMeta$1(message, {}, metas);
-    }
-};
-c3prLOG$1.testMode = () => c3prLOG$1.testModeActivated = true;
-c3prLOG$1.isEnvVarSet = () => !!config$2 && !!config$2.c3pr && !!config$2.c3pr.logger.mongoUrl;
-var c3prLOG_1$1 = c3prLOG$1;
-
-var c3prLOG2$2 = createCommonjsModule(function (module, exports) {
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-exports.c3pr = {
-    c3prLOG2({ msg, logMetas, meta, error: e }) {
-        if (arguments.length !== 1) {
-            throw new Error(`c3prLOG2() called with different number or arguments. Wanted: 1. Passed: ${arguments.length} - ${JSON.stringify(arguments)}`);
-        }
-        const extraKeys = Object.keys(arguments[0]).filter(key => !["msg", "logMetas", "meta", "error"].includes(key));
-        if (extraKeys.length) {
-            throw new Error(`c3prLOG2() argument must be of format {msg, logMetas, meta}. Additional keys passed: ${JSON.stringify(extraKeys)}. Full arg: ${JSON.stringify(arguments[0])}`);
-        }
-        let msgMsg = msg || '';
-        let metaMeta = meta || {};
-        if (e) {
-            msgMsg += `Error reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`;
-            metaMeta.error = util.inspect(e);
-        }
-        c3prLOG_1$1(msgMsg, metaMeta, ...(logMetas || []));
-    }
-};
-exports.c3prLOG2 = exports.c3pr.c3prLOG2;
-
-});
-
-unwrapExports(c3prLOG2$2);
-var c3prLOG2_1$1 = c3prLOG2$2.c3pr;
-var c3prLOG2_2$1 = c3prLOG2$2.c3prLOG2;
-
 function isNothing(subject) {
   return (typeof subject === 'undefined') || (subject === null);
 }
@@ -45688,7 +45588,7 @@ var loadTools_1 = {
     toolsHash
 };
 
-const c3prLOG2$3 = c3prLOG2$2.c3pr.c3prLOG2;
+const c3prLOG2$2 = c3prLOG2.c3pr.c3prLOG2;
 
 
 
@@ -45707,13 +45607,13 @@ function broadcast(summary) {
     Promise.all(
         toolSubmissions
     ).then(({data}) => {
-        c3prLOG2$3({
+        c3prLOG2$2({
             msg: `Successfully broadcasted to registry. URL: ${config_1.c3pr.hub.agentsUrl}.`,
             logMetas: [logMeta],
             meta: {data, summary}
         });
     }).catch((e) => {
-        c3prLOG2$3({
+        c3prLOG2$2({
             msg: `Error while broadcasting to registry. URL: ${config_1.c3pr.hub.agentsUrl}. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}`,
             logMetas: [logMeta],
             meta: {error: util.inspect(e)}
@@ -45723,7 +45623,7 @@ function broadcast(summary) {
 
 function hubRegistryBroadcast() {
     const summary = loadTools_1.toolsSummary;
-    c3prLOG2$3({
+    c3prLOG2$2({
         msg: `Now broadcasting to C-3PR registry API: ${config_1.c3pr.hub.agentsUrl}.`,
         logMetas: [logMeta],
         meta: {summary}
@@ -45756,7 +45656,7 @@ c3prHubClient.login({
     throw e;
 });
 
-var nodeC3prLogger = c3prLOG_1$1;
+var nodeC3prLogger = c3prLOG_1;
 
 /*!
  * depd
@@ -46071,7 +45971,7 @@ function depd (namespace) {
 
   function deprecate (message) {
     // call to self as log
-    log$2.call(deprecate, message);
+    log$1.call(deprecate, message);
   }
 
   deprecate._file = file;
@@ -46124,7 +46024,7 @@ function istraced (namespace) {
  * Display deprecation message.
  */
 
-function log$2 (message, site) {
+function log$1 (message, site) {
   var haslisteners = eventListenerCount$1(process, 'deprecation') !== 0;
 
   // abort early if no destination
@@ -46410,7 +46310,7 @@ function wrapproperty (obj, prop, message) {
   // wrap getter
   if (typeof get === 'function') {
     descriptor.get = function getter () {
-      log$2.call(deprecate, message, site);
+      log$1.call(deprecate, message, site);
       return get.apply(this, arguments)
     };
   }
@@ -46418,7 +46318,7 @@ function wrapproperty (obj, prop, message) {
   // wrap setter
   if (typeof set === 'function') {
     descriptor.set = function setter () {
-      log$2.call(deprecate, message, site);
+      log$1.call(deprecate, message, site);
       return set.apply(this, arguments)
     };
   }
@@ -48343,7 +48243,7 @@ function depd$1 (namespace) {
 
   function deprecate (message) {
     // call to self as log
-    log$3.call(deprecate, message);
+    log$2.call(deprecate, message);
   }
 
   deprecate._file = file;
@@ -48396,7 +48296,7 @@ function istraced$1 (namespace) {
  * Display deprecation message.
  */
 
-function log$3 (message, site) {
+function log$2 (message, site) {
   var haslisteners = eventListenerCount$3(process, 'deprecation') !== 0;
 
   // abort early if no destination
@@ -48679,7 +48579,7 @@ function wrapproperty$1 (obj, prop, message) {
   // wrap getter
   if (typeof get === 'function') {
     descriptor.get = function getter () {
-      log$3.call(deprecate, message, site);
+      log$2.call(deprecate, message, site);
       return get.apply(this, arguments)
     };
   }
@@ -48687,7 +48587,7 @@ function wrapproperty$1 (obj, prop, message) {
   // wrap setter
   if (typeof set === 'function') {
     descriptor.set = function setter () {
-      log$3.call(deprecate, message, site);
+      log$2.call(deprecate, message, site);
       return set.apply(this, arguments)
     };
   }
@@ -71329,7 +71229,7 @@ var express_8 = express.urlencoded;
 
 var express$1 = express;
 
-const c3prLOG2$4 = c3prLOG2.c3pr.c3prLOG2;
+const c3prLOG2$3 = c3prLOG2.c3pr.c3prLOG2;
 
 const logMeta$1 = {nodeName: 'node-c3pr-hub-client', moduleName: 'collectEventAndMarkAsProcessing'};
 
@@ -71349,7 +71249,7 @@ async function collectEventAndMarkAsProcessing({event_type, c3prHubUrl, jwt, log
         await axios$1.patch(`${c3prHubUrl}/api/v1/events/${event_type}/${event.uuid}/meta/processing`, {}, {headers});
         return {uuid: event.uuid, event_type, payload: event.payload};
     } catch (e) {
-        c3prLOG2$4({
+        c3prLOG2$3({
             msg: `Error while marking event ${event.uuid} of type ${event_type} as processing. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}`,
             logMetas: [...(outerLogMetas || []), logMeta$1],
             meta: {error: util.inspect(e)}
@@ -71684,7 +71584,7 @@ var axiosRetry = lib$2.default;
 
 const axios$2 = axios$1.default;
 
-const c3prLOG2$5 = c3prLOG2.c3pr.c3prLOG2;
+const c3prLOG2$4 = c3prLOG2.c3pr.c3prLOG2;
 
 const logMeta$2 = {nodeName: 'node-c3pr-hub-client', moduleName: 'markAs'};
 
@@ -71697,7 +71597,7 @@ async function markAs({new_status, event_type, uuid, c3prHubUrl, jwt, logMetas: 
     try {
         await client.patch(`/api/v1/events/${event_type}/${uuid}/meta/${new_status.toLowerCase()}`, {}, {headers});
     } catch (error) {
-        c3prLOG2$5({msg: `Error while marking event ${uuid} of type ${event_type} as ${new_status.toUpperCase()}.`, logMetas: [...(outerLogMetas || []), logMeta$2], error});
+        c3prLOG2$4({msg: `Error while marking event ${uuid} of type ${event_type} as ${new_status.toUpperCase()}.`, logMetas: [...(outerLogMetas || []), logMeta$2], error});
         throw error;
     }
 }
@@ -71717,30 +71617,31 @@ var markAs_1 = {
     }
 };
 
-const c3prLOG2$6 = c3prLOG2.c3pr.c3prLOG2;
+const c3prLOG2$5 = c3prLOG2.c3pr.c3prLOG2;
 const collectEventAndMarkAsProcessing$1 = collectEventAndMarkAsProcessing_1.collectEventAndMarkAsProcessing.collectEventAndMarkAsProcessing;
 const markAsProcessed$1 = markAs_1.markAs.markAsProcessed;
 const markAsUnprocessed$1 = markAs_1.markAs.markAsUnprocessed;
 
 const logMeta$3 = {nodeName: 'node-c3pr-hub-client', moduleName: 'handleFirstCollectedEvent'};
 
+// TODO document this can return null (not the result) when no event is collected
 async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUrl, jwt, logMetas: outerLogMetas}) {
     const logMetas = [...(outerLogMetas || []), logMeta$3];
 
-    c3prLOG2$6({msg: `Handling ${event_type}.`, logMetas});
+    c3prLOG2$5({msg: `Handling ${event_type}.`, logMetas});
 
     let event;
     try {
         event = await collectEventAndMarkAsProcessing$1({event_type, c3prHubUrl, jwt, logMetas});
     } catch (error) {
-        c3prLOG2$6({msg: `Couldn't collect ${event_type}. Skipping.`, logMetas, error});
+        c3prLOG2$5({msg: `Couldn't collect ${event_type}. Skipping.`, logMetas, error});
         return;
     }
 
     let handlerFunctionResult;
     try {
         if (!event) {
-            c3prLOG2$6({
+            c3prLOG2$5({
                 msg: `No ${event_type} collected (possibly due to concurrent attempts to collect the same event and this instance was late). Skipping.`,
                 logMetas,
                 meta: {event}
@@ -71751,19 +71652,20 @@ async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUr
         handlerFunctionResult = await handlerFunction(event);
 
     } catch (error) {
-        c3prLOG2$6({msg: `Error while executing handlerFunction() for event handling.`, logMetas, error});
+        c3prLOG2$5({msg: `Error while executing handlerFunction() for event handling.`, logMetas, error, meta: {handlerFunction, event}});
 
         try {
             await markAsUnprocessed$1({event_type, uuid: event.uuid, c3prHubUrl, jwt, logMetas});
         } catch (error) {
-            c3prLOG2$6({msg: `Couldn't mark ${event_type}/${event.uuid} as UNPROCESSED. You must do it **MANUALLY**. If you don't, you'll have to wait until the PROCESSING `+
+            c3prLOG2$5({msg: `Couldn't mark ${event_type}/${event.uuid} as UNPROCESSED. You must do it **MANUALLY**. If you don't, you'll have to wait until the PROCESSING `+
                     `status times out.`, logMetas, error});
         }
         return;
     }
 
     if (!handlerFunctionResult || !handlerFunctionResult.new_status) {
-        throw new Error('Handler function should return an object of format {new_status, result}, being new_status mandatory. Received: ' + JSON.stringify(handlerFunctionResult));
+        throw new Error(`<handleFirstCollectedEvent> Handler function should return an object of format {new_status, result}, being new_status mandatory.
+        handlerFunction was ${handlerFunction}. handlerFunction result received: ${JSON.stringify(handlerFunctionResult)}`);
     }
 
     switch (handlerFunctionResult.new_status.toUpperCase()) {
@@ -71771,7 +71673,7 @@ async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUr
             try {
                 await markAsProcessed$1({event_type, uuid: event.uuid, c3prHubUrl, jwt, logMetas});
             } catch (error) {
-                c3prLOG2$6({msg: `Couldn't mark ${event_type}/${event.uuid} as PROCESSED. You must do it **MANUALLY**. If you don't, the PROCESSING status will `+
+                c3prLOG2$5({msg: `Couldn't mark ${event_type}/${event.uuid} as PROCESSED. You must do it **MANUALLY**. If you don't, the PROCESSING status will `+
                         `timeout and the event will be reprocessed, possibly generating duplicated effects.`, logMetas, error});
             }
             break;
@@ -71779,12 +71681,13 @@ async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUr
             try {
                 await markAsUnprocessed$1({event_type, uuid: event.uuid, c3prHubUrl, jwt, logMetas});
             } catch (error) {
-                c3prLOG2$6({msg: `Couldn't mark ${event_type}/${event.uuid} as UNPROCESSED. You must do it **MANUALLY**. If you don't, you'll have to wait until the PROCESSING `+
+                c3prLOG2$5({msg: `Couldn't mark ${event_type}/${event.uuid} as UNPROCESSED. You must do it **MANUALLY**. If you don't, you'll have to wait until the PROCESSING `+
                         `status times out.`, logMetas, error});
             }
             break;
         default:
-            throw new Error('Handler function returned a new_status of unsupported value. handlerFunctionResult received: ' + JSON.stringify(handlerFunctionResult));
+            throw new Error(`<handleFirstCollectedEvent> Handler function returned a new_status of unsupported value. 
+            handlerFunction was ${handlerFunction}. handlerFunction result received: ${JSON.stringify(handlerFunctionResult)}`);
     }
 
     return handlerFunctionResult.result;
@@ -71843,7 +71746,7 @@ function c3prLOG3(message, { ids, meta = {}, error, level = 0 }) {
         msgMsg = msgMsg.trim() + ` - Error reason: '${error}'. Data: ${error.response && JSON.stringify(error.response.data) || '<no data>'}.`;
         metaMeta.error = util.inspect(error);
     }
-    c3prLOG_1$1(msgMsg, metaMeta, ...(logMetas || []));
+    c3prLOG_1(msgMsg, metaMeta, ...(logMetas || []));
 }
 exports.default = c3prLOG3;
 
@@ -71851,7 +71754,7 @@ exports.default = c3prLOG3;
 
 unwrapExports(c3prLOG3_1);
 
-const c3prLOG2$7 = c3prLOG2.c3pr.c3prLOG2;
+const c3prLOG2$6 = c3prLOG2.c3pr.c3prLOG2;
 
 const logMeta$4 = {nodeName: 'node-c3pr-hub-client', moduleName: 'registerNewEvent'};
 
@@ -71859,7 +71762,7 @@ async function registerNewEvent({event_type, payload, c3prHubUrl, jwt, logMetas:
     const logMetas = [...(outerLogMetas || []), logMeta$4];
     try {
 
-        c3prLOG2$7({
+        c3prLOG2$6({
             msg: `Registering new event of type '${event_type}'.`,
             logMetas,
             meta: {event_type, payload}
@@ -71872,7 +71775,7 @@ async function registerNewEvent({event_type, payload, c3prHubUrl, jwt, logMetas:
         const headers = {Authorization: `Bearer ${jwt}`};
         await client.post(`/api/v1/events/${event_type}`, payload, {headers});
     } catch (e) {
-        c3prLOG2$7({
+        c3prLOG2$6({
             msg: `Error while registering new event of type '${event_type}'. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
             logMetas,
             meta: {payload, error: util.inspect(e)}
@@ -72186,7 +72089,7 @@ function v4(options, buf, offset) {
 
 var v4_1 = v4;
 
-const c3prLOG2$8 = c3prLOG2$2.c3pr.c3prLOG2;
+const c3prLOG2$7 = c3prLOG2.c3pr.c3prLOG2;
 const cloneRepositoryLocally$1 = nodeGitClient.cloneRepositoryLocally;
 const determineGitDiffBase64$1 = nodeGitClient.determineGitDiffBase64;
 const c3prSH$1 = nodeGitClient.c3prSH;
@@ -72204,12 +72107,12 @@ async function invokeToolAtGitRepo(toolInvocation, loadTools) {
     const localUniqueCorrelationId = v4_1();
     const logMeta = {nodeName: 'c3pr-agent', correlationIds: [toolInvocation.repository.revision, localUniqueCorrelationId], moduleName: 'invokeToolAtGitRepo'};
 
-    c3prLOG2$8({msg: `Invoking tool at git repo: ${toolInvocation.repository.clone_url_http}`, logMetas: [logMeta]});
+    c3prLOG2$7({msg: `Invoking tool at git repo: ${toolInvocation.repository.clone_url_http}`, logMetas: [logMeta]});
 
     const tool = loadTools.toolsHash[toolInvocation.tool_id];
     if (!tool) {
         const msg = `Tool of tool_id '${toolInvocation.tool_id}' was not found!`;
-        c3prLOG2$8({
+        c3prLOG2$7({
             msg,
             logMetas: [logMeta],
             meta: {toolInvocation}
@@ -72226,7 +72129,7 @@ async function invokeToolAtGitRepo(toolInvocation, loadTools) {
         cloneDepth: config_1.c3pr.agent.cloneDepth
     }, logMeta);
 
-    c3prLOG2$8({msg: `Done cloning at ${cloneFolder}.`, logMetas: [logMeta]});
+    c3prLOG2$7({msg: `Done cloning at ${cloneFolder}.`, logMetas: [logMeta]});
 
     for (let file of toolInvocation.files) {
         await c3prSH$1("JAVA_TOOL_OPTIONS='-Dfile.encoding=ISO-8859-1;'; " + tool.command.replace(/#{filename}/g, file), {cwd: cloneFolder, maxBuffer: 1024 * 2000 /* 2MB */}, {stdout: true, logMeta});
@@ -72354,7 +72257,7 @@ var handleToolInvocationRequested_1 = {
     }
 };
 
-const c3prLOG2$9 = c3prLOG2$2.c3pr.c3prLOG2;
+const c3prLOG2$8 = c3prLOG2.c3pr.c3prLOG2;
 
 const handleToolInvocationRequested$1 = handleToolInvocationRequested_1.handleToolInvocationRequested.handleToolInvocationRequested;
 
@@ -72363,7 +72266,7 @@ const logMetas$1 = [{nodeName: 'c3pr-agent', moduleName: 'c3prHubListenerControl
 var c3prHubListenerController = function (app) {
 
     app.post(config_1.c3pr.agent.ToolInvocationRequestedCallbackUrl, function (request, response) {
-        c3prLOG2$9({msg: `'ToolInvocationRequested' received.`, logMetas: logMetas$1});
+        c3prLOG2$8({msg: `'ToolInvocationRequested' received.`, logMetas: logMetas$1});
         handleToolInvocationRequested$1();
         response.send();
     });
