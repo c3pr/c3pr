@@ -82071,7 +82071,7 @@ async function invokeToolAtGitRepo(toolInvocation, loadTools) {
         c3prLOG2$7({msg: `Done cloning at ${cloneFolder}.`, logMetas: [logMeta]});
 
         for (let file of toolInvocation.files) {
-            executeOnUtf8_1(file, async () => {
+            await executeOnUtf8_1(file, async () => {
                 await c3prSH$1(tool.command.replace(/#{filename}/g, file), {cwd: cloneFolder, maxBuffer: 1024 * 2000 /* 2MB */}, {stdout: true, logMeta});
             });
         }
