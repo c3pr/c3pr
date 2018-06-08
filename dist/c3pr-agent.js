@@ -82011,13 +82011,14 @@ function convertEncoding(file, from, to) {
         });
     });
 }
-async function executeOnUtf8(file, fun) {
-    if (chardet.detectFileSync(file)  === ISO_8859_1) {
-        await convertEncoding(file, ISO_8859_1, UTF_8);
+async function executeOnUtf8(baseFolder, file, fun) {
+    const fullFilePath = path.join(baseFolder, file);
+    if (chardet.detectFileSync(fullFilePath)  === ISO_8859_1) {
+        await convertEncoding(fullFilePath, ISO_8859_1, UTF_8);
         try {
             await fun();
         } finally {
-            await convertEncoding(file, UTF_8, ISO_8859_1);
+            await convertEncoding(fullFilePath, UTF_8, ISO_8859_1);
         }
     } else {
         await fun();
@@ -82071,7 +82072,7 @@ async function invokeToolAtGitRepo(toolInvocation, loadTools) {
         c3prLOG2$7({msg: `Done cloning at ${cloneFolder}.`, logMetas: [logMeta]});
 
         for (let file of toolInvocation.files) {
-            await executeOnUtf8_1(file, async () => {
+            await executeOnUtf8_1(cloneFolder, file, async () => {
                 await c3prSH$1(tool.command.replace(/#{filename}/g, file), {cwd: cloneFolder, maxBuffer: 1024 * 2000 /* 2MB */}, {stdout: true, logMeta});
             });
         }
@@ -82083,7 +82084,7 @@ async function invokeToolAtGitRepo(toolInvocation, loadTools) {
     }
 
 }
-console.log('\nloaded v123\n');
+console.log('\nloaded v2\n');
 var invokeToolAtGitRepo_1 = invokeToolAtGitRepo;
 
 const c3prLOG3 = c3prLOG3_1.default;
