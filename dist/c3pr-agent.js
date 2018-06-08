@@ -77908,8 +77908,8 @@ var recognisers = [
   new sbcs_1.windows_1256,
   new sbcs_1.KOI8_R
 ];
-
-var detect = function(buffer, opts) {
+var xaxaxa = {};
+xaxaxa.detect = function(buffer, opts) {
 
   // Tally up the byte occurence statistics.
   var fByteStats = [];
@@ -77952,7 +77952,7 @@ var detect = function(buffer, opts) {
   }
 };
 
-var detectFile = function(filepath, opts, cb) {
+xaxaxa.detectFile = function(filepath, opts, cb) {
   if (typeof opts === 'function') {
     cb = opts;
     opts = undefined;
@@ -77966,7 +77966,7 @@ var detectFile = function(filepath, opts, cb) {
     }
 
     if (err) return cb(err, null);
-    cb(null, self$1.detect(buffer, opts));
+    cb(null, xaxaxa.detect(buffer, opts));
   };
 
   if (opts && opts.sampleSize) {
@@ -77981,23 +77981,23 @@ var detectFile = function(filepath, opts, cb) {
   fs.readFile(filepath, handler);
 };
 
-var detectFileSync = function(filepath, opts) {
+xaxaxa.detectFileSync = function(filepath, opts) {
   if (opts && opts.sampleSize) {
     var fd = fs.openSync(filepath, 'r'),
       sample = new Buffer(opts.sampleSize);
 
     fs.readSync(fd, sample, 0, opts.sampleSize);
     fs.closeSync(fd);
-    return self$1.detect(sample, opts);
+    return xaxaxa.detect(sample, opts);
   }
 
-  return self$1.detect(fs.readFileSync(filepath), opts);
+  return xaxaxa.detect(fs.readFileSync(filepath), opts);
 };
 
 var chardet = {
-	detect: detect,
-	detectFile: detectFile,
-	detectFileSync: detectFileSync
+	detect: xaxaxa.detect,
+	detectFile: xaxaxa.detectFile,
+	detectFileSync: xaxaxa.detectFileSync
 };
 
 var Buffer$18 = require$$0.Buffer;
@@ -82084,7 +82084,7 @@ async function invokeToolAtGitRepo(toolInvocation, loadTools) {
     }
 
 }
-console.log('\nloaded v2\n');
+console.log('\nloaded v3\n');
 var invokeToolAtGitRepo_1 = invokeToolAtGitRepo;
 
 const c3prLOG3 = c3prLOG3_1.default;
