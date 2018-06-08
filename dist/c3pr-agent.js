@@ -82083,7 +82083,7 @@ async function invokeToolAtGitRepo(toolInvocation, loadTools) {
     }
 
 }
-
+console.log('\nloaded v123\n');
 var invokeToolAtGitRepo_1 = invokeToolAtGitRepo;
 
 const c3prLOG3 = c3prLOG3_1.default;
