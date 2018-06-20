@@ -4,6 +4,7 @@ const determineGitDiffBase64 = require("node-git-client").determineGitDiffBase64
 const c3prSH = require("node-git-client").c3prSH;
 const uuidv4 = require('uuid/v4');
 
+const executeOnUtf8 = require('./executeOnUtf8');
 const config = require('../../config');
 
 /**
@@ -15,36 +16,43 @@ async function invokeToolAtGitRepo(toolInvocation, loadTools) {
 
     const localUniqueCorrelationId = uuidv4();
     const logMeta = {nodeName: 'c3pr-agent', correlationIds: [toolInvocation.repository.revision, localUniqueCorrelationId], moduleName: 'invokeToolAtGitRepo'};
+    try {
 
-    c3prLOG2({msg: `Invoking tool at git repo: ${toolInvocation.repository.clone_url_http}`, logMetas: [logMeta]});
+        c3prLOG2({msg: `Invoking tool at git repo: ${toolInvocation.repository.clone_url_http}`, logMetas: [logMeta]});
 
-    const tool = loadTools.toolsHash[toolInvocation.tool_id];
-    if (!tool) {
-        const msg = `Tool of tool_id '${toolInvocation.tool_id}' was not found!`;
-        c3prLOG2({
-            msg,
-            logMetas: [logMeta],
-            meta: {toolInvocation}
-        });
-        throw new Error(msg);
+        const tool = loadTools.toolsHash[toolInvocation.tool_id];
+        if (!tool) {
+            const msg = `Tool of tool_id '${toolInvocation.tool_id}' was not found!`;
+            c3prLOG2({
+                msg,
+                logMetas: [logMeta],
+                meta: {toolInvocation}
+            });
+            throw new Error(msg);
+        }
+
+        const cloneFolder = await cloneRepositoryLocally({
+            localUniqueCorrelationId: localUniqueCorrelationId,
+            cloneBaseDir: config.c3pr.agent.cloneDir,
+            url: toolInvocation.repository.clone_url_http,
+            branch: toolInvocation.repository.branch,
+            revision: toolInvocation.repository.revision,
+            cloneDepth: config.c3pr.agent.cloneDepth
+        }, logMeta);
+
+        c3prLOG2({msg: `Done cloning at ${cloneFolder}.`, logMetas: [logMeta]});
+
+        for (let file of toolInvocation.files) {
+            await executeOnUtf8(cloneFolder, file, async () => {
+                await c3prSH(tool.command.replace(/#{filename}/g, file), {cwd: cloneFolder, maxBuffer: 1024 * 2000 /* 2MB */}, {stdout: true, logMeta});
+            });
+        }
+
+        return determineGitDiffBase64(toolInvocation.repository.revision, localUniqueCorrelationId, cloneFolder, logMeta);
+    } catch (error) {
+        c3prLOG2({msg: `Error during invokeToolAtGitRepo.`, logMetas: [logMeta], error});
+        return {files: [], diff: ''};
     }
-
-    const cloneFolder = await cloneRepositoryLocally({
-        localUniqueCorrelationId: localUniqueCorrelationId,
-        cloneBaseDir: config.c3pr.agent.cloneDir,
-        url: toolInvocation.repository.clone_url_http,
-        branch: toolInvocation.repository.branch,
-        revision: toolInvocation.repository.revision,
-        cloneDepth: config.c3pr.agent.cloneDepth
-    }, logMeta);
-
-    c3prLOG2({msg: `Done cloning at ${cloneFolder}.`, logMetas: [logMeta]});
-
-    for (let file of toolInvocation.files) {
-        await c3prSH("JAVA_TOOL_OPTIONS='-Dfile.encoding=ISO-8859-1;'; " + tool.command.replace(/#{filename}/g, file), {cwd: cloneFolder, maxBuffer: 1024 * 2000 /* 2MB */}, {stdout: true, logMeta});
-    }
-
-    return determineGitDiffBase64(toolInvocation.repository.revision, localUniqueCorrelationId, cloneFolder, logMeta);
 
 }
 
