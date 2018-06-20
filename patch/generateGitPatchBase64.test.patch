@@ -1,0 +1,110 @@
+From 37e78e5a5ea8fd2b3a2eecc129473c5ae250ad3a Mon Sep 17 00:00:00 2001
+From: c3pr <c3pr@example.com>
+Date: Mon, 11 Jun 2018 13:53:22 -0300
+Subject: [PATCH 1/1] commit-msg
+
+---
+ file-to-append-spaces-only.txt                               | 5 +++++
+ file-to-append.txt                                           | 1 +
+ file-to-remove.txt                                           | 1 -
+ ...e-and-append.txt => file-to-rename-and-append-renamed.txt | 1 +
+ file-to-rename-only.txt => file-to-rename-only-renamed.txt   | 0
+ iso-8859-1_file.txt                                          | 2 +-
+ new-file.txt                                                 | 1 +
+ utf-8_file.txt                                               | 2 +-
+ utf8-file-will-add-spaces.txt                                | 5 +++--
+ 9 files changed, 13 insertions(+), 5 deletions(-)
+ delete mode 100644 file-to-remove.txt
+ rename file-to-rename-and-append.txt => file-to-rename-and-append-renamed.txt (63%)
+ rename file-to-rename-only.txt => file-to-rename-only-renamed.txt (100%)
+ create mode 100644 new-file.txt
+
+diff --git a/file-to-append-spaces-only.txt b/file-to-append-spaces-only.txt
+index bb6da1f..1eba3d3 100644
+--- a/file-to-append-spaces-only.txt
++++ b/file-to-append-spaces-only.txt
+@@ -1 +1,6 @@
+ Spaces will be appended to this file.
++
++ 
++
++ 	
++  
+\ No newline at end of file
+diff --git a/file-to-append.txt b/file-to-append.txt
+index d22da3a..ff77f3e 100644
+--- a/file-to-append.txt
++++ b/file-to-append.txt
+@@ -1 +1,2 @@
+ Will append some content to this file.
++some change
+\ No newline at end of file
+diff --git a/file-to-remove.txt b/file-to-remove.txt
+deleted file mode 100644
+index 2ec2ef1..0000000
+--- a/file-to-remove.txt
++++ /dev/null
+@@ -1 +0,0 @@
+-Will remove this file.
+diff --git a/file-to-rename-and-append.txt b/file-to-rename-and-append-renamed.txt
+similarity index 63%
+rename from file-to-rename-and-append.txt
+rename to file-to-rename-and-append-renamed.txt
+index 8297352..52d0a09 100644
+--- a/file-to-rename-and-append.txt
++++ b/file-to-rename-and-append-renamed.txt
+@@ -1 +1,2 @@
+ We will rename this file and append text to it.
++add some text after renaming
+\ No newline at end of file
+diff --git a/file-to-rename-only.txt b/file-to-rename-only-renamed.txt
+similarity index 100%
+rename from file-to-rename-only.txt
+rename to file-to-rename-only-renamed.txt
+diff --git a/iso-8859-1_file.txt b/iso-8859-1_file.txt
+index 6120dbd..57d9804 100644
+--- a/iso-8859-1_file.txt
++++ b/iso-8859-1_file.txt
+@@ -1,3 +1,3 @@
+ I am UTF-8.
+ X�����Y.�!
+-I'm test file.�!
+\ No newline at end of file
++I'm test file.�!aaa
+\ No newline at end of file
+diff --git a/new-file.txt b/new-file.txt
+new file mode 100644
+index 0000000..d43816e
+--- /dev/null
++++ b/new-file.txt
+@@ -0,0 +1 @@
++new file created
+\ No newline at end of file
+diff --git a/utf-8_file.txt b/utf-8_file.txt
+index 7a6603f..434bb32 100644
+--- a/utf-8_file.txt
++++ b/utf-8_file.txt
+@@ -1,3 +1,3 @@
+ I am UTF-8.
+ XãéìöûZ.á!
+-I'm test file.é!
+\ No newline at end of file
++I'm test file.é!bbb
+\ No newline at end of file
+diff --git a/utf8-file-will-add-spaces.txt b/utf8-file-will-add-spaces.txt
+index 765777f..63c887f 100644
+--- a/utf8-file-will-add-spaces.txt
++++ b/utf8-file-will-add-spaces.txt
+@@ -1,5 +1,6 @@
+ line1	
+ 	
+ line3
+-áé óú.
+-xyz.
++áé          óú.		
++xyz!
++!!
+\ No newline at end of file
+-- 
+2.17.1.windows.2
+
