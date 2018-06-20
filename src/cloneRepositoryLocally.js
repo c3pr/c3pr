@@ -29,7 +29,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
     c3prLOG(`Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`, ...logMetas, gitCloneLogMeta);
 
     // clones that single branch (maybe there is a somewhat slightly faster way of doing this with --mirror, though I feel it probably won't pay off)
-    await c3prSH(`git clone -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {logMeta});
+    await c3prSH(`git clone --config core.autocrlf=false -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {logMeta});
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //NOTE:
