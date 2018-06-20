@@ -13,6 +13,7 @@ RUN npm install
 
 COPY src /opt/c3pr-repo-gitlab/src
 COPY resources /opt/c3pr-repo-gitlab/resources
+COPY tsconfig.json /opt/c3pr-repo-gitlab/
 
 EXPOSE 5004
 
