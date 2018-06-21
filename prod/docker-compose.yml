@@ -1,0 +1,75 @@
+version: '3.1'
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+  # NOTE: This mongodb configuration disables authentication! Do not use it in production!
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+
+  c3pr-hub:
+    image: c3pr/c3pr-hub:4.0.0
+    ports:
+      - 5000:5000
+    environment:
+      C3PR_MONGO_URL: mongodb://mongo:27017
+      PORT: 5000
+
+  c3pr-brain:
+    image: c3pr/c3pr-brain:2.0.0
+    ports:
+      - 5001:5001
+    environment:
+      C3PR_MONGO_URL: mongodb://mongo:27017
+      C3PR_HUB_URL: http://c3pr-hub:5000
+      C3PR_BRAIN_URL: http://c3pr-brain:5001
+
+#  c3pr-dashboard:
+#    build:
+#      context: ../../../c3pr-dashboard
+#    ports:
+#      - 5005:5005
+#    environment:
+#      C3PR_MONGO_URL: mongodb://mongo:27017
+#      PORT: 5005
+#      C3PR_HUB_URL: http://c3pr-hub:5000
+
+#  c3pr-repo-github:
+#    build:
+#      context: ../../c3pr-repo-github
+#    ports:
+#      - 5002:5002
+#    environment:
+#      C3PR_MONGO_URL: mongodb://mongo:27017
+#      PORT: 5003
+#      C3PR_REPO_GITHUB_URL: http://c3pr-repo-github:5003
+#      C3PR_HUB_URL: http://c3pr-hub:5000
+#      GITHUB_API_TOKEN: 7dsf4asd89f4sd6fs6d4fsa65d4fas6d54fsd654
+
+  c3pr-repo-gitlab:
+    image: c3pr/c3pr-repo-gitlab:2.0.0
+    ports:
+      - 5004:5004
+    environment:
+      C3PR_MONGO_URL: mongodb://mongo:27017
+      PORT: 5004
+      C3PR_REPO_GITLAB_URL: http://c3pr-repo-gitlab:5004
+      C3PR_HUB_URL: http://c3pr-hub:5000
+      GITLAB_URL: http://c3prgitlab:8888
+      GITLAB_API_TOKEN: RUDxzjBSVBUxZmyHKYMJ
+
+  c3pr-tool-walkmod-sonar:
+    image: c3pr/c3pr-tool-walkmod-sonar:1.6.1
+    ports:
+      - 5003:5003
+    environment:
+      C3PR_MONGO_URL: mongodb://mongo:27017
+      C3PR_HUB_URL: http://c3pr-hub:5000
+      C3PR_AGENT_URL: http://c3pr-tool-walkmod-sonar:5003
