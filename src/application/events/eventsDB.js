@@ -2,7 +2,9 @@ const MongoClient = require("mongodb").MongoClient;
 const config = require('../../config');
 const Status = require('./status');
 
-const client = MongoClient.connect(config.c3pr.hub.mongoC3prUrl);
+const client = require('../../infrastructure/db');
+
+
 
 const events = (async () => {
     return (await client).db(config.c3pr.hub.mongoC3prDatabase).collection(config.c3pr.hub.mongoEventsCollection);

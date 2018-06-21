@@ -1,5 +1,5 @@
 const assert = require('assert');
-const client = require('./db');
+const client = require('../../infrastructure/db');
 const config = require('../../config');
 
 const prsDB = client.then(cli => cli.db(config.c3pr.hub.mongoC3prDatabase).collection(config.c3pr.hub.mongoPRsCollection));

@@ -1,7 +1,7 @@
 const uuidv4 = require('uuid/v4');
 
 const config = require('../../config');
-const client = require('./db');
+const client = require('../../infrastructure/db');
 
 const projects = client.then(cli => cli.db(config.c3pr.hub.mongoC3prDatabase).collection(config.c3pr.hub.mongoProjectsCollection));
 

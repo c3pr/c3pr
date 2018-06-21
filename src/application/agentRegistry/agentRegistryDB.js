@@ -1,4 +1,4 @@
-const client = require('../project/db');
+const client = require('../../infrastructure/db');
 const config = require('../../config');
 
 const agentRegistryDB = client.then(cli => cli.db(config.c3pr.hub.mongoC3prDatabase).collection(config.c3pr.hub.mongoAgentRegistryCollection));
