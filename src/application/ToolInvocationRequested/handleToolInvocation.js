@@ -10,12 +10,18 @@ const loadTools = require('../tools/loadTools');
 async function emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, ids) {
     const parent = {event_type: toolInvocationRequestedEvent.event_type, uuid: toolInvocationRequestedEvent.uuid};
 
-    const changed_files = gitPatchBase64.files;
-    const unmodified_files = toolInvocationRequested.files.filter(f => !gitPatchBase64.files.includes(f));
+    const changed_files = [
+        ...gitPatchBase64.files.added,
+        ...gitPatchBase64.files.modified,
+        ...gitPatchBase64.files.renamed.map(renamedFile => renamedFile.from),
+        ...gitPatchBase64.files.renamed.map(renamedFile => renamedFile.to),
+        ...gitPatchBase64.files.deleted
+    ];
+    const unmodified_files = toolInvocationRequested.files.filter(f => !changed_files.includes(f));
 
     const tool = loadTools.toolsHash[toolInvocationRequested.tool_id];
-    const pr_title = gitPatchBase64.files.length ? tool.pr_title : '<no diff>';
-    const pr_body = gitPatchBase64.files.length ? tool.pr_body : '<no diff>';
+    const pr_title = changed_files.length ? tool.pr_title : '<no diff>';
+    const pr_body = changed_files.length ? tool.pr_body : '<no diff>';
     const diff_base64 = gitPatchBase64.patch.hexBase64;
 
     let result = await c3prRNE.registerNewEvent({
@@ -39,7 +45,7 @@ async function emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatc
         return {new_status: 'UNPROCESSED', result: {error, meta}};
     });
 
-    if (gitPatchBase64.files.length) {
+    if (changed_files.length) {
         c3prLOG3(`Tool invocation complete. A patch has been generated and sent.`, {ids});
     } else {
         c3prLOG3(`Tool invocation complete. No patch has been generated.`, {ids});
