@@ -12,4 +12,4 @@ services:
     image: mongo-express
     restart: always
     ports:
-      - 5556:5556
+      - 8081:8081
