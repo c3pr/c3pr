@@ -52,7 +52,7 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools) {
         return generateGitPatchBase64({cloneFolder, gitUserName: config.c3pr.agent.gitUserName, gitUserEmail: config.c3pr.agent.gitUserEmail, commitMessage: tool.pr_title}, {ids})
     } catch (error) {
         c3prLOG2({msg: `Error during invokeToolAtGitRepo.`, logMetas: [logMeta], error});
-        return {files: [], diff: ''};
+        return {files: [], patch: {hexBase64: ''}};
     }
 
 }
