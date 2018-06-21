@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/c3pr/node-c3pr-hub-client/issues"
   },
-  "homepage": "https://github.com/c3pr/node-c3pr-hub-client#readme",
+  "homepage": "https://github.com/c3pr/node-c3pr-hub-client",
   "dependencies": {
     "axios": "^0.18.0",
     "axios-retry": "^3.1.0",
