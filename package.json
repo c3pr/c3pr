@@ -1,7 +1,7 @@
 {
   "name": "c3pr-brain",
-  "version": "1.0.0",
-  "description": "C3PR Main Bot",
+  "version": "2.0.0",
+  "description": "C-3PR Brain Module",
   "scripts": {
     "start": "node src/index.js",
     "debug": "node %NODE_DEBUG_OPTION% src/index.js",
