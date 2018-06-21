@@ -1,0 +1,15 @@
+version: '2'
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+  # NOTE: This mongodb configuration disables authentication! Do not use it in production!
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 5556:5556

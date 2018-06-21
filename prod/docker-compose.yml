@@ -1,29 +1,12 @@
 version: '2'
 services:
 
-  mongo:
-    image: mongo
-    restart: always
-    ports:
-      - 27017:27017
-  # NOTE: This mongodb configuration disables authentication! Do not use it in production!
-    logging:
-      driver: none # mutes output
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 5556:5556
-    logging:
-      driver: none # mutes output
-
   c3pr-hub:
     image: c3pr/c3pr-hub:4.0.0
     ports:
       - 5555:5555
     environment:
-      C3PR_MONGO_URL: mongodb://mongo:27017
+      C3PR_MONGO_URL: mongodb://srv-codereview:27017
       PORT: 5555
 
   c3pr-brain:
@@ -31,7 +14,7 @@ services:
     ports:
       - 5001:5001
     environment:
-      C3PR_MONGO_URL: mongodb://mongo:27017
+      C3PR_MONGO_URL: mongodb://srv-codereview:27017
       C3PR_HUB_URL: http://c3pr-hub:5555
       C3PR_BRAIN_URL: http://c3pr-brain:5001
 
@@ -41,7 +24,7 @@ services:
 #    ports:
 #      - 5005:5005
 #    environment:
-#      C3PR_MONGO_URL: mongodb://mongo:27017
+#      C3PR_MONGO_URL: mongodb://srv-codereview:27017
 #      PORT: 5005
 #      C3PR_HUB_URL: http://c3pr-hub:5555
 
@@ -51,7 +34,7 @@ services:
 #    ports:
 #      - 5002:5002
 #    environment:
-#      C3PR_MONGO_URL: mongodb://mongo:27017
+#      C3PR_MONGO_URL: mongodb://srv-codereview:27017
 #      PORT: 5003
 #      C3PR_REPO_GITHUB_URL: http://c3pr-repo-github:5003
 #      C3PR_HUB_URL: http://c3pr-hub:5555
@@ -62,7 +45,7 @@ services:
     ports:
       - 5004:5004
     environment:
-      C3PR_MONGO_URL: mongodb://mongo:27017
+      C3PR_MONGO_URL: mongodb://srv-codereview:27017
       PORT: 5004
       C3PR_REPO_GITLAB_URL: http://c3pr-repo-gitlab:5004
       C3PR_HUB_URL: http://c3pr-hub:5555
@@ -74,6 +57,6 @@ services:
     ports:
       - 5003:5003
     environment:
-      C3PR_MONGO_URL: mongodb://mongo:27017
+      C3PR_MONGO_URL: mongodb://srv-codereview:27017
       C3PR_HUB_URL: http://c3pr-hub:5555
       C3PR_AGENT_URL: http://c3pr-tool-walkmod-sonar:5003
