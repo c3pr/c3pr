@@ -122,7 +122,7 @@ export default {
         this.fetchStatus = 'Click to re-fetch all';
       }).catch(e => {
         // eslint-disable-next-line
-        alert('xError: ' + e);
+        alert('Error: ' + e + '\n\nNote: if the error is 401, you probably restarted the HUB but didn\'t restart the dashboard after.');
       });
     },
     ago(date) {
