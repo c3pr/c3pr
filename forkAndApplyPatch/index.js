@@ -23,7 +23,7 @@ async function forkAndApplyPatch({ createForkIfNotExists, addAuthenticationToClo
     await c3prSH3_1.default(`git remote add main ${mainRepoCloneUrl}`, { cwd: stagingFolder }, { replacements: [tokenReplacementForLogFunction], ids });
     await c3prSH3_1.default(`git fetch main ${mainRepoBranch}`, { cwd: stagingFolder }, { ids });
     await c3prSH3_1.default(`git merge main/${mainRepoBranch}`, { cwd: stagingFolder }, { ids });
-    await applyGitPatchBase64_1.default(stagingFolder, { hexBase64: patchContent, plain: '', header: '', footer: '' }, { ids: [mainRepoHash] });
+    await applyGitPatchBase64_1.default(stagingFolder, gitUserName, gitUserEmail, { hexBase64: patchContent, plain: '', header: '', footer: '' }, { ids: [mainRepoHash] });
     // add fork repo
     await c3prSH3_1.default(`git remote add fork ${forkRepoCloneUrl}`, { cwd: stagingFolder }, { replacements: [tokenReplacementForLogFunction], ids });
     // push changes

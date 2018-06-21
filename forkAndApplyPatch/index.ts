@@ -43,7 +43,7 @@ async function forkAndApplyPatch({
     await c3prSH3(`git fetch main ${mainRepoBranch}`, {cwd: stagingFolder}, {ids});
     await c3prSH3(`git merge main/${mainRepoBranch}`, {cwd: stagingFolder}, {ids});
 
-    await applyGitPatchBase64(stagingFolder, {hexBase64: patchContent, plain: '', header: '', footer: ''}, {ids: [mainRepoHash]});
+    await applyGitPatchBase64(stagingFolder, gitUserName, gitUserEmail, {hexBase64: patchContent, plain: '', header: '', footer: ''}, {ids: [mainRepoHash]});
 
     // add fork repo
     await c3prSH3(`git remote add fork ${forkRepoCloneUrl}`, {cwd: stagingFolder}, {replacements: [tokenReplacementForLogFunction], ids});
