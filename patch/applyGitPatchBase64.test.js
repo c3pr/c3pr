@@ -66,7 +66,7 @@ describe('applyGitPatchBase64', () => {
         /// execute:
 
         const patch = {hexBase64, plain: 'unused', header: 'unused', footer: 'unused'};
-        await applyGitPatchBase64(cloneFolder, patch, {ids});
+        await applyGitPatchBase64(cloneFolder, 'user', 'e@mail.com', patch, {ids});
 
         /// verify:
 
