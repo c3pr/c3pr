@@ -1,6 +1,6 @@
 {
   "name": "c3pr-adapter-gitlab",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "C3PR Repository Adapter for GitLab",
   "scripts": {
     "start": "node --require ts-node/register src/index.ts",
@@ -26,10 +26,10 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#9.3.0",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#9.1.1",
-    "node-c3pr-repo": "github:c3pr/node-c3pr-repo#5.0.0",
-    "node-git-client": "github:c3pr/node-git-client#6.1.1",
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#9.6.2",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#11.0.0",
+    "node-c3pr-repo": "github:c3pr/node-c3pr-repo#5.1.0",
+    "node-git-client": "github:c3pr/node-git-client#6.3.2",
     "ts-node": "^6.0.5",
     "typescript": "^2.9.1",
     "uuid": "^3.2.1"
