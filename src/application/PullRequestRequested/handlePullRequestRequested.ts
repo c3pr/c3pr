@@ -46,11 +46,10 @@ async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
         gitLabApiToken: config.c3pr.repoGitlab.gitlab.apiToken,
         gitUserName: config.c3pr.repoGitlab.gitlab.botUserName,
         gitUserEmail: config.c3pr.repoGitlab.gitlab.botUserEmail,
-        prCommitMessage: prr.pr_title,
         pr_assignee: prr.assignee,
-        prTitle: prr.pr_title,
-        prBody: prr.pr_body,
-        patchContent: prr.diff_base64
+        pr_title: prr.pr_title,
+        pr_body: prr.pr_body,
+        patchHexBase64: prr.diff_base64
     });
 
     c3prLOG2({

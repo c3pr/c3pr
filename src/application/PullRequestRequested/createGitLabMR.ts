@@ -11,17 +11,16 @@ async function createGitLabMR({
                             gitLabApiToken,
                             gitUserName,
                             gitUserEmail,
-                            prCommitMessage,
                             pr_assignee,
-                            prTitle,
-                            prBody,
-                            patchContent
+                            pr_title,
+                            pr_body,
+                            patchHexBase64
                         }) {
 
     const logMeta = {nodeName: 'c3pr-repo-gitlab', correlationId: mainRepoHash, moduleName: 'createGitLabMR'};
     c3prLOG2({
         msg: `Initiating MR creation.`,
-        meta: {mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitLabUrl, gitLabApiToken, gitUserName, gitUserEmail, prCommitMessage, prTitle, prBody, pr_assignee, patchContent},
+        meta: {mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitLabUrl, gitLabApiToken, gitUserName, gitUserEmail, pr_title, pr_body, pr_assignee, patchHexBase64},
         logMetas: [logMeta]
     });
 
@@ -42,12 +41,12 @@ async function createGitLabMR({
         mainRepoHash,
         gitUserName,
         gitUserEmail,
-        prCommitMessage,
-        patchContent,
+        prCommitMessage: pr_title,
+        patchContent: patchHexBase64,
         mainRepoCloneUrl,
         logMetas: [logMeta]
     });
-    return outboundPorts.createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBody, pr_assignee);
+    return outboundPorts.createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, pr_title, pr_body, pr_assignee);
 }
 
 export { createGitLabMR };
