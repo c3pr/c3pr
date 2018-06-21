@@ -10,6 +10,9 @@ const C3PR_AGENT_ID = process.env.C3PR_AGENT_ID;
 const C3PR_CLONE_DIR = process.env.C3PR_CLONE_DIR || '/tmp/c3pr/clones';
 const C3PR_CLONE_DEPTH = process.env.C3PR_CLONE_DEPTH || 50;
 
+const C3PR_GIT_BOT_USER_USERNAME = process.env.C3PR_GIT_BOT_USER_USERNAME || 'c3pr-bot';
+const C3PR_GIT_BOT_USER_EMAIL = process.env.C3PR_GIT_BOT_USER_EMAIL || 'c3prbot@gmail.com';
+
 const config = {
     c3pr: {
         auth: {
@@ -30,6 +33,9 @@ const config = {
             agentId: C3PR_AGENT_ID,
             cloneDir: C3PR_CLONE_DIR,
             cloneDepth: C3PR_CLONE_DEPTH,
+
+            gitUserName: C3PR_GIT_BOT_USER_USERNAME,
+            gitUserEmail: C3PR_GIT_BOT_USER_EMAIL,
 
             ToolInvocationRequestedCallbackUrl: `/callbacks/ToolInvocationRequested`
         }
