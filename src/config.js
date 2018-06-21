@@ -5,6 +5,9 @@ const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
 
 const C3PR_BRAIN_URL = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:5001`;
 
+// noinspection JSUnusedLocalSymbols
+const C3PR_MONGO_URL = process.env.C3PR_MONGO_URL; // REQUIRED DUE TO C3PR LOGGER
+
 const config = {
     c3pr: {
         auth: {
