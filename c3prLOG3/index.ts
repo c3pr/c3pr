@@ -60,9 +60,17 @@ function c3prLOG3(message: string, {ids, meta = {}, error, level = 0}: {ids?: (s
 
 export default c3prLOG3;
 
-export async function logMetasToIds(...logMetas) {
-    let arrayOfIds = logMetas.map(logMeta => [...(logMeta.correlationIds || []), logMeta.correlationId].filter(i => i));
-    // noinspection UnnecessaryLocalVariableJS
-    let ids = arrayOfIds.reduce((previousValue, currentValue) => [...previousValue, ...currentValue], []);
-    return ids;
+function flatten(arrayOfArrays) {
+    return arrayOfArrays.reduce((resultArray, array) => [...resultArray, ...array], []);
+}
+
+export function logMetasToIds(...arrayOfLogMetasOrOfArrayOfLogMetas) {
+    let arrayOfArrayOfLogMetas = arrayOfLogMetasOrOfArrayOfLogMetas.map(i => Array.isArray(i) ? i : [i]);
+    let arrayOfLogMetas = flatten(arrayOfArrayOfLogMetas);
+
+    let arrayOfArrayOfIds = arrayOfLogMetas.map(logMeta => {
+        const correlationIds = logMeta.correlationIds || [];
+        return logMeta.correlationId ? [...correlationIds, logMeta.correlationId] : correlationIds;
+    });
+    return flatten(arrayOfArrayOfIds);
 }
