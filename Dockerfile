@@ -13,6 +13,6 @@ RUN npm install
 
 COPY src /opt/c3pr-hub/src
 
-EXPOSE 5004
+EXPOSE 5000
 
 CMD npm start
