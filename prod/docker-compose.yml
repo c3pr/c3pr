@@ -7,12 +7,16 @@ services:
     ports:
       - 27017:27017
   # NOTE: This mongodb configuration disables authentication! Do not use it in production!
+    logging:
+      driver: none # mutes output
 
   mongo-express:
     image: mongo-express
     restart: always
     ports:
-      - 8081:8081
+      - 5556:5556
+    logging:
+      driver: none # mutes output
 
   c3pr-hub:
     image: c3pr/c3pr-hub:4.0.0
