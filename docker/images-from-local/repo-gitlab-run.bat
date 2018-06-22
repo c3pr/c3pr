@@ -3,7 +3,7 @@ docker run ^
  -p 5004:5004 ^
  --name c3pr_repo_gitlab ^
  -e C3PR_MONGO_URL=%C3PR_MONGO_URL% ^
- -e C3PR_REPO_GITLAB_URL=http://127.0.0.1:5004 ^
+ -e C3PR_REPO_GITLAB_URL=http://host.docker.internal:5004 ^
  -e C3PR_HUB_URL=http://host.docker.internal:5000 ^
  -e GITLAB_URL=http://c3prgitlab:8888 ^
  -e GITLAB_API_TOKEN=%GITLAB_API_TOKEN% ^
