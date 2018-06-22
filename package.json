@@ -28,7 +28,7 @@
     "github-webhook-handler": "^0.7.1",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#11.0.0",
     "node-c3pr-repo": "github:c3pr/node-c3pr-repo#5.1.0",
-    "node-git-client": "github:c3pr/node-git-client#6.3.2",
+    "node-git-client": "github:c3pr/node-git-client#7.0.0",
     "octonode": "^0.9.1",
     "uuid": "^3.2.1"
   },
