@@ -82,8 +82,8 @@
 import axios from 'axios';
 import EventDetail from '../components/EventDetail.vue';
 import moment from 'moment';
+import {BACKEND_HUB} from "../envs";
 
-const proxyPrefix = '/api/hub';
 export default {
   name: 'Logs',
   data() {
@@ -97,15 +97,15 @@ export default {
   created() { this.fetchAll(); },
   methods: {
     async fetchBusListeners() {
-      const { data } = await axios.get(proxyPrefix + '/api/v1/bus/listeners');
+      const { data } = await axios.get(BACKEND_HUB + '/api/v1/bus/listeners');
       this.listeners = data;
     },
     async fetchRegistry() {
-      const { data } = await axios.get(proxyPrefix + '/api/v1/agents');
+      const { data } = await axios.get(BACKEND_HUB + '/api/v1/agents');
       this.registry = data;
     },
     async fetchEvents() {
-      const {data} = await axios.get(proxyPrefix + '/api/v1/events');
+      const {data} = await axios.get(BACKEND_HUB + '/api/v1/events');
       if (Array.isArray(data)) {
         data.sort((a, b) => {
           return a && a.meta && a.meta.created && b && b.meta && b.meta.created && a.meta.created.localeCompare(b.meta.created) * -1;

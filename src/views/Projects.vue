@@ -37,8 +37,8 @@
 
 <script>
 import axios from "axios";
+import {BACKEND_HUB} from "../envs";
 
-const proxyPrefix = "/api/hub";
 export default {
   components: {
   	Multiselect: window.VueMultiselect.default
@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     async fetchProjects() {
-      const { data } = await axios.get(proxyPrefix + "/api/v1/projects");
+      const { data } = await axios.get(BACKEND_HUB + "/api/v1/projects");
       this.projects = data;
     }
   }
