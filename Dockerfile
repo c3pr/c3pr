@@ -12,8 +12,6 @@ COPY package-lock.json /opt/c3pr-dashboard
 RUN npm install
 
 COPY src /opt/c3pr-dashboard/src
-COPY resources /opt/c3pr-dashboard/resources
-COPY frontend/dist /opt/c3pr-dashboard/frontend/dist
 
 EXPOSE 5005
 
