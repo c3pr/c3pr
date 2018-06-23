@@ -1,7 +1,10 @@
 export const BACKEND = (() => {
+  let host = 'c3pr-dashboard';
   if (document.location.href.includes('localhost')) {
-    return 'http://localhost:5005';
+    host = 'localhost';
+  } else if (document.location.href.includes('127.0.0.1')) {
+    host = '127.0.0.1';
   }
-  return 'http://c3pr-dashboard:5005';
+  return `http://${host}:5005`;
 })();
 export const BACKEND_HUB = BACKEND + '/api/hub';
