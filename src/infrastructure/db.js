@@ -36,6 +36,6 @@ module.exports = db.then(client => {
     client.on('close', () => { console.log('-> db lost connection'); });
     client.on('reconnect', () => { console.log('-> db reconnected'); });
     return client;
-});
+}).catch(e => console.log(`Error while connecting to C3PR database.`, e));
 
 // https://thecodebarbarian.com/managing-connections-with-the-mongodb-node-driver.html
