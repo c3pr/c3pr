@@ -5,6 +5,6 @@ export const BACKEND = (() => {
   } else if (document.location.href.includes('127.0.0.1')) {
     host = '127.0.0.1';
   }
-  return `http://${host}:5005`;
+  return `http://${host}:7305`;
 })();
 export const BACKEND_HUB = BACKEND + '/api/hub';
