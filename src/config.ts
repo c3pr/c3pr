@@ -1,10 +1,10 @@
 import os = require("os");
 import { hubClientConfig } from "node-c3pr-hub-client";
 
-const PORT = process.env.PORT || 5004;
+const PORT = process.env.PORT || 7304;
 const C3PR_REPO_GITLAB_URL = process.env.C3PR_REPO_GITLAB_URL || `http://localhost:${PORT}` || `http://${os.hostname()}:${PORT}`;
 
-const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
+const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:7300`;
 
 const GITLAB_URL = process.env.GITLAB_URL || 'http://c3prgitlab:8888';
 const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3';
