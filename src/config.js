@@ -1,9 +1,9 @@
 const os = require("os");
 const hubClientConfig = require('node-c3pr-hub-client').hubClientConfig;
 
-const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:5000`;
+const C3PR_HUB_URL = process.env.C3PR_HUB_URL || `http://${os.hostname()}:7300`;
 
-const C3PR_BRAIN_URL = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:5001`;
+const C3PR_BRAIN_URL = process.env.C3PR_BRAIN_URL || `http://${os.hostname()}:7301`;
 
 // noinspection JSUnusedLocalSymbols
 const C3PR_MONGO_URL = process.env.C3PR_MONGO_URL; // REQUIRED DUE TO C3PR LOGGER
@@ -26,7 +26,7 @@ const config = {
 
         brain: {
             c3prBrainUrl: C3PR_BRAIN_URL,
-            c3prBrainPort: require('url').parse(C3PR_BRAIN_URL).port || 80,
+            c3prBrainPort: require('url').parse(C3PR_BRAIN_URL).port || 7301,
 
             ChangesCommittedCallbackUrl:        `/callbacks/ChangesCommitted`,
             ToolInvocationCompletedCallbackUrl: `/callbacks/ToolInvocationCompleted`,
