@@ -2,66 +2,66 @@ version: '2'
 services:
 
   c3pr-hub:
-    image: c3pr/c3pr-hub:4.0.0
-    ports:
-      - 5555:5555
+    image: c3pr/c3pr-hub:5.0.0
+    expose:
+      - 7300 # used by other nodes for login and event subscription/publishing
     environment:
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
-      PORT: 5555
+      PORT: 7300
 
   c3pr-brain:
-    image: c3pr/c3pr-brain:2.0.0
-    ports:
-      - 5001:5001
+    image: c3pr/c3pr-brain:3.0.0
+    expose:
+      - 7301 # used by hub at callback
     environment:
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
-      C3PR_HUB_URL: http://c3pr-hub:5555
-      C3PR_BRAIN_URL: http://c3pr-brain:5001
+      C3PR_HUB_URL: http://c3pr-hub:7300
+      C3PR_BRAIN_URL: http://c3pr-brain:7301
 
   c3pr-dashboard:
-    image: c3pr/c3pr-dashboard:1.0.0
-    ports:
-      - 5005:5005
+    image: c3pr/c3pr-dashboard:2.0.0
+    expose:
+      - 7305 # used by c3pr-dashboard-ui
     environment:
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
-      PORT: 5005
-      C3PR_HUB_URL: http://c3pr-hub:5555
+      PORT: 7305
+      C3PR_HUB_URL: http://c3pr-hub:7300
 
   c3pr-dashboard-ui:
-    image: c3pr/c3pr-dashboard-ui:1.0.0
+    image: c3pr/c3pr-dashboard-ui:2.0.0
     ports:
-    - 5080:80
+    - 7380:80 # used by end user
 
 #  c3pr-repo-github:
 #    image: c3pr/c3pr-repo-github:?.0.0
 #    ports:
-#      - 5002:5002
+#      - 7302:7302
 #    environment:
 #      C3PR_MONGO_URL: ${C3PR_MONGO_URL}
-#      PORT: 5003
-#      C3PR_REPO_GITHUB_URL: http://c3pr-repo-github:5003
-#      C3PR_HUB_URL: http://c3pr-hub:5555
+#      PORT: 7302
+#      C3PR_REPO_GITHUB_URL: http://c3pr-repo-github:7302
+#      C3PR_HUB_URL: http://c3pr-hub:7300
 #      GITHUB_API_TOKEN: ${GITHUB_API_TOKEN}
 
   c3pr-repo-gitlab:
-    image: c3pr/c3pr-repo-gitlab:2.0.0
+    image: c3pr/c3pr-repo-gitlab:3.0.0
     ports:
-      - 5004:5004
+      - 7304:7304 # used at gitlab integration settings
     environment:
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
-      PORT: 5004
-      C3PR_REPO_GITLAB_URL: http://c3pr-repo-gitlab:5004
-      C3PR_HUB_URL: http://c3pr-hub:5555
+      PORT: 7304
+      C3PR_REPO_GITLAB_URL: http://c3pr-repo-gitlab:7304
+      C3PR_HUB_URL: http://c3pr-hub:7300
       GITLAB_URL: ${GITLAB_URL}
       GITLAB_API_TOKEN: ${GITLAB_API_TOKEN}
 
   c3pr-tool-walkmod-sonar:
     image: c3pr/c3pr-tool-walkmod-sonar:1.6.1
-    ports:
-      - 5003:5003
+    expose:
+      - 5003 # used by hub at callbacks
     environment:
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
       C3PR_AGENT_ID: c3pr-tool-walkmod-sonar:1.6.1
-      C3PR_HUB_URL: http://c3pr-hub:5555
+      C3PR_HUB_URL: http://c3pr-hub:7300
       C3PR_AGENT_URL: http://c3pr-tool-walkmod-sonar:5003
       GITLAB_BOT_USER_ID: ${GITLAB_BOT_USER_ID}
