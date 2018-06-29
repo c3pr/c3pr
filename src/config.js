@@ -1,7 +1,7 @@
 const os = require("os");
 const hubClientConfig = require('node-c3pr-hub-client').hubClientConfig;
 
-const C3PR_HUB_URL = process.env.C3PR_HUB_URL || (require("is-docker")() ? `http://host.docker.internal:5000` : `http://${os.hostname()}:5000`);
+const C3PR_HUB_URL = process.env.C3PR_HUB_URL || (require("is-docker")() ? `http://host.docker.internal:7300` : `http://${os.hostname()}:7300`);
 const C3PR_AGENT_URL = process.env.C3PR_AGENT_URL || `http://${os.hostname()}:5003`;
 
 // The env variables below are typically set at build time in the Dockerfile
