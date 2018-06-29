@@ -6,33 +6,33 @@
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 
 # Reading all agents
-GET http://localhost:5000/api/v1/agents
+GET http://localhost:7300/api/v1/agents
 Accept: application/json
 
 ###
 # Registering an agent with ONE tool_id
-PATCH http://localhost:5000/api/v1/agents
+PATCH http://localhost:7300/api/v1/agents
 Content-Type: application/json
 
 {"tool_id": "my-tool-id", "expiration_time": "2020-01-12T20:15:32Z"}
 
 ###
 # Registering an agent that will quickly expire
-PATCH http://localhost:5000/api/v1/agents
+PATCH http://localhost:7300/api/v1/agents
 Content-Type: application/json
 
 {"tool_id": "my-tool-id-quick-expire", "expiration_time": "2018-05-31T17:31:33Z"}
 
 ###
 # Registering an agent with many tool_ids
-PATCH http://localhost:5000/api/v1/agents
+PATCH http://localhost:7300/api/v1/agents
 Content-Type: application/json
 
 {"tool_ids": ["tool-a", "tool-b"], "expiration_time": "2020-01-12T20:15:32Z"}
 
 ###
 # Registering an agent without expiration_time
-PATCH http://localhost:5000/api/v1/agents
+PATCH http://localhost:7300/api/v1/agents
 Content-Type: application/json
 
 {"tool_id": "errr"}
