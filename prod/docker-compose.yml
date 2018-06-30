@@ -20,8 +20,8 @@ services:
 
   c3pr-dashboard:
     image: c3pr/c3pr-dashboard:2.0.0
-    expose:
-      - 7305 # used by c3pr-dashboard-ui
+    ports:
+      - 7305:7305 # used by c3pr-dashboard-ui, via end user's browser
     environment:
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
       PORT: 7305
