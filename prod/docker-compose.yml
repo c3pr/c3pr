@@ -28,7 +28,7 @@ services:
       C3PR_HUB_URL: http://c3pr-hub:7300
 
   c3pr-dashboard-ui:
-    image: c3pr/c3pr-dashboard-ui:2.0.0
+    image: c3pr/c3pr-dashboard-ui:3.0.0
     ports:
     - 7380:80 # used by end user
 
