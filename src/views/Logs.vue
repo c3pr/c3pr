@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import {BACKEND_HUB} from "../envs";
+
 export default {
   name: 'Logs',
   data() {
@@ -65,7 +67,7 @@ export default {
   methods: {
     fetchAll() {
       this.fetchStatus = 'Fetching logs...';
-      fetch('/api/v1/logs')
+      fetch(BACKEND_HUB + '/api/v1/logs')
         .then(r => r.json())
         .then((r) => {
           r.sort((a, b) => a.dateTime.localeCompare(b.dateTime) * -1);
