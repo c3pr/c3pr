@@ -16,6 +16,8 @@ module.exports = {
             mongoPRsCollection: 'prs',
             mongoAgentRegistryCollection: 'agents',
 
+            mongoLogsCollection: 'logs',
+
             bus: {
                 maxRetries: 2,
                 retryWaitingTimeInMs: 5 * 1000 // 5 seconds
