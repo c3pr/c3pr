@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
-require('./logsController')(app);
 require('./hubController')(app);
 
 app.get('*', function(req, res){
@@ -21,5 +20,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.dashboard.c3prDashboardPort, () => {
-    c3prLOG(`C-3PR dashboard is up at port ${config.c3pr.dashboard.c3prDashboardPort}.`, {nodeName: 'c3pr-dasbboard', correlationIds: 'boot', moduleName: 'express'});
+    c3prLOG(`C-3PR dashboard is up at port ${config.c3pr.dashboard.c3prDashboardPort}.`, {nodeName: 'c3pr-dashboard', correlationIds: 'boot', moduleName: 'express'});
 });
