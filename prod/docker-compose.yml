@@ -56,12 +56,12 @@ services:
       GITLAB_API_TOKEN: ${GITLAB_API_TOKEN}
 
   c3pr-tool-walkmod-sonar:
-    image: c3pr/c3pr-tool-walkmod-sonar:1.6.1
+    image: c3pr/c3pr-tool-walkmod-sonar:2.0.0
     expose:
       - 5003 # used by hub at callbacks
     environment:
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
-      C3PR_AGENT_ID: c3pr-tool-walkmod-sonar:1.6.1
+      C3PR_AGENT_ID: c3pr-tool-walkmod-sonar
       C3PR_HUB_URL: http://c3pr-hub:7300
       C3PR_AGENT_URL: http://c3pr-tool-walkmod-sonar:5003
       GITLAB_BOT_USER_ID: ${GITLAB_BOT_USER_ID}
