@@ -44,7 +44,7 @@ services:
 #      GITHUB_API_TOKEN: ${GITHUB_API_TOKEN}
 
   c3pr-repo-gitlab:
-    image: c3pr/c3pr-repo-gitlab:3.0.0
+    image: c3pr/c3pr-repo-gitlab:4.0.0
     ports:
       - 7304:7304 # used at gitlab integration settings
     environment:
