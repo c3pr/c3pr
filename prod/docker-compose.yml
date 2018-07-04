@@ -56,7 +56,7 @@ services:
       GITLAB_API_TOKEN: ${GITLAB_API_TOKEN}
 
   c3pr-tool-walkmod-sonar:
-    image: c3pr/c3pr-tool-walkmod-sonar:2.0.0
+    image: c3pr/c3pr-tool-walkmod-sonar:5.0.0
     expose:
       - 5003 # used by hub at callbacks
     environment:
