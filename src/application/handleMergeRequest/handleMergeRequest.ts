@@ -14,7 +14,7 @@ function handleMergeRequest(webhookPayload: GitLabMergeRequestUpdated) {
     });
 
     if (webhookPayload.object_attributes.author_id !== config.c3pr.repoGitlab.gitlab.bot_user_id) {
-        c3prLOG2({msg: `MR event is ignored. The PR is not authored by the bot.`, logMetas, meta: {webhookPayload}});
+        c3prLOG2({msg: `MR event is ignored. The PR is not authored by the bot.`, logMetas, meta: {webhookPayload, bot_user_id: config.c3pr.repoGitlab.gitlab.bot_user_id}});
         return
     }
     if (webhookPayload.object_attributes.action === 'open' && webhookPayload.changes.state === undefined) {
