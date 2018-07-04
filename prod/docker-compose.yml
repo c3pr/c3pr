@@ -54,6 +54,7 @@ services:
       C3PR_HUB_URL: http://c3pr-hub:7300
       GITLAB_URL: ${GITLAB_URL}
       GITLAB_API_TOKEN: ${GITLAB_API_TOKEN}
+      GITLAB_BOT_USER_ID: ${GITLAB_BOT_USER_ID}
 
   c3pr-tool-walkmod-sonar:
     image: c3pr/c3pr-tool-walkmod-sonar:5.0.0
@@ -64,4 +65,3 @@ services:
       C3PR_AGENT_ID: c3pr-tool-walkmod-sonar
       C3PR_HUB_URL: http://c3pr-hub:7300
       C3PR_AGENT_URL: http://c3pr-tool-walkmod-sonar:5003
-      GITLAB_BOT_USER_ID: ${GITLAB_BOT_USER_ID}
