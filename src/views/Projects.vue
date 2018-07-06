@@ -17,18 +17,22 @@
         </td>
       </tr>
     </table> -->
-    
+
       <table style="margin: auto; margin-top: 10px;">
         <tr>
           <th>Name</th>
-          <th>Tags</th>
           <th>Clone-Url</th>
+          <th>Open PRs</th>
+          <th>Merged PRs</th>
+          <th>Closed PRs</th>
           <th>Actions</th>
         </tr>
         <tr v-for="(project) in projects" :key="project._id">
           <td>{{project.name}}</td>
-          <td><multiselect v-model="project.tags" placeholder="Search a tag" label="" :options="options" :multiple="true" :taggable="false"></multiselect></td>
           <td>{{project.clone_url_http}}</td>
+          <td>{{ project.prs.filter(({status}) => status === "open").length }}</td>
+          <td>{{ project.prs.filter(({status}) => status === "merged").length }}</td>
+          <td>{{ project.prs.filter(({status}) => status === "closed").length }}</td>
           <td><router-link :to= "{ name: 'details', params: { projectId: project._id, project: project }}">details</router-link></td>
         </tr>
       </table>
@@ -36,35 +40,37 @@
 </template>
 
 <script>
-import axios from "axios";
-import {BACKEND_HUB} from "../envs";
+import { mapActions, mapGetters } from 'vuex';
+import {PROJECTS, FETCH_PROJECTS, GET_PROJECTS} from "../store/projects";
 
 export default {
-  components: {
-  	Multiselect: window.VueMultiselect.default
-	},
-  name: "Logs",
+  name: "Projects",
+
   data() {
     return {
-      projects: [],
       options: [
-        'maven',
-        'java',
+        'Maven',
+        'Gradle',
+        'Java',
         'starwars',
         'Vue.js',
-        'Javascript',
-        'Open Source'
+        'JavaScript',
+        'TypeScript',
+        'Angular'
       ]
     };
   },
+
+  computed: {
+    ...mapGetters(PROJECTS, {projects: GET_PROJECTS})
+  },
+
   created() {
     this.fetchProjects();
   },
+
   methods: {
-    async fetchProjects() {
-      const { data } = await axios.get(BACKEND_HUB + "/api/v1/projects");
-      this.projects = data;
-    }
+    ...mapActions(PROJECTS, {fetchProjects: FETCH_PROJECTS})
   }
 };
 </script>
