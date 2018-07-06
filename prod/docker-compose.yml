@@ -2,7 +2,7 @@ version: '2'
 services:
 
   c3pr-hub:
-    image: c3pr/c3pr-hub:5.0.0
+    image: c3pr/c3pr-hub:6.0.0
     expose:
       - 7300 # used by other nodes for login and event subscription/publishing
     environment:
@@ -28,7 +28,7 @@ services:
       C3PR_HUB_URL: http://c3pr-hub:7300
 
   c3pr-dashboard-ui:
-    image: c3pr/c3pr-dashboard-ui:3.0.0
+    image: c3pr/c3pr-dashboard-ui:4.0.0
     ports:
     - 7380:80 # used by end user
 
