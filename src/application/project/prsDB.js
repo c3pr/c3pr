@@ -13,8 +13,8 @@ async function findBy(query) {
     return (await prsDB).find(query).toArray();
 }
 
-async function findAllOfProject(processor_uuid) {
-    return (await prsDB).find({processor_uuid}).toArray();
+async function findAllOfProject(project_uuid) {
+    return (await prsDB).find({project_uuid}).toArray();
 }
 
 const PR_STATUS = {

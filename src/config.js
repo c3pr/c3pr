@@ -1,12 +1,12 @@
 const PORT = process.env.PORT;
-const C3PR_MONGO_URL = process.env.C3PR_MONGO_URL;
+const C3PR_MONGO_URL = process.env.C3PR_MONGO_URL || 'mongodb://127.0.0.1:27017';
 
 module.exports = {
     c3pr: {
         hub: {
             port: PORT || 7300,
 
-            mongoC3prUrl: C3PR_MONGO_URL || 'http://127.0.0.1:27017',
+            mongoC3prUrl: C3PR_MONGO_URL,
             mongoC3prDatabase: 'c3pr',
             mongoEventsCollection: 'events',
             uncollectPollingInMs: 5 * 60 * 1000, // five minutes
