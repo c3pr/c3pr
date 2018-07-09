@@ -41,7 +41,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import {PROJECTS, FETCH_PROJECTS, GET_PROJECTS} from "../store/projects";
+import { PROJECTS, FETCH_ALL_PROJECTS, GET_ALL_PROJECTS } from "../store/modules/projects";
 
 export default {
   name: "Projects",
@@ -62,7 +62,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(PROJECTS, {projects: GET_PROJECTS})
+    ...mapGetters(PROJECTS, {projects: GET_ALL_PROJECTS})
   },
 
   created() {
@@ -70,7 +70,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(PROJECTS, {fetchProjects: FETCH_PROJECTS})
+    ...mapActions(PROJECTS, {fetchProjects: FETCH_ALL_PROJECTS})
   }
 };
 </script>

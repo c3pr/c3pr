@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import projects, { PROJECTS } from './projects';
+import projects, { PROJECTS } from './modules/projects';
 
 export default new Vuex.Store({
 
