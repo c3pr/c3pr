@@ -1,10 +1,10 @@
 const config = require('../../config');
 const client = require('../../infrastructure/db');
 
-const projects = client.then(cli => cli.db(config.c3pr.hub.mongoC3prDatabase).collection(config.c3pr.hub.mongoLogsCollection));
+const logs = client.then(cli => cli.db(config.c3pr.hub.mongoC3prDatabase).collection(config.c3pr.hub.mongoLogsCollection));
 
 async function findBy(query) {
-    return (await projects).find(query).toArray();
+    return (await logs).find(query).toArray();
 }
 
 function findAll() {
@@ -12,7 +12,7 @@ function findAll() {
 }
 
 async function findNodes() {
-    return (await projects).distinct('node');
+    return (await logs).distinct('node');
 }
 
 module.exports = {
