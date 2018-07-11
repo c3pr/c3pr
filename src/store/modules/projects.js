@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import projectsApi from "../../api/projects";
+import projectsApi from "../../api/projectsApi";
 
 export const PROJECTS = 'PROJECTS';
 export const FETCH_ALL_PROJECTS = 'FETCH_ALL_PROJECTS';
@@ -8,8 +8,8 @@ export const FETCH_PRS_FOR_PROJECT = 'FETCH_PRS_FOR_PROJECT';
 
 export const GET_ALL_PROJECTS = 'GET_ALL_PROJECTS';
 
-const UPDATE_PROJECTS = 'UPDATE_PROJECTS';
-const UPDATE_PROJECT_PRS = 'UPDATE_PROJECT_PRS';
+export const UPDATE_ALL_PROJECTS = 'UPDATE_ALL_PROJECTS';
+export const UPDATE_PRS_FOR_PROJECT = 'UPDATE_PRS_FOR_PROJECT';
 
 
 const state = {
@@ -28,7 +28,7 @@ const getters = {
 const actions = {
   async [FETCH_ALL_PROJECTS]({ commit, dispatch }) {
     const projects = await projectsApi.findAllProjects();
-    commit(UPDATE_PROJECTS, projects);
+    commit(UPDATE_ALL_PROJECTS, projects);
 
     return dispatch(FETCH_PRS_FOR_ALL_PROJECTS);
   },
@@ -39,17 +39,17 @@ const actions = {
 
   async [FETCH_PRS_FOR_PROJECT]({ commit }, project_uuid) {
     const prs = await projectsApi.findPrsForProject(project_uuid);
-    commit(UPDATE_PROJECT_PRS, {project_uuid, prs});
+    commit(UPDATE_PRS_FOR_PROJECT, {project_uuid, prs});
   }
 };
 
 
 const mutations = {
-  [UPDATE_PROJECTS](state, projects) {
+  [UPDATE_ALL_PROJECTS](state, projects) {
     state.projects = projects;
   },
 
-  [UPDATE_PROJECT_PRS](state, {project_uuid, prs}) {
+  [UPDATE_PRS_FOR_PROJECT](state, {project_uuid, prs}) {
     Vue.set(state.prs, project_uuid, prs);
   }
 };
