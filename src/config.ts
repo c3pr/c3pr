@@ -10,7 +10,7 @@ const GITLAB_URL = process.env.GITLAB_URL || 'http://c3prgitlab:8888';
 const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3';
 
 // used as (1) commit author, (2) mr author, and (3) namespace for the forks
-const GITLAB_BOT_USER_ID = process.env.GITLAB_BOT_USER_ID || 15;
+const GITLAB_BOT_USER_ID = +(process.env.GITLAB_BOT_USER_ID || "15");
 const GITLAB_BOT_USER_USERNAME = process.env.GITLAB_BOT_USER_USERNAME || 'c3pr-bot';
 const GITLAB_BOT_USER_EMAIL = process.env.GITLAB_BOT_USER_EMAIL || 'c3prbot@gmail.com';
 
