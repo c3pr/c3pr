@@ -1,8 +1,8 @@
-const c3prLOG = require("node-c3pr-logger");
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('../config');
 const cors = require('cors');
+const config = require('../config');
+const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
 
 const app = express();
 
@@ -23,5 +23,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.hub.port, () => {
-    c3prLOG(`C-3PR hub is up at port ${config.c3pr.hub.port}.`, {nodeName: 'c3pr-hub', correlationIds: 'boot', moduleName: 'express'});
+    c3prLOG3(`C-3PR hub is up at port ${config.c3pr.hub.port}.`, {ids: ['init']});
 });
