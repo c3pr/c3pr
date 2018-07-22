@@ -1,6 +1,6 @@
 {
   "name": "c3pr-hub",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "C-3PR Events and Data Hub Module",
   "scripts": {
     "start": "node src/index.js",
@@ -22,21 +22,21 @@
   "homepage": "https://github.com/c3pr/c3pr-hub",
   "dependencies": {
     "axios": "^0.18.0",
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.18.3",
     "cors": "^2.8.4",
-    "express": "^4.16.2",
+    "express": "^4.16.3",
     "jwt-simple": "^0.5.1",
-    "mongodb": "^3.0.4",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#11.0.0",
-    "uuid": "^3.2.1"
+    "mongodb": "^3.1.1",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#12.0.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@types/express": "^4.11.1",
-    "@types/mongodb": "^3.0.8",
-    "@types/sinon-chai": "^2.7.29",
+    "@types/express": "^4.16.0",
+    "@types/mongodb": "^3.1.2",
+    "@types/sinon-chai": "^2.7.33",
     "axios-mock-adapter": "^1.15.0",
     "chai": "^4.1.2",
-    "mocha": "^5.0.0",
-    "sinon": "^4.2.2"
+    "mocha": "^5.2.0",
+    "sinon": "^4.5.0"
   }
 }
