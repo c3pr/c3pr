@@ -20,7 +20,7 @@ const state = {
 
 const getters = {
   [GET_ALL_PROJECTS]: state => {
-    return state.projects.map(project => ({...project, prs: state.prs[project.uuid]}));
+    return state.projects.map(project => ({...project, prs: state.prs[project.uuid] || []}));
   }
 };
 
