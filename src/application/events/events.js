@@ -1,4 +1,4 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
 const config = require('../../config');
 
 const uuidv4 = require('uuid/v4');
@@ -86,12 +86,11 @@ function patchAsUnprocessed(event_type, uuid, processor_uuid) {
     return eventsDB.persistAsUnprocessed(uuid);
 }
 
-const logMetas = [{nodeName: 'c3pr-hub', moduleName: 'events'}];
+const ids = ['init'];
 
 async function initializeEventsOnStartup() {
-    c3prLOG2({
-        msg: 'Initializing events status database.', logMetas
-    });
+    c3prLOG3('Initializing events status database.', {ids});
+
     const previouslyUnprocessedEvents = await eventsDB.findAllOfStatus(Status.UNPROCESSED);
     previouslyUnprocessedEvents.forEach(({event_type, uuid}) => Status.addAsUnprocessed(event_type, uuid));
 
@@ -101,9 +100,10 @@ async function initializeEventsOnStartup() {
         // noinspection JSIgnoredPromiseFromCall
         eventsDB.persistAsUnprocessed(uuid);
     });
-    c3prLOG2({
-        msg: `Initialization complete. Previously UNPROCESSED events: ${previouslyUnprocessedEvents.length}. Previously PROCESSING events: ${previouslyProcessingEvents.length}`, logMetas
-    });
+    c3prLOG3(
+        `Initialization complete. Previously UNPROCESSED events: ${previouslyUnprocessedEvents.length}. Previously PROCESSING events: ${previouslyProcessingEvents.length}`,
+        {ids, meta: {previouslyUnprocessedEvents}}
+    );
 
     /**
      * Marks as UNPROCESSED all events that have status = PROCESSING for longer than config.c3pr.hub.uncollectTimeoutInMs.
@@ -115,7 +115,7 @@ async function initializeEventsOnStartup() {
 }
 
 module.exports = {
-    init: initializeEventsOnStartup().catch(e => c3prLOG2({msg: 'Error on initializing events on startup.', logMetas, meta: {e}})),
+    init: initializeEventsOnStartup().catch(error => c3prLOG3('Error on initializing events on startup.', {ids, error})),
     register,
     find,
     findAll,
