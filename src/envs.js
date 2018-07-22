@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const BACKEND = `http://${document.location.hostname}:7305`;
 //export const BACKEND = `http://srv-codereview:7305`;
 export const BACKEND_HUB = BACKEND + '/api/hub';
