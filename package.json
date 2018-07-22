@@ -1,6 +1,6 @@
 {
   "name": "node-c3pr-logger",
-  "version": "11.0.0",
+  "version": "12.0.0",
   "description": "Node.js client for remote logging",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/c3pr/node-c3pr-logger#readme",
   "dependencies": {
-    "mongodb": "^3.0.8"
+    "mongodb": "^3.1.1"
   },
   "devDependencies": {
     "@types/mongodb": "^3.0.8",
