@@ -1,27 +1,20 @@
-const axios = require('axios');
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+const axios = require('axios').default;
+const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
 
 const LOGIN_RETRY_TIME = 5 * 1000;
 
-async function login({loginUrl, username, password, subscriptions, logMetas: outerLogMetas}) {
-    const logMetas = [...(outerLogMetas || []), {nodeName: 'node-c3pr-hub-client', correlationId: 'login', moduleName: 'login'}];
+const ids = ['init'];
+async function login({loginUrl, username, password, subscriptions}) {
 
     try {
         const {data: jwt} = await axios.post(loginUrl, {username, password, subscriptions});
-        c3prLOG2({
-            msg: `Successfully logged in at ${loginUrl}.`,
-            logMetas,
-        });
+        c3prLOG3(`Successfully logged in at ${loginUrl}.`, {ids});
         return jwt;
-    } catch (e) {
-        c3prLOG2({
-            msg: `Error while logging in at ${loginUrl}. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}`,
-            logMetas,
-            meta: {error: require('util').inspect(e)}
-        });
+    } catch (error) {
+        c3prLOG3(`Error while logging in at ${loginUrl}.`, {ids, error});
         return new Promise(resolve => {
             setTimeout(() => {
-                resolve(login({loginUrl, username, password, subscriptions, logMetas: outerLogMetas}));
+                resolve(login({loginUrl, username, password, subscriptions}));
             }, LOGIN_RETRY_TIME);
         })
     }
