@@ -15,10 +15,6 @@ const config = {
 
         dashboard: {
             c3prDashboardPort: PORT,
-
-            mongoLogsUri: process.env.C3PR_MONGO_URL,
-            mongoLogsDatabase: 'c3pr',
-            mongoLogsCollection: 'logs',
         },
 
         hub: {
