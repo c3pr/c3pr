@@ -1,8 +1,9 @@
-const c3prLOG = require("node-c3pr-logger");
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('../config');
 const cors = require('cors');
+
+const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
+const config = require('../config');
 
 const app = express();
 
@@ -20,5 +21,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.dashboard.c3prDashboardPort, () => {
-    c3prLOG(`C-3PR dashboard is up at port ${config.c3pr.dashboard.c3prDashboardPort}.`, {nodeName: 'c3pr-dashboard', correlationIds: 'boot', moduleName: 'express'});
+    c3prLOG3(`C-3PR dashboard is up at port ${config.c3pr.dashboard.c3prDashboardPort}.`, {ids: ['init']});
 });

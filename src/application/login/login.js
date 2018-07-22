@@ -6,8 +6,7 @@ c3prHubClient.login({
     loginUrl: config.c3pr.hub.loginUrl,
     username: 'c3pr-dashboard',
     password: 'not-used',
-    subscriptions: [],
-    logMetas: [{nodeName: 'c3pr-dashboard', moduleName: 'login'}]
+    subscriptions: []
 }).then(jwt => {
     config.c3pr.auth.jwt = jwt;
 }).catch(e => {
