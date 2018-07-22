@@ -18,6 +18,7 @@ export interface SocketOptions {
 */
 
 const db = MongoClient.connect(config.c3pr.hub.mongoC3prUrl, {
+    useNewUrlParser: true, // https://stackoverflow.com/a/51182415
     // Turn off all buffering, error immediately if disconnected
     bufferMaxEntries: 0,
     autoReconnect: true,
