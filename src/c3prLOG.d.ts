@@ -1,7 +1,7 @@
 declare const mongodb: any;
 declare const config: any;
 declare function wrap(arr: any, prefix?: string, suffix?: string): any;
-declare let warningShown: boolean;
+declare let warningShown: {};
 declare function showWarning(warningMsg: string): void;
 declare function showWarningIfDatabaseNotDefined(): void;
 declare const emptyLogMeta: {

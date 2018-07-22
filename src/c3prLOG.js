@@ -3,12 +3,14 @@ const config = require('./config');
 function wrap(arr, prefix = `[`, suffix = `]`) {
     return arr.map(i => `${prefix}${i}${suffix}`).join(' ');
 }
-let warningShown = false;
+let warningShown = {};
 function showWarning(warningMsg) {
-    if (!warningShown) {
-        console.log(`${warningMsg} (This message will be printed only once every 5 minutes.)`);
-        warningShown = true;
-        setTimeout(() => warningShown = false, 5 * 60 * 1000).unref();
+    if (!warningShown[warningMsg]) {
+        console.log(`*** [note-c3pr-logger] ${warningMsg} (This message will be printed only once every 5 minutes.)`);
+        warningShown[warningMsg] = true;
+        setTimeout(() => {
+            warningShown[warningMsg] = false;
+        }, 5 * 60 * 1000).unref();
     }
 }
 function showWarningIfDatabaseNotDefined() {
@@ -36,7 +38,7 @@ async function log(nodeName, correlationIds, moduleNames, message, metadata) {
         return;
     }
     try {
-        const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl);
+        const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl, { useNewUrlParser: true });
         let logs = client.db(config.c3pr.logger.database).collection(config.c3pr.logger.collection + (c3prLOG.testModeActivated ? "-test" : ""));
         await logs.insertOne({ node: nodeName, dateTime: new Date().toISOString(), correlationIds, moduleNames, message, metadata });
         await client.close();
