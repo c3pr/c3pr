@@ -21,6 +21,13 @@ async function findAll() {
     return (await events).find({}).toArray();
 }
 
+async function perProjectEventCountOfType(event_type) {
+    return (await events).aggregate([
+        {$match: {event_type}},
+        {$group: {_id: {project_uuid: "$payload.project_uuid"}, count: {$sum: 1}, last_modified: {$max: "$meta.modified"}}},
+    ]).toArray();
+}
+
 async function findAllOfType(event_type, query) {
     return (await events).find({event_type, ...(query||{})}).toArray();
 }
@@ -57,5 +64,6 @@ module.exports = {
     persistAsUnprocessed,
     persistAsProcessing,
     persistAsProcessed,
+    perProjectEventCountOfType,
     close: async () => (await client).close(),
 };
