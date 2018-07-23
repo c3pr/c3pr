@@ -27,7 +27,7 @@ const db = MongoClient.connect(config.c3pr.hub.mongoC3prUrl, {
     reconnectTries: Number.MAX_VALUE,
     reconnectInterval: 1500,
     keepAlive: 1
-});
+}).catch(e => console.log(`Error on connect()`, e));
 
 /**
  *
