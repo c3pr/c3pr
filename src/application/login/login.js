@@ -10,8 +10,7 @@ c3prHubClient.login({
     password: 'not-used',
     subscriptions: [
         {eventType: "ToolInvocationRequested", callbackUrl: config.c3pr.agent.agentUrl + config.c3pr.agent.ToolInvocationRequestedCallbackUrl}
-    ],
-    logMetas: [{nodeName: 'c3pr-agent', moduleName: 'login'}]
+    ]
 }).then(jwt => {
     config.c3pr.auth.jwt = jwt;
 
