@@ -48,33 +48,6 @@
       </tbody>
     </table>
 
-    <hr>
-
-    <h1>Events ({{ events.length }})</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>uuid</th>
-          <th>event_type</th>
-          <th>status</th>
-          <th>created</th>
-          <th>modified</th>
-          <th>payload</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="event of events" :class="event.node">
-          <td>{{ event.uuid.split("-")[0] }}</td>
-          <td>{{ event.event_type }}</td>
-          <td>{{ event.meta.status }}</td>
-          <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
-          <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
-          <td>
-            <event-detail :event_type="event.event_type" :payload="event.payload"></event-detail>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 

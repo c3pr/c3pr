@@ -2,22 +2,6 @@
   <div class="about">
 
     <h1>Projects</h1>
-
-    <!--<table>
-      <tr v-for="project of projects" :key="project._id">
-        <td style="padding: 10px 5px 10px 5px">
-          <table class="project-table">
-            <tbody>
-            <tr  v-for="(value, key) of project">
-              <td class="grayed">{{ key }}</td>
-              <td>{{ value }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-    </table> -->
-
       <table style="margin: auto; margin-top: 10px;">
         <tr>
           <th>Name</th>
@@ -27,7 +11,7 @@
           <th>Closed PRs</th>
           <th>Actions</th>
         </tr>
-        <tr v-for="(project) in projects" :key="project._id">
+        <tr v-for="project in projects" :key="project._id">
           <td>{{project.name}}</td>
           <td>{{project.clone_url_http}}</td>
           <td>{{ project.prs.filter(({status}) => status === "open").length }}</td>
