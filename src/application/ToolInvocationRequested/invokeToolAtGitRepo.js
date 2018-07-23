@@ -1,4 +1,4 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
 const cloneRepositoryLocally = require("node-git-client").cloneRepositoryLocally;
 const generateGitPatchBase64 = require("node-git-client/patch/generateGitPatchBase64").default;
 const c3prSH = require("node-git-client").c3prSH;
@@ -19,16 +19,12 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools) {
     const logMeta = {nodeName: 'c3pr-agent', correlationIds: ids, moduleName: 'invokeToolAtGitRepo'};
     try {
 
-        c3prLOG2({msg: `Invoking tool at git repo: ${toolInvocationRequested.repository.clone_url_http}`, logMetas: [logMeta]});
+        c3prLOG3(`Invoking tool at git repo: ${toolInvocationRequested.repository.clone_url_http}`, {ids});
 
         const tool = loadTools.toolsHash[toolInvocationRequested.tool_id];
         if (!tool) {
             const msg = `Tool of tool_id '${toolInvocationRequested.tool_id}' was not found!`;
-            c3prLOG2({
-                msg,
-                logMetas: [logMeta],
-                meta: {toolInvocation: toolInvocationRequested}
-            });
+            c3prLOG3(msg, {ids, meta: {toolInvocation: toolInvocationRequested}});
             throw new Error(msg);
         }
 
@@ -41,7 +37,7 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools) {
             cloneDepth: config.c3pr.agent.cloneDepth
         }, logMeta);
 
-        c3prLOG2({msg: `Done cloning at ${cloneFolder}.`, logMetas: [logMeta]});
+        c3prLOG3(`Done cloning at ${cloneFolder}.`, {ids});
 
         for (let file of toolInvocationRequested.files) {
             await executeOnUtf8(cloneFolder, file, async () => {
@@ -51,7 +47,7 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools) {
 
         return generateGitPatchBase64({cloneFolder, gitUserName: config.c3pr.agent.gitUserName, gitUserEmail: config.c3pr.agent.gitUserEmail, commitMessage: tool.pr_title}, {ids})
     } catch (error) {
-        c3prLOG2({msg: `Error during invokeToolAtGitRepo.`, logMetas: [logMeta], error});
+        c3prLOG3(`Error during invokeToolAtGitRepo.`, {ids, error});
         return {files: [], patch: {hexBase64: ''}};
     }
 

@@ -1,6 +1,9 @@
-const c3prLOG = require("node-c3pr-logger");
 const express = require('express');
 const bodyParser = require('body-parser');
+
+const c3prLOG = require("node-c3pr-logger");
+const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
+
 const config = require('../config');
 
 const app = express();
@@ -17,9 +20,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.agent.port, () => {
-    const logMeta = {nodeName: 'c3pr-agent', correlationIds: 'boot', moduleName: 'main'};
-
-    c3prLOG(`c3pr-agent version __C3PR_AGENT_EXECUTABLE_VERSION__ now online with Agent ID: ${config.c3pr.agent.agentId}`, logMeta);
-
-
+    c3prLOG3(`c3pr-agent version __C3PR_AGENT_EXECUTABLE_VERSION__ now online with Agent ID: ${config.c3pr.agent.agentId}`, {ids: ['init']});
 });

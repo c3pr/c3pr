@@ -1,9 +1,10 @@
 const axios = require('axios');
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
 
 const config = require('../../config');
 const loadTools = require('../tools/loadTools');
 
+const ids = ['init'];
 const logMeta = {nodeName: 'c3pr-agent', correlationIds: 'boot', moduleName: 'hubRegistryBroadcast'};
 
 function broadcast(summary) {
@@ -18,27 +19,15 @@ function broadcast(summary) {
     Promise.all(
         toolSubmissions
     ).then(({data}) => {
-        c3prLOG2({
-            msg: `Successfully broadcasted to registry. URL: ${config.c3pr.hub.agentsUrl}.`,
-            logMetas: [logMeta],
-            meta: {data, summary}
-        });
-    }).catch((e) => {
-        c3prLOG2({
-            msg: `Error while broadcasting to registry. URL: ${config.c3pr.hub.agentsUrl}. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}`,
-            logMetas: [logMeta],
-            meta: {error: require('util').inspect(e)}
-        });
+        c3prLOG3(`Successfully broadcasted to registry. URL: ${config.c3pr.hub.agentsUrl}.`, {ids, meta: {data, summary}});
+    }).catch((error) => {
+        c3prLOG3(`Error while broadcasting to registry. URL: ${config.c3pr.hub.agentsUrl}.`, {ids, error});
     });
 }
 
 function hubRegistryBroadcast() {
     const summary = loadTools.toolsSummary;
-    c3prLOG2({
-        msg: `Now broadcasting to C-3PR registry API: ${config.c3pr.hub.agentsUrl}.`,
-        logMetas: [logMeta],
-        meta: {summary}
-    });
+    c3prLOG3(`Now broadcasting to C-3PR registry API: ${config.c3pr.hub.agentsUrl}.`, {ids, meta: {summary}});
     broadcast(summary);
     setInterval(() => {
         broadcast(summary);
