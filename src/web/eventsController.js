@@ -32,6 +32,18 @@ module.exports = function (app) {
         });
     });
 
+    app.get('/api/v1/events/:eventType/analytics/count-per-project', function ({params: {eventType}}, response) {
+        events.analyticsPerProjectEventCountOfType(eventType).then((aggregates) => {
+            if (aggregates) {
+                response.status(200).send(aggregates);
+            } else {
+                response.status(404).send();
+            }
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
     // curl -sD - http://127.0.0.1:7300/api/v1/events --header "Authorization: Bearer $(curl -s -X POST http://127.0.0.1:7300/api/v1/login | tr -d '"')"
     app.get('/api/v1/events/', function ({params: {eventType, uuid}}, response) {
         events.findAll().then((evts) => {

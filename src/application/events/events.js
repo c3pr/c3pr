@@ -36,6 +36,11 @@ function findAll() {
     return eventsDB.findAll();
 }
 
+function analyticsPerProjectEventCountOfType(event_type) {
+    assert.ok(event_type, "event_type is required");
+    return eventsDB.perProjectEventCountOfType(event_type);
+}
+
 function findAllOfType(event_type, query) {
     assert.ok(event_type, "event_type is required");
     return eventsDB.findAllOfType(event_type, query);
@@ -123,6 +128,7 @@ module.exports = {
     peekUnprocessed,
     patchAsProcessing,
     patchAsProcessed,
-    patchAsUnprocessed
+    patchAsUnprocessed,
+    analyticsPerProjectEventCountOfType
 };
 
