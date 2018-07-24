@@ -22,7 +22,7 @@
         <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
         <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
         <td :title="event.payload.changed_files.join('\n')">{{ event.payload.changed_files.length }}</td>
-        <td><router-link :to= "{ name: 'events-per-project-per-changes-committed', params: { project_uuid, changes_committed: event.uuid }}">details</router-link></td>
+        <td><router-link :to= "{ name: 'details', params: { projectId: event._id, project: event }}">details</router-link></td>
       </tr>
       </tbody>
     </table>
@@ -32,7 +32,14 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { EVENTS, FETCH_EVENTS_FOR_PROJECT, GET_EVENTS_BY_TYPE_FOR_PROJECT } from "../store/modules/events";
+import {
+  EVENTS,
+  FETCH_ALL_EVENTS,
+  FETCH_CHANGES_COMMITTED_PER_PROJECT, FETCH_EVENTS_FOR_PROJECT,
+  GET_ALL_EVENTS,
+  GET_CHANGES_COMMITTED_PER_PROJECT, GET_EVENTS_BY_TYPE_FOR_PROJECT
+} from "../store/modules/events";
+import { PROJECTS, FETCH_ALL_PROJECTS, GET_ALL_PROJECTS } from "../store/modules/projects";
 import EventDetail from '../components/EventDetail.vue';
 
 export default {
@@ -60,7 +67,10 @@ export default {
 
   methods: {
     getEventsForProject() {
-      return this.getEventsOfTypeForProject(this.project_uuid, this.event_type)
+      console.log('called');
+      const eventsOfTypeForProject = this.getEventsOfTypeForProject(this.project_uuid, this.event_type);
+      console.log('returns', eventsOfTypeForProject);
+      return eventsOfTypeForProject
     },
     ...mapActions(EVENTS, {fetchEventsForProject: FETCH_EVENTS_FOR_PROJECT})
   }
@@ -68,4 +78,44 @@ export default {
 </script>
 
 <style scoped>
+table.project-table td,
+table.project-table th {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 2px;
+}
+
+th {
+  background-color: #ededed;
+}
+
+table.project-table {
+  font-family: sans-serif;
+  font-size: small;
+  border-collapse: collapse;
+  margin: auto;
+  text-align: left;
+}
+
+.message {
+  text-align: left;
+  font-family: monospace;
+}
+
+.c3pr-repo-github {
+  color: purple;
+}
+
+.c3pr {
+  color: blue;
+}
+
+.c3pr-agent {
+  color: green;
+}
+
+pre {
+  text-align: initial;
+  white-space: pre-wrap;
+}
 </style>

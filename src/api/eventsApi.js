@@ -12,6 +12,11 @@ export default {
     return events;
   },
 
+  async findAllEventsOfTypeForProject(event_type, project_uuid) {
+    const { data: events, headers: { etag } } = await axios.get(`/api/v1/events/${event_type}?payload.project_uuid=${project_uuid}`);
+    return {etag, events};
+  },
+
   async perProjectEventCountOfType(event_type) {
     const { data: aggregations } = await axios.get(`/api/v1/events/${event_type}/analytics/count-per-project`);
     return aggregations;

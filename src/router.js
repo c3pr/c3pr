@@ -6,6 +6,7 @@ import Hub from './views/Hub.vue';
 import Projects from './views/Projects.vue';
 import Events from './views/Events.vue';
 import EventsPerProject from './views/EventsPerProject.vue';
+import EventsPerProjectPerChangesCommitted from './views/EventsPerProjectPerChangesCommitted.vue';
 import Details from './views/Details.vue';
 
 Vue.use(Router);
@@ -38,9 +39,16 @@ export default new Router({
       component: Events,
     },
     {
-      path: '/events/:project_uuid',
+      path: '/events/project/:project_uuid',
       name: 'events-per-project',
       component: EventsPerProject,
+      props: true
+    },
+    {
+      path: '/events/project/:project_uuid/change/:changes_committed',
+      name: 'events-per-project-per-changes-committed',
+      component: EventsPerProjectPerChangesCommitted,
+      props: true
     },
     {
       path: '/project/:projectId/details',
