@@ -30,4 +30,12 @@ module.exports = function (app) {
         });
     });
 
+    app.get('/api/v1/logs/id/:correlation_id/', function ({params: {correlation_id}}, response) {
+        logsDB.findBy({correlationIds: { $all: [correlation_id] } }).then((logs) => {
+            response.status(200).send(logs);
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
 };

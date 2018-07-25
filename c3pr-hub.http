@@ -11,3 +11,8 @@ GET http://127.0.0.1:7300/api/v1/events/ChangesCommitted?payload.project_uuid=60
 Authorization: Bearer {{auth_token}}
 
 ###
+
+GET http://127.0.0.1:7300/api/v1/logs/id/f10c022e8f4e722aabfe6653cedbbabcdbfb820a
+Authorization: Bearer {{auth_token}}
+
+###
