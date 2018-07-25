@@ -32,8 +32,8 @@ function find(uuid) {
     return eventsDB.find(uuid);
 }
 
-function findAll() {
-    return eventsDB.findAll();
+function findAll(query) {
+    return eventsDB.findAll(query);
 }
 
 function analyticsPerProjectEventCountOfType(event_type) {

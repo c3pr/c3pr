@@ -17,8 +17,8 @@ async function find(uuid) {
     return (await events).findOne({uuid});
 }
 
-async function findAll() {
-    return (await events).find({}).toArray();
+async function findAll(query = {}) {
+    return (await events).find(query).toArray();
 }
 
 async function perProjectEventCountOfType(event_type) {
@@ -28,12 +28,12 @@ async function perProjectEventCountOfType(event_type) {
     ]).toArray();
 }
 
-async function findAllOfType(event_type, query) {
-    return (await events).find({event_type, ...(query||{})}).toArray();
+function findAllOfType(event_type, query) {
+    return findAll({event_type, ...(query||{})});
 }
 
-async function findAllOfStatus(status) {
-    return (await events).find({'meta.status': status}).toArray();
+function findAllOfStatus(status) {
+    return findAll({'meta.status': status});
 }
 
 async function markStatus(uuid, status, processor_uuid) {

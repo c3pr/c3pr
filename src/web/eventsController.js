@@ -44,9 +44,8 @@ module.exports = function (app) {
         });
     });
 
-    // curl -sD - http://127.0.0.1:7300/api/v1/events --header "Authorization: Bearer $(curl -s -X POST http://127.0.0.1:7300/api/v1/login | tr -d '"')"
-    app.get('/api/v1/events/', function ({params: {eventType, uuid}}, response) {
-        events.findAll().then((evts) => {
+    app.get('/api/v1/events/', function ({query}, response) {
+        events.findAll(query).then((evts) => {
             response.status(200).send(evts);
         }).catch((e) => {
             response.status(500).send(e.toString());
