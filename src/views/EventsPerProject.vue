@@ -27,7 +27,9 @@
           {{ event.payload['source-webhook'].commits[0].message.substring(0, 50) }}{{ event.payload['source-webhook'].commits[0].message.length > 50 ? '...' : '' }}
         </td>
         <td :title="event.payload.changed_files.join('\n')">{{ event.payload.changed_files.length }}</td>
-        <td><router-link :to= "{ name: 'events-per-project-per-changes-committed', params: { project_uuid, changes_committed_uuid: event.uuid }}">details</router-link></td>
+        <td :title="event.payload.repository.revision">#</td>
+        <td><router-link :to= "{ name: 'events-per-project-per-changes-committed', params: { project_uuid, changes_committed_uuid: event.uuid }}">events for this commit</router-link></td>
+        <td><router-link :to= "{ name: 'logs-id', params: { correlation_id: event.payload.repository.revision }}">logs</router-link></td>
       </tr>
       </tbody>
     </table>

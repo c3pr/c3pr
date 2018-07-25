@@ -24,6 +24,12 @@ export default new Router({
       component: Logs,
     },
     {
+      path: '/logs/id/:correlation_id',
+      name: 'logs-id',
+      component: Logs,
+      props: true
+    },
+    {
       path: '/hub',
       name: 'hub',
       component: Hub,

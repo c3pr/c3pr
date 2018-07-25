@@ -47,6 +47,11 @@ import {BACKEND_HUB} from "../envs";
 
 export default {
   name: 'Logs',
+
+  props: {
+    'correlation_id': String
+  },
+
   data() {
     return {
       fetchStatus: 'Click to re-fetch logs',
@@ -67,7 +72,7 @@ export default {
   methods: {
     fetchAll() {
       this.fetchStatus = 'Fetching logs...';
-      fetch(BACKEND_HUB + '/api/v1/logs')
+      fetch(BACKEND_HUB + '/api/v1/logs' + (this.correlation_id ? '/id/' + this.correlation_id : ''))
         .then(r => r.json())
         .then((r) => {
           r.sort((a, b) => a.dateTime.localeCompare(b.dateTime) * -1);

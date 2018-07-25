@@ -25,6 +25,7 @@
         <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
 
         <td><router-link :to= "{ name: 'details', params: { projectId: event._id, project: event }}">details</router-link></td>
+        <td><router-link :to= "{ name: 'logs-id', params: { correlation_id: event.payload.repository.revision }}">logs</router-link></td>
       </tr>
       </tbody>
     </table>
