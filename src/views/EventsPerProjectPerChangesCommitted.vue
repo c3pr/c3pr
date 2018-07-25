@@ -1,7 +1,9 @@
 <template>
   <div class="about">
 
-    <h1>Events ({{ project_uuid }})!</h1>
+    <h1>Events per Changes Committed</h1>
+    <h4>Changes Committed: {{ changes_committed_uuid }}</h4>
+    <h4>Project: {{ project_uuid }}</h4>
 
     <table>
       <thead>
@@ -21,7 +23,7 @@
         <td>{{ event.meta.status }}</td>
         <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
         <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
-        <td :title="event.payload.changed_files.join('\n')">{{ event.payload.changed_files.length }}</td>
+
         <td><router-link :to= "{ name: 'details', params: { projectId: event._id, project: event }}">details</router-link></td>
       </tr>
       </tbody>
@@ -35,87 +37,43 @@ import { mapActions, mapGetters } from 'vuex';
 import {
   EVENTS,
   FETCH_ALL_EVENTS,
-  FETCH_CHANGES_COMMITTED_PER_PROJECT, FETCH_EVENTS_FOR_PROJECT,
+  FETCH_CHANGES_COMMITTED_PER_PROJECT, FETCH_EVENTS_FOR_PROJECT, FETCH_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED,
   GET_ALL_EVENTS,
-  GET_CHANGES_COMMITTED_PER_PROJECT, GET_EVENTS_BY_TYPE_FOR_PROJECT
+  GET_CHANGES_COMMITTED_PER_PROJECT, GET_EVENTS_BY_TYPE_FOR_PROJECT, GET_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED
 } from "../store/modules/events";
 import { PROJECTS, FETCH_ALL_PROJECTS, GET_ALL_PROJECTS } from "../store/modules/projects";
 import EventDetail from '../components/EventDetail.vue';
 
 export default {
-  name: "Events",
+  name: "EventsPerProjectPerChangesCommitted",
 
   components: {EventDetail},
 
   props: {
-    'project_uuid': String
+    'project_uuid': String,
+    'changes_committed_uuid': String
   },
 
   data() {
-    return {
-      event_type: 'ChangesCommitted'
-    };
+    return {};
   },
 
   computed: {
-    ...mapGetters(EVENTS, {getEventsOfTypeForProject: GET_EVENTS_BY_TYPE_FOR_PROJECT})
+    ...mapGetters(EVENTS, {getEventsForProjectByChangesCommitted: GET_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED})
   },
 
   mounted() {
-    this.fetchEventsForProject({project_uuid: this.project_uuid, event_type: this.event_type});
+    this.fetchEventsForProjectByChangesCommitted({project_uuid: this.project_uuid, changes_committed_uuid: this.changes_committed_uuid});
   },
 
   methods: {
     getEventsForProject() {
-      console.log('called');
-      const eventsOfTypeForProject = this.getEventsOfTypeForProject(this.project_uuid, this.event_type);
-      console.log('returns', eventsOfTypeForProject);
-      return eventsOfTypeForProject
+      return this.getEventsForProjectByChangesCommitted(this.project_uuid, this.changes_committed_uuid)
     },
-    ...mapActions(EVENTS, {fetchEventsForProject: FETCH_EVENTS_FOR_PROJECT})
+    ...mapActions(EVENTS, {fetchEventsForProjectByChangesCommitted: FETCH_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED})
   }
 };
 </script>
 
 <style scoped>
-table.project-table td,
-table.project-table th {
-  border: 1px solid black;
-  border-collapse: collapse;
-  padding: 2px;
-}
-
-th {
-  background-color: #ededed;
-}
-
-table.project-table {
-  font-family: sans-serif;
-  font-size: small;
-  border-collapse: collapse;
-  margin: auto;
-  text-align: left;
-}
-
-.message {
-  text-align: left;
-  font-family: monospace;
-}
-
-.c3pr-repo-github {
-  color: purple;
-}
-
-.c3pr {
-  color: blue;
-}
-
-.c3pr-agent {
-  color: green;
-}
-
-pre {
-  text-align: initial;
-  white-space: pre-wrap;
-}
 </style>

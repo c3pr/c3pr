@@ -45,7 +45,7 @@ export default new Router({
       props: true
     },
     {
-      path: '/events/project/:project_uuid/change/:changes_committed',
+      path: '/events/project/:project_uuid/change/:changes_committed_uuid',
       name: 'events-per-project-per-changes-committed',
       component: EventsPerProjectPerChangesCommitted,
       props: true

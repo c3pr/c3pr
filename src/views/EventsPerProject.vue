@@ -1,7 +1,8 @@
 <template>
   <div class="about">
 
-    <h1>Events ({{ project_uuid }})!</h1>
+    <h1>Changes Committed</h1>
+    <h3>For project {{ project_uuid }}</h3>
 
     <table>
       <thead>
@@ -11,7 +12,8 @@
         <th>status</th>
         <th>created</th>
         <th>modified</th>
-        <th>payload</th>
+        <th width="365px">message</th>
+        <th title="Modified Files">Files</th>
       </tr>
       </thead>
       <tbody>
@@ -21,8 +23,11 @@
         <td>{{ event.meta.status }}</td>
         <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
         <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
+        <td :title="event.payload['source-webhook'].commits[0].message">
+          {{ event.payload['source-webhook'].commits[0].message.substring(0, 50) }}{{ event.payload['source-webhook'].commits[0].message.length > 50 ? '...' : '' }}
+        </td>
         <td :title="event.payload.changed_files.join('\n')">{{ event.payload.changed_files.length }}</td>
-        <td><router-link :to= "{ name: 'events-per-project-per-changes-committed', params: { project_uuid, changes_committed: event.uuid }}">details</router-link></td>
+        <td><router-link :to= "{ name: 'events-per-project-per-changes-committed', params: { project_uuid, changes_committed_uuid: event.uuid }}">details</router-link></td>
       </tr>
       </tbody>
     </table>
