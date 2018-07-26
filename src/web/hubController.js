@@ -20,10 +20,10 @@ module.exports = function (app) {
 
         const targetUrl = request.originalUrl.replace(/^\/api\/hub/, '');
 
-        axios.patch(config.c3pr.hub.c3prHubUrl + targetUrl, {headers}, request.body).then(({data}) => {
+        axios.patch(config.c3pr.hub.c3prHubUrl + targetUrl, request.body, {headers}).then(({data}) => {
             response.send(data);
         }).catch(e => {
-            response.send(e.toString());
+            response.send(e.toString() + ": " + e.response.data);
         })
     });
 
@@ -32,10 +32,10 @@ module.exports = function (app) {
 
         const targetUrl = request.originalUrl.replace(/^\/api\/hub/, '');
 
-        axios.post(config.c3pr.hub.c3prHubUrl + targetUrl, {headers}, request.body).then(({data}) => {
+        axios.post(config.c3pr.hub.c3prHubUrl + targetUrl, request.body, {headers}).then(({data}) => {
             response.send(data);
         }).catch(e => {
-            response.send(e.toString());
+            response.send(e.toString() + ": " + e.response.data);
         })
     });
 
