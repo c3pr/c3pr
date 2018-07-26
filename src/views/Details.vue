@@ -17,6 +17,7 @@
         <strong class="child" style="padding-right:10px">Project Url:</strong>
         <input type="text" size="50" class="child" v-model="project.clone_url_http"/><br>
       </div>
+    <br/>
     <button v-on:click="postProject">Salvar</button>
   </div>
 </template>
@@ -97,6 +98,18 @@ table.project-table {
 
 .c3pr-agent {
   color: green;
+}
+
+button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 2px;
 }
 
 pre {
