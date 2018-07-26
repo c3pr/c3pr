@@ -1,4 +1,5 @@
 const uuidv4 = require('uuid/v4');
+const assert = require('assert');
 
 const config = require('../../config');
 const client = require('../../infrastructure/db');
@@ -33,8 +34,17 @@ async function newProject({clone_url_http, name, tags}) {
     });
 }
 
+async function updateProject({uuid, clone_url_http, name, tags}) {
+    assert.ok(uuid && clone_url_http && name && tags, `Missing required args for updateProject(): ${JSON.stringify({uuid, clone_url_http, name, tags})}`);
+    return (await projects).update(
+        {uuid},
+        {$set: {'clone_url_http': clone_url_http, 'name': name, 'tags' : tags}}
+    );
+}
+
 module.exports = {
     newProject,
+    updateProject,
     findBy,
     findAll
 };

@@ -15,6 +15,14 @@ module.exports = function (app) {
         });
     });
 
+    app.patch('/api/v1/projects/:uuid', function ({body, params: {uuid}}, response) {
+        projectsDB.updateProject({...body, uuid}).then((project) => {
+            response.status(200).send(project);
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
     app.get('/api/v1/projects/:project_uuid/prs', function ({params: {project_uuid}}, response) {
         prsDB.findAllOfProject(project_uuid).then((prs) => {
             response.status(200).send(prs);
