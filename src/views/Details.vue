@@ -26,6 +26,7 @@
 import axios from "../envs";
 
 const proxyPrefix = "/api/hub";
+
 export default {
   components: {
   	Multiselect: window.VueMultiselect.default
@@ -46,7 +47,7 @@ export default {
   },
   methods: {
     postProject() {
-      axios.post('/api/v1/projects/' + this.projectId, {clone_url_http: this.project.clone_url_http, name: this.project.name, tags: this.project.tags})
+      axios.patch('/api/v1/projects/' + this.projectId, {clone_url_http: this.project.clone_url_http, name: this.project.name, tags: this.project.tags})
     }
   }
 };
