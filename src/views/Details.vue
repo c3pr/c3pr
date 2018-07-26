@@ -17,11 +17,12 @@
         <strong class="child" style="padding-right:10px">Project Url:</strong>
         <input type="text" size="50" class="child" v-model="project.clone_url_http"/><br>
       </div>
+    <button v-on:click="postProject">Salvar</button>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from "../envs";
 
 const proxyPrefix = "/api/hub";
 export default {
@@ -42,6 +43,11 @@ export default {
       ]
     };
   },
+  methods: {
+    postProject() {
+      axios.post('/api/v1/projects/' + this.projectId, {clone_url_http: this.project.clone_url_http, name: this.project.name, tags: this.project.tags})
+    }
+  }
 };
 </script>
 
