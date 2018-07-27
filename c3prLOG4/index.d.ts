@@ -10,6 +10,8 @@ interface IC3prLOG4 {
     }): Promise<any>;
     logMetasToIds(lms: any[]): (string | number)[];
     lcid(): string;
+    testMode(): void;
+    isEnvVarSet(): boolean;
 }
 declare const _default: IC3prLOG4;
 export default _default;

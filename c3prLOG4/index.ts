@@ -1,5 +1,6 @@
 import uuidv4 from 'uuid/v4';
 import c3prLOG3, { logMetasToIds } from "../c3prLOG3";
+const c3prLOG_original = require('../src/c3prLOG');
 
 function c3prLOG4(message: string, {lcid, euuid, logMetas, ids: outerIds, meta = {}, error, level = 0}: {lcid: string, euuid: string, logMetas?: any, ids?: (string|number)[]; meta?: any; error?: Error; level?: number}) {
     if (arguments.length !== 1 && arguments.length !== 2) {
@@ -21,11 +22,16 @@ function c3prLOG4(message: string, {lcid, euuid, logMetas, ids: outerIds, meta =
     return uuidv4().split("-")[4];
 };
 
+(c3prLOG4 as IC3prLOG4).testMode = c3prLOG_original.testMode;
+(c3prLOG4 as IC3prLOG4).isEnvVarSet = c3prLOG_original.isEnvVarSet;
+
 interface IC3prLOG4 {
     (message: string,
      {lcid, euuid, logMetas, ids, meta, error, level}: {lcid: string, euuid: string, logMetas?: any, ids?: (string|number)[]; meta?: any; error?: Error; level?: number}): Promise<any>;
     logMetasToIds(lms: any[]): (string|number)[];
     lcid(): string;
+    testMode(): void;
+    isEnvVarSet(): boolean;
 }
 
 export default c3prLOG4 as IC3prLOG4;
