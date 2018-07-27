@@ -5,9 +5,9 @@ const markAsProcessed = require('./markAs').markAs.markAsProcessed;
 const markAsUnprocessed = require('./markAs').markAs.markAsUnprocessed;
 
 // TODO document this can return null (not the result) when no event is collected
-async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUrl, jwt}) {
-    let lcid = c3prLOG4.lcid();
-    let euuid = 'pre-event';
+async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUrl, jwt, lcid: outerLCID, euuid: outerEUUID}) {
+    let lcid = outerLCID || c3prLOG4.lcid();
+    let euuid = outerEUUID || 'pre-event';
     c3prLOG4(`Handling ${event_type}.`, {lcid, euuid});
 
     let event;
