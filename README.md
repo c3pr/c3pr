@@ -18,14 +18,10 @@ The `C3PR_MONGO_URL` must be defined to something like: `mongodb://user:pass@hos
 Example at a JavaScript file:
 
 ```javascript
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 
-let logMeta = {nodeName: 'my-node', correlationId: 'SHA121313', moduleName: 'my-script'};
-c3prLOG2({
-    msg: `message.`,
-    logMetas: [logMeta],
-    meta: {meta: 'some specific data'},
-});
+let lcid = c3prLOG4.lcid(); // log correlation id
+c3prLOG4(`message.`, {lcid, euuid: '123-123-evt-uuid', ids, logMetas});
 ```
 
 See [test file](src/c3prLOG.test.js) for usages.
