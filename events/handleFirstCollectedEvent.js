@@ -26,7 +26,7 @@ async function handleFirstCollectedEvent({event_type, handlerFunction, c3prHubUr
 
     let handlerFunctionResult;
     try {
-        handlerFunctionResult = await handlerFunction(event);
+        handlerFunctionResult = await handlerFunction(event, {lcid, euuid});
     } catch (error) {
         c3prLOG4(`Error while executing handlerFunction() for event handling.`, {lcid, euuid, error, meta: {handlerFunction, event}});
 
