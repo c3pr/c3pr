@@ -1,5 +1,5 @@
 const exec = require('child_process').exec;
-const c3prLOG = require("node-c3pr-logger");
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 
 function sh(command, options): Promise<{error, stdout, stderr}> {
     return new Promise((resolve => {
@@ -17,29 +17,32 @@ function replaceTokens(input, replacements) {
     return inputAfterReplacements;
 }
 
-const shellLogMeta = {moduleName: 'c3prSH'};
 
-async function c3prSH(shCommand, shOptions, {logMeta, stdout: shouldStdOut, replacements, thirdArgNotProvided} =
-                                                         {logMeta: undefined, stdout: undefined, replacements: undefined, thirdArgNotProvided: true}) {
+async function c3prSH(shCommand, shOptions,
+                      {lcid,            euuid,            logMeta,            stdout: shouldStdOut, replacements,            thirdArgNotProvided} =
+                      {lcid: undefined, euuid: undefined, logMeta: undefined, stdout: undefined,    replacements: undefined, thirdArgNotProvided: true}) {
     const r = s => replaceTokens(s, replacements || []);
 
     if (thirdArgNotProvided) {
-        c3prLOG(`WARNING: no third arg provided when SH'ing \`${r(shCommand)}\``, shellLogMeta);
+        c3prLOG4(`WARNING: no third arg provided when SH'ing \`${r(shCommand)}\``, {lcid: 'c3prSH', euuid: 'c3prSH'});
     }
 
     const logMetaArr = Array.isArray(logMeta) ? logMeta : [logMeta];
 
-    c3prLOG(`\$ ${r(shCommand)}`, ...logMetaArr, shellLogMeta);
+    c3prLOG4(`\$ ${r(shCommand)}`, {lcid, euuid, logMeta: logMetaArr});
 
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (shouldStdOut) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        c3prLOG(r(stdout), ...logMetaArr, shellLogMeta);
+        c3prLOG4(r(stdout), {lcid, euuid, logMeta: logMetaArr});
     }
     if (error) {
-        c3prLOG(`
+        c3prLOG4(`
             [ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            
+            -- SHELL COMMAND FAILED --
+            
             COMMAND: ${r(shCommand)}
             OPTIONS: ${r(JSON.stringify(shOptions))}
             There as an error: ${r(error)}
@@ -50,7 +53,7 @@ async function c3prSH(shCommand, shOptions, {logMeta, stdout: shouldStdOut, repl
             STDERR:
             ${r(stderr)}
             [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`,
-            ...logMetaArr, shellLogMeta
+            {lcid, euuid, logMeta: logMetaArr, error}
         );
         throw new Error(r(error));
     }

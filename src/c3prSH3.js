@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
-const c3prLOG3_1 = require("node-c3pr-logger/c3prLOG3");
+const c3prLOG4_1 = require("node-c3pr-logger/c3prLOG4");
 function sh(command, options) {
     return new Promise((resolve => {
         child_process_1.exec(command, options, function (error, stdout, stderr) {
@@ -16,18 +16,21 @@ function replaceTokens(input, replacements) {
     });
     return inputAfterReplacements;
 }
-async function c3prSH3(shCommand, shOptions = {}, { ids = [], stdout: shouldStdOut = false, replacements } = {}) {
+async function c3prSH3(shCommand, shOptions = {}, { lcid, euuid, ids = [], stdout: shouldStdOut = false, replacements } = {}) {
     const hideTokens = s => replaceTokens(s, replacements || []);
-    c3prLOG3_1.default(`\$ ${hideTokens(shCommand)}`, { ids });
+    c3prLOG4_1.default(`\$ ${hideTokens(shCommand)}`, { lcid, euuid, ids });
     let { error, stdout, stderr } = await sh(shCommand, shOptions);
     if (shouldStdOut) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        c3prLOG3_1.default(hideTokens(stdout), { ids });
+        c3prLOG4_1.default(hideTokens(stdout), { lcid, euuid, ids });
     }
     if (error) {
-        c3prLOG3_1.default(`
+        c3prLOG4_1.default(`
             [ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                        
+            -- SHELL COMMAND FAILED --
+            
             COMMAND: ${hideTokens(shCommand)}
             OPTIONS: ${hideTokens(JSON.stringify(shOptions))}
             There as an error: ${hideTokens(error)}
@@ -37,7 +40,7 @@ async function c3prSH3(shCommand, shOptions = {}, { ids = [], stdout: shouldStdO
             ------------------------------
             STDERR:
             ${hideTokens(stderr)}
-            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`, { ids });
+            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`, { lcid, euuid, ids });
         throw new Error(hideTokens(error));
     }
     return (hideTokens(stdout) || '').trim();
