@@ -27,11 +27,12 @@ function c3prLOG4(message: string, {lcid, euuid, logMetas, ids: outerIds, meta =
 
 interface IC3prLOG4 {
     (message: string,
-     {lcid, euuid, logMetas, ids, meta, error, level}: {lcid: string, euuid: string, logMetas?: any, ids?: (string|number)[]; meta?: any; error?: Error; level?: number}): Promise<any>;
+     {lcid, euuid, logMetas, ids, meta, error, level}: {lcid: string, euuid: string, logMetas?: any, ids?: (string|number)[]; meta?: any; error?: Error; level?: number}): void;
     logMetasToIds(lms: any[]): (string|number)[];
     lcid(): string;
     testMode(): void;
     isEnvVarSet(): boolean;
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default c3prLOG4 as IC3prLOG4;

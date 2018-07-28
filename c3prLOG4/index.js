@@ -22,5 +22,6 @@ c3prLOG4.lcid = function () {
 };
 c3prLOG4.testMode = c3prLOG_original.testMode;
 c3prLOG4.isEnvVarSet = c3prLOG_original.isEnvVarSet;
+// noinspection JSUnusedGlobalSymbols
 exports.default = c3prLOG4;
 //# sourceMappingURL=index.js.map

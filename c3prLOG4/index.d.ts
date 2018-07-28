@@ -7,7 +7,7 @@ interface IC3prLOG4 {
         meta?: any;
         error?: Error;
         level?: number;
-    }): Promise<any>;
+    }): void;
     logMetasToIds(lms: any[]): (string | number)[];
     lcid(): string;
     testMode(): void;
