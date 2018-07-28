@@ -16,4 +16,4 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 ./npmi.sh $SCRIPTPATH/../../node-c3pr-hub-client
 ./npmi.sh $SCRIPTPATH/../../node-c3pr-logger
 ./npmi.sh $SCRIPTPATH/../../node-c3pr-repo
-./npmi.sh $SCRIPTPATH/../../node-git-client
+./npmi.sh $SCRIPTPATH/../../node-c3pr-git-client

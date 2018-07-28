@@ -12,5 +12,5 @@ git clone http://github.com/c3pr/c3pr-tool-walkmod-sonar
 git clone http://github.com/c3pr/node-c3pr-hub-client
 git clone http://github.com/c3pr/node-c3pr-logger
 git clone http://github.com/c3pr/node-c3pr-repo
-git clone http://github.com/c3pr/node-git-client
+git clone http://github.com/c3pr/node-c3pr-git-client
 git clone http://github.com/c3pr/sample-project-java-maven

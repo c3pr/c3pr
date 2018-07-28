@@ -66,10 +66,10 @@ Current nodes:
 [154]: https://travis-ci.org/c3pr/node-c3pr-logger
 [155]: N.A.
 
-[161]: https://github.com/c3pr/node-git-client
+[161]: https://github.com/c3pr/node-c3pr-git-client
 [162]: N.A.
-[163]: https://travis-ci.org/c3pr/node-git-client.svg?branch=master
-[164]: https://travis-ci.org/c3pr/node-git-client
+[163]: https://travis-ci.org/c3pr/node-c3pr-git-client.svg?branch=master
+[164]: https://travis-ci.org/c3pr/node-c3pr-git-client
 [165]: N.A.
 
 [171]: https://github.com/c3pr/node-c3pr-repo
