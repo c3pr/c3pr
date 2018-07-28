@@ -2,34 +2,32 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 const fs = require('fs');
 const c3prSH = require('./c3prSH');
-const c3prLOG = require("node-c3pr-logger");
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4");
 
-async function createClonesDir(cloneDir, ...logMeta) {
+async function createClonesDir({cloneBaseDir, lcid, euuid}) {
     return new Promise(resolve => {
-        const resolvedClonesDir = path.resolve(cloneDir);
+        const resolvedClonesDir = path.resolve(cloneBaseDir);
         if (fs.existsSync(resolvedClonesDir)) {
-            c3prLOG(`${resolvedClonesDir} already exists.`, ...logMeta);
+            c3prLOG4(`${resolvedClonesDir} already exists.`, {lcid, euuid});
             resolve();
         } else {
-            c3prLOG(`${resolvedClonesDir} does not exist, creating.`, ...logMeta);
+            c3prLOG4(`${resolvedClonesDir} does not exist, creating.`, {lcid, euuid});
             mkdirp(resolvedClonesDir, () => {
-                c3prLOG(`Clones dir created at ${resolvedClonesDir}`, ...logMeta);
+                c3prLOG4(`Clones dir created at ${resolvedClonesDir}`, {lcid, euuid});
                 resolve();
             });
         }
     });
 }
 
-async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId, ...logMetas) {
-    const gitCloneLogMeta = {correlationIds: [gitSHA, localUniqueCorrelationId], moduleName: 'cloneRepositoryLocally'};
-    const logMeta = [...logMetas, gitCloneLogMeta];
+async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId, lcid, euuid) {
 
-    await createClonesDir(cloneBaseDir, ...logMeta);
+    await createClonesDir({cloneBaseDir, lcid, euuid});
 
-    c3prLOG(`Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`, ...logMetas, gitCloneLogMeta);
+    c3prLOG4(`Cloning repo ${repoURL}#${gitSHA} at ${cloneFolder}...`, {lcid, euuid, meta: {gitSHA, localUniqueCorrelationId}});
 
     // clones that single branch (maybe there is a somewhat slightly faster way of doing this with --mirror, though I feel it probably won't pay off)
-    await c3prSH(`git clone --config core.autocrlf=false -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {logMeta});
+    await c3prSH(`git clone --config core.autocrlf=false -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`, {}, {lcid, euuid});
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //NOTE:
@@ -46,19 +44,19 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
     // right now, though, I feel the constant "cloneDepth" is pretty much enough.
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    await c3prSH(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {logMeta});
+    await c3prSH(`git reset --hard ${gitSHA}`, {cwd: cloneFolder}, {lcid, euuid});
 
-    c3prLOG(`Clone/reset completed.`, ...logMeta);
+    c3prLOG4(`Clone/reset completed.`, {lcid, euuid});
 }
 
-async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, url, branch, revision, cloneDepth}, ...logMetas) {
+async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, url, branch, revision, cloneDepth, lcid, euuid}) {
 
     const repoURL = url;
     const gitSHA = revision;
     const cloneFolder = path.resolve(path.join(cloneBaseDir, gitSHA, localUniqueCorrelationId));
 
     // clones at "cloneBaseDir/SHA/RANDOMUUID", e.g. "./tmp/59b20b8d5c6ff8d09518454d4dd8b7b30f095ab5/471ff3f9-2ada-48eb-a0f3-3ab70f3f0bdd"
-    await gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId, ...logMetas);
+    await gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId, lcid, euuid);
 
     return cloneFolder;
 
