@@ -1,11 +1,12 @@
-const axios = require('axios');
-const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
+const axios = require('axios').default;
 
 const config = require('../../config');
 const loadTools = require('../tools/loadTools');
 
-const ids = ['init'];
-const logMeta = {nodeName: 'c3pr-agent', correlationIds: 'boot', moduleName: 'hubRegistryBroadcast'};
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+const lcid = c3prLOG4.lcid();
+const euuid = 'init';
+
 
 function broadcast(summary) {
     const headers = {Authorization: `Bearer ${config.c3pr.auth.jwt}`};
@@ -13,21 +14,20 @@ function broadcast(summary) {
     const expirationTime = new Date(Date.now() + config.c3pr.hub.broadcastTimeoutInMs).toISOString();
 
     const toolSubmissions = summary.map(tool => {
-        // noinspection JSUnresolvedFunction
         return axios.patch(config.c3pr.hub.agentsUrl, {...tool, expiration_time: expirationTime}, {headers})
     });
     Promise.all(
         toolSubmissions
     ).then(({data}) => {
-        c3prLOG3(`Successfully broadcasted to registry. URL: ${config.c3pr.hub.agentsUrl}.`, {ids, meta: {data, summary}});
+        c3prLOG4(`Successfully broadcasted to registry. URL: ${config.c3pr.hub.agentsUrl}.`, {lcid, euuid, meta: {data, summary}});
     }).catch((error) => {
-        c3prLOG3(`Error while broadcasting to registry. URL: ${config.c3pr.hub.agentsUrl}.`, {ids, error});
+        c3prLOG4(`Error while broadcasting to registry. URL: ${config.c3pr.hub.agentsUrl}.`, {lcid, euuid, error});
     });
 }
 
 function hubRegistryBroadcast() {
     const summary = loadTools.toolsSummary;
-    c3prLOG3(`Now broadcasting to C-3PR registry API: ${config.c3pr.hub.agentsUrl}.`, {ids, meta: {summary}});
+    c3prLOG4(`Now broadcasting to C-3PR registry API: ${config.c3pr.hub.agentsUrl}.`, {lcid, euuid, meta: {summary}});
     broadcast(summary);
     setInterval(() => {
         broadcast(summary);

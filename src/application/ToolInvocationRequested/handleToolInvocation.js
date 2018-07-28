@@ -1,5 +1,5 @@
-const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
 const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 
 const invokeToolAtGitRepo = require("./invokeToolAtGitRepo");
 
@@ -7,7 +7,8 @@ const config = require('../../config');
 
 const loadTools = require('../tools/loadTools');
 
-async function emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, ids) {
+
+async function emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, lcid, euuid) {
     const parent = {event_type: toolInvocationRequestedEvent.event_type, uuid: toolInvocationRequestedEvent.uuid};
 
     const changed_files = [
@@ -38,23 +39,24 @@ async function emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatc
         },
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        logMetas: [{nodeName: 'c3pr-agent', correlationIds: ids, moduleName: 'handleToolInvocation'}]
+        lcid,
+        euuid
     }).catch(error => {
         const meta = {toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested};
-        c3prLOG3(`Error while registering new event: ToolInvocationCompleted.`, {ids, error, meta});
+        c3prLOG4(`Error while registering new event: ToolInvocationCompleted.`, {lcid, euuid, error, meta});
         return {new_status: 'UNPROCESSED', result: {error, meta}};
     });
 
     if (changed_files.length) {
-        c3prLOG3(`Tool invocation complete. A patch has been generated and sent.`, {ids});
+        c3prLOG4(`Tool invocation complete. A patch has been generated and sent.`, {lcid, euuid});
     } else {
-        c3prLOG3(`Tool invocation complete. No patch has been generated.`, {ids});
+        c3prLOG4(`Tool invocation complete. No patch has been generated.`, {lcid, euuid});
     }
 
     return {new_status: 'PROCESSED', result};
 }
 
-async function emitToolInvocationFailed(toolInvocationRequestedEvent, failure_message, toolInvocationRequested, ids) {
+async function emitToolInvocationFailed(toolInvocationRequestedEvent, failure_message, toolInvocationRequested, lcid, euuid) {
     const meta = {toolInvocationRequestedEvent, failure_message, toolInvocationRequested};
     const parent = {event_type: toolInvocationRequestedEvent.event_type, uuid: toolInvocationRequestedEvent.uuid};
 
@@ -68,30 +70,29 @@ async function emitToolInvocationFailed(toolInvocationRequestedEvent, failure_me
         },
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        logMetas: [{nodeName: 'c3pr-agent', correlationIds: ids, moduleName: 'handleToolInvocation'}]
+        lcid,
+        euuid
     }).catch(error => {
-        c3prLOG3(`Error while registering new event: ToolInvocationCompleted.`, {ids, error, meta});
+        c3prLOG4(`Error while registering new event: ToolInvocationCompleted.`, {lcid, euuid, error, meta});
         return {new_status: 'UNPROCESSED', result: {error, meta}};
     });
 
-    c3prLOG3(`Tool invocation failed. Reason: ${failure_message}`, {ids, meta});
+    c3prLOG4(`Tool invocation failed. Reason: ${failure_message}`, {lcid, euuid, meta});
     return {new_status: 'PROCESSED', result};
 }
 
-async function handleToolInvocation(toolInvocationRequestedEvent) {
+async function handleToolInvocation(toolInvocationRequestedEvent, {lcid, euuid}) {
 
     const toolInvocationRequested = toolInvocationRequestedEvent.payload;
 
-    const ids = [toolInvocationRequested.repository.revision];
-    c3prLOG3(`C-3PR Agent received invocation: ${toolInvocationRequested.tool_id}. Files: ${JSON.stringify(toolInvocationRequested.files)}`, {ids, meta: {toolInvocationRequestedEvent}});
+    c3prLOG4(`C-3PR Agent received invocation: ${toolInvocationRequested.tool_id}. Files: ${JSON.stringify(toolInvocationRequested.files)}`, {lcid, euuid, meta: {toolInvocationRequestedEvent}});
 
-    let gitPatchBase64;
     try {
-        gitPatchBase64 = await invokeToolAtGitRepo(toolInvocationRequested, loadTools);
+        let gitPatchBase64 = await invokeToolAtGitRepo(toolInvocationRequested, loadTools, {lcid, euuid});
+        return await emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, lcid, euuid);
     } catch (error) {
-        return await emitToolInvocationFailed(toolInvocationRequestedEvent, error.toString(), toolInvocationRequested, ids);
+        return await emitToolInvocationFailed(toolInvocationRequestedEvent, error.toString(), toolInvocationRequested, lcid, euuid);
     }
-    return await emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, ids);
 }
 
 module.exports = handleToolInvocation;
