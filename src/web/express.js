@@ -1,7 +1,10 @@
-const c3prLOG = require("node-c3pr-logger");
 const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('../config');
+
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+const lcid = c3prLOG4.lcid();
+const euuid = 'express';
 
 const app = express();
 
@@ -17,5 +20,5 @@ app.get('*', function(req, res){
 app.listen(config.c3pr.brain.c3prBrainPort, () => {
     const logMeta = {nodeName: 'c3pr-brain', correlationIds: 'boot', moduleName: 'main'};
 
-    c3prLOG(`C-3PR BRAIN is up at port ${config.c3pr.brain.c3prBrainPort}.`, logMeta);
+    c3prLOG4(`C-3PR BRAIN is up at port ${config.c3pr.brain.c3prBrainPort}.`, {lcid, euuid});
 });
