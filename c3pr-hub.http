@@ -16,3 +16,13 @@ GET http://127.0.0.1:7300/api/v1/logs/id/f10c022e8f4e722aabfe6653cedbbabcdbfb820
 Authorization: Bearer {{auth_token}}
 
 ###
+
+PATCH http://localhost:7300/api/v1/projects/5b36aa1e6e3cbc0006213b97
+Authorization: Bearer {{auth_token}}
+
+###
+
+PATCH http://localhost:7305/api/hub/api/v1/projects/5b36aa1e6e3cbc0006213b97
+Authorization: Bearer {{auth_token}}
+
+###
