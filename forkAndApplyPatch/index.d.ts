@@ -1,4 +1,4 @@
-declare function forkAndApplyPatch({ createForkIfNotExists, addAuthenticationToCloneUrl, tokenReplacementForLogFunction, mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitUserName, gitUserEmail, prCommitMessage, patchContent, mainRepoCloneUrl, logMetas }: {
+declare function forkAndApplyPatch({ createForkIfNotExists, addAuthenticationToCloneUrl, tokenReplacementForLogFunction, mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitUserName, gitUserEmail, prCommitMessage, patchContent, mainRepoCloneUrl, lcid, euuid }: {
     createForkIfNotExists: any;
     addAuthenticationToCloneUrl: any;
     tokenReplacementForLogFunction: any;
@@ -10,7 +10,8 @@ declare function forkAndApplyPatch({ createForkIfNotExists, addAuthenticationToC
     prCommitMessage: any;
     patchContent: any;
     mainRepoCloneUrl: any;
-    logMetas?: any[];
+    lcid: any;
+    euuid: any;
 }): Promise<{
     forkRepoOrg: any;
     forkRepoProject: any;
