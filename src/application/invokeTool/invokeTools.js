@@ -1,16 +1,11 @@
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const filterFilesWithExtensions = require('./filterFilesWithExtensions');
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
-
 const decideApplicableToolAgents = require('./decideApplicableToolAgents');
-
 const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
-
 const config = require('../../config');
 
-const logMetaz = (correlationId) => [{nodeName: 'c3pr-brain', correlationId, moduleName: 'invokeTools'}];
 
-function invokeToolForFiles(parent, changes_committed_root, repository, tool_id, files) {
-    const logMetas = logMetaz(repository.revision);
+function invokeToolForFiles(parent, changes_committed_root, repository, tool_id, files, {lcid, euuid}) {
     const toolInvocationRequested = {
         parent,
         changes_committed_root,
@@ -19,26 +14,21 @@ function invokeToolForFiles(parent, changes_committed_root, repository, tool_id,
         files
     };
 
-    c3prLOG2({
-        msg: `Registering new event of type 'ToolInvocationRequested' for repository ${repository.clone_url_http} and rev ${repository.revision
+    c3prLOG4(
+        `Registering new event of type 'ToolInvocationRequested' for repository ${repository.clone_url_http} and rev ${repository.revision
         }. Tool id: ${tool_id}. Files: ${JSON.stringify(files)}`,
-        logMetas,
-        meta: {payload: toolInvocationRequested}
-    });
+        {lcid, euuid, meta: {payload: toolInvocationRequested}}
+    );
 
     return c3prRNE.registerNewEvent({
         event_type: `ToolInvocationRequested`,
         payload: toolInvocationRequested,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        logMetas
-    })
-    .catch(e => {
-        c3prLOG2({
-            msg: `Error while registering new event: ToolInvocationRequested. Reason: '${e}'. Data: ${e.response.data}.`,
-            logMetas,
-            meta: {error: require('util').inspect(e)}
-        });
+        lcid,
+        euuid
+    }).catch(error => {
+        c3prLOG4(`Error while registering new event: ToolInvocationRequested.`, {lcid, euuid, error});
     })
 }
 
@@ -50,17 +40,11 @@ function invokeToolForFiles(parent, changes_committed_root, repository, tool_id,
  * - Pick one tool agent
  * - Create ToolInvocationRequested for such tool agent.
  */
-async function invokeTools({parent, changes_committed_root, repository, files}) {
-    const logMetas = logMetaz(repository.revision);
-
+async function invokeTools({parent, changes_committed_root, repository, files}, {lcid, euuid}) {
     /** @type {Object[]} */
-    const applicableToolAgents = await decideApplicableToolAgents(changes_committed_root, files, logMetas);
+    const applicableToolAgents = await decideApplicableToolAgents(changes_committed_root, files, {lcid, euuid});
 
-    c3prLOG2({
-        msg: `Applicable tool agents: ${applicableToolAgents.length}.`,
-        meta: {applicableToolAgents},
-        logMetas
-    });
+    c3prLOG4(`Applicable tool agents: ${applicableToolAgents.length}.`, {lcid, euuid, meta: {applicableToolAgents}});
 
     let changedAndNotRefactoredFiles = [...files];
     let invocations = [];
@@ -73,15 +57,15 @@ async function invokeTools({parent, changes_committed_root, repository, files}) 
 
         if (filesForThisTool.length) {
             changedAndNotRefactoredFiles = changedAndNotRefactoredFiles.filter(f => !filesForThisTool.includes(f));
-            invocations.push(invokeToolForFiles(parent, changes_committed_root, repository, tool.tool_id, filesForThisTool));
+            invocations.push(invokeToolForFiles(parent, changes_committed_root, repository, tool.tool_id, filesForThisTool, {lcid, euuid}));
         }
     }
 
     if (!changedAndNotRefactoredFiles.length) {
-        c3prLOG2({msg: `All files have been handled. Tool invocations complete. Remaining applicable tool agents: ${applicableToolAgents.length}`, logMetas});
+        c3prLOG4(`All files have been handled. Tool invocations complete. Remaining applicable tool agents: ${applicableToolAgents.length}`, {lcid, euuid});
     }
     if (!applicableToolAgents.length) {
-        c3prLOG2({msg: `All tool applicable agents have been invoked. Tool invocations complete. Remaining changed and not refactored files: ${changedAndNotRefactoredFiles.length}`, logMetas});
+        c3prLOG4(`All tool applicable agents have been invoked. Tool invocations complete. Remaining changed and not refactored files: ${changedAndNotRefactoredFiles.length}`, {lcid, euuid});
     }
 
     return Promise.all(invocations);
