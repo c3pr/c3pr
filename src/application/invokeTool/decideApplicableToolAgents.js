@@ -1,5 +1,5 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
 const axios = require('axios').default;
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const config = require('../../config');
 const ports = require('../ports');
 
@@ -15,14 +15,11 @@ async function calculateAlreadyInvokedTools(changes_committed_root) {
     return toolInvocationRequestedEvents.map(tire => tire.payload.tool_id);
 }
 
-async function decideApplicableToolAgents(changes_committed_root, files, logMetas) {
+async function decideApplicableToolAgents(changes_committed_root, files, {lcid, euuid}) {
     const availableAgents = await ports.fetchAllToolAgents();
 
     if (availableAgents.length === 0) {
-        c3prLOG2({
-            msg: `No available agents at the moment. Skipping.`,
-            logMetas,
-        });
+        c3prLOG4(`No available agents at the moment. Skipping.`, {lcid, euuid});
         return [];
     }
 
@@ -31,11 +28,7 @@ async function decideApplicableToolAgents(changes_committed_root, files, logMeta
     const filesWithoutOpenPRs = files.filter(file => !filesWithOpenPRs.includes(file));
 
     if (!filesWithoutOpenPRs.length) {
-        c3prLOG2({
-            msg: `No files without open PRs. Skipping.`,
-            logMetas,
-            meta: {filesWithOpenPRs, files}
-        });
+        c3prLOG4(`No files without open PRs. Skipping.`, {lcid, euuid, meta: {filesWithOpenPRs, files}});
         return [];
     }
 
