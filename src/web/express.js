@@ -2,8 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const c3prLOG3 = require("node-c3pr-logger/c3prLOG3").default;
 const config = require('../config');
+
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+const lcid = c3prLOG4.lcid();
+const euuid = 'dashboard-express-init';
 
 const app = express();
 
@@ -21,5 +24,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.dashboard.c3prDashboardPort, () => {
-    c3prLOG3(`C-3PR dashboard is up at port ${config.c3pr.dashboard.c3prDashboardPort}.`, {ids: ['init']});
+    c3prLOG4(`C-3PR dashboard is up at port ${config.c3pr.dashboard.c3prDashboardPort}.`, {lcid, euuid});
 });
