@@ -1,10 +1,9 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 
 const c3prRTI = require('../invokeTool/invokeTools').c3prBrain;
 
-const logMetaz = (correlationId) => ({nodeName: 'c3pr-brain', correlationId, moduleName: 'invokeToolsForRemainingFiles'});
 
-function invokeToolsForRemainingFiles(toolInvocationCompletedEvent, outerLogMetas) {
+function invokeToolsForRemainingFiles(toolInvocationCompletedEvent, {lcid, euuid}) {
     c3prRTI.invokeTools({
         parent: {
             event_type: toolInvocationCompletedEvent.event_type,
@@ -13,12 +12,8 @@ function invokeToolsForRemainingFiles(toolInvocationCompletedEvent, outerLogMeta
         changes_committed_root: toolInvocationCompletedEvent.payload.changes_committed_root,
         repository: toolInvocationCompletedEvent.payload.repository,
         files: toolInvocationCompletedEvent.payload.unmodified_files
-    }).catch(e => {
-        c3prLOG2({
-            msg: `Error while invoking tools. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
-            logMetas: [...(outerLogMetas || []), logMetaz(toolInvocationCompletedEvent.payload.repository.revision)],
-            meta: {toolInvocationCompletedEvent, error: require('util').inspect(e)}
-        });
+    }, {lcid, euuid}).catch(error => {
+        c3prLOG4(`Error while invoking tools.`, {lcid, euuid, error, meta: {toolInvocationCompletedEvent}});
     });
 }
 

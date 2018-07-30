@@ -1,17 +1,13 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
 
 const config = require('../../config');
 
 
-function emitPullRequestRequested(pullRequestRequested, outerLogMetas) {
-    const logMeta = {nodeName: 'c3pr-brain', correlationId: pullRequestRequested.repository.revision, moduleName: 'emitPullRequestRequested'};
-    const logMetas = [...(outerLogMetas || []), logMeta];
-
-    c3prLOG2({
-        msg: `Registering new event of type 'PullRequestRequested' for repository ${pullRequestRequested.repository.clone_url_http} and rev ${pullRequestRequested.repository.revision}.`,
-        logMetas,
-        meta: {payload: pullRequestRequested}
+function emitPullRequestRequested(pullRequestRequested, {lcid, euuid}) {
+    c3prLOG4(
+        `Registering new event of type 'PullRequestRequested' for repository ${pullRequestRequested.repository.clone_url_http} and rev ${pullRequestRequested.repository.revision}.`,
+        {lcid, euuid, meta: {payload: pullRequestRequested}
     });
 
     return c3prRNE.registerNewEvent({
@@ -19,15 +15,11 @@ function emitPullRequestRequested(pullRequestRequested, outerLogMetas) {
         payload: pullRequestRequested,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        logMetas
-    })
-        .catch(e => {
-            c3prLOG2({
-                msg: `Error while registering new event: PullRequestRequested. Reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || 'no data'}.`,
-                logMetas,
-                meta: {error: require('util').inspect(e)}
-            });
-        })
+        lcid,
+        euuid
+    }).catch(error => {
+        c3prLOG4(`Error while registering new event: PullRequestRequested.`, {lcid, euuid, error});
+    });
 }
 
 module.exports = emitPullRequestRequested;
