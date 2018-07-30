@@ -1,17 +1,17 @@
 const config = require('../../config');
-const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').handleFirstCollectedEvent.handleFirstCollectedEvent;
+const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').default;
 
 const updatePR = require('./updatePR');
 
-const logMetas = [{nodeName: 'c3pr-brain', moduleName: 'handlePullRequestUpdated'}];
 
-function handlePullRequestUpdated() {
+function handlePullRequestUpdated({lcid, euuid}) {
     return handleFirstCollectedEvent({
         event_type: `PullRequestUpdated`,
         handlerFunction: updatePR,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        logMetas
+        lcid,
+        euuid
     });
 }
 
