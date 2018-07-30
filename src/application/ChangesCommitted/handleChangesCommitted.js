@@ -1,23 +1,21 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3pr.c3prLOG2;
-const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').handleFirstCollectedEvent.handleFirstCollectedEvent;
-
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').default;
 const c3prRTI = require('../invokeTool/invokeTools').c3prBrain;
-
 const config = require('../../config');
 
-const logMetas = [{nodeName: 'c3pr-brain', moduleName: 'handleChangesCommitted'}];
 
-function handleChangesCommitted() {
+function handleChangesCommitted({lcid, euuid}) {
     return handleFirstCollectedEvent({
         event_type: `ChangesCommitted`,
         handlerFunction,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        logMetas
+        lcid,
+        euuid
     });
 }
 
-async function handlerFunction(changesCommittedEvent) {
+async function handlerFunction(changesCommittedEvent, {lcid, euuid}) {
     const parent = {
         event_type: changesCommittedEvent.event_type,
         uuid: changesCommittedEvent.uuid
@@ -25,10 +23,10 @@ async function handlerFunction(changesCommittedEvent) {
     try {
         let result = await c3prRTI.invokeTools({
             parent, changes_committed_root: changesCommittedEvent.uuid, repository: changesCommittedEvent.payload.repository, files: changesCommittedEvent.payload.changed_files
-        });
+        }, {lcid, euuid});
         return {new_status: 'PROCESSED', result};
     } catch (error) {
-        c3prLOG2({msg: `Error while invoking tools.`, logMetas, error, meta: {changesCommittedEvent}});
+        c3prLOG4(`Error while invoking tools.`, {lcid, euuid, error, meta: {changesCommittedEvent}});
         throw error;
     }
 }
