@@ -1,6 +1,5 @@
-import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 import outboundPorts from "../../ports/outbound/index";
-
 
 
 async function createGitLabMR({
@@ -14,15 +13,15 @@ async function createGitLabMR({
                             pr_assignee,
                             pr_title,
                             pr_body,
-                            patchHexBase64
+                            patchHexBase64,
+                            lcid,
+                            euuid
                         }) {
 
-    const logMeta = {nodeName: 'c3pr-repo-gitlab', correlationId: mainRepoHash, moduleName: 'createGitLabMR'};
-    c3prLOG2({
-        msg: `Initiating MR creation.`,
-        meta: {mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitLabUrl, gitLabApiToken, gitUserName, gitUserEmail, pr_title, pr_body, pr_assignee, patchHexBase64},
-        logMetas: [logMeta]
-    });
+    c3prLOG4(
+        `Initiating MR creation.`,
+        {lcid, euuid, meta: {mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitLabUrl, gitLabApiToken, gitUserName, gitUserEmail, pr_title, pr_body, pr_assignee, patchHexBase64}}
+    );
 
     const addAuthenticationToCloneUrl = (cloneUrl) => {
         return cloneUrl.replace(/^http(s?):\/\//, `http$1://clone:${gitLabApiToken}@`)
@@ -44,9 +43,10 @@ async function createGitLabMR({
         prCommitMessage: pr_title,
         patchContent: patchHexBase64,
         mainRepoCloneUrl,
-        logMetas: [logMeta]
+        lcid,
+        euuid
     });
-    return outboundPorts.createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, pr_title, pr_body, pr_assignee);
+    return outboundPorts.createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, pr_title, pr_body, pr_assignee, {lcid, euuid});
 }
 
 export { createGitLabMR };

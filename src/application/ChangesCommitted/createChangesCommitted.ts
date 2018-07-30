@@ -1,26 +1,24 @@
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
+
 import config from '../../config';
 import ports from "../../ports/outbound";
 import {Commit, GitLabPush} from "../../ports/outbound/types/GitLabPush/GitLabPush";
 import {sortCommits} from "./sortCommits";
-import {c3prLOG2} from "node-c3pr-logger/c3prLOG2";
 
 
-const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'convertWebhookToChanges'}];
 
-
-async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits: Commit[]) {
+async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits: Commit[], {lcid, euuid}) {
     const commits = sortCommits(webhookCommits);
 
     const changesetFiles = new Set();
     for(let commit of commits) {
-        const logMetas = logMetaz(commit.id);
         if (commit.author.email === config.c3pr.repoGitlab.gitlab.botUserEmail) {
-            c3prLOG2({msg: `Skipping commit ${commit.id}, since its author is the bot (${commit.author.email}).`, meta: {commit}, logMetas});
+            c3prLOG4(`Skipping commit ${commit.id}, since its author is the bot (${commit.author.email}).`, {lcid, euuid, meta: {commit}});
             continue;
         }
         const gitLabCommit = await ports.getGitLabCommit(urlEncodedOrgNameProjectName, commit.id);
         if (gitLabCommit.parent_ids.length > 1) {
-            c3prLOG2({msg: `Skipping commit ${commit.id}, because it is a merge.`, meta: {commit, gitLabCommit}, logMetas});
+            c3prLOG4(`Skipping commit ${commit.id}, because it is a merge.`, {lcid, euuid, meta: {commit, gitLabCommit}});
             continue;
         }
 
@@ -44,8 +42,8 @@ async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits:
     return changeset;
 }
 
-async function createChangesCommitted(webhookPayload: GitLabPush) {
-    const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits);
+async function createChangesCommitted(webhookPayload: GitLabPush, {lcid, euuid}) {
+    const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits, {lcid, euuid});
 
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
     const project_uuid = await ports.fetchFirstProjectForCloneUrl(clone_url_http);

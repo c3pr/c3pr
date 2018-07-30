@@ -1,34 +1,29 @@
-import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
+
 import handlePush from '../handlePush/handlePush';
 import handleMergeRequest from '../handleMergeRequest/handleMergeRequest';
 import {GitLabPush} from "../../ports/outbound/types/GitLabPush/GitLabPush";
 import {GitLabMergeRequestUpdated} from "../../ports/outbound/types/GitLabMergeRequestUpdated/GitLabMergeRequestUpdated";
 
 
-function logMetaz(correlationId?: string) {
-    return [{nodeName: 'c3pr-repo-gitlab', correlationId: correlationId, moduleName: 'handleWebhook'}];
-}
-
 function handleWebhook(webhookPayload: GitLabPush | GitLabMergeRequestUpdated): Promise<any> {
+    const lcid = c3prLOG4.lcid();
     if (webhookPayload.object_kind === "push") {
         let gitlabPush = webhookPayload as GitLabPush;
-        c3prLOG2({
-            msg: `Received webhook for PUSH from ${gitlabPush.repository.git_http_url}. Message: '${gitlabPush.commits && gitlabPush.commits[0].message.trim()}'.`,
-            logMetas: logMetaz(gitlabPush.after)
-        });
-        return handlePush(gitlabPush);
+        const euuid = 'gitlab-push:' + gitlabPush.after;
+        c3prLOG4(`Received webhook for PUSH from ${gitlabPush.repository.git_http_url}. Message: '${gitlabPush.commits && gitlabPush.commits[0].message.trim()}'.`, {lcid, euuid});
+        return handlePush(gitlabPush, {lcid, euuid});
     }
 
     if (webhookPayload.object_kind === "merge_request") {
         let gitLabMergeRequestUpdated = webhookPayload as GitLabMergeRequestUpdated;
-        return handleMergeRequest(gitLabMergeRequestUpdated);
+        const euuid = 'gitlab-mru:' + gitLabMergeRequestUpdated.object_attributes.last_commit.id;
+        return handleMergeRequest(gitLabMergeRequestUpdated, {lcid, euuid});
     }
 
-    c3prLOG2({
-        msg: `Received webhook. Unknown type: ${webhookPayload.object_kind}.`,
-        logMetas: logMetaz((webhookPayload as GitLabPush).after),
-        meta: {webhookPayload},
-    });
+    const sha = (webhookPayload as GitLabPush).after || (oattr => oattr && oattr.last_commit && oattr.last_commit.id)((webhookPayload as any).object_attributes);
+    const euuid = 'gitlab-unknown:' + sha;
+    c3prLOG4(`Received webhook. Unknown type: ${webhookPayload.object_kind}.`, {lcid, euuid, meta: {webhookPayload}});
 }
 
 export { handleWebhook };

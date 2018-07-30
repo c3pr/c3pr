@@ -10,11 +10,11 @@ export interface OutboundPorts {
     getGitLabCommit(project_id: string | number, sha: string): Promise<GitLabCommit>;
 
     forkAndApplyPatch({ createForkIfNotExists, addAuthenticationToCloneUrl, tokenReplacementForLogFunction, mainRepoOrgRepo, mainRepoBranch, mainRepoHash,
-                          gitUserName, gitUserEmail, prCommitMessage, patchContent, mainRepoCloneUrl, logMetas }: {
+                          gitUserName, gitUserEmail, prCommitMessage, patchContent, mainRepoCloneUrl, lcid, euuid }: {
             createForkIfNotExists: any; addAuthenticationToCloneUrl: any; tokenReplacementForLogFunction: any; mainRepoOrgRepo: any; mainRepoBranch: any; mainRepoHash: any;
-                gitUserName: any; gitUserEmail: any; prCommitMessage: any; patchContent: any; mainRepoCloneUrl: any; logMetas?: any[];
+                gitUserName: any; gitUserEmail: any; prCommitMessage: any; patchContent: any; mainRepoCloneUrl: any; lcid: string; euuid: string
     }): Promise<{forkRepoOrg: any; forkRepoProject: any; forkRepoBranch: string;}>;
 
-    createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBodyMarkdown, pr_assignee): Promise<GitLabMergeRequestCreated>;
-    createForkIfNotExists(orgNameProjectName, outerLogMetas: any[]): Promise<{organization: string, forkName: string, cloneUrl: string}>
+    createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBodyMarkdown, pr_assignee, {lcid, euuid}): Promise<GitLabMergeRequestCreated>;
+    createForkIfNotExists(orgNameProjectName, {lcid, euuid}): Promise<{organization: string, forkName: string, cloneUrl: string}>
 }

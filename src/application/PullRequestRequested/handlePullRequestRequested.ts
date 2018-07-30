@@ -1,42 +1,34 @@
-import { c3prLOG2 } from "node-c3pr-logger/c3prLOG2";
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 import {Event} from 'node-c3pr-hub-client';
-import hfce = require('node-c3pr-hub-client/events/handleFirstCollectedEvent');
-
-let handleFirstCollectedEvent = hfce.handleFirstCollectedEvent.handleFirstCollectedEvent;
+import handleFirstCollectedEvent from 'node-c3pr-hub-client/events/handleFirstCollectedEvent';
 
 import { createGitLabMR } from './createGitLabMR';
 
 import config from '../../config';
 import {createAndEmitPullRequestCreated} from "../PullRequestCreated/createAndEmitPullRequestCreated";
 
-const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handlePullRequestRequested'}];
-const logMetaz = (correlationId) => [{nodeName: 'c3pr-repo-gitlab', correlationId, moduleName: 'handlePullRequestRequested'}];
 
-
-async function handlePullRequestRequested(): Promise<any> {
+export async function handlePullRequestRequested({lcid, euuid}): Promise<any> {
     let handleResult = await handleFirstCollectedEvent({
         event_type: `PullRequestRequested`,
         handlerFunction,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.hub.auth.jwt,
-        logMetas
+        lcid,
+        euuid
     });
     if (handleResult) {
         let {pullRequestRequestedEvent, createMrResult} = handleResult;
-        return createAndEmitPullRequestCreated(pullRequestRequestedEvent, createMrResult);
+        return createAndEmitPullRequestCreated(pullRequestRequestedEvent, createMrResult, {lcid, euuid});
     }
 }
 
-async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
+async function handlerFunction(pullRequestRequestedEvent: Event<any>, {lcid, euuid}) {
 
     const prr = pullRequestRequestedEvent.payload;
     const repository = prr.repository;
 
-    c3prLOG2({
-        msg: `Handling MR request title '${prr.pr_title}' rev '${repository.revision}'`,
-        logMetas: logMetaz(repository.revision),
-        meta: {pullRequestRequestedEvent}
-    });
+    c3prLOG4(`Handling MR request title '${prr.pr_title}' rev '${repository.revision}'`, {lcid, euuid, meta: {pullRequestRequestedEvent}});
 
     let createMrResult = await createGitLabMR({
         mainRepoOrgRepo: repository.full_path,
@@ -49,17 +41,12 @@ async function handlerFunction(pullRequestRequestedEvent: Event<any>) {
         pr_assignee: prr.assignee,
         pr_title: prr.pr_title,
         pr_body: prr.pr_body,
-        patchHexBase64: prr.diff_base64
+        patchHexBase64: prr.diff_base64,
+        lcid,
+        euuid
     });
 
-    c3prLOG2({
-        msg: `MR created successfully.`,
-        logMetas: logMetaz(repository.revision),
-        meta: {pullRequestRequestedEvent}
-    });
+    c3prLOG4(`MR created successfully.`, {lcid, euuid, meta: {pullRequestRequestedEvent}});
 
     return {new_status: 'PROCESSED', result: {pullRequestRequestedEvent, createMrResult}}
 }
-
-
-export { handlePullRequestRequested };

@@ -1,11 +1,13 @@
-import {c3prLOG2} from "node-c3pr-logger/c3prLOG2";
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 import {c3prRNE} from 'node-c3pr-hub-client/events/registerNewEvent';
+
 import {GitLabMergeRequestUpdated} from "../../ports/outbound/types/GitLabMergeRequestUpdated/GitLabMergeRequestUpdated";
 import config from '../../config';
 
-export function createAndEmitPullRequestUpdated(gitLabMergeRequestUpdatedWebhook: GitLabMergeRequestUpdated) {
+
+export function createAndEmitPullRequestUpdated(gitLabMergeRequestUpdatedWebhook: GitLabMergeRequestUpdated, {lcid, euuid}) {
     const pullRequestUpdated = createPullRequestUpdated(gitLabMergeRequestUpdatedWebhook);
-    return emitPullRequestUpdated(pullRequestUpdated);
+    return emitPullRequestUpdated(pullRequestUpdated, {lcid, euuid});
 }
 
 function getStatus(gitLabMergeRequestUpdatedWebhook: GitLabMergeRequestUpdated) {
@@ -32,19 +34,17 @@ function createPullRequestUpdated(gitLabMergeRequestUpdatedWebhook: GitLabMergeR
     }
 }
 
-function emitPullRequestUpdated(pullRequestUpdated) {
-    const logMetas = [{nodeName: 'c3pr-repo-gitlab', correlationId: pullRequestUpdated.pr_id, moduleName: 'emitPullRequestUpdated'}];
-
-    c3prLOG2({msg: `Registering new event of type 'PullRequestUpdated' for repository ${pullRequestUpdated.repository.clone_url_http}.`, logMetas, meta: {pullRequestUpdated}});
+function emitPullRequestUpdated(pullRequestUpdated, {lcid, euuid}) {
+    c3prLOG4(`Registering new event of type 'PullRequestUpdated' for repository ${pullRequestUpdated.repository.clone_url_http}.`, {lcid, euuid, meta: {pullRequestUpdated}});
 
     return c3prRNE.registerNewEvent({
         event_type: `PullRequestUpdated`,
         payload: pullRequestUpdated,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.hub.auth.jwt,
-        logMetas
-    })
-        .catch(error => {
-            c3prLOG2({msg: `Error while registering new event: PullRequestUpdated.`, logMetas, error, meta: {pullRequestUpdated}});
-        })
+        lcid,
+        euuid
+    }).catch(error => {
+        c3prLOG4(`Error while registering new event: PullRequestUpdated.`, {lcid, euuid, error, meta: {pullRequestUpdated}});
+    });
 }

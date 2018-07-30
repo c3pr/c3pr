@@ -1,10 +1,13 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import * as c3prLOG from "node-c3pr-logger";
 
 import config from '../../../config';
 import c3prHubListenerController from "./c3prHubListenerController";
 import webhooksController from "./webhooksController";
+
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+const lcid = c3prLOG4.lcid();
+const euuid = 'express';
 
 const app = express();
 
@@ -28,5 +31,5 @@ c3pr-repo-gitlab webhooks URL will be: ${config.c3pr.repoGitlab.c3prRepoGitlabUr
 
 c3pr's git username and email are: '${config.c3pr.repoGitlab.gitlab.botUserName.replace(/'/g, '')}' <'${config.c3pr.repoGitlab.gitlab.botUserEmail.replace(/'/g, '')}'>
 `);
-    c3prLOG(`C-3PR Github Repo is up at ${config.c3pr.repoGitlab.c3prRepoGitlabUrl}.`, {nodeName: 'c3pr-repo-gitlab', correlationIds: 'boot', moduleName: 'express'});
+    c3prLOG4(`C-3PR Github Repo is up at ${config.c3pr.repoGitlab.c3prRepoGitlabUrl}.`, {lcid, euuid});
 });

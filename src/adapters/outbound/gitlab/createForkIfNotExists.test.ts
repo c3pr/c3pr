@@ -10,7 +10,7 @@ describe('createForkIfNotExists', () => {
 
     it('createForkIfNotExists', async () => {
 
-        let r = await createForkIfNotExists('sample_user/sample-project-java-maven');
+        let r = await createForkIfNotExists('sample_user/sample-project-java-maven', {lcid: 'test', euuid: 'test'});
 
         expect(r).to.deep.equal({
             "organization":"c3pr-bot",
