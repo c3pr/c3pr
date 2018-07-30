@@ -25,8 +25,8 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#12.1.0",
-    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#9.7.0",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#15.0.0",
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#11.0.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
