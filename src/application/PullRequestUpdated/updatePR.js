@@ -1,15 +1,14 @@
-const c3prLOG2 = require("node-c3pr-logger/c3prLOG2").c3prLOG2;
+const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const ports = require('../ports');
 
-async function updatePR(pullRequestUpdatedEvent) {
+async function updatePR(pullRequestUpdatedEvent, {lcid, euuid}) {
     const project_uuid = await ports.fetchFirstProjectForCloneUrl(pullRequestUpdatedEvent.payload.repository.clone_url_http);
 
     let result = await ports.updatePrOfProject(project_uuid, pullRequestUpdatedEvent.payload.pr_id, pullRequestUpdatedEvent.payload.status, pullRequestUpdatedEvent.payload.assignee);
-    c3prLOG2({
-        msg: `Updated PR ${pullRequestUpdatedEvent.payload.pr_id} in database for project ${pullRequestUpdatedEvent.payload.repository.clone_url_http}`,
-        logMetas: [{nodeName: 'c3pr-brain', moduleName: 'updatePR'}],
-        meta: {pullRequestUpdatedEvent, project_uuid}
-    });
+    c3prLOG4(
+        `Updated PR ${pullRequestUpdatedEvent.payload.pr_id} in database for project ${pullRequestUpdatedEvent.payload.repository.clone_url_http}`,
+        {lcid, euuid, meta: {pullRequestUpdatedEvent, project_uuid}}
+    );
     return {new_status: 'PROCESSED', result};
 }
 
