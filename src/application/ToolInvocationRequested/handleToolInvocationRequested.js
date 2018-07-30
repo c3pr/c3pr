@@ -1,4 +1,4 @@
-const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').handleFirstCollectedEvent.handleFirstCollectedEvent;
+const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').default;
 const config = require('../../config');
 
 const handleToolInvocation = require('./handleToolInvocation');
@@ -15,8 +15,4 @@ function handleToolInvocationRequested({lcid, euuid}) {
     });
 }
 
-module.exports = {
-    handleToolInvocationRequested: {
-        handleToolInvocationRequested
-    }
-};
+module.exports = handleToolInvocationRequested;
