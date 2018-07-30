@@ -16,7 +16,7 @@ require('./c3prHubListenerController')(app);
 app.get('*', function(req, res){
     // The 404 Route (ALWAYS Keep this as the last route)
     res.status(404).send('This is the C3PR Agent (v. __C3PR_AGENT_EXECUTABLE_VERSION__). ' +
-        `c3prLOG env var is ${!c3prLOG4.isEnvVarSet() ? 'not' : ''} set. ` +
+        `c3prLOG4's env var is ${!c3prLOG4.isEnvVarSet() ? 'not' : ''} set. ` +
         `Btw, no endpoint is listening at ${req.url}.`);
 });
 
