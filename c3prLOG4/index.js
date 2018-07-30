@@ -7,6 +7,9 @@ function c3prLOG4(message, { lcid, euuid, logMetas, ids: outerIds, meta = {}, er
     if (arguments.length !== 1 && arguments.length !== 2) {
         throw new Error(`c3prLOG4() called with different number or arguments. Wanted: 1 or 2. Passed: ${arguments.length} - ${JSON.stringify(arguments)}`);
     }
+    if (!lcid || !euuid) {
+        throw new Error(`c3prLOG4(): lcid and euuid are mandatory. Full args: ${JSON.stringify(arguments)}`);
+    }
     const extraKeys = Object.keys(arguments[1] || {}).filter(key => !["lcid", "euuid", "logMetas", "level", "ids", "meta", "error"].includes(key));
     if (extraKeys.length) {
         throw new Error(`c3prLOG4() has too many keys. Additional keys passed: ${JSON.stringify(extraKeys)}. Full args: ${JSON.stringify(arguments)}`);
