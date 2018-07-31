@@ -1,7 +1,7 @@
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
-const cloneRepositoryLocally = require("node-c3pr-git-client").cloneRepositoryLocally;
+const cloneRepositoryLocally = require("node-c3pr-git-client/src/cloneRepositoryLocally");
 const generateGitPatchBase64 = require("node-c3pr-git-client/patch/generateGitPatchBase64").default;
-const c3prSH = require("node-c3pr-git-client").c3prSH;
+const c3prSH3 = require("node-c3pr-git-client/src/c3prSH3").default;
 const uuidv4 = require('uuid/v4');
 
 const executeOnUtf8 = require('./executeOnUtf8');
@@ -41,7 +41,7 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, {lcid, eu
 
         for (let file of toolInvocationRequested.files) {
             await executeOnUtf8(cloneFolder, file, async () => {
-                await c3prSH(tool.command.replace(/#{filename}/g, file), {cwd: cloneFolder, maxBuffer: 1024 * 2000 /* 2MB */}, {stdout: true, lcid, euuid});
+                await c3prSH3(tool.command.replace(/#{filename}/g, file), {cwd: cloneFolder, maxBuffer: 1024 * 2000 /* 2MB */}, {stdout: true, lcid, euuid});
             });
         }
 
