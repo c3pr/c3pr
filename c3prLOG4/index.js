@@ -70,7 +70,7 @@ async function printAndInsertIntoDatabase(options) {
             euuid: options.euuid,
             metadata: options.meta,
             message: options.message,
-            error: util.inspect(options.error)
+            error: options.error && util.inspect(options.error)
         });
         await client.close();
     }
