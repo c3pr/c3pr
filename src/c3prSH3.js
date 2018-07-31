@@ -16,14 +16,15 @@ function replaceTokens(input, replacements) {
     });
     return inputAfterReplacements;
 }
-async function c3prSH3(shCommand, shOptions = {}, { lcid, euuid, ids = [], stdout: shouldStdOut = false, replacements } = {}) {
+async function c3prSH3(shCommand, shOptions = {}, { lcid, euuid, level: outerLevel, stdout: shouldStdOut = false, replacements } = {}) {
+    const level = (outerLevel || 0) + 1;
     const hideTokens = s => replaceTokens(s, replacements || []);
-    c3prLOG4_1.default(`\$ ${hideTokens(shCommand)}`, { lcid, euuid, ids });
+    c3prLOG4_1.default(`\$ ${hideTokens(shCommand)}`, { lcid, euuid, level });
     let { error, stdout, stderr } = await sh(shCommand, shOptions);
     if (shouldStdOut) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        c3prLOG4_1.default(hideTokens(stdout), { lcid, euuid, ids });
+        c3prLOG4_1.default(hideTokens(stdout), { lcid, euuid, level });
     }
     if (error) {
         c3prLOG4_1.default(`
@@ -40,11 +41,10 @@ async function c3prSH3(shCommand, shOptions = {}, { lcid, euuid, ids = [], stdou
             ------------------------------
             STDERR:
             ${hideTokens(stderr)}
-            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`, { lcid, euuid, ids });
+            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`, { lcid, euuid, level });
         throw new Error(hideTokens(error));
     }
     return (hideTokens(stdout) || '').trim();
 }
-// noinspection JSUnusedGlobalSymbols
 exports.default = c3prSH3;
 //# sourceMappingURL=c3prSH3.js.map
