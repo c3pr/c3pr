@@ -5,8 +5,7 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
-    "declaration": true
+    "sourceMap": true
   },
   "compileOnSave": true,
   "buildOnSave": true
