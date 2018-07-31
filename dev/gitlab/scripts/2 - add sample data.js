@@ -12,7 +12,7 @@ const createGitLabUser = require('./util/createGitLabUser');
         {name: 'sample-project-java-maven', import_url: 'https://github.com/c3pr/sample-project-java-maven.git', visibility: 'public'},
         {headers: {"PRIVATE-TOKEN": configForDemoScripts.__rootAccessToken}}
     );
-    console.info(`Successfully created project with ID: ${data.id}.`, data);
+    console.info(`Successfully created project with ID: ${data.id}.`);
 
 /*
     // GROUPS

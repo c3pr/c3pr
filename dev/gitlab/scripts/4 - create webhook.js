@@ -1,12 +1,15 @@
 //
 /*
 THIS SCRIPT CREATES THE WEBHOOK IN THE SAMPLE PROJECT.
+
+YOU HAVE TO HAVE CREATED A TOKEN IN SCRIPT 1 FOR THIS TO WORK.
+ALSO THE BOT MUST BE ADDED AS MASTER TO THE PROJECT 1.
  */
 //
 const configForDemoScripts = require('./1 - config for demo scripts');
 const jsonPost = require('./util/jsonPost');
 
-const C3PR_REPO_GITLAB_URL_FOR_GITLAB = `http://host.docker.internal:5004`;
+const C3PR_REPO_GITLAB_URL_FOR_GITLAB = `http://host.docker.internal:7304`;
 (async () => {
 
     let {data} = await jsonPost(

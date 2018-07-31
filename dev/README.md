@@ -20,6 +20,7 @@
         - Something like `GkrbEjtK3YkCQvPRU7ye`
 
 4. Go to the `gitlab/scripts` folder and add `GkrbEjtK3YkCQvPRU7ye` to the `__rootAccessToken` property in the script `1`.
+    - Also edit the bot username and email
 
 5. Run scripts 2 and on (in the `gitlab/scripts`) folder, but read first:
     - The basic requirement for C-3PR to work is:
