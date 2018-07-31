@@ -38,6 +38,14 @@ const SAMPLE_STACKS = {
         "    at Object.c3prSH3 (/opt/c3pr-repo-gitlab/node_modules/node-git-client/src/c3prSH3.ts:26:13)",
         "    at Object.forkAndApplyPatch (/opt/c3pr-repo-gitlab/node_modules/node-c3pr-repo/forkAndApplyPatch/index.ts:39:18)",
         "    at <anonymous>"
+    ],
+    "stack4": [
+        'Error',
+        '    at getFullStack (...)',
+        '    at functionScriptFileDetector (...)',
+        "    at Object.t.default (/opt/c3pr-repo-gitlab/node_modules/node-git-client/src/c3prSH3.ts:26:13)",
+        "    at t.default (/opt/c3pr-repo-gitlab/node_modules/node-c3pr-repo/forkAndApplyPatch/index.ts:39:18)",
+        "    at <anonymous>"
     ]
 };
 
@@ -98,7 +106,12 @@ describe('functionScriptFileDetector', () => {
 
         it('3', () => {
             const caller_name = getCallerName(SAMPLE_STACKS.stack3);
-            expect(caller_name).to.deep.equal("Object.c3prSH3");
+            expect(caller_name).to.deep.equal("c3prSH3");
+        });
+
+        it('4', () => {
+            const caller_name = getCallerName(SAMPLE_STACKS.stack4);
+            expect(caller_name).to.deep.equal("Object.t.default");
         });
 
     });

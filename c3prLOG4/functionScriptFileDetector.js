@@ -27,17 +27,28 @@ const SKIPPED_LINES = 3; // notice the first lines bellow are 'Error' and the ca
   '    at processImmediate [as _immediateCallback] (timers.js:722:5)' ]
  */
 const INVALID_NAMES = [
-    'Object.t.default', 't.default'
+    'Object.t.default', 't.default', 'Promise.all.then'
 ];
+function transformName(name) {
+    if (INVALID_NAMES.includes(name)) {
+        return name;
+    }
+    return name.replace(/^Object\./, '');
+}
 function getCallerName(fullStack, level = 0) {
+    let callerName;
     for (let i = SKIPPED_LINES + level; i < fullStack.length; i++) {
         let line = fullStack[i];
         const match = line.match(/at (.*?) \(/);
-        if (match && match[1] && !INVALID_NAMES.includes(match[1])) {
-            return match[1];
+        if (match && match[1]) {
+            if (!INVALID_NAMES.includes(match[1])) {
+                return transformName(match[1]);
+            }
+            // noinspection JSUnusedAssignment
+            callerName = callerName || match[1];
         }
     }
-    return '(unknown caller)';
+    return callerName || '(unknown caller)';
 }
 exports.getCallerName = getCallerName;
 function getServiceName(stack, s = exports.functionScriptFileDetectorConfig.path_separator) {
