@@ -26,9 +26,9 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "github-webhook-handler": "^0.7.1",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#17.1.0",
-    "node-c3pr-repo": "github:c3pr/node-c3pr-repo#11.0.1",
-    "node-c3pr-git-client": "github:c3pr/node-c3pr-git-client#13.0.1",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#17.1.2",
+    "node-c3pr-repo": "github:c3pr/node-c3pr-repo#11.0.2",
+    "node-c3pr-git-client": "github:c3pr/node-c3pr-git-client#13.0.2",
     "octonode": "^0.9.1",
     "uuid": "^3.2.1"
   },
