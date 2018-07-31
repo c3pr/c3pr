@@ -19,28 +19,24 @@ function c3prLOG4(message, options) {
         throw new Error(`c3prLOG4() has too many keys. Additional keys passed: ${JSON.stringify(extraKeys)}. Full args: ${JSON.stringify(arguments)}`);
     }
     const { stack, service_name, caller_name } = functionScriptFileDetector_1.default((options.level || 0) + 1);
-    let { augmentedMsg, augmentedMeta } = augmentWithError(message, stack, options);
     return printAndInsertIntoDatabase({
-        message: augmentedMsg,
+        message: augmentWithError(message, options),
         lcid: options.lcid,
         euuid: options.euuid,
         service_name,
         caller_name,
-        meta: augmentedMeta,
+        meta: Object.assign({ stack }, (options.meta || {})),
         error: options.error
     });
 }
 // noinspection JSUnusedGlobalSymbols
 exports.default = c3prLOG4;
-function augmentWithError(message, stack, options) {
-    let augmentedMsg = message || '';
-    let augmentedMeta = Object.assign({ stack }, (options.meta || {}));
+function augmentWithError(message, options) {
     if (options.error) {
-        const error = options.error;
-        augmentedMsg = augmentedMsg.trim() + ` - Error reason: '${error}'. Data: ${error.response && JSON.stringify(error.response.data) || '<no data>'}.`;
-        augmentedMeta.error = util.inspect(error);
+        const e = options.error;
+        return (message || '').trim() + ` - Error reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || '<no data>'}.`;
     }
-    return { augmentedMsg, augmentedMeta };
+    return message || '';
 }
 c3prLOG4.lcid = function () {
     // noinspection TypeScriptValidateJSTypes
@@ -67,15 +63,14 @@ async function printAndInsertIntoDatabase(options) {
         const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl, { useNewUrlParser: true });
         let logs = client.db(config.c3pr.logger.database).collection(config.c3pr.logger.collection + '4' + (testModeActivated ? "-test" : ""));
         await logs.insertOne({
-            dateTime: new Date().toISOString(),
-            node: options.service_name,
+            date_time: new Date().toISOString(),
             service_name: options.service_name,
-            moduleName: options.caller_name,
             caller_name: options.caller_name,
             lcid: options.lcid,
             euuid: options.euuid,
             metadata: options.meta,
-            message: options.message
+            message: options.message,
+            error: util.inspect(options.error)
         });
         await client.close();
     }

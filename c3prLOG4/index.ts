@@ -39,15 +39,13 @@ function c3prLOG4(message: string, options: Log4Options) {
 
     const {stack, service_name, caller_name} = functionScriptFileDetector((options.level || 0) + 1);
 
-    let {augmentedMsg, augmentedMeta} = augmentWithError(message, stack, options);
-
     return printAndInsertIntoDatabase({
-        message: augmentedMsg,
+        message: augmentWithError(message, options),
         lcid: options.lcid,
         euuid: options.euuid,
         service_name,
         caller_name,
-        meta: augmentedMeta,
+        meta: {stack, ...(options.meta || {})},
         error: options.error
     });
 }
@@ -56,15 +54,12 @@ export default c3prLOG4 as IC3prLOG4;
 
 
 
-function augmentWithError(message: string, stack: string[], options: Log4Options) {
-    let augmentedMsg = message || '';
-    let augmentedMeta = {stack, ...(options.meta || {})};
+function augmentWithError(message: string, options: Log4Options) {
     if (options.error) {
-        const error = options.error;
-        augmentedMsg = augmentedMsg.trim() + ` - Error reason: '${error}'. Data: ${(error as any).response && JSON.stringify((error as any).response.data) || '<no data>'}.`;
-        augmentedMeta.error = util.inspect(error);
+        const e = options.error as any;
+        return (message || '').trim() + ` - Error reason: '${e}'. Data: ${e.response && JSON.stringify(e.response.data) || '<no data>'}.`;
     }
-    return {augmentedMsg, augmentedMeta};
+    return message || '';
 }
 
 
@@ -118,15 +113,14 @@ async function printAndInsertIntoDatabase(options: LogData) {
         let logs = client.db(config.c3pr.logger.database).collection(config.c3pr.logger.collection + '4' + (testModeActivated ? "-test" : ""));
 
         await logs.insertOne({
-            dateTime: new Date().toISOString(),
-            node: options.service_name,
+            date_time: new Date().toISOString(),
             service_name: options.service_name,
-            moduleName: options.caller_name,
             caller_name: options.caller_name,
             lcid: options.lcid,
             euuid: options.euuid,
             metadata: options.meta,
-            message: options.message
+            message: options.message,
+            error: util.inspect(options.error)
         });
         await client.close();
     } catch (e) {
