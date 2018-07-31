@@ -6,8 +6,6 @@ import config from "../../config";
 
 
 export default function handleMergeRequest(webhookPayload: GitLabMergeRequestUpdated, {lcid, euuid}) {
-    const logMetas = [{nodeName: 'c3pr-repo-gitlab', moduleName: 'handleMergeRequest'}];
-
     c3prLOG4(
         `Handling MR action:${webhookPayload.object_attributes.action} for ${webhookPayload.project.git_http_url}. Message: '${webhookPayload.object_attributes.title.trim()}'.`,
         {lcid, euuid, meta: {webhookPayload}}
