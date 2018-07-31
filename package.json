@@ -34,8 +34,8 @@
     "js-yaml": "^3.11.0",
     "mkdirp": "^0.5.1",
     "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#11.0.0",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#16.0.0",
-    "node-c3pr-git-client": "github:c3pr/node-c3pr-git-client#10.0.1",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#17.0.0",
+    "node-c3pr-git-client": "github:c3pr/node-c3pr-git-client#11.0.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
