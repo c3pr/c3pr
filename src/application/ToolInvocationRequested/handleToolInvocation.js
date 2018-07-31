@@ -8,6 +8,13 @@ const config = require('../../config');
 const loadTools = require('../tools/loadTools');
 
 
+function generatePrBody(changed_files, toolPrBody, revision) {
+    return (changed_files.length ? toolPrBody : '<no diff>') + `
+---
+
+This fix was generated in response to the commit ${revision}.`;
+}
+
 async function emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, lcid, euuid) {
     const parent = {event_type: toolInvocationRequestedEvent.event_type, uuid: toolInvocationRequestedEvent.uuid};
 
@@ -22,7 +29,8 @@ async function emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatc
 
     const tool = loadTools.toolsHash[toolInvocationRequested.tool_id];
     const pr_title = changed_files.length ? tool.pr_title : '<no diff>';
-    const pr_body = changed_files.length ? tool.pr_body : '<no diff>';
+    const pr_body = generatePrBody(changed_files, tool.pr_body, toolInvocationRequested.repository.revision);
+
     const diff_base64 = gitPatchBase64.patch.hexBase64;
 
     let result = await c3prRNE.registerNewEvent({
