@@ -2,11 +2,11 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "commonjs",
-    "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
-    "noEmitHelpers": true
+    "noEmitHelpers": true,
+    "noImplicitUseStrict": true
   },
   "exclude": [
     "node_modules"

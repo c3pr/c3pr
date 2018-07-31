@@ -1,7 +1,7 @@
-const c3prLOG3 = require('../c3prLOG3/index').default;
+const c3prLOG4 = require('../c3prLOG4/index').default;
 
 function awaw() {
-    c3prLOG3({msg: 'bob', ids: [1,2,"3","1"]});
+    c3prLOG4('bob', {lcid: "1111", euuid: "2222"});
 }
 
 module.exports = awaw;
