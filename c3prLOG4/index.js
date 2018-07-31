@@ -49,9 +49,16 @@ c3prLOG4.lcid = function () {
 let testModeActivated = false;
 c3prLOG4.testMode = () => testModeActivated = true;
 c3prLOG4.isEnvVarSet = () => !!config && !!config.c3pr && !!config.c3pr.logger.mongoUrl;
+function printShort(euuid) {
+    const split = euuid.split('-');
+    if (split.length === 5) {
+        return split[0];
+    }
+    return euuid;
+}
 async function printAndInsertIntoDatabase(options) {
     showWarningIfDatabaseNotDefined();
-    console.log(`[${options.lcid}] [${options.euuid}] <${options.caller_name}>`, options.message);
+    console.log(`[${options.lcid}] [${printShort(options.euuid)}] <${options.caller_name}>`, options.message);
     if (!config.c3pr.logger.mongoUrl) {
         return;
     }

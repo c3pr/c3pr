@@ -95,10 +95,18 @@ interface LogData {
     error?: Error;
 }
 
+function printShort(euuid: string) {
+    const split = euuid.split('-');
+    if (split.length === 5) {
+        return split[0];
+    }
+    return euuid;
+}
+
 async function printAndInsertIntoDatabase(options: LogData) {
     showWarningIfDatabaseNotDefined();
 
-    console.log(`[${options.lcid}] [${options.euuid}] <${options.caller_name}>`, options.message);
+    console.log(`[${options.lcid}] [${printShort(options.euuid)}] <${options.caller_name}>`, options.message);
 
     if (!config.c3pr.logger.mongoUrl) {
         return;
