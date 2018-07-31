@@ -1,7 +1,7 @@
 const mkdirp = require('mkdirp');
 const path = require('path');
 const fs = require('fs');
-const c3prSH3 = require('./c3prSH3');
+const c3prSH3 = require('./c3prSH3').default;
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 
 
