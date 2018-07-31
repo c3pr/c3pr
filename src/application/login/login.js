@@ -5,7 +5,7 @@ const hubRegistryBroadcast = require('./hubRegistryBroadcast');
 
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const lcid = c3prLOG4.lcid();
-const euuid = 'init';
+const euuid = 'agent-login';
 
 c3prHubClient.login({
     loginUrl: config.c3pr.hub.loginUrl,
