@@ -6,8 +6,6 @@ const emitPullRequestRequested = require('../PullRequestRequested/emitPullReques
 const invokeToolsForRemainingFiles = require('./invokeToolsForRemainingFiles');
 
 function createAndEmitPullRequestRequested(toolInvocationCompletedEvent, {lcid, euuid}) {
-    const lms = [...(logMetas || []), {nodeName: 'c3pr-brain', correlationId: toolInvocationCompletedEvent.payload.repository.revision, moduleName: 'createAndEmitPullRequestRequested'}];
-
     let result = {};
     if (toolInvocationCompletedEvent.payload.unmodified_files.length) {
         c3prLOG4(`ToolInvocationCompleted has unmodified files. I will now attempt to invoke new tools.`, {lcid, euuid, meta: {toolInvocationCompletedEvent}});
@@ -17,7 +15,7 @@ function createAndEmitPullRequestRequested(toolInvocationCompletedEvent, {lcid, 
     if (toolInvocationCompletedEvent.payload.changed_files.length) {
         c3prLOG4(`ToolInvocationCompleted modified files. I will now issue a PullRequestRequested event.`, {lcid, euuid, meta: {toolInvocationCompletedEvent}});
         const pullRequestRequested = createPullRequestRequested(toolInvocationCompletedEvent);
-        result.prEmitted = emitPullRequestRequested(pullRequestRequested, lms);
+        result.prEmitted = emitPullRequestRequested(pullRequestRequested, {lcid, euuid});
     }
 
     return {new_status: 'PROCESSED', result};
