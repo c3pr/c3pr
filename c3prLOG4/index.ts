@@ -1,15 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as config from '../src/config';
 
-const mongodb = require('mongodb');
-const util = require('util');
+import * as mongodb from 'mongodb';
+import * as util from 'util';
 
-import fileAndModule from "../c3prLOG4/fileAndModule";
-
+import functionScriptFileDetector from './functionScriptFileDetector';
 
 
 interface IC3prLOG4 {
-    (message: string, options: Log4Options): void;
+    (message: string, options: Log4Options): any;
     lcid(): string;
     testMode(): void;
     isEnvVarSet(): boolean;
@@ -20,6 +19,7 @@ interface Log4Options {
     euuid: string;
     meta?: any;
     error?: Error;
+    level?: number;
 }
 
 function c3prLOG4(message: string, options: Log4Options) {
@@ -37,20 +37,16 @@ function c3prLOG4(message: string, options: Log4Options) {
         throw new Error(`c3prLOG4() has too many keys. Additional keys passed: ${JSON.stringify(extraKeys)}. Full args: ${JSON.stringify(arguments)}`);
     }
 
-
-    const script_name = c3prLOG4.caller.name === "" ? "(anonymous)" : c3prLOG4.caller.name;
-
-    const {stack, service_name} = fileAndModule();
+    const {stack, service_name, caller_name} = functionScriptFileDetector((options.level || 0) + 1);
 
     let {augmentedMsg, augmentedMeta} = augmentWithError(message, stack, options);
 
-    // noinspection JSIgnoredPromiseFromCall
-    printAndInsertIntoDatabase({
+    return printAndInsertIntoDatabase({
         message: augmentedMsg,
         lcid: options.lcid,
         euuid: options.euuid,
         service_name,
-        script_name,
+        caller_name,
         meta: augmentedMeta,
         error: options.error
     });
@@ -94,7 +90,7 @@ interface LogData {
     lcid: string;
     euuid: string;
     service_name?: string;
-    script_name?: string;
+    caller_name?: string;
     meta?: any;
     error?: Error;
 }
@@ -102,12 +98,13 @@ interface LogData {
 async function printAndInsertIntoDatabase(options: LogData) {
     showWarningIfDatabaseNotDefined();
 
-    console.log(`[${options.lcid}] [${options.euuid}] <${options.script_name}>`, options.message);
+    console.log(`[${options.lcid}] [${options.euuid}] <${options.caller_name}>`, options.message);
 
     if (!config.c3pr.logger.mongoUrl) {
         return;
     }
     try {
+        // @ts-ignore
         const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl, { useNewUrlParser: true });
 
         let logs = client.db(config.c3pr.logger.database).collection(config.c3pr.logger.collection + '4' + (testModeActivated ? "-test" : ""));
@@ -116,8 +113,8 @@ async function printAndInsertIntoDatabase(options: LogData) {
             dateTime: new Date().toISOString(),
             node: options.service_name,
             service_name: options.service_name,
-            moduleName: options.script_name,
-            script_name: options.script_name,
+            moduleName: options.caller_name,
+            caller_name: options.caller_name,
             lcid: options.lcid,
             euuid: options.euuid,
             metadata: options.meta,
