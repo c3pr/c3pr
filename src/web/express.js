@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
+require('./configController')(app);
 require('./agentRegistryController')(app);
 require('./busController')(app);
 require('./eventsController')(app);
