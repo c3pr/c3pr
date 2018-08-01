@@ -31,7 +31,7 @@
           <v-btn v-if="log.message.length > 70" color="primary" icon small @click="displayAtDialog(log.message)"><v-icon>message</v-icon></v-btn>
         </td>
         <td>
-          <span v-if="log.error"><v-btn color="primary" small icon @click="displayAtDialog(log.error)"><v-icon>error</v-icon></v-btn></span>
+          <span v-if="log.error"><v-btn color="error" small icon @click="displayAtDialog(log.error)"><v-icon>error</v-icon></v-btn></span>
           <span v-else>(none)</span>
         </td>
         <td><v-btn color="primary" icon small @click="displayAtDialog(log.metadata)"><v-icon>local_offer</v-icon></v-btn></td>
