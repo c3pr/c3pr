@@ -1,6 +1,6 @@
 {
   "name": "c3pr-brain",
-  "version": "2.0.0",
+  "version": "5.0.0",
   "description": "C-3PR Brain Module",
   "scripts": {
     "start": "node src/index.js",
@@ -24,8 +24,8 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
-    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#12.1.2",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#17.1.2",
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#12.1.3",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#17.1.3",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
