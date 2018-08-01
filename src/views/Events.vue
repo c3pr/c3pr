@@ -24,6 +24,10 @@
       </tbody>
     </table>
 
+    <br>
+
+    <h1>Unprocessed/Processing Events</h1>
+
   </div>
 </template>
 

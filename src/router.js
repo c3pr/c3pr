@@ -19,13 +19,8 @@ export default new Router({
       component: Dashboard,
     },
     {
-      path: '/logs',
-      name: 'logs',
-      component: Logs,
-    },
-    {
-      path: '/logs/id/:correlation_id',
-      name: 'logs-id',
+      path: '/logs/euuid/:euuid',
+      name: 'logs-euuid',
       component: Logs,
       props: true
     },

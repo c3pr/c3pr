@@ -50,7 +50,9 @@ const getters = {
   [GET_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED]: state => (project_uuid, changes_committed_uuid) => {
     const eventsOfProjectByType = state.eventsPerProject[project_uuid] || {};
     const eventsOfProject = flatten(Object.values(eventsOfProjectByType).map(eventMap => Object.values(eventMap)));
-    return eventsOfProject.filter(event => event.payload.changes_committed_root === changes_committed_uuid);
+    const eventsOfChangesCommitted = eventsOfProject.filter(event => event.payload.changes_committed_root === changes_committed_uuid);
+    eventsOfChangesCommitted.sort((a, b) => a.meta.modified.localeCompare(b.meta.modified));
+    return eventsOfChangesCommitted;
   }
 };
 

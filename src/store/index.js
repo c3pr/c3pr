@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 import projects, { PROJECTS } from './modules/projects';
 import events, { EVENTS } from './modules/events';
+import logs, { LOGS } from './modules/logs';
 
 export default new Vuex.Store({
 
@@ -12,7 +13,8 @@ export default new Vuex.Store({
 
   modules: {
     [PROJECTS]: projects,
-    [EVENTS]: events
+    [EVENTS]: events,
+    [LOGS]: logs,
   }
 
 });
