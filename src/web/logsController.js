@@ -14,24 +14,16 @@ module.exports = function (app) {
         });
     });
 
-    app.get('/api/v1/logs/nodes', function ({query}, response) {
-        logsDB.findNodes().then((nodes) => {
-            response.status(200).send(nodes);
-        }).catch((e) => {
-            response.status(500).send(e.toString());
-        });
-    });
-
-    app.get('/api/v1/logs/:node_name/', function ({params: {node_name}}, response) {
-        logsDB.findBy({node: node_name}).then((logs) => {
+    app.get('/api/v1/logs/lcid/:lcid/', function ({params: {lcid}}, response) {
+        logsDB.findBy({lcid}).then((logs) => {
             response.status(200).send(logs);
         }).catch((e) => {
             response.status(500).send(e.toString());
         });
     });
 
-    app.get('/api/v1/logs/id/:correlation_id/', function ({params: {correlation_id}}, response) {
-        logsDB.findBy({correlationIds: { $all: [correlation_id] } }).then((logs) => {
+    app.get('/api/v1/logs/euuid/:euuid/', function ({params: {euuid}}, response) {
+        logsDB.findBy({euuid}).then((logs) => {
             response.status(200).send(logs);
         }).catch((e) => {
             response.status(500).send(e.toString());
