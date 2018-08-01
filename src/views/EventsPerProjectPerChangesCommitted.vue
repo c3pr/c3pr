@@ -34,18 +34,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import {
-  EVENTS,
-  FETCH_ALL_EVENTS,
-  FETCH_CHANGES_COMMITTED_PER_PROJECT, FETCH_EVENTS_FOR_PROJECT, FETCH_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED,
-  GET_ALL_EVENTS,
-  GET_CHANGES_COMMITTED_PER_PROJECT, GET_EVENTS_BY_TYPE_FOR_PROJECT, GET_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED
-} from "../store/modules/events";
-import { PROJECTS, FETCH_ALL_PROJECTS, GET_ALL_PROJECTS } from "../store/modules/projects";
-import EventDetail from '../components/EventDetail.vue';
+  import {mapActions, mapGetters} from 'vuex';
+  import {
+    EVENTS,
+    FETCH_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED,
+    GET_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED
+  } from "../store/modules/events";
+  import EventDetail from '../components/EventDetail.vue';
 
-export default {
+  export default {
   name: "EventsPerProjectPerChangesCommitted",
 
   components: {EventDetail},

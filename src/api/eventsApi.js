@@ -25,6 +25,16 @@ export default {
   async perProjectEventCountOfType(event_type) {
     const { data: aggregations } = await axios.get(`/api/v1/events/${event_type}/analytics/count-per-project`);
     return aggregations;
+  },
+
+  async findAllUnprocessedEvents() {
+    const { data: events } = await axios.get(`/api/v1/events?meta.status=UNPROCESSED`);
+    return events;
+  },
+
+  async findAllProcessingEvents() {
+    const { data: events } = await axios.get(`/api/v1/events?meta.status=PROCESSING`);
+    return events;
   }
 
 }
