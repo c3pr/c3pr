@@ -1,3 +1,5 @@
+const rimraf = require('rimraf');
+
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const cloneRepositoryLocally = require("node-c3pr-git-client/src/cloneRepositoryLocally");
 const generateGitPatchBase64 = require("node-c3pr-git-client/patch/generateGitPatchBase64").default;
@@ -14,7 +16,6 @@ const config = require('../../config');
  */
 async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, {lcid, euuid}) {
 
-    try {
 
         c3prLOG4(`Invoking tool at git repo: ${toolInvocationRequested.repository.clone_url_http}`, {lcid, euuid});
 
@@ -26,7 +27,9 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, {lcid, eu
             throw new Error(msg);
         }
 
-        const cloneFolder = await cloneRepositoryLocally({
+    let cloneFolder;
+    try {
+        cloneFolder = await cloneRepositoryLocally({
             localUniqueCorrelationId: uuidv4(),
             cloneBaseDir: config.c3pr.agent.cloneDir,
             url: toolInvocationRequested.repository.clone_url_http,
@@ -49,6 +52,12 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, {lcid, eu
     } catch (error) {
         c3prLOG4(`Error during invokeToolAtGitRepo.`, {lcid, euuid, error});
         return {files: [], patch: {hexBase64: ''}};
+    } finally {
+        if (cloneFolder) {
+            rimraf(cloneFolder, function () {
+                c3prLOG4(`Clone folder ${cloneFolder} removed.`, {lcid, euuid});
+            });
+        }
     }
 
 }
