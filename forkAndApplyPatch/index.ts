@@ -1,5 +1,7 @@
 import * as path from 'path';
+import * as rimraf from 'rimraf';
 import { v4 as uuidv4 } from 'uuid';
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 import c3prSH3 from "node-c3pr-git-client/src/c3prSH3";
 import applyGitPatchBase64 from "node-c3pr-git-client/patch/applyGitPatchBase64";
 
@@ -46,6 +48,10 @@ async function forkAndApplyPatch({
     await c3prSH3(`git remote add fork ${forkRepoCloneUrl}`, {cwd: stagingFolder}, {replacements: [tokenReplacementForLogFunction], lcid, euuid});
     // push changes
     await c3prSH3(`git push -u fork ${forkRepoBranch}`, {cwd: stagingFolder}, {lcid, euuid});
+
+    rimraf(forkRepoBranch, () => {
+        c3prLOG4(`Clone/staging folder ${forkRepoBranch} removed.`, {lcid, euuid});
+    });
 
     return {forkRepoOrg, forkRepoProject, forkRepoBranch};
 }

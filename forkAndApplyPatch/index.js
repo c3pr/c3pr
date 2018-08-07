@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = require("path");
+const rimraf = require("rimraf");
 const uuid_1 = require("uuid");
+const c3prLOG4_1 = require("node-c3pr-logger/c3prLOG4");
 const c3prSH3_1 = require("node-c3pr-git-client/src/c3prSH3");
 const applyGitPatchBase64_1 = require("node-c3pr-git-client/patch/applyGitPatchBase64");
 const C3PR_CLONES_FOLDER = process.env.C3PR_CLONES_FOLDER || '/tmp/';
@@ -25,6 +27,9 @@ async function forkAndApplyPatch({ createForkIfNotExists, addAuthenticationToClo
     await c3prSH3_1.default(`git remote add fork ${forkRepoCloneUrl}`, { cwd: stagingFolder }, { replacements: [tokenReplacementForLogFunction], lcid, euuid });
     // push changes
     await c3prSH3_1.default(`git push -u fork ${forkRepoBranch}`, { cwd: stagingFolder }, { lcid, euuid });
+    rimraf(forkRepoBranch, () => {
+        c3prLOG4_1.default(`Clone/staging folder ${forkRepoBranch} removed.`, { lcid, euuid });
+    });
     return { forkRepoOrg, forkRepoProject, forkRepoBranch };
 }
 // noinspection JSUnusedGlobalSymbols
