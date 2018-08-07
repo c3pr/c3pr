@@ -11,8 +11,11 @@ module.exports = {
             mongoC3prUrl: C3PR_MONGO_URL,
             mongoC3prDatabase: C3PR_MONGO_DATABASE,
             mongoEventsCollection: 'events',
+
             uncollectPollingInMs: 5 * 60 * 1000, // five minutes
             uncollectTimeoutInMs: 60 * 60 * 1000, // one hour
+
+            broadcastIntervalInMs: 5 * 60 * 1000, // five minutes
 
             mongoProjectsCollection: 'projects',
             mongoPRsCollection: 'prs',

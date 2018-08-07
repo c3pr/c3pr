@@ -83,6 +83,10 @@ function peekUnprocessedEventOfType(event_type) {
     return uuid;
 }
 
+function getEventTypesWithUnprocessedEvents() {
+    return EVENTS_UNPROCESSED.keys();
+}
+
 module.exports = Object.freeze({
     UNPROCESSED: 'UNPROCESSED',
     PROCESSING: 'PROCESSING',
@@ -92,5 +96,6 @@ module.exports = Object.freeze({
     removeAsProcessing,
     addAsProcessing,
     peekUnprocessedEventOfType,
-    retrieveAllTimedOut
+    retrieveAllTimedOut,
+    getEventTypesWithUnprocessedEvents
 });

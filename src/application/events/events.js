@@ -118,6 +118,15 @@ async function initializeEventsOnStartup() {
         const allTimedOut = Status.retrieveAllTimedOut(config.c3pr.hub.uncollectTimeoutInMs);
         allTimedOut.forEach(({event_type, uuid}) => patchAsUnprocessed(event_type, uuid))
     }, config.c3pr.hub.uncollectPollingInMs).unref();
+
+
+
+    setInterval(() => {
+        const eventTypesWithUnprocessedEvents = Status.getEventTypesWithUnprocessedEvents();
+        for (let event_type of eventTypesWithUnprocessedEvents) {
+            c3prBus.emit(event_type);
+        }
+    }, config.c3pr.hub.broadcastIntervalInMs).unref();
 }
 
 module.exports = {
