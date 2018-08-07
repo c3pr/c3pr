@@ -54,7 +54,7 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, {lcid, eu
         return {files: [], patch: {hexBase64: ''}};
     } finally {
         if (cloneFolder) {
-            rimraf(cloneFolder, function () {
+            rimraf(cloneFolder, () => {
                 c3prLOG4(`Clone folder ${cloneFolder} removed.`, {lcid, euuid});
             });
         }
