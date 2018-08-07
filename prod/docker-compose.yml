@@ -2,7 +2,7 @@ version: '2'
 services:
 
   c3pr-hub:
-    image: c3pr/c3pr-hub:8.0.0
+    image: c3pr/c3pr-hub
     expose:
       - 7300 # used by other nodes for login and event subscription/publishing
     environment:
@@ -10,7 +10,7 @@ services:
       PORT: 7300
 
   c3pr-brain:
-    image: c3pr/c3pr-brain:5.0.0
+    image: c3pr/c3pr-brain
     expose:
       - 7301 # used by hub at callback
     environment:
@@ -19,7 +19,7 @@ services:
       C3PR_BRAIN_URL: http://c3pr-brain:7301
 
   c3pr-dashboard:
-    image: c3pr/c3pr-dashboard:4.0.0
+    image: c3pr/c3pr-dashboard
     ports:
       - 7305:7305 # used by c3pr-dashboard-ui, via end user's browser
     environment:
@@ -28,7 +28,7 @@ services:
       C3PR_HUB_URL: http://c3pr-hub:7300
 
   c3pr-dashboard-ui:
-    image: c3pr/c3pr-dashboard-ui:latest
+    image: c3pr/c3pr-dashboard-ui
     ports:
     - 7380:80 # used by end user
 
@@ -44,7 +44,7 @@ services:
 #      GITHUB_API_TOKEN: ${GITHUB_API_TOKEN}
 
   c3pr-repo-gitlab:
-    image: c3pr/c3pr-repo-gitlab:8.0.0
+    image: c3pr/c3pr-repo-gitlab
     ports:
       - 7304:7304 # used at gitlab integration settings
     environment:
