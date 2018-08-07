@@ -43,30 +43,19 @@
 
     <v-btn color="primary" icon small @click="reFetch"><v-icon>refresh</v-icon></v-btn>
 
-    <div class="text-xs-center">
-      <v-dialog v-model="displayDialog">
-        <v-card>
-          <v-card-title class="headline grey lighten-2" primary-title>Log Details</v-card-title>
-          <v-card-text>
-            <pre style="font-size: x-small">{{ formattedObjetctDisplayedAtDialog }}</pre>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" @click="displayDialog = false">OK</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
+    <display-dialog v-model="displayDialog" :content="objetctDisplayedAtDialog"></display-dialog>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { LOGS, FETCH_LOGS_FOR_EVENT, GET_LOGS_FOR_EVENT } from "../store/modules/logs";
+import DisplayDialog from '../components/DisplayDialog.vue';
 
 export default {
   name: 'Logs',
+
+  components: {DisplayDialog},
 
   props: {
     'euuid': String
@@ -80,13 +69,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(LOGS, {getLogsForEvent: GET_LOGS_FOR_EVENT}),
-
-    formattedObjetctDisplayedAtDialog() {
-      const objectAsString = JSON.stringify(this.objetctDisplayedAtDialog || "", null, 2);
-      const withLineBreaks = (objectAsString).replace(/([^\\])(?:\\r)?\\n/g, "$1\n");
-      return withLineBreaks.replace(/([^\\])\\t/g, "$1\t");
-    }
+    ...mapGetters(LOGS, {getLogsForEvent: GET_LOGS_FOR_EVENT})
   },
 
   mounted() {
