@@ -26,50 +26,13 @@
 
     <br>
 
-    <h1>Unprocessed/Processing Events</h1>
+    <h1>Processing Events ({{ eventsProcessing.length }})</h1>
+    <event-list :events="eventsProcessing"></event-list>
 
-    <table>
-      <thead>
-      <tr>
-        <th>uuid</th>
-        <th>event_type</th>
-        <th>status</th>
-        <th>created</th>
-        <th>modified</th>
-        <th>Logs</th>
-        <th>Details</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="event of eventsUnprocessedAndProcessing">
-        <td>{{ event.uuid.split("-")[0] }}</td>
-        <td>{{ event.event_type }}</td>
-        <td>{{ event.meta.status }}</td>
-        <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
-        <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
-        <td><router-link :to= "{ name: 'logs-euuid', params: { euuid: event.uuid }}">logs</router-link></td>
-        <td><v-btn color="primary" small @click="displayAtDialog(event)"><v-icon>local_offer</v-icon>Details</v-btn></td>
-      </tr>
-      </tbody>
-    </table>
+    <br>
 
-
-
-    <div class="text-xs-center">
-      <v-dialog v-model="displayDialog">
-        <v-card>
-          <v-card-title class="headline grey lighten-2" primary-title>Event Details</v-card-title>
-          <v-card-text>
-            <pre style="font-size: x-small">{{ formattedObjetctDisplayedAtDialog }}</pre>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" @click="displayDialog = false">OK</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
+    <h1>Unprocessed Events ({{ eventsUnprocessed.length }})</h1>
+    <event-list :events="eventsUnprocessed"></event-list>
 
   </div>
 </template>
@@ -78,16 +41,21 @@
   import {mapActions, mapGetters} from 'vuex';
   import {
     EVENTS,
-    FETCH_CHANGES_COMMITTED_PER_PROJECT, FETCH_EVENTS_UNPROCESSED_AND_PROCESSING,
-    GET_CHANGES_COMMITTED_PER_PROJECT, GET_EVENTS_UNPROCESSED_AND_PROCESSING
+    FETCH_CHANGES_COMMITTED_PER_PROJECT,
+    FETCH_EVENTS_UNPROCESSED_AND_PROCESSING,
+    GET_CHANGES_COMMITTED_PER_PROJECT,
+    GET_EVENTS_PROCESSING,
+    GET_EVENTS_UNPROCESSED,
   } from "../store/modules/events";
   import {PROJECTS, FETCH_ALL_PROJECTS, GET_ALL_PROJECTS} from "../store/modules/projects";
   import EventDetail from '../components/EventDetail.vue';
+  import EventList from '../components/EventList.vue';
+  import DisplayDialog from '../components/DisplayDialog.vue';
 
   export default {
     name: "Events",
 
-    components: {EventDetail},
+    components: {DisplayDialog, EventDetail, EventList},
 
     data() {
       return {
@@ -99,15 +67,10 @@
     computed: {
       ...mapGetters(EVENTS, {
         changesCommittedPerProject: GET_CHANGES_COMMITTED_PER_PROJECT,
-        eventsUnprocessedAndProcessing: GET_EVENTS_UNPROCESSED_AND_PROCESSING,
+        eventsUnprocessed: GET_EVENTS_UNPROCESSED,
+        eventsProcessing: GET_EVENTS_PROCESSING,
       }),
-      ...mapGetters(PROJECTS, {projects: GET_ALL_PROJECTS}),
-
-      formattedObjetctDisplayedAtDialog() {
-        const objectAsString = JSON.stringify(this.objetctDisplayedAtDialog || "", null, 2);
-        const withLineBreaks = (objectAsString).replace(/([^\\])(?:\\r)?\\n/g, "$1\n");
-        return withLineBreaks.replace(/([^\\])\\t/g, "$1\t");
-      }
+      ...mapGetters(PROJECTS, {projects: GET_ALL_PROJECTS})
     },
 
     created() {
@@ -121,12 +84,7 @@
         fetchChangesCommittedPerProject: FETCH_CHANGES_COMMITTED_PER_PROJECT,
         fetchEventsUnprocessedAndProcessing: FETCH_EVENTS_UNPROCESSED_AND_PROCESSING
       }),
-      ...mapActions(PROJECTS, {fetchProjects: FETCH_ALL_PROJECTS}),
-
-      displayAtDialog(obj) {
-        this.objetctDisplayedAtDialog = obj;
-        this.displayDialog = true;
-      },
+      ...mapActions(PROJECTS, {fetchProjects: FETCH_ALL_PROJECTS})
     }
   };
 </script>

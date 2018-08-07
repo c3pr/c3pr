@@ -15,7 +15,8 @@ export const GET_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED = 'GET_EVENTS_FOR_PROJE
 export const GET_CHANGES_COMMITTED_PER_PROJECT = 'GET_CHANGES_COMMITTED_PER_PROJECT';
 
 export const GET_EVENTS = 'GET_EVENTS';
-export const GET_EVENTS_UNPROCESSED_AND_PROCESSING = 'GET_EVENTS_UNPROCESSED_AND_PROCESSING';
+export const GET_EVENTS_UNPROCESSED = 'GET_EVENTS_UNPROCESSED';
+export const GET_EVENTS_PROCESSING = 'GET_EVENTS_PROCESSING';
 
 export const UPDATE_EVENT = 'UPDATE_EVENT';
 export const UPDATE_EVENT_FOR_PROJECT = 'UPDATE_EVENT_FOR_PROJECT';
@@ -62,9 +63,13 @@ const getters = {
     const arrayOfMapIdEvent = flatten(arrayOfMapTypeVsEvents.map(mie => Object.values(mie)));
     return flatten(arrayOfMapIdEvent.map(ev => Object.values(ev)));
   },
-  [GET_EVENTS_UNPROCESSED_AND_PROCESSING]: state => {
+  [GET_EVENTS_UNPROCESSED]: state => {
     const arrayOfEvents = Object.values(state.events);
-    return arrayOfEvents.filter(e => e.meta.status === 'UNPROCESSED' || e.meta.status === 'PROCESSING');
+    return arrayOfEvents.filter(e => e.meta.status === 'UNPROCESSED');
+  },
+  [GET_EVENTS_PROCESSING]: state => {
+    const arrayOfEvents = Object.values(state.events);
+    return arrayOfEvents.filter(e => e.meta.status === 'PROCESSING');
   },
 };
 
