@@ -19,11 +19,11 @@ async function emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatc
     const parent = {event_type: toolInvocationRequestedEvent.event_type, uuid: toolInvocationRequestedEvent.uuid};
 
     const changed_files = [
-        ...gitPatchBase64.files.added,
-        ...gitPatchBase64.files.modified,
-        ...gitPatchBase64.files.renamed.map(renamedFile => renamedFile.from),
-        ...gitPatchBase64.files.renamed.map(renamedFile => renamedFile.to),
-        ...gitPatchBase64.files.deleted
+        ...(gitPatchBase64.files.added || []),
+        ...(gitPatchBase64.files.modified || []),
+        ...(gitPatchBase64.files.renamed.map(renamedFile => renamedFile.from) || []),
+        ...(gitPatchBase64.files.renamed.map(renamedFile => renamedFile.to) || []),
+        ...(gitPatchBase64.files.delete || [])
     ];
     const unmodified_files = toolInvocationRequested.files.filter(f => !changed_files.includes(f));
 
