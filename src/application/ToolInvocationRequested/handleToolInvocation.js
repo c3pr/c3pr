@@ -81,7 +81,7 @@ async function emitToolInvocationFailed(toolInvocationRequestedEvent, failure_me
         lcid,
         euuid
     }).catch(error => {
-        c3prLOG4(`Error while registering new event: ToolInvocationCompleted.`, {lcid, euuid, error, meta});
+        c3prLOG4(`Error while registering new event: ToolInvocationFailed.`, {lcid, euuid, error, meta});
         return {new_status: 'UNPROCESSED', result: {error, meta}};
     });
 
