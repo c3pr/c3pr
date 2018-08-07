@@ -17,15 +17,15 @@ const config = require('../../config');
 async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, {lcid, euuid}) {
 
 
-        c3prLOG4(`Invoking tool at git repo: ${toolInvocationRequested.repository.clone_url_http}`, {lcid, euuid});
+    c3prLOG4(`Invoking tool at git repo: ${toolInvocationRequested.repository.clone_url_http}`, {lcid, euuid});
 
-        const tool = loadTools.toolsHash[toolInvocationRequested.tool_id];
-        if (!tool) {
-            const msg = `Tool of tool_id '${toolInvocationRequested.tool_id}' was not found!`;
-            c3prLOG4(msg, {lcid, euuid, meta: {toolInvocation: toolInvocationRequested}});
-            // noinspection ExceptionCaughtLocallyJS
-            throw new Error(msg);
-        }
+    const tool = loadTools.toolsHash[toolInvocationRequested.tool_id];
+    if (!tool) {
+        const msg = `Tool of tool_id '${toolInvocationRequested.tool_id}' was not found!`;
+        c3prLOG4(msg, {lcid, euuid, meta: {toolInvocation: toolInvocationRequested}});
+        // noinspection ExceptionCaughtLocallyJS
+        throw new Error(msg);
+    }
 
     let cloneFolder;
     try {
