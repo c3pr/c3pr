@@ -48,11 +48,17 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, {lcid, eu
             });
         }
 
-        return generateGitPatchBase64({cloneFolder, gitUserName: config.c3pr.agent.gitUserName, gitUserEmail: config.c3pr.agent.gitUserEmail, commitMessage: tool.pr_title}, {lcid, euuid})
+        c3prLOG4(`Done running tool on every modified file at ${cloneFolder}. Attempting to generate patch...`, {lcid, euuid});
+
+        let patch = await generateGitPatchBase64({cloneFolder, gitUserName: config.c3pr.agent.gitUserName, gitUserEmail: config.c3pr.agent.gitUserEmail, commitMessage: tool.pr_title}, {lcid, euuid});
+
+        c3prLOG4(`Patch generated.`, {lcid, euuid});
+        return patch;
     } catch (error) {
         c3prLOG4(`Error during invokeToolAtGitRepo.`, {lcid, euuid, error});
         return {files: [], patch: {hexBase64: ''}};
     } finally {
+        c3prLOG4(`All work is done. Clone folder '${cloneFolder}' will be removed.`, {lcid, euuid});
         if (cloneFolder) {
             rimraf(cloneFolder, () => {
                 c3prLOG4(`Clone folder ${cloneFolder} removed.`, {lcid, euuid});
