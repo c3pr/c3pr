@@ -1,6 +1,6 @@
 {
   "name": "c3pr-agent",
-  "version": "13.0.0",
+  "version": "14.0.0",
   "description": "C3PR Container agent",
   "main": "index.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "js-yaml": "^3.11.0",
     "mkdirp": "^0.5.1",
     "node-c3pr-git-client": "github:c3pr/node-c3pr-git-client#13.0.5",
-    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#12.1.5",
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#12.1.6",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#17.1.5",
     "rimraf": "^2.6.2",
     "uuid": "^3.2.1"
