@@ -38,7 +38,9 @@ async function log(nodeName, correlationIds, moduleNames, message, metadata) {
         return;
     }
     try {
-        const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl, { useNewUrlParser: true });
+        const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl, {
+        // useNewUrlParser: true // we rolled back to mongodb 3.08 (from 3.1.1 or 3.0.11)
+        });
         let logs = client.db(config.c3pr.logger.database).collection(config.c3pr.logger.collection + (c3prLOG.testModeActivated ? "-test" : ""));
         await logs.insertOne({ node: nodeName, dateTime: new Date().toISOString(), correlationIds, moduleNames, message, metadata, lcid: metadata.lcid, euuid: metadata.euuid });
         await client.close();

@@ -45,7 +45,9 @@ async function log(nodeName: string, correlationIds: string[], moduleNames: stri
         return;
     }
     try {
-        const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl, { useNewUrlParser: true });
+        const client = await mongodb.MongoClient.connect(config.c3pr.logger.mongoUrl, {
+            // useNewUrlParser: true // we rolled back to mongodb 3.08 (from 3.1.1 or 3.0.11)
+        });
 
         let logs = client.db(config.c3pr.logger.database).collection(config.c3pr.logger.collection + ((c3prLOG as any).testModeActivated ? "-test" : ""));
 
