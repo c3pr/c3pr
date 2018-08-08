@@ -13,7 +13,7 @@ async function login({loginUrl, username, password, subscriptions, lcid, euuid =
         c3prLOG4(`Error while logging in at ${loginUrl}.`, {lcid, euuid, error});
         return new Promise(resolve => {
             setTimeout(() => {
-                resolve(login({loginUrl, username, password, subscriptions}));
+                resolve(login({loginUrl, username, password, subscriptions, lcid, euuid}));
             }, LOGIN_RETRY_TIME);
         })
     }
