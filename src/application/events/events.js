@@ -42,7 +42,9 @@ async function reprocessParents(event_type) {
         Status.markForReprocessing(parentEventType, parentUUID, '<REPROCESS>');
         await eventsDB.persistAsUnprocessed(parentUUID);
 
-        c3prLOG4(`Event patched as processed due to request to reprocess its parents.`, {lcid: c3prLOG4.lcid(), euuid: e.uuid});
+        const reprocessLCID = c3prLOG4.lcid();
+        c3prLOG4(`Event patched as processed due to request to reprocess its parents.`, {lcid: reprocessLCID, euuid: e.uuid});
+        c3prLOG4(`Event patched as unprocessed due to request to reprocess the child event.`, {lcid: reprocessLCID, euuid: parentUUID, meta: {childEventType: e.event_type, childUUID: e.uuid}});
         await patchAsProcessed(e.event_type, e.uuid, REPROCESS_PROCESSOR_UUID);
     }
 }
