@@ -3,8 +3,10 @@ services:
 
   c3pr-hub:
     image: c3pr/c3pr-hub
-    expose:
-      - 7300 # used by other nodes for login and event subscription/publishing
+#    expose:
+#      - 7300 # used by other nodes for login and event subscription/publishing
+    ports:
+      - 7300:7300
     environment:
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
       PORT: 7300
