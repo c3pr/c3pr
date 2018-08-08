@@ -79,7 +79,8 @@ export default {
   methods: {
     displayAtDialog(obj) {
       this.objetctDisplayedAtDialog = obj;
-      this.displayDialog = true;
+      this.displayDialog = false;
+      this.$nextTick(() => this.displayDialog = true)
     },
 
     ...mapActions(LOGS, {fetchLogsForEvent: FETCH_LOGS_FOR_EVENT}),

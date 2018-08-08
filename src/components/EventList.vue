@@ -47,7 +47,8 @@ export default {
   methods: {
     displayAtDialog(obj) {
       this.objetctDisplayedAtDialog = obj;
-      this.displayDialog = true;
+      this.displayDialog = false;
+      this.$nextTick(() => this.displayDialog = true)
     },
   }
 };
