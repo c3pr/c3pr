@@ -30,6 +30,23 @@ async function register(event_type, payload) {
     return uuid;
 }
 
+async function reprocessParents(event_type) {
+    assert.ok(event_type, "Missing required argument: event_type");
+    const REPROCESS_PROCESSOR_UUID = `<REPROCESS> at ${new Date().toISOString()}`;
+    let events = await findAll({event_type, "meta.status": Status.UNPROCESSED});
+    for(let e of events) {
+        await patchAsProcessing(e.event_type, e.uuid, REPROCESS_PROCESSOR_UUID);
+        let parentEventType = e.payload.parent.event_type;
+        let parentUUID = e.payload.parent.uuid;
+
+        Status.markForReprocessing(parentEventType, parentUUID, '<REPROCESS>');
+        await eventsDB.persistAsUnprocessed(parentUUID);
+
+        c3prLOG4(`Event patched as processed due to request to reprocess its parents.`, {lcid: c3prLOG4.lcid(), euuid: e.uuid});
+        await patchAsProcessed(e.event_type, e.uuid, REPROCESS_PROCESSOR_UUID);
+    }
+}
+
 function find(uuid) {
     assert.ok(uuid, "uuid is required");
     return eventsDB.find(uuid);
@@ -106,8 +123,9 @@ async function initializeEventsOnStartup() {
         // noinspection JSIgnoredPromiseFromCall
         eventsDB.persistAsUnprocessed(uuid);
     });
+    const previouslyUnprocessedEventTypes = Array.from(new Set(previouslyUnprocessedEvents.map(e => e.event_type)));
     c3prLOG4(
-        `Initialization complete. Previously UNPROCESSED events: ${previouslyUnprocessedEvents.length}. Previously PROCESSING events: ${previouslyProcessingEvents.length}`,
+        `Initialization complete. Previously UNPROCESSED events: ${previouslyUnprocessedEvents.length} [${previouslyUnprocessedEventTypes}]. Previously PROCESSING events: ${previouslyProcessingEvents.length}`,
         {lcid, euuid, meta: {previouslyUnprocessedEvents}}
     );
 
@@ -139,6 +157,7 @@ module.exports = {
     patchAsProcessing,
     patchAsProcessed,
     patchAsUnprocessed,
-    analyticsPerProjectEventCountOfType
+    analyticsPerProjectEventCountOfType,
+    reprocessParents
 };
 

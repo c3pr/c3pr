@@ -20,9 +20,9 @@ function addAsUnprocessed(event_type, uuid) {
     EVENTS_UNPROCESSED.set(event_type, unprocessedEventsOfType);
 }
 
-function removeAsUnprocessed(event_type, uuid) {
+function removeAsUnprocessed(event_type, uuid, skipPresenceCheck = false) {
     const unprocessedEventsOfType = EVENTS_UNPROCESSED.get(event_type) || new Set();
-    if (!unprocessedEventsOfType.has(uuid)) {
+    if (!unprocessedEventsOfType.has(uuid) && !skipPresenceCheck) {
         throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is not currently with unprocessed status.`)
     }
     unprocessedEventsOfType.delete(uuid);
@@ -50,16 +50,27 @@ function currentlyProcessing(event_type, uuid) {
     return processingEventsOfType.get(uuid);
 }
 
+const REPROCESS = '<REPROCESS>';
+
 function removeAsProcessing(event_type, uuid, processor_uuid) {
     const processingEventsOfType = EVENTS_PROCESSING.get(event_type) || new Map();
     const processingEvent = processingEventsOfType.get(uuid);
+    if (!processingEvent && processor_uuid === REPROCESS) {
+        return;
+    }
     if (!processingEvent) {
         throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is not currently being processed.`)
     }
-    if (processor_uuid !== '<TIMED_OUT>' && processingEvent.processor_uuid !== processor_uuid) {
+    if (processor_uuid !== '<TIMED_OUT>' && processor_uuid !== REPROCESS && processingEvent.processor_uuid !== processor_uuid) {
         throw new Error(`Event of UUID '${uuid}' and type '${event_type}' is being processed by a different processor_uuid ('${processingEvent.processor_uuid}'), not the one you sent me ('${processor_uuid}').`)
     }
     processingEventsOfType.delete(uuid);
+}
+
+function markForReprocessing(event_type, uuid) {
+    removeAsProcessing(event_type, uuid, REPROCESS);
+    removeAsUnprocessed(event_type, uuid, true);
+    addAsUnprocessed(event_type, uuid);
 }
 
 function retrieveAllTimedOut(timeoutInMs) {
@@ -97,5 +108,6 @@ module.exports = Object.freeze({
     addAsProcessing,
     peekUnprocessedEventOfType,
     retrieveAllTimedOut,
-    getEventTypesWithUnprocessedEvents
+    getEventTypesWithUnprocessedEvents,
+    markForReprocessing
 });

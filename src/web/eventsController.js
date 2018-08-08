@@ -71,6 +71,14 @@ module.exports = function (app) {
         });
     });
 
+    app.post('/api/v1/events/:eventType/reprocess-parents', function (request, response) {
+        events.reprocessParents(request.params.eventType).then((uuid) => {
+            response.status(200).send(uuid);
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
     // curl --data '{"key": "added", "value": "booo", "timeout": 10000}' --header "Content-Type: application/json" -X PATCH http://127.0.0.1:7300/api/registry
     app.patch('/api/v1/events/:eventType/:uuid/meta/processing', function ({params: {eventType, uuid}, decodedJwtToken}, response) {
         let processor_uuid = decodedJwtToken.sub;

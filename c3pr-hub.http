@@ -26,3 +26,7 @@ PATCH http://localhost:7305/api/hub/api/v1/projects/5b36aa1e6e3cbc0006213b97
 Authorization: Bearer {{auth_token}}
 
 ###
+POST http://localhost:7300/api/v1/events/ToolInvocationFailed/reprocess-parents
+Authorization: Bearer {{auth_token}}
+
+###
