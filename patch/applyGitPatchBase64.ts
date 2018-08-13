@@ -3,7 +3,7 @@ import c3prSH3 from "../src/c3prSH3";
 import { v4 as uuidv4 } from  'uuid';
 import {PatchDiffBase64} from "./generateGitPatchBase64";
 
-async function applyGitPatchBase64(cloneFolder: string, gitUserName: string, gitUserEmail: string, patch: PatchDiffBase64, {lcid, euuid}) {
+async function applyGitPatchBase64(cloneFolder: string, gitUserName: string, gitUserEmail: string, patch: PatchDiffBase64, {lcid, sha, euuid}) {
     const patchFileName = `c3pr-${uuidv4()}.patch`;
     const patchFilePath = `${cloneFolder}/${patchFileName}`;
 
@@ -12,8 +12,9 @@ async function applyGitPatchBase64(cloneFolder: string, gitUserName: string, git
 
     const userNameNoQuotes = gitUserName.replace(/'/g, '');
     const userEmailNoQuotes = gitUserEmail.replace(/'/g, '');
-    await c3prSH3(`git -c user.name='${userNameNoQuotes}' -c user.email='${userEmailNoQuotes}' am --keep-cr --whitespace=fix ${patchFileName}`, {cwd: cloneFolder}, {lcid, euuid});
+    await c3prSH3(`git -c user.name='${userNameNoQuotes}' -c user.email='${userEmailNoQuotes}' am --keep-cr --whitespace=fix ${patchFileName}`, {cwd: cloneFolder}, {lcid, sha, euuid});
     fs.unlinkSync(patchFilePath);
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default applyGitPatchBase64;

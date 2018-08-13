@@ -16,15 +16,15 @@ function replaceTokens(input, replacements) {
     });
     return inputAfterReplacements;
 }
-async function c3prSH3(shCommand, shOptions = {}, { lcid, euuid, level: outerLevel, stdout: shouldStdOut = false, replacements } = {}) {
+async function c3prSH3(shCommand, shOptions = {}, { lcid, sha, euuid, level: outerLevel, stdout: shouldStdOut = false, replacements }) {
     const level = (outerLevel || 0) + 1;
     const hideTokens = s => replaceTokens(s, replacements || []);
-    c3prLOG4_1.default(`\$ ${hideTokens(shCommand)}`, { lcid, euuid, level });
+    c3prLOG4_1.default(`\$ ${hideTokens(shCommand)}`, { lcid, sha, euuid, level });
     let { error, stdout, stderr } = await sh(shCommand, shOptions);
     if (shouldStdOut) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        c3prLOG4_1.default(hideTokens(stdout), { lcid, euuid, level });
+        c3prLOG4_1.default(hideTokens(stdout), { lcid, sha, euuid, level });
     }
     if (error) {
         c3prLOG4_1.default(`
@@ -41,7 +41,7 @@ async function c3prSH3(shCommand, shOptions = {}, { lcid, euuid, level: outerLev
             ------------------------------
             STDERR:
             ${hideTokens(stderr)}
-            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`, { lcid, euuid, level });
+            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`, { lcid, sha, euuid, level });
         throw new Error(hideTokens(error));
     }
     return (hideTokens(stdout) || '').trim();

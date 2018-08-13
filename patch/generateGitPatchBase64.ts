@@ -20,7 +20,7 @@ export interface GitPatchBase64 {
     patch: PatchDiffBase64;
 }
 
-function extractFileChanges(fileNames):FileChanges {
+function extractFileChanges(fileNames: string):FileChanges {
     return fileNames.trim().split('\n').filter(f => f).reduce((previousValue: FileChanges, currentValue) => {
         switch (currentValue[0]) {
             case 'A':
@@ -44,20 +44,20 @@ function extractFileChanges(fileNames):FileChanges {
     }, {added: [], modified: [], renamed: [], deleted: []});
 }
 
-async function generateGitPatchBase64({cloneFolder, gitUserName, gitUserEmail, commitMessage}, {lcid, euuid}): Promise<GitPatchBase64> {
+async function generateGitPatchBase64({cloneFolder, gitUserName, gitUserEmail, commitMessage}, {lcid, sha, euuid}): Promise<GitPatchBase64> {
 
-    await c3prSH3(`git add -A`, {cwd: cloneFolder}, {lcid, euuid});
+    await c3prSH3(`git add -A`, {cwd: cloneFolder}, {lcid, sha, euuid});
 
     const diffFilePath = `${cloneFolder}/1`;
 
-    // let fileNames = await c3prSH3(`git diff --staged --name-only`, {cwd: cloneFolder}, {lcid, euuid});
-    let fileNames = await c3prSH3(`git status --short`, {cwd: cloneFolder}, {lcid, euuid});
+    // let fileNames = await c3prSH3(`git diff --staged --name-only`, {cwd: cloneFolder}, {lcid, sha, euuid});
+    let fileNames = await c3prSH3(`git status --short`, {cwd: cloneFolder}, {lcid, sha, euuid});
 
     if (fileNames.trim() === '') {
         return {files: {added: [], modified: [], renamed: [], deleted: []}, patch: {hexBase64: '', plain: '', header: '', footer: ''}};
     }
 
-    // await c3prSH3(`git diff --staged --ignore-space-change > changes.patch`, {cwd: cloneFolder}, {lcid, euuid});
+    // await c3prSH3(`git diff --staged --ignore-space-change > changes.patch`, {cwd: cloneFolder}, {lcid, sha, euuid});
     // console.log('\n\n\n\n\n\n');
     // const changes = fs.readFileSync(`${cloneFolder}/changes.patch`, 'utf8');
     // console.log(changes);
@@ -66,9 +66,9 @@ async function generateGitPatchBase64({cloneFolder, gitUserName, gitUserEmail, c
     // ADD and COMMIT CHANGES
     const userNameNoQuotes = gitUserName.replace(/'/g, '');
     const userEmailNoQuotes = gitUserEmail.replace(/'/g, '');
-    await c3prSH3(`git -c user.name='${userNameNoQuotes}' -c user.email='${userEmailNoQuotes}' commit -m "${commitMessage.replace(/"/g, '\\"')}"`, {cwd: cloneFolder}, {lcid, euuid});
+    await c3prSH3(`git -c user.name='${userNameNoQuotes}' -c user.email='${userEmailNoQuotes}' commit -m "${commitMessage.replace(/"/g, '\\"')}"`, {cwd: cloneFolder}, {lcid, sha, euuid});
 
-    await c3prSH3(`git format-patch --ignore-space-at-eol --numbered-files -n -1 HEAD`, {cwd: cloneFolder}, {lcid, euuid});
+    await c3prSH3(`git format-patch --ignore-space-at-eol --numbered-files -n -1 HEAD`, {cwd: cloneFolder}, {lcid, sha, euuid});
 
     const plain = fs.readFileSync(diffFilePath, 'utf8');
 
