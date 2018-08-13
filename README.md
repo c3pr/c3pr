@@ -21,7 +21,8 @@ Example at a JavaScript file:
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 
 let lcid = c3prLOG4.lcid(); // log correlation id
-c3prLOG4(`message.`, {lcid, euuid: '123-123-evt-uuid', ids, logMetas});
+let sha = `some git sha, if present`;
+c3prLOG4(`message.`, {lcid, sha, euuid: '123-123-evt-uuid', ids, logMetas});
 ```
 
 See [test file](src/c3prLOG.test.js) for usages.
