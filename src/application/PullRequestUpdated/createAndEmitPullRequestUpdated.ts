@@ -18,9 +18,12 @@ function getStatus(gitLabMergeRequestUpdatedWebhook: GitLabMergeRequestUpdated) 
 }
 
 function createPullRequestUpdated(gitLabMergeRequestUpdatedWebhook: GitLabMergeRequestUpdated) {
+    // Expected message format: "dfasdfasdffd This fix was generated in response to the commit 5aeb86edb4a17cb985c13a4db14a4b66064ef94b.".match(/(\w+)\.$/)[1]
+    const revision = gitLabMergeRequestUpdatedWebhook.object_attributes.description.match(/(\w+)\.$/)[1];
     return {
         repository: {
-            clone_url_http: gitLabMergeRequestUpdatedWebhook.project.git_http_url
+            clone_url_http: gitLabMergeRequestUpdatedWebhook.project.git_http_url,
+            revision
         },
 
         pr_id: gitLabMergeRequestUpdatedWebhook.object_attributes.iid,
