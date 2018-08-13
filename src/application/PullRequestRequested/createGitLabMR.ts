@@ -14,13 +14,12 @@ async function createGitLabMR({
                             pr_title,
                             pr_body,
                             patchHexBase64,
-                            lcid,
-                            euuid
+                            lcid, sha, euuid
                         }) {
 
     c3prLOG4(
         `Initiating MR creation.`,
-        {lcid, euuid, meta: {mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitLabUrl, gitLabApiToken, gitUserName, gitUserEmail, pr_title, pr_body, pr_assignee, patchHexBase64}}
+        {lcid, sha, euuid, meta: {mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitLabUrl, gitLabApiToken, gitUserName, gitUserEmail, pr_title, pr_body, pr_assignee, patchHexBase64}}
     );
 
     const addAuthenticationToCloneUrl = (cloneUrl) => {
@@ -43,10 +42,9 @@ async function createGitLabMR({
         prCommitMessage: pr_title,
         patchContent: patchHexBase64,
         mainRepoCloneUrl,
-        lcid,
-        euuid
+        lcid, sha, euuid
     });
-    return outboundPorts.createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, pr_title, pr_body, pr_assignee, {lcid, euuid});
+    return outboundPorts.createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, pr_title, pr_body, pr_assignee, {lcid, sha, euuid});
 }
 
 export { createGitLabMR };

@@ -11,19 +11,21 @@ function handleWebhook(webhookPayload: GitLabPush | GitLabMergeRequestUpdated): 
     if (webhookPayload.object_kind === "push") {
         let gitlabPush = webhookPayload as GitLabPush;
         const euuid = 'gitlab-push:' + gitlabPush.after;
-        c3prLOG4(`Received webhook for PUSH from ${gitlabPush.repository.git_http_url}. Message: '${gitlabPush.commits && gitlabPush.commits[0].message.trim()}'.`, {lcid, euuid});
-        return handlePush(gitlabPush, {lcid, euuid});
+        const sha = gitlabPush.after;
+        c3prLOG4(`Received webhook for PUSH from ${gitlabPush.repository.git_http_url}. Message: '${gitlabPush.commits && gitlabPush.commits[0].message.trim()}'.`, {lcid, sha, euuid});
+        return handlePush(gitlabPush, {lcid, sha, euuid});
     }
 
     if (webhookPayload.object_kind === "merge_request") {
         let gitLabMergeRequestUpdated = webhookPayload as GitLabMergeRequestUpdated;
         const euuid = 'gitlab-mru:' + gitLabMergeRequestUpdated.object_attributes.last_commit.id;
-        return handleMergeRequest(gitLabMergeRequestUpdated, {lcid, euuid});
+        const sha = gitLabMergeRequestUpdated.object_attributes.last_commit.id;
+        return handleMergeRequest(gitLabMergeRequestUpdated, {lcid, sha, euuid});
     }
 
     const sha = (webhookPayload as GitLabPush).after || (oattr => oattr && oattr.last_commit && oattr.last_commit.id)((webhookPayload as any).object_attributes);
     const euuid = 'gitlab-unknown:' + sha;
-    c3prLOG4(`Received webhook. Unknown type: ${webhookPayload.object_kind}.`, {lcid, euuid, meta: {webhookPayload}});
+    c3prLOG4(`Received webhook. Unknown type: ${webhookPayload.object_kind}.`, {lcid, sha, euuid, meta: {webhookPayload}});
 }
 
 export { handleWebhook };

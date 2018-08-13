@@ -4,7 +4,7 @@ import {createPullRequestCreated} from "./createPullRequestCreated";
 import {emitPullRequestCreated} from "./emitPullRequestCreated";
 
 
-export function createAndEmitPullRequestCreated(pullRequestRequestedEvent: Event<any>, createMrResult: GitLabMergeRequestCreated, {lcid, euuid}) {
+export function createAndEmitPullRequestCreated(pullRequestRequestedEvent: Event<any>, createMrResult: GitLabMergeRequestCreated, {lcid, sha, euuid}) {
     const pullRequestCreated = createPullRequestCreated(pullRequestRequestedEvent, createMrResult);
-    return emitPullRequestCreated(pullRequestCreated, {lcid, euuid});
+    return emitPullRequestCreated(pullRequestCreated, {lcid, sha, euuid});
 }

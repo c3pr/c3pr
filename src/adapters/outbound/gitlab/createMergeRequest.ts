@@ -6,7 +6,7 @@ import {GitLabMergeRequestCreated} from "../../../ports/outbound/types/GitLabMer
 import {getGitLabProject} from "./getGitLabProject";
 
 
-async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBodyMarkdown, pr_assignee, {lcid, euuid}): Promise<GitLabMergeRequestCreated> {
+async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, forkRepoProject, forkRepoBranch, prTitle, prBodyMarkdown, pr_assignee, {lcid, sha, euuid}): Promise<GitLabMergeRequestCreated> {
 
     let {id: mainRepoId} = await getGitLabProject(mainRepoOrgRepo);
     let forkRepoId = encodeURIComponent(forkRepoOrg+"/"+forkRepoProject);
@@ -25,7 +25,7 @@ async function createMergeRequest(mainRepoOrgRepo, mainRepoBranch, forkRepoOrg, 
         "allow_maintainer_to_push": true, // boolean       no	Whether or not a maintainer of the target project can push to the source branch
     };
 
-    c3prLOG4(`Requesting MR creation.`, {lcid, euuid, meta: {mainRepoOrgRepo, forkRepoOrg, forkRepoProject, pr_assignee, payload}});
+    c3prLOG4(`Requesting MR creation.`, {lcid, sha, euuid, meta: {mainRepoOrgRepo, forkRepoOrg, forkRepoProject, pr_assignee, payload}});
 
     let {data: mergeRequestCreation} = await axios.post(
         `${config.c3pr.repoGitlab.gitlab.url}/api/v4/projects/${forkRepoId}/merge_requests`,

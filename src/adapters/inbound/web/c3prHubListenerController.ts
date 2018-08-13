@@ -8,9 +8,9 @@ export default function (app) {
 
     app.post(config.c3pr.repoGitlab.PullRequestRequestedCallbackUrl, function (request, response) {
         const lcid = c3prLOG4.lcid();
-        c3prLOG4(`'PullRequestRequested' received.`, {lcid, euuid});
+        c3prLOG4(`'PullRequestRequested' received.`, {lcid, sha, euuid});
         // noinspection JSIgnoredPromiseFromCall
-        inboundPorts.handlePullRequestRequested({lcid, euuid});
+        inboundPorts.handlePullRequestRequested({lcid, sha, euuid});
         response.send('Event received. I will process it, thanks.');
     });
 

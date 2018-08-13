@@ -31,5 +31,5 @@ c3pr-repo-gitlab webhooks URL will be: ${config.c3pr.repoGitlab.c3prRepoGitlabUr
 
 c3pr's git username and email are: '${config.c3pr.repoGitlab.gitlab.botUserName.replace(/'/g, '')}' <'${config.c3pr.repoGitlab.gitlab.botUserEmail.replace(/'/g, '')}'>
 `);
-    c3prLOG4(`C-3PR Github Repo is up at ${config.c3pr.repoGitlab.c3prRepoGitlabUrl}.`, {lcid, euuid});
+    c3prLOG4(`C-3PR Github Repo is up at ${config.c3pr.repoGitlab.c3prRepoGitlabUrl}.`, {lcid, sha, euuid});
 });

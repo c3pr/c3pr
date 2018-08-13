@@ -3,10 +3,10 @@ import {c3prRNE} from 'node-c3pr-hub-client/events/registerNewEvent';
 import config from '../../config';
 
 
-export function emitPullRequestCreated(pullRequestCreated, {lcid, euuid}) {
+export function emitPullRequestCreated(pullRequestCreated, {lcid, sha, euuid}) {
     c3prLOG4(
         `Registering new event of type 'PullRequestCreated' for repository ${pullRequestCreated.repository.clone_url_http} and rev ${pullRequestCreated.repository.revision}.`,
-        {lcid, euuid, meta: {payload: pullRequestCreated}}
+        {lcid, sha, euuid, meta: {payload: pullRequestCreated}}
     );
 
     return c3prRNE.registerNewEvent({
@@ -14,9 +14,8 @@ export function emitPullRequestCreated(pullRequestCreated, {lcid, euuid}) {
         payload: pullRequestCreated,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.hub.auth.jwt,
-        lcid,
-        euuid
+        lcid, sha, euuid
     }).catch(error => {
-        c3prLOG4(`Error while registering new event: PullRequestCreated.`, {lcid, euuid, error});
+        c3prLOG4(`Error while registering new event: PullRequestCreated.`, {lcid, sha, euuid, error});
     });
 }

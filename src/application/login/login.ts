@@ -14,8 +14,7 @@ function c3prRepoGitLabLogin(): Promise<void> {
         subscriptions: [
             {eventType: "PullRequestRequested", callbackUrl: config.c3pr.repoGitlab.c3prRepoGitlabUrl + config.c3pr.repoGitlab.PullRequestRequestedCallbackUrl}
         ],
-        lcid,
-        euuid
+        lcid, sha, euuid
     }).then(jwt => {
         config.c3pr.hub.auth.jwt = jwt;
     }).catch(e => {

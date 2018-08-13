@@ -7,18 +7,18 @@ import {sortCommits} from "./sortCommits";
 
 
 
-async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits: Commit[], {lcid, euuid}) {
+async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits: Commit[], {lcid, sha, euuid}) {
     const commits = sortCommits(webhookCommits);
 
     const changesetFiles = new Set();
     for(let commit of commits) {
         if (commit.author.email === config.c3pr.repoGitlab.gitlab.botUserEmail) {
-            c3prLOG4(`Skipping commit ${commit.id}, since its author is the bot (${commit.author.email}).`, {lcid, euuid, meta: {commit}});
+            c3prLOG4(`Skipping commit ${commit.id}, since its author is the bot (${commit.author.email}).`, {lcid, sha, euuid, meta: {commit}});
             continue;
         }
         const gitLabCommit = await ports.getGitLabCommit(urlEncodedOrgNameProjectName, commit.id);
         if (gitLabCommit.parent_ids.length > 1) {
-            c3prLOG4(`Skipping commit ${commit.id}, because it is a merge.`, {lcid, euuid, meta: {commit, gitLabCommit}});
+            c3prLOG4(`Skipping commit ${commit.id}, because it is a merge.`, {lcid, sha, euuid, meta: {commit, gitLabCommit}});
             continue;
         }
 
@@ -42,8 +42,8 @@ async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits:
     return changeset;
 }
 
-async function createChangesCommitted(webhookPayload: GitLabPush, {lcid, euuid}) {
-    const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits, {lcid, euuid});
+async function createChangesCommitted(webhookPayload: GitLabPush, {lcid, sha, euuid}) {
+    const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits, {lcid, sha, euuid});
 
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
     const project_uuid = await ports.fetchFirstProjectForCloneUrl(clone_url_http);
