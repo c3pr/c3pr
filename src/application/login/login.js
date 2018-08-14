@@ -4,15 +4,15 @@ const c3prHubClient = require('node-c3pr-hub-client/login').c3prHubClient;
 
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const lcid = c3prLOG4.lcid();
-const euuid = 'dashboard-login';
+const sha = 'dashboard-login';
+const euuid = sha;
 
 c3prHubClient.login({
     loginUrl: config.c3pr.hub.loginUrl,
     username: 'c3pr-dashboard',
     password: 'not-used',
     subscriptions: [],
-    lcid,
-    euuid
+    lcid, sha, euuid
 }).then(jwt => {
     config.c3pr.auth.jwt = jwt;
 }).catch(e => {
