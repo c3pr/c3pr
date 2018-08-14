@@ -1,6 +1,7 @@
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const lcid = c3prLOG4.lcid();
-const euuid = 'events-init';
+const sha = 'events-init';
+const euuid = sha;
 
 const config = require('../../config');
 
@@ -43,8 +44,9 @@ async function reprocessParents(event_type) {
         await eventsDB.persistAsUnprocessed(parentUUID);
 
         const reprocessLCID = c3prLOG4.lcid();
-        c3prLOG4(`Event patched as processed due to request to reprocess its parents.`, {lcid: reprocessLCID, euuid: e.uuid});
-        c3prLOG4(`Event patched as unprocessed due to request to reprocess the child event.`, {lcid: reprocessLCID, euuid: parentUUID, meta: {childEventType: e.event_type, childUUID: e.uuid}});
+        const sha = (e.payload.repository && e.payload.repository.revision) || 'unknown';
+        c3prLOG4(`Event patched as processed due to request to reprocess its parents.`, {lcid: reprocessLCID, sha, euuid: e.uuid});
+        c3prLOG4(`Event patched as unprocessed due to request to reprocess the child event.`, {lcid: reprocessLCID, sha, euuid: parentUUID, meta: {childEventType: e.event_type, childUUID: e.uuid}});
         await patchAsProcessed(e.event_type, e.uuid, REPROCESS_PROCESSOR_UUID);
     }
 }
@@ -114,7 +116,7 @@ function patchAsUnprocessed(event_type, uuid, processor_uuid) {
 }
 
 async function initializeEventsOnStartup() {
-    c3prLOG4('Initializing events status database.', {lcid, euuid});
+    c3prLOG4('Initializing events status database.', {lcid, sha, euuid});
 
     const previouslyUnprocessedEvents = await eventsDB.findAllOfStatus(Status.UNPROCESSED);
     previouslyUnprocessedEvents.forEach(({event_type, uuid}) => Status.addAsUnprocessed(event_type, uuid));
@@ -128,7 +130,7 @@ async function initializeEventsOnStartup() {
     const previouslyUnprocessedEventTypes = Array.from(new Set(previouslyUnprocessedEvents.map(e => e.event_type)));
     c3prLOG4(
         `Initialization complete. Previously UNPROCESSED events: ${previouslyUnprocessedEvents.length} [${previouslyUnprocessedEventTypes}]. Previously PROCESSING events: ${previouslyProcessingEvents.length}`,
-        {lcid, euuid, meta: {previouslyUnprocessedEvents}}
+        {lcid, sha, euuid, meta: {previouslyUnprocessedEvents}}
     );
 
     /**
@@ -150,7 +152,7 @@ async function initializeEventsOnStartup() {
 }
 
 module.exports = {
-    init: initializeEventsOnStartup().catch(error => c3prLOG4('Error on initializing events on startup.', {lcid, euuid, error})),
+    init: initializeEventsOnStartup().catch(error => c3prLOG4('Error on initializing events on startup.', {lcid, sha, euuid, error})),
     register,
     find,
     findAll,

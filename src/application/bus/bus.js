@@ -6,7 +6,8 @@ const EventEmitter = require('events');
 const config = require('../../config');
 
 const lcid = c3prLOG4.lcid();
-const euuid = 'hub-bus';
+const sha = 'hub-bus';
+const euuid = sha;
 
 const hub = new EventEmitter();
 
@@ -16,14 +17,14 @@ const newSubscribers = new EventEmitter();
 let listeners = [];
 
 function removeListener(event_type, callbackUrl, listener) {
-    c3prLOG4(`Removing due to MAX-RETRIES listener for event '${event_type}' the URL ${callbackUrl}.`, {lcid, euuid});
+    c3prLOG4(`Removing due to MAX-RETRIES listener for event '${event_type}' the URL ${callbackUrl}.`, {lcid, sha, euuid});
     listeners = listeners.filter(ls => ls.listener !== listener);
 
     hub.removeListener(event_type, listener);
 }
 
 function notify(callbackUrl, tryNumber, event_type, listener) {
-    c3prLOG4(`Notifying for event '${event_type}' the URL ${callbackUrl}.` + (tryNumber > 1 ? ` Try number ${tryNumber} of ${config.c3pr.hub.bus.maxRetries + 1}.` : ``), {lcid, euuid});
+    c3prLOG4(`Notifying for event '${event_type}' the URL ${callbackUrl}.` + (tryNumber > 1 ? ` Try number ${tryNumber} of ${config.c3pr.hub.bus.maxRetries + 1}.` : ``), {lcid, sha, euuid});
 
     axios.post(callbackUrl).catch(() => {
         if (tryNumber > config.c3pr.hub.bus.maxRetries) {
@@ -37,9 +38,9 @@ function notify(callbackUrl, tryNumber, event_type, listener) {
 }
 
 function subscribeTo(event_type, callbackUrl) {
-    c3prLOG4(`Subscribing to event '${event_type}' the URL ${callbackUrl}.`, {lcid, euuid});
+    c3prLOG4(`Subscribing to event '${event_type}' the URL ${callbackUrl}.`, {lcid, sha, euuid});
     if (listeners.find(ls => ls.event_type === event_type && ls.callbackUrl === callbackUrl)) {
-        c3prLOG4(`URL ${callbackUrl} already subscribed to event '${event_type}'. Skipping.`, {lcid, euuid});
+        c3prLOG4(`URL ${callbackUrl} already subscribed to event '${event_type}'. Skipping.`, {lcid, sha, euuid});
     } else {
         const listener = () => notify(callbackUrl, 1, event_type, listener);
         hub.on(event_type, listener);
@@ -50,7 +51,7 @@ function subscribeTo(event_type, callbackUrl) {
 }
 
 function emit(event_type) {
-    c3prLOG4(`Emitting '${event_type}'.`, {lcid, euuid});
+    c3prLOG4(`Emitting '${event_type}'.`, {lcid, sha, euuid});
     hub.emit(event_type);
 }
 
