@@ -3,14 +3,13 @@ const createAndEmitPullRequestRequested = require('./createAndEmitPullRequestReq
 const config = require('../../config');
 
 
-function handleToolInvocationCompleted({lcid, euuid}) {
+function handleToolInvocationCompleted({lcid, sha, euuid}) {
     return handleFirstCollectedEvent({
         event_type: `ToolInvocationCompleted`,
         handlerFunction: createAndEmitPullRequestRequested,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        lcid,
-        euuid
+        lcid, sha, euuid
     });
 }
 

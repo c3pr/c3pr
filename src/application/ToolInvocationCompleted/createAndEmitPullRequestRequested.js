@@ -5,17 +5,17 @@ const emitPullRequestRequested = require('../PullRequestRequested/emitPullReques
 
 const invokeToolsForRemainingFiles = require('./invokeToolsForRemainingFiles');
 
-function createAndEmitPullRequestRequested(toolInvocationCompletedEvent, {lcid, euuid}) {
+function createAndEmitPullRequestRequested(toolInvocationCompletedEvent, {lcid, sha, euuid}) {
     let result = {};
     if (toolInvocationCompletedEvent.payload.unmodified_files.length) {
-        c3prLOG4(`ToolInvocationCompleted has unmodified files. I will now attempt to invoke new tools.`, {lcid, euuid, meta: {toolInvocationCompletedEvent}});
-        result.newToolInvocation = invokeToolsForRemainingFiles(toolInvocationCompletedEvent, {lcid, euuid});
+        c3prLOG4(`ToolInvocationCompleted has unmodified files. I will now attempt to invoke new tools.`, {lcid, sha, euuid, meta: {toolInvocationCompletedEvent}});
+        result.newToolInvocation = invokeToolsForRemainingFiles(toolInvocationCompletedEvent, {lcid, sha, euuid});
     }
 
     if (toolInvocationCompletedEvent.payload.changed_files.length) {
-        c3prLOG4(`ToolInvocationCompleted modified files. I will now issue a PullRequestRequested event.`, {lcid, euuid, meta: {toolInvocationCompletedEvent}});
+        c3prLOG4(`ToolInvocationCompleted modified files. I will now issue a PullRequestRequested event.`, {lcid, sha, euuid, meta: {toolInvocationCompletedEvent}});
         const pullRequestRequested = createPullRequestRequested(toolInvocationCompletedEvent);
-        result.prEmitted = emitPullRequestRequested(pullRequestRequested, {lcid, euuid});
+        result.prEmitted = emitPullRequestRequested(pullRequestRequested, {lcid, sha, euuid});
     }
 
     return {new_status: 'PROCESSED', result};

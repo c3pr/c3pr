@@ -4,10 +4,10 @@ const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
 const config = require('../../config');
 
 
-function emitPullRequestRequested(pullRequestRequested, {lcid, euuid}) {
+function emitPullRequestRequested(pullRequestRequested, {lcid, sha, euuid}) {
     c3prLOG4(
         `Registering new event of type 'PullRequestRequested' for repository ${pullRequestRequested.repository.clone_url_http} and rev ${pullRequestRequested.repository.revision}.`,
-        {lcid, euuid, meta: {payload: pullRequestRequested}
+        {lcid, sha, euuid, meta: {payload: pullRequestRequested}
     });
 
     return c3prRNE.registerNewEvent({
@@ -15,10 +15,9 @@ function emitPullRequestRequested(pullRequestRequested, {lcid, euuid}) {
         payload: pullRequestRequested,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        lcid,
-        euuid
+        lcid, sha, euuid
     }).catch(error => {
-        c3prLOG4(`Error while registering new event: PullRequestRequested.`, {lcid, euuid, error});
+        c3prLOG4(`Error while registering new event: PullRequestRequested.`, {lcid, sha, euuid, error});
     });
 }
 

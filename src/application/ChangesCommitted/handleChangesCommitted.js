@@ -4,18 +4,17 @@ const c3prRTI = require('../invokeTool/invokeTools').c3prBrain;
 const config = require('../../config');
 
 
-function handleChangesCommitted({lcid, euuid}) {
+function handleChangesCommitted({lcid, sha, euuid}) {
     return handleFirstCollectedEvent({
         event_type: `ChangesCommitted`,
         handlerFunction,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        lcid,
-        euuid
+        lcid, sha, euuid
     });
 }
 
-async function handlerFunction(changesCommittedEvent, {lcid, euuid}) {
+async function handlerFunction(changesCommittedEvent, {lcid, sha, euuid}) {
     const parent = {
         event_type: changesCommittedEvent.event_type,
         uuid: changesCommittedEvent.uuid
@@ -23,10 +22,10 @@ async function handlerFunction(changesCommittedEvent, {lcid, euuid}) {
     try {
         let result = await c3prRTI.invokeTools({
             parent, changes_committed_root: changesCommittedEvent.uuid, repository: changesCommittedEvent.payload.repository, files: changesCommittedEvent.payload.changed_files
-        }, {lcid, euuid});
+        }, {lcid, sha, euuid});
         return {new_status: 'PROCESSED', result};
     } catch (error) {
-        c3prLOG4(`Error while invoking tools.`, {lcid, euuid, error, meta: {changesCommittedEvent}});
+        c3prLOG4(`Error while invoking tools.`, {lcid, sha, euuid, error, meta: {changesCommittedEvent}});
         throw error;
     }
 }

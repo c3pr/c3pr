@@ -3,14 +3,13 @@ const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFir
 const savePR = require('./savePR');
 
 
-function handlePullRequestCreated({lcid, euuid}) {
+function handlePullRequestCreated({lcid, sha, euuid}) {
     return handleFirstCollectedEvent({
         event_type: `PullRequestCreated`,
         handlerFunction: savePR,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        lcid,
-        euuid
+        lcid, sha, euuid
     });
 }
 

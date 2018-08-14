@@ -4,7 +4,9 @@ const c3prHubClient = require('node-c3pr-hub-client/login').c3prHubClient;
 
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const lcid = c3prLOG4.lcid();
-const euuid = 'brain-login';
+const sha = 'brain-login';
+// noinspection UnnecessaryLocalVariableJS
+const euuid = sha;
 
 c3prHubClient.login({
     loginUrl: config.c3pr.hub.loginUrl,
@@ -16,8 +18,7 @@ c3prHubClient.login({
         {eventType: "PullRequestCreated",      callbackUrl: config.c3pr.brain.c3prBrainUrl + config.c3pr.brain.PullRequestCreatedCallbackUrl},
         {eventType: "PullRequestUpdated",      callbackUrl: config.c3pr.brain.c3prBrainUrl + config.c3pr.brain.PullRequestUpdatedCallbackUrl}
     ],
-    lcid,
-    euuid
+    lcid, sha, euuid
 }).then(jwt => {
     config.c3pr.auth.jwt = jwt;
 }).catch(e => {
