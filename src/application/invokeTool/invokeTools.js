@@ -64,7 +64,7 @@ async function invokeTools({parent, changes_committed_root, repository, files}, 
         c3prLOG4(`All files have been handled. Tool invocations complete. Remaining applicable tool agents: ${applicableToolAgents.length}`, {lcid, sha, euuid});
     }
     if (!applicableToolAgents.length) {
-        c3prLOG4(`All tool applicable agents have been invoked. Tool invocations complete. Remaining changed and not refactored files: ${changedAndNotRefactoredFiles.length}`, {lcid, sha, euuid});
+        c3prLOG4(`All applicable TOOLS have been invoked (or all remaining files have open PRs awaiting evaluation). Tool invocations complete. Remaining changed and not refactored files: ${changedAndNotRefactoredFiles.length}`, {lcid, sha, euuid});
     }
 
     return Promise.all(invocations);
