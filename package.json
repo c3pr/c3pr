@@ -22,7 +22,7 @@
   "homepage": "https://github.com/c3pr/node-c3pr-git-client#readme",
   "dependencies": {
     "mkdirp": "^0.5.1",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#18.0.0",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#19.0.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
