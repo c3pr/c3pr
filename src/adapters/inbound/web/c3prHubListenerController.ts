@@ -2,7 +2,8 @@ import config from '../../../config';
 import inboundPorts from "../../../ports/inbound";
 
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
-const euuid = 'express';
+const sha = 'express';
+const euuid = sha;
 
 export default function (app) {
 

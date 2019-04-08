@@ -33,7 +33,7 @@ describe('emitChangesCommitted', () => {
             ).reply(() => { changesCommittedEmitted = true; return [200]; });
 
         // execute
-        await emitChangesCommitted(changesCommitted);
+        await emitChangesCommitted(changesCommitted, {lcid: 'lcid', sha: 'sha', euuid: 'euuid'});
 
         // verify
         expect(changesCommittedEmitted).to.equal(true);

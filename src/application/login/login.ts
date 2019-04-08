@@ -4,7 +4,8 @@ import { c3prHubClient } from 'node-c3pr-hub-client/login';
 
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const lcid = c3prLOG4.lcid();
-const euuid = 'gitlab-login';
+const sha = 'gitlab-login';
+const euuid = sha;
 
 function c3prRepoGitLabLogin(): Promise<void> {
     return c3prHubClient.login({
