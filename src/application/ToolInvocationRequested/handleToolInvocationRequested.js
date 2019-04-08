@@ -4,14 +4,13 @@ const config = require('../../config');
 const handleToolInvocation = require('./handleToolInvocation');
 
 
-function handleToolInvocationRequested({lcid, euuid}) {
+function handleToolInvocationRequested({lcid, sha, euuid}) {
     return handleFirstCollectedEvent({
         event_type: `ToolInvocationRequested`,
         handlerFunction: handleToolInvocation,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
-        lcid,
-        euuid
+        lcid, sha, euuid
     });
 }
 

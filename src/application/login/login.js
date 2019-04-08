@@ -5,7 +5,9 @@ const hubRegistryBroadcast = require('./hubRegistryBroadcast');
 
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const lcid = c3prLOG4.lcid();
-const euuid = 'agent-login';
+const sha = 'agent-login';
+// noinspection UnnecessaryLocalVariableJS
+const euuid = sha;
 
 c3prHubClient.login({
     loginUrl: config.c3pr.hub.loginUrl,
@@ -14,8 +16,7 @@ c3prHubClient.login({
     subscriptions: [
         {eventType: "ToolInvocationRequested", callbackUrl: config.c3pr.agent.agentUrl + config.c3pr.agent.ToolInvocationRequestedCallbackUrl}
     ],
-    lcid,
-    euuid
+    lcid, sha, euuid
 }).then(jwt => {
     config.c3pr.auth.jwt = jwt;
 

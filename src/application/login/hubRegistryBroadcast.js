@@ -5,7 +5,8 @@ const loadTools = require('../tools/loadTools');
 
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const lcid = c3prLOG4.lcid();
-const euuid = 'init';
+const sha = 'hub-registry-init';
+const euuid = sha;
 
 
 function broadcast(summary) {
@@ -19,15 +20,15 @@ function broadcast(summary) {
     Promise.all(
         toolSubmissions
     ).then(({data}) => {
-        c3prLOG4(`Successfully broadcasted to registry. URL: ${config.c3pr.hub.agentsUrl}.`, {lcid, euuid, meta: {data, summary}});
+        c3prLOG4(`Successfully broadcasted to C-3PR HUB's Agent Registry. This agent's URL: ${config.c3pr.hub.agentsUrl}.`, {lcid, sha, euuid, meta: {data, summary}});
     }).catch((error) => {
-        c3prLOG4(`Error while broadcasting to registry. URL: ${config.c3pr.hub.agentsUrl}.`, {lcid, euuid, error});
+        c3prLOG4(`Error while broadcasting to C-3PR HUB's Agent Registry. This agent's URL: ${config.c3pr.hub.agentsUrl}.`, {lcid, sha, euuid, error});
     });
 }
 
 function hubRegistryBroadcast() {
     const summary = loadTools.toolsSummary;
-    c3prLOG4(`Now broadcasting to C-3PR registry API: ${config.c3pr.hub.agentsUrl}.`, {lcid, euuid, meta: {summary}});
+    c3prLOG4(`Now broadcasting to C-3PR HUB's Agent Registry API: ${config.c3pr.hub.agentsUrl}.`, {lcid, sha, euuid, meta: {summary}});
     broadcast(summary);
     setInterval(() => {
         broadcast(summary);
