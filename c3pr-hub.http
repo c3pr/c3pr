@@ -30,3 +30,7 @@ POST http://localhost:7300/api/v1/events/ToolInvocationFailed/reprocess-parents
 Authorization: Bearer {{auth_token}}
 
 ###
+GET http://localhost:7300/api/v1/events/ChangesCommitted/d1fd8808-9496-44b0-a259-20e6a7115e3d
+Authorization: Bearer {{auth_token}}
+
+###
