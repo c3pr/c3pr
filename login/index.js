@@ -7,7 +7,7 @@ async function login({loginUrl, username, password, subscriptions, lcid, sha, eu
 
     try {
         const {data: jwt} = await axios.post(loginUrl, {username, password, subscriptions});
-        c3prLOG4(`Successfully logged in at ${loginUrl}.`, {lcid, sha, euuid});
+        c3prLOG4(`Successfully logged in on C3PR-HUB (${loginUrl}).`, {lcid, sha, euuid});
         return jwt;
     } catch (error) {
         c3prLOG4(`Error while logging in at ${loginUrl}.`, {lcid, sha, euuid, error});
