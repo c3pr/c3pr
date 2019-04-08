@@ -10,7 +10,7 @@
     <table>
       <thead>
       <tr>
-        <th>date_time/lcid/euuid</th>
+        <th>date_time/lcid/sha/euuid</th>
         <th>service<br>name</th>
         <th>caller<br>name</th>
         <th>message</th>
@@ -22,7 +22,7 @@
       <tr v-for="log of getLogsForEvent" :class="log.node" :key="log._id">
         <td class="mono">
           {{ log.date_time.replace(/[TZ]/g, ' ') }}<br>
-          {{ log.lcid.substr(0, 11) }} {{ log.euuid.substr(0, 11) }}
+          {{ log.lcid.substr(0, 11) }} {{ (log.sha || '').substr(0, 11) }} {{ log.euuid.substr(0, 11) }}
         </td>
         <td>{{ log.service_name }}</td>
         <td style="font-size: x-small">{{ log.caller_name }}</td>
