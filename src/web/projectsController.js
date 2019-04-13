@@ -31,6 +31,18 @@ module.exports = function (app) {
         });
     });
 
+    app.get('/api/v1/projects/:project_uuid/blacklisted_files', function ({params: {project_uuid}}, response) {
+        projectsDB.findBy({uuid: project_uuid}).then((projects) => {
+            if (projects.length < 1) {
+                response.status(404).send(`No project matches uuid ${project_uuid}.`);
+            } else {
+                response.status(200).send(projects[0].blacklisted_files || []);
+            }
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
     app.get('/api/v1/projects/:project_uuid/prs/open/changed_files', function ({params: {project_uuid}}, response) {
         prsDB.findFilesWithOpenPR(project_uuid).then((prs) => {
             response.status(200).send(prs);
