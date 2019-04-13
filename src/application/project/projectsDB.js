@@ -29,16 +29,23 @@ async function newProject({clone_url_http, name, tags}) {
         clone_url_http,
         name,
         tags,
+        blacklisted_files: [],
         should_analyze_pushes: true, // should analyze regular pushes/commits (Not just PRs)
         should_analyze_prs: true
     });
 }
 
-async function updateProject({uuid, clone_url_http, name, tags}) {
-    assert.ok(uuid && clone_url_http && name && tags, `Missing required args for updateProject(): ${JSON.stringify({uuid, clone_url_http, name, tags})}`);
+function removeEmptyProperties(myObj) {
+    const clone = {... myObj};
+    Object.keys(clone).forEach((key) => (myObj[key] === null || myObj[key] === undefined) && delete myObj[key]);
+    return clone;
+}
+
+async function updateProject({uuid, clone_url_http, name, tags, blacklisted_files}) {
+    assert.ok(uuid, `Missing uuid for updateProject()!`);
     return (await projects).update(
         {uuid},
-        {$set: {'clone_url_http': clone_url_http, 'name': name, 'tags' : tags}}
+        {$set: removeEmptyProperties({clone_url_http, name, tags, blacklisted_files})}
     );
 }
 
