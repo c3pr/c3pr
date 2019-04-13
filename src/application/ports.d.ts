@@ -10,6 +10,7 @@ interface Agent {
 declare const ports: {
     fetchAllToolAgents(): Promise<Agent[]>;
     shuffleArray<T>(ignored: T[]): T[];
+    fetchBlacklistedFiles(changes_committed_root: string): string[];
     retrieveFilesWithOpenPRs(changes_committed_root: string): string[];
     fetchFirstProjectForCloneUrl(clone_url_http: string): Promise<string>;
     fetchChangedFilesForPullRequestCreatedEvent(pullRequestCreatedEvent: Event<any>): string[];

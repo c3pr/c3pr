@@ -1,6 +1,7 @@
 module.exports = {
     fetchAllToolAgents: require('../adapters/fetchAllToolAgents'),
     shuffleArray: require('../adapters/shuffleArray'),
+    fetchBlacklistedFiles: require('../adapters/fetchBlacklistedFiles'),
     retrieveFilesWithOpenPRs: require('../adapters/retrieveFilesWithOpenPRs'),
     fetchFirstProjectForCloneUrl: require('node-c3pr-hub-client/projects/fetchFirstProjectForCloneUrl').fetchFirstProjectForCloneUrl,
     fetchChangedFilesForPullRequestCreatedEvent: require('../adapters/fetchChangedFilesForPullRequestCreatedEvent'),

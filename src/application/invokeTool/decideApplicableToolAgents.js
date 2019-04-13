@@ -15,6 +15,14 @@ async function calculateAlreadyInvokedTools(changes_committed_root) {
     return toolInvocationRequestedEvents.map(tire => tire.payload.tool_id);
 }
 
+async function decideApplicableFiles(changes_committed_root, files) {
+    const filesWithOpenPRs = await ports.retrieveFilesWithOpenPRs(changes_committed_root);
+    const blacklistedFiles = await ports.fetchBlacklistedFiles(changes_committed_root);
+
+    const filesWithoutOpenPRs = files.filter(file => !filesWithOpenPRs.includes(file));
+    return {filesWithOpenPRs, filesWithoutOpenPRs};
+}
+
 async function decideApplicableToolAgents(changes_committed_root, files, {lcid, sha, euuid}) {
     const availableAgents = await ports.fetchAllToolAgents();
 
@@ -22,10 +30,7 @@ async function decideApplicableToolAgents(changes_committed_root, files, {lcid, 
         c3prLOG4(`No available agents at the moment. Skipping.`, {lcid, sha, euuid});
         return [];
     }
-
-    const filesWithOpenPRs = await ports.retrieveFilesWithOpenPRs(changes_committed_root);
-
-    const filesWithoutOpenPRs = files.filter(file => !filesWithOpenPRs.includes(file));
+    const {filesWithOpenPRs, filesWithoutOpenPRs} = await decideApplicableFiles(changes_committed_root, files);
 
     if (!filesWithoutOpenPRs.length) {
         c3prLOG4(`No files without open PRs. Skipping.`, {lcid, sha, euuid, meta: {filesWithOpenPRs, files}});
