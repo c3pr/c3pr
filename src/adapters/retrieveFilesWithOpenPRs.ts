@@ -11,4 +11,4 @@ async function retrieveFilesWithOpenPRs(changes_committed_root) {
     return filesWithOpenPRs;
 }
 
-export = retrieveFilesWithOpenPRs;
+export default retrieveFilesWithOpenPRs;

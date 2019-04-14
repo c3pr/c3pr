@@ -8,4 +8,4 @@ async function fetchBlacklistedFiles(changes_committed_root) {
     return blackListedFiles;
 }
 
-export = fetchBlacklistedFiles;
+export default fetchBlacklistedFiles;

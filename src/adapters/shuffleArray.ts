@@ -7,4 +7,4 @@ function shuffleArray(array) {
     return shuffledArray;
 }
 
-export = shuffleArray;
+export default shuffleArray;
