@@ -15,7 +15,7 @@ async function findNodes() {
     return (await logs).distinct('node');
 }
 
-module.exports = {
+export = {
     findBy,
     findAll,
     findNodes

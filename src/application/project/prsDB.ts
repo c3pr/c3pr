@@ -51,7 +51,7 @@ async function findFilesWithOpenPR(project_uuid) {
     return openPRs.reduce((changedFiles, openPR) => [...changedFiles, ...openPR.changed_files], [])
 }
 
-module.exports = {
+export = {
     newPR,
     updatePR,
     findAllOfProject,

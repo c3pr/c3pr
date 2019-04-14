@@ -17,7 +17,4 @@ function decodeToken(token) {
     return jwt.decode(token, secret);
 }
 
-module.exports = {
-    encodeUuidToken,
-    decodeToken
-};
+export { encodeUuidToken, decodeToken };

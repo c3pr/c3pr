@@ -33,7 +33,7 @@ const db = MongoClient.connect(config.c3pr.hub.mongoC3prUrl, {
  *
  * @type Promise<MongoClient>
  */
-module.exports = db.then(client => {
+export = db.then(client => {
     client.on('close', () => { console.log('-> db lost connection'); });
     client.on('reconnect', () => { console.log('-> db reconnected'); });
     return client;

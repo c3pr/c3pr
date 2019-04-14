@@ -55,7 +55,7 @@ function persistAsProcessed(uuid, processor_uuid) {
     return markStatus(uuid, Status.PROCESSED, processor_uuid);
 }
 
-module.exports = {
+export = {
     insert,
     find,
     findAll,

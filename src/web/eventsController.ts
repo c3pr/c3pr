@@ -2,7 +2,7 @@ const events = require('../application/events/events');
 const authExpressMiddleware = require("../application/auth/authExpressMiddleware");
 
 
-module.exports = function (app) {
+export = function (app) {
 
     app.use('/api/v1/events', authExpressMiddleware);
 

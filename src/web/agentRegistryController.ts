@@ -1,7 +1,7 @@
 const agentRegistry = require('../application/agentRegistry/agentRegistry');
 
 
-module.exports = function (app) {
+export = function (app) {
 
     app.get('/api/v1/agents', function (request, response) {
         agentRegistry.findAll().then(agents => {

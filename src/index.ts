@@ -12,6 +12,7 @@ process.on('uncaughtException', function (err) {
     console.log('uncaughtException <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
 });
 
+// @ts-ignore
 process.on('UnhandledPromiseRejectionWarning', function (err) {
     console.log('UnhandledPromiseRejectionWarning >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     const stack = new Error().stack;

@@ -3,7 +3,7 @@ const authExpressMiddleware = require("../application/auth/authExpressMiddleware
 const projectsDB = require('../application/project/projectsDB');
 const prsDB = require('../application/project/prsDB');
 
-module.exports = function (app) {
+export = function (app) {
 
     app.use('/api/v1/projects', authExpressMiddleware);
 

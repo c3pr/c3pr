@@ -1,10 +1,10 @@
-const expect = require('chai').expect;
-const uuidv4 = require('uuid/v4');
+import { expect } from 'chai';
+import uuidv4 = require('uuid/v4');
 
-const config = require('../../config');
+import config = require('../../config');
 config.c3pr.hub.mongoEventsCollection += "-test";
 
-const Status = require('./status');
+import Status = require('./status');
 
 describe('status', function () {
 
@@ -12,7 +12,7 @@ describe('status', function () {
     let uuid;
     let processor_uuid;
 
-    before(() => {
+    beforeEach(() => {
         EVENT_TYPE = "evtType" + Math.random();
         uuid = uuidv4();
         processor_uuid = uuidv4();

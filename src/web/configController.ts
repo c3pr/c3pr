@@ -2,7 +2,7 @@ const authExpressMiddleware = require("../application/auth/authExpressMiddleware
 
 const config = require('../config');
 
-module.exports = function (app) {
+export = function (app) {
 
     app.use('/api/v1/config', authExpressMiddleware);
 

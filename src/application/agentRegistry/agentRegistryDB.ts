@@ -19,7 +19,7 @@ async function remove(query) {
     return (await agentRegistryDB).remove(query);
 }
 
-module.exports = {
+export = {
     findAll,
     replaceOne,
     remove

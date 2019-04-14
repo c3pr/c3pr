@@ -98,7 +98,7 @@ function getEventTypesWithUnprocessedEvents() {
     return EVENTS_UNPROCESSED.keys();
 }
 
-module.exports = Object.freeze({
+export = Object.freeze({
     UNPROCESSED: 'UNPROCESSED',
     PROCESSING: 'PROCESSING',
     PROCESSED: 'PROCESSED',

@@ -14,4 +14,4 @@ function authExpressMiddleware(request, response, next) {
     }
 }
 
-module.exports = authExpressMiddleware;
+export = authExpressMiddleware;

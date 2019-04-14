@@ -49,7 +49,7 @@ async function updateProject({uuid, clone_url_http, name, tags, blacklisted_file
     );
 }
 
-module.exports = {
+export = {
     newProject,
     updateProject,
     findBy,

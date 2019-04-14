@@ -1,5 +1,6 @@
-const encodeUuidToken = require("../auth/auth").encodeUuidToken;
-const c3prBus = require('../bus/bus').c3prBus;
+import { encodeUuidToken } from "./auth";
+import { c3prBus } from '../bus/bus';
+import { v4 as uuidv4 } from 'uuid';
 
 function subscribe(subscriptions = []) {
     if (
@@ -36,4 +37,4 @@ function login(body) {
     return encodeUuidToken(body.username);
 }
 
-module.exports = login;
+export = login;

@@ -138,7 +138,7 @@ async function initializeEventsOnStartup() {
      */
     setTimeout(() => {
         const allTimedOut = Status.retrieveAllTimedOut(config.c3pr.hub.uncollectTimeoutInMs);
-        allTimedOut.forEach(({event_type, uuid}) => patchAsUnprocessed(event_type, uuid))
+        allTimedOut.forEach(({event_type, uuid}) => patchAsUnprocessed(event_type, uuid, 'uncollect-timeout'))
     }, config.c3pr.hub.uncollectPollingInMs).unref();
 
 
@@ -151,7 +151,7 @@ async function initializeEventsOnStartup() {
     }, config.c3pr.hub.broadcastIntervalInMs).unref();
 }
 
-module.exports = {
+export = {
     init: initializeEventsOnStartup().catch(error => c3prLOG4('Error on initializing events on startup.', {lcid, sha, euuid, error})),
     register,
     find,

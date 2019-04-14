@@ -1,5 +1,5 @@
 require("node-c3pr-logger").testMode();
-const expect = require('chai').expect;
+import { expect } from 'chai';
 
 const uuidv4 = require('uuid/v4');
 

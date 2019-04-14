@@ -1,6 +1,6 @@
 const login = require("../application/auth/login");
 
-module.exports = function (app) {
+export = function (app) {
 
     app.post('/api/v1/login', function (request, response) {
         try {

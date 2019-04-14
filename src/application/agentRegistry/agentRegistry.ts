@@ -26,9 +26,10 @@ function removeExpiredAgents() {
     return agentRegistryDB.remove({expiration_time: {$lte: now}});
 }
 
+// @ts-ignore
 setInterval(removeExpiredAgents, config.c3pr.hub.agentRegistry.cleanRegistryStepInMs).unref();
 
-module.exports = {
+export = {
     init: removeExpiredAgents().then(async () => { c3prLOG4('Agents initialized. Database has ' + (await agentRegistryDB.findAll()).length + ' agents.', {lcid, sha, euuid}); }),
     putAgent,
     findAll: agentRegistryDB.findAll

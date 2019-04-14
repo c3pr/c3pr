@@ -2,7 +2,7 @@ const authExpressMiddleware = require("../application/auth/authExpressMiddleware
 
 const logsDB = require('../application/logs/logsDB');
 
-module.exports = function (app) {
+export = function (app) {
 
     app.use('/api/v1/logs', authExpressMiddleware);
 

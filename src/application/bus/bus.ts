@@ -60,12 +60,10 @@ function clearListeners(event_type) {
     listeners = [];
 }
 
-module.exports = {
-    c3prBus: {
-        subscribeTo,
-        emit,
-        clearListeners,
-        getListeners: () => listeners.map(({event_type, callbackUrl}) => ({event_type, callbackUrl})),
-        onNewSubscribers: (listener) => newSubscribers.on(NEW_SUBSCRIBER, (event_type) => listener(event_type))
-    }
+export let c3prBus = {
+    subscribeTo,
+    emit,
+    clearListeners,
+    getListeners: () => listeners.map(({event_type, callbackUrl}) => ({event_type, callbackUrl})),
+    onNewSubscribers: (listener) => newSubscribers.on(NEW_SUBSCRIBER, (event_type) => listener(event_type))
 };
