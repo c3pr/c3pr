@@ -19,8 +19,8 @@ async function decideApplicableFiles(changes_committed_root, files) {
     const filesWithOpenPRs = await ports.retrieveFilesWithOpenPRs(changes_committed_root);
     const blacklistedFiles = await ports.fetchBlacklistedFiles(changes_committed_root);
 
-    const filesWithoutOpenPRs = files.filter(file => !filesWithOpenPRs.includes(file));
-    return {filesWithOpenPRs, filesWithoutOpenPRs};
+    const patchableFiles = files.filter(file => !filesWithOpenPRs.includes(file)).filter(file => !blacklistedFiles.includes(file));
+    return {patchableFiles, nonPatchableFiles: {filesWithOpenPRs, blacklistedFiles}};
 }
 
 async function decideApplicableToolAgents(changes_committed_root, files, {lcid, sha, euuid}) {
@@ -30,14 +30,14 @@ async function decideApplicableToolAgents(changes_committed_root, files, {lcid, 
         c3prLOG4(`No available agents at the moment. Skipping.`, {lcid, sha, euuid});
         return [];
     }
-    const {filesWithOpenPRs, filesWithoutOpenPRs} = await decideApplicableFiles(changes_committed_root, files);
+    const {patchableFiles, nonPatchableFiles} = await decideApplicableFiles(changes_committed_root, files);
 
-    if (!filesWithoutOpenPRs.length) {
-        c3prLOG4(`No files without open PRs. Skipping.`, {lcid, sha, euuid, meta: {filesWithOpenPRs, files}});
+    if (!patchableFiles.length) {
+        c3prLOG4(`No patchable files. Either all already have open PRs or are blacklisted. Skipping.`, {lcid, sha, euuid, meta: {files, nonPatchableFiles}});
         return [];
     }
 
-    let applicableToolAgents = filterApplicableToolAgents(availableAgents, filesWithoutOpenPRs);
+    let applicableToolAgents = filterApplicableToolAgents(availableAgents, patchableFiles);
     applicableToolAgents = ports.shuffleArray(applicableToolAgents);
 
     const alreadyInvokedTools = await calculateAlreadyInvokedTools(changes_committed_root);
