@@ -1,4 +1,4 @@
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const filterFilesWithExtensions = require('./filterFilesWithExtensions');
 const decideApplicableToolAgents = require('./decideApplicableToolAgents');
 const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
@@ -70,7 +70,7 @@ async function invokeTools({parent, changes_committed_root, repository, files}, 
     return Promise.all(invocations);
 }
 
-module.exports = {
+export = {
     c3prBrain: {
         invokeTools
     }

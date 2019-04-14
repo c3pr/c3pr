@@ -1,4 +1,4 @@
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').default;
 const c3prRTI = require('../invokeTool/invokeTools').c3prBrain;
 const config = require('../../config');
@@ -30,7 +30,7 @@ async function handlerFunction(changesCommittedEvent, {lcid, sha, euuid}) {
     }
 }
 
-module.exports = {
+export = {
     c3pr: {
         handleChangesCommitted
     }

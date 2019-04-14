@@ -11,4 +11,4 @@ async function retrieveFilesWithOpenPRs(changes_committed_root) {
     return filesWithOpenPRs;
 }
 
-module.exports = retrieveFilesWithOpenPRs;
+export = retrieveFilesWithOpenPRs;

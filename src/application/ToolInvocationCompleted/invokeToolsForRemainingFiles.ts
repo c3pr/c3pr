@@ -1,4 +1,4 @@
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 
 const c3prRTI = require('../invokeTool/invokeTools').c3prBrain;
 
@@ -17,4 +17,4 @@ function invokeToolsForRemainingFiles(toolInvocationCompletedEvent, {lcid, sha, 
     });
 }
 
-module.exports = invokeToolsForRemainingFiles;
+export = invokeToolsForRemainingFiles;

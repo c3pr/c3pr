@@ -13,7 +13,7 @@ function handleToolInvocationCompleted({lcid, sha, euuid}) {
     });
 }
 
-module.exports = {
+export = {
     c3pr: {
         handleToolInvocationCompleted
     }

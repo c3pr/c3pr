@@ -1,7 +1,7 @@
 process.env.NODE_ENV = 'test';
 
 const filterApplicableToolAgents = require('./filterApplicableToolAgents');
-const expect = require('chai').expect;
+import { expect } from 'chai';
 
 
 describe('applicableToolAgents', () => {

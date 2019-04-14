@@ -10,4 +10,4 @@ function filterApplicableToolAgents(toolAgents, files) {
     return toolAgents.filter(toolAgent => atLeastOneExtensionInChangesetIsIn(extensionsInChangeset, toolAgent.extensions));
 }
 
-module.exports = filterApplicableToolAgents;
+export = filterApplicableToolAgents;

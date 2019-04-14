@@ -6,4 +6,4 @@ async function fetchChangedFilesForPullRequestCreatedEvent(pullRequestCreatedEve
     return toolInvocationCompletedEvent.payload.changed_files;
 }
 
-module.exports = fetchChangedFilesForPullRequestCreatedEvent;
+export = fetchChangedFilesForPullRequestCreatedEvent;

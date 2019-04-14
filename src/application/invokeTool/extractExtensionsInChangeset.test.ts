@@ -1,4 +1,4 @@
-const expect = require('chai').expect;
+import { expect } from 'chai';
 
 const extractExtensionsInChangeset = require("./extractExtensionsInChangeset").extractExtensionsInChangeset;
 const extractExtension = require("./extractExtensionsInChangeset").extractExtension;

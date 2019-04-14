@@ -1,4 +1,4 @@
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
 
 const config = require('../../config');
@@ -21,4 +21,4 @@ function emitPullRequestRequested(pullRequestRequested, {lcid, sha, euuid}) {
     });
 }
 
-module.exports = emitPullRequestRequested;
+export = emitPullRequestRequested;

@@ -1,14 +1,17 @@
 require("node-c3pr-logger").testMode();
 process.env.NODE_ENV = 'test';
 
-const expect = require('chai').expect;
+import { expect } from 'chai';
 require('chai').should();
 
+// noinspection JSUnusedLocalSymbols
 const config = require('../../config');
 
 const createPullRequestRequested = require('./createPullRequestRequested').c3pr.createPullRequestRequested;
 
+// noinspection JSUnusedLocalSymbols
 const axios = require('axios');
+// noinspection JSUnusedLocalSymbols
 const MockAdapter = require('axios-mock-adapter');
 
 const toolInvocationCompleted = {
@@ -32,6 +35,7 @@ const toolInvocationCompleted = {
     }
 };
 
+// noinspection JSUnusedLocalSymbols
 const pullRequestRequested = {
     "parent": {
         "event_type": "ToolInvocationCompleted",

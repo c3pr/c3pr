@@ -4,4 +4,4 @@ function filterFilesWithExtensions(changeset, extensions) {
     return changeset.filter(file => extensions.includes(extractExtension(file)));
 }
 
-module.exports = filterFilesWithExtensions;
+export = filterFilesWithExtensions;

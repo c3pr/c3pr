@@ -17,7 +17,7 @@ function createPullRequestRequested(toolInvocationCompleted) {
 
 }
 
-module.exports = {
+export = {
     c3pr: {
         createPullRequestRequested
     }

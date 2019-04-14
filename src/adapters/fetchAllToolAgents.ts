@@ -8,4 +8,4 @@ async function fetchAllToolAgents() {
     return toolAgents;
 }
 
-module.exports = fetchAllToolAgents;
+export = fetchAllToolAgents;

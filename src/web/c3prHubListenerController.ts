@@ -5,11 +5,11 @@ const c3prHTIC = require('../application/ToolInvocationCompleted/handleToolInvoc
 const handlePullRequestCreated = require('../application/PullRequestCreated/handlePullRequestCreated');
 const handlePullRequestUpdated = require('../application/PullRequestUpdated/handlePullRequestUpdated');
 
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const sha = 'express-hub';
 const euuid = sha;
 
-module.exports = function (app) {
+export = function (app) {
 
     app.post(config.c3pr.brain.ChangesCommittedCallbackUrl, function (request, response) {
         const lcid = c3prLOG4.lcid();

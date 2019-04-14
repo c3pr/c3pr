@@ -1,7 +1,7 @@
 require("node-c3pr-logger").testMode();
 process.env.NODE_ENV = 'test';
 
-const expect = require('chai').expect;
+import { expect } from 'chai';
 require('chai').should();
 
 const ports = require('../ports');

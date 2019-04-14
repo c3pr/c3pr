@@ -1,4 +1,4 @@
-const expect = require('chai').expect;
+import { expect } from 'chai';
 const filterFilesWithExtensions = require('./filterFilesWithExtensions');
 
 describe('filterFilesWithExtensions', function () {

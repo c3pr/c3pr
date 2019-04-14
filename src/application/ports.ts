@@ -1,4 +1,4 @@
-module.exports = {
+export = {
     fetchAllToolAgents: require('../adapters/fetchAllToolAgents'),
     shuffleArray: require('../adapters/shuffleArray'),
     fetchBlacklistedFiles: require('../adapters/fetchBlacklistedFiles'),

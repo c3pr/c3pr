@@ -2,7 +2,7 @@ const config = require('../../config');
 
 const c3prHubClient = require('node-c3pr-hub-client/login').c3prHubClient;
 
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const lcid = c3prLOG4.lcid();
 const sha = 'brain-login';
 // noinspection UnnecessaryLocalVariableJS

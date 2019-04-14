@@ -1,5 +1,5 @@
 const axios = require('axios').default;
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const config = require('../../config');
 const ports = require('../ports');
 
@@ -45,4 +45,4 @@ async function decideApplicableToolAgents(changes_committed_root, files, {lcid, 
     return applicableToolAgents.filter(tool => !alreadyInvokedTools.includes(tool.tool_id));
 }
 
-module.exports = decideApplicableToolAgents;
+export = decideApplicableToolAgents;

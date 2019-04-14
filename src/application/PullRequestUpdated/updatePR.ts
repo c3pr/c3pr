@@ -1,4 +1,4 @@
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const ports = require('../ports');
 
 async function updatePR(pullRequestUpdatedEvent, {lcid, sha, euuid}) {
@@ -12,4 +12,4 @@ async function updatePR(pullRequestUpdatedEvent, {lcid, sha, euuid}) {
     return {new_status: 'PROCESSED', result};
 }
 
-module.exports = updatePR;
+export = updatePR;
