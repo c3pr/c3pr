@@ -1,5 +1,5 @@
 const axios = require('axios').default;
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 
 const EventEmitter = require('events');
 
