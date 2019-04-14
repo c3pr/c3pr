@@ -21,9 +21,6 @@ PATCH http://localhost:7300/api/v1/projects/5b36aa1e6e3cbc0006213b97
 Authorization: Bearer {{auth_token}}
 
 ###
-GET http://localhost:7300/api/v1/projects/6068bb20-6145-4e3c-a9d3-2096fd2db24b/blacklisted_files
-Authorization: Bearer {{auth_token}}
-###
 GET http://localhost:7300/api/v1/projects?uuid=6068bb20-6145-4e3c-a9d3-2096fd2db24b
 Authorization: Bearer {{auth_token}}
 ###
@@ -39,4 +36,8 @@ Authorization: Bearer {{auth_token}}
 GET http://localhost:7300/api/v1/events/ChangesCommitted/d1fd8808-9496-44b0-a259-20e6a7115e3d
 Authorization: Bearer {{auth_token}}
 
+###
+############################# excluded_files
+GET http://localhost:7300/api/v1/projects/6068bb20-6145-4e3c-a9d3-2096fd2db24b/excluded_files
+Authorization: Bearer {{auth_token}}
 ###

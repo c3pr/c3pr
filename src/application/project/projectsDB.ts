@@ -29,7 +29,6 @@ async function newProject({clone_url_http, name, tags}) {
         clone_url_http,
         name,
         tags,
-        blacklisted_files: [],
         should_analyze_pushes: true, // should analyze regular pushes/commits (Not just PRs)
         should_analyze_prs: true
     });
@@ -41,11 +40,11 @@ function removeEmptyProperties(myObj) {
     return clone;
 }
 
-async function updateProject({uuid, clone_url_http, name, tags, blacklisted_files}) {
+async function updateProject({uuid, clone_url_http, name, tags}) {
     assert.ok(uuid, `Missing uuid for updateProject()!`);
     return (await projects).update(
         {uuid},
-        {$set: removeEmptyProperties({clone_url_http, name, tags, blacklisted_files})}
+        {$set: removeEmptyProperties({clone_url_http, name, tags})}
     );
 }
 

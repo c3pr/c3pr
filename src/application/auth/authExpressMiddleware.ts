@@ -1,6 +1,8 @@
 const decodeToken = require("./auth").decodeToken;
 
 function authExpressMiddleware(request, response, next) {
+    next(); return; // disable login for now
+    // noinspection UnreachableCodeJS
     if (!request.headers.authorization || request.headers.authorization.split(' ')[0] !== 'Bearer') {
         response.status(401).send(`Please send a "Authorization: Bearer TOKEN-JWT" header.`);
     } else {

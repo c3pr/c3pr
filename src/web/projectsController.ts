@@ -1,11 +1,19 @@
+import excludedFilesDB from "../application/project/excludedFilesDB";
+
 const authExpressMiddleware = require("../application/auth/authExpressMiddleware");
 
 const projectsDB = require('../application/project/projectsDB');
 const prsDB = require('../application/project/prsDB');
 
+function removeMongoIds(list) {
+    return list.map(item => ({...item, _id: undefined}));
+}
+
 export = function (app) {
 
     app.use('/api/v1/projects', authExpressMiddleware);
+
+    // PROJECTS ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     app.get('/api/v1/projects/', function ({query}, response) {
         projectsDB.findBy(query).then((projects) => {
@@ -23,21 +31,11 @@ export = function (app) {
         });
     });
 
+    // PRS ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     app.get('/api/v1/projects/:project_uuid/prs', function ({params: {project_uuid}}, response) {
         prsDB.findAllOfProject(project_uuid).then((prs) => {
             response.status(200).send(prs);
-        }).catch((e) => {
-            response.status(500).send(e.toString());
-        });
-    });
-
-    app.get('/api/v1/projects/:project_uuid/blacklisted_files', function ({params: {project_uuid}}, response) {
-        projectsDB.findBy({uuid: project_uuid}).then((projects) => {
-            if (projects.length < 1) {
-                response.status(404).send(`No project matches uuid ${project_uuid}.`);
-            } else {
-                response.status(200).send(projects[0].blacklisted_files || []);
-            }
         }).catch((e) => {
             response.status(500).send(e.toString());
         });
@@ -66,5 +64,20 @@ export = function (app) {
             response.status(500).send(e.toString());
         });
     });
+
+    // EXCLUDED FILES //////////////////////////////////////////////////////////////////////////////////////////////////
+
+    app.get('/api/v1/projects/:project_uuid/excluded_files', async function ({params: {project_uuid}, query: {file_path}}, response) {
+        if (!(await projectsDB.findBy({uuid: project_uuid})).length) {
+            response.status(404).send(`Project ${project_uuid} not found.`);
+            return;
+        }
+        excludedFilesDB.findBy((file_path && {project_uuid, file_path}) || {project_uuid}).then((excludedFiles) => {
+            response.status(200).send(removeMongoIds(excludedFiles));
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
 
 };
