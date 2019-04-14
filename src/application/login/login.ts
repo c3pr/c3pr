@@ -2,7 +2,7 @@ import config from '../../config';
 
 import { c3prHubClient } from 'node-c3pr-hub-client/login';
 
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const lcid = c3prLOG4.lcid();
 const sha = 'gitlab-login';
 const euuid = sha;

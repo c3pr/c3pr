@@ -1,7 +1,7 @@
 import config from '../../../config';
 import inboundPorts from "../../../ports/inbound";
 
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const sha = 'express';
 const euuid = sha;
 

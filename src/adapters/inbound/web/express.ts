@@ -5,7 +5,7 @@ import config from '../../../config';
 import c3prHubListenerController from "./c3prHubListenerController";
 import webhooksController from "./webhooksController";
 
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const lcid = c3prLOG4.lcid();
 const sha = 'express-gitlab-init';
 const euuid = sha;
