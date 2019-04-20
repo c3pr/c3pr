@@ -1,4 +1,4 @@
-const config = require('../../config');
+import config from '../../config';
 const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').default;
 
 const updatePR = require('./updatePR');

@@ -38,4 +38,5 @@ const config = {
 };
 
 hubClientConfig.init(C3PR_HUB_URL, () => config.c3pr.auth.jwt);
-export = config;
+
+export default config;

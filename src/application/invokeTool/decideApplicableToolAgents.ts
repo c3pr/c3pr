@@ -1,6 +1,6 @@
-const axios = require('axios').default;
+import axios from 'axios';
 import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
-const config = require('../../config');
+import config from '../../config';
 const ports = require('../ports');
 
 const filterApplicableToolAgents = require('./filterApplicableToolAgents');

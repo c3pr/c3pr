@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('../config');
+import config from '../config';
 
 import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const lcid = c3prLOG4.lcid();

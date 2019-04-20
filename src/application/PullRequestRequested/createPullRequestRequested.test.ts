@@ -4,8 +4,8 @@ process.env.NODE_ENV = 'test';
 import { expect } from 'chai';
 require('chai').should();
 
-// noinspection JSUnusedLocalSymbols
-const config = require('../../config');
+// noinspection ES6UnusedImports
+import config from '../../config';
 
 const createPullRequestRequested = require('./createPullRequestRequested').c3pr.createPullRequestRequested;
 

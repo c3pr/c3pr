@@ -1,5 +1,5 @@
-const axios = require('axios').default;
-const config = require('../config');
+import axios from 'axios';
+import config from '../config';
 
 /**
  * Returns all files with an open PR that was created by the bot.

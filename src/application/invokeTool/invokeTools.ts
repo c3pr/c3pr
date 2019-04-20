@@ -2,7 +2,7 @@ import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const filterFilesWithExtensions = require('./filterFilesWithExtensions');
 const decideApplicableToolAgents = require('./decideApplicableToolAgents');
 const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
-const config = require('../../config');
+import config from '../../config';
 
 
 function invokeToolForFiles(parent, changes_committed_root, repository, tool_id, files, {lcid, sha, euuid}) {

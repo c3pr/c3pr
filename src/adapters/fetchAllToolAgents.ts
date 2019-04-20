@@ -1,5 +1,5 @@
-const axios = require('axios').default;
-const config = require('../config');
+import axios from 'axios';
+import config from '../config';
 
 async function fetchAllToolAgents() {
     const headers = {Authorization: `Bearer ${config.c3pr.auth.jwt}`};

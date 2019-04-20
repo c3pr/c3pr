@@ -1,7 +1,7 @@
 import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').default;
 const c3prRTI = require('../invokeTool/invokeTools').c3prBrain;
-const config = require('../../config');
+import config from '../../config';
 
 
 function handleChangesCommitted({lcid, sha, euuid}) {

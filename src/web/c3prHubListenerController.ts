@@ -1,4 +1,4 @@
-const config = require('../config');
+import config from '../config';
 
 const c3prHCC = require('../application/ChangesCommitted/handleChangesCommitted').c3pr;
 const c3prHTIC = require('../application/ToolInvocationCompleted/handleToolInvocationCompleted').c3pr;

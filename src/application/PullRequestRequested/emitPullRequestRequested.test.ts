@@ -10,7 +10,7 @@ const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
 const axiosMock = new MockAdapter(axios);
 
-const config = require('../../config');
+import config from '../../config';
 config.c3pr.patchesUrl = 'http://changes-server/patches';
 
 require("node-c3pr-logger").testMode();

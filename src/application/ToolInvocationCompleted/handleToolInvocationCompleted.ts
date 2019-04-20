@@ -1,6 +1,6 @@
 const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').default;
 const createAndEmitPullRequestRequested = require('./createAndEmitPullRequestRequested');
-const config = require('../../config');
+import config from '../../config';
 
 
 function handleToolInvocationCompleted({lcid, sha, euuid}) {

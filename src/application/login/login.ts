@@ -1,4 +1,4 @@
-const config = require('../../config');
+import config from '../../config';
 
 const c3prHubClient = require('node-c3pr-hub-client/login').c3prHubClient;
 
