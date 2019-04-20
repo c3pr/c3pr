@@ -22,7 +22,7 @@ const config = {
             changesCommittedOfUuidUrl: `${C3PR_HUB_URL}/api/v1/events/ChangesCommitted/:uuid`,
             toolInvocationRequestedForRoot: `${C3PR_HUB_URL}/api/v1/events/ToolInvocationRequested?payload.changes_committed_root=`,
             filesWithOpenPRsForProjectUrl: `${C3PR_HUB_URL}/api/v1/projects/:project_uuid/prs/open/changed_files`,
-            excludedFileForProjectUrl: `${C3PR_HUB_URL}/api/v1/projects/:project_uuid/excluded_files?file_path=`,
+            projectFileUrl: `${C3PR_HUB_URL}/api/v1/projects/:project_uuid/files/:file_path`,
         },
 
         brain: {
