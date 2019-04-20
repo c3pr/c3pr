@@ -1,5 +1,5 @@
 import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
-const ports = require('../ports');
+import ports from '../ports';
 
 async function savePR(pullRequestCreatedEvent, {lcid, sha, euuid}) {
     const project_uuid = await ports.fetchFirstProjectForCloneUrl(pullRequestCreatedEvent.payload.repository.clone_url_http);

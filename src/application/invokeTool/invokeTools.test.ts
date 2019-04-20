@@ -4,7 +4,7 @@ process.env.NODE_ENV = 'test';
 import { expect } from 'chai';
 require('chai').should();
 
-const ports = require('../ports');
+import ports from '../ports';
 ports.shuffleArray = a => a; // shuffleArray won't shuffle a thing
 
 const axios = require('axios');

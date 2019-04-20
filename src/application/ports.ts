@@ -7,7 +7,16 @@ import {fetchFirstProjectForCloneUrl} from "node-c3pr-hub-client/projects/fetchF
 import {postNewPrForProject} from "node-c3pr-hub-client/projects/postNewPrForProject";
 import {updatePrOfProject} from "node-c3pr-hub-client/projects/updatePrOfProject";
 
-export = {
+const ports: {
+    fetchAllToolAgents;
+    shuffleArray;
+    fetchBlacklistedFiles;
+    retrieveFilesWithOpenPRs;
+    fetchChangedFilesForPullRequestCreatedEvent;
+    fetchFirstProjectForCloneUrl;
+    postNewPrForProject;
+    updatePrOfProject;
+} = {
     fetchAllToolAgents,
     shuffleArray,
     fetchBlacklistedFiles,
@@ -17,3 +26,5 @@ export = {
     postNewPrForProject,
     updatePrOfProject
 };
+
+export default ports;
