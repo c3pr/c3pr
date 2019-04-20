@@ -1,8 +1,8 @@
-import excludedFilesDB from "../application/project/excludedFilesDB";
+import projectFilesDB from "../application/project/projectFilesDB";
+import projectsDB from '../application/project/projectsDB';
 
 const authExpressMiddleware = require("../application/auth/authExpressMiddleware");
 
-const projectsDB = require('../application/project/projectsDB');
 const prsDB = require('../application/project/prsDB');
 
 function removeMongoIds(list) {
@@ -65,15 +65,64 @@ export = function (app) {
         });
     });
 
-    // EXCLUDED FILES //////////////////////////////////////////////////////////////////////////////////////////////////
+    // PROJECT FILES //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    app.get('/api/v1/projects/:project_uuid/excluded_files', async function ({params: {project_uuid}, query: {file_path}}, response) {
-        if (!(await projectsDB.findBy({uuid: project_uuid})).length) {
+    app.get('/api/v1/projects/:project_uuid/files*', async function ({params}, response) {
+        const {project_uuid} = params;
+        if (await projectsDB.projectDoesNotExist({uuid: project_uuid})) {
             response.status(404).send(`Project ${project_uuid} not found.`);
             return;
         }
-        excludedFilesDB.findBy((file_path && {project_uuid, file_path}) || {project_uuid}).then((excludedFiles) => {
-            response.status(200).send(removeMongoIds(excludedFiles));
+        const optional_file_path = params[0] && params[0].replace(/^\/(files\/)?/, '');
+        projectFilesDB.findBy((optional_file_path && {project_uuid, file_path: optional_file_path}) || {project_uuid}).then((projectFiles) => {
+            const filesWithoutMongoIds = removeMongoIds(projectFiles);
+            response.status(200).send((optional_file_path && filesWithoutMongoIds[0]) || filesWithoutMongoIds);
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
+    app.patch('/api/v1/projects/:project_uuid/files/*', async function ({body, params}, response) {
+        const {project_uuid} = params;
+        if (await projectsDB.projectDoesNotExist({uuid: project_uuid})) {
+            response.status(404).send(`Project ${project_uuid} not found.`);
+            return;
+        }
+        const file_path = params[0];
+        if (project_uuid !== body.project_uuid || file_path !== body.file_path) {
+            response.status(400).send(`Body properties project_uuid and file_path don't match the URL.`);
+            return;
+        }
+        projectFilesDB.updateProjectFile({...body, project_uuid, file_path}).then((x) => {
+            const updated_files = x.result.nModified;
+            if (updated_files) {
+                response.status(200).send({updated_files: updated_files});
+            } else {
+                response.status(404).send({updated_files: 0, message: `No files were found or modified.`});
+            }
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
+    app.put('/api/v1/projects/:project_uuid/files/*', async function ({body, params}, response) {
+        const {project_uuid} = params;
+        if (await projectsDB.projectDoesNotExist({uuid: project_uuid})) {
+            response.status(404).send(`Project ${project_uuid} not found.`);
+            return;
+        }
+        const file_path = params[0];
+        if (project_uuid !== body.project_uuid || file_path !== body.file_path) {
+            response.status(400).send(`Body properties project_uuid and file_path don't match the URL.`);
+            return;
+        }
+        projectFilesDB.createOrUpdateProjectFile({...body, project_uuid, file_path}).then((x) => {
+            const updated_files = x.result.nModified;
+            if (updated_files) {
+                response.status(200).send({updated_files: updated_files, created_files: 0});
+            } else {
+                response.status(201).send({updated_files: 0, created_files: x.result.n});
+            }
         }).catch((e) => {
             response.status(500).send(e.toString());
         });

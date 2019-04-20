@@ -37,7 +37,43 @@ GET http://localhost:7300/api/v1/events/ChangesCommitted/d1fd8808-9496-44b0-a259
 Authorization: Bearer {{auth_token}}
 
 ###
-############################# excluded_files
-GET http://localhost:7300/api/v1/projects/6068bb20-6145-4e3c-a9d3-2096fd2db24b/excluded_files
+############################# project_files
+GET http://localhost:7300/api/v1/projects/6068bb20-6145-4e3c-a9d3-2096fd2db24b/files
 Authorization: Bearer {{auth_token}}
+###
+GET http://localhost:7300/api/v1/projects/6068bb20-6145-4e3c-a9d3-2096fd2db24b/files/
+Authorization: Bearer {{auth_token}}
+###
+GET http://localhost:7300/api/v1/projects/6068bb20-6145-4e3c-a9d3-2096fd2db24b/files/files/src/main/java/com/stuff/HelloApplication.java
+Authorization: Bearer {{auth_token}}
+###
+PATCH http://localhost:7300/api/v1/projects/6068bb20-6145-4e3c-a9d3-2096fd2db24b/files/src/main/java/com/stuff/HelloApplication.java
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+    "project_uuid": "6068bb20-6145-4e3c-a9d3-2096fd2db24b",
+    "file_path": "src/main/java/com/stuff/HelloApplication.java",
+    "analyses": [],
+    "excluded_for_tools": [{
+      "all_tools": true,
+      "all_lines": true,
+      "reason": "App file should never be touched!!!"
+    }]
+}
+###
+PUT http://localhost:7300/api/v1/projects/6068bb20-6145-4e3c-a9d3-2096fd2db24b/files/src/main/java/com/stuff/HelloApplication3.java
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+    "project_uuid": "6068bb20-6145-4e3c-a9d3-2096fd2db24b",
+    "file_path": "src/main/java/com/stuff/HelloApplication3.java",
+    "analyses": [],
+    "excluded_for_tools": [{
+      "all_tools": true,
+      "all_lines": true,
+      "reason": "App2 file should never be touched!x2"
+    }]
+}
 ###

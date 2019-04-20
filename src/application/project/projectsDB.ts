@@ -14,6 +14,10 @@ async function findBy(query) {
     return (await projects).find(query).toArray();
 }
 
+async function projectDoesNotExist(query) {
+    return !(await (await projects).find(query).toArray()).length;
+}
+
 function findAll() {
     return findBy({});
 }
@@ -48,11 +52,12 @@ async function updateProject({uuid, clone_url_http, name, tags}) {
     );
 }
 
-export = {
+export default {
     newProject,
     updateProject,
     findBy,
-    findAll
+    findAll,
+    projectDoesNotExist
 };
 
 // noinspection BadExpressionStatementJS

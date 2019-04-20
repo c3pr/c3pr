@@ -19,7 +19,7 @@ export = {
 
             mongoProjectsCollection: 'projects',
             mongoPRsCollection: 'prs',
-            mongoExcludedFilesCollection: 'excluded_files',
+            mongoProjectFilesCollection: 'project_files',
             mongoAgentRegistryCollection: 'agents',
 
             mongoLogsCollection: C3PR_MONGO_LOGS_COLLECTION,
