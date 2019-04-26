@@ -1,6 +1,6 @@
 import fetchAllToolAgents from "../adapters/fetchAllToolAgents";
 import shuffleArray from "../adapters/shuffleArray";
-import fetchBlacklistedFiles from "../adapters/fetchBlacklistedFiles";
+import fetchProjectFiles from "../adapters/fetchProjectFiles";
 import retrieveFilesWithOpenPRs from "../adapters/retrieveFilesWithOpenPRs";
 import fetchChangedFilesForPullRequestCreatedEvent from "../adapters/fetchChangedFilesForPullRequestCreatedEvent";
 import {fetchFirstProjectForCloneUrl} from "node-c3pr-hub-client/projects/fetchFirstProjectForCloneUrl";
@@ -10,7 +10,7 @@ import {updatePrOfProject} from "node-c3pr-hub-client/projects/updatePrOfProject
 const ports: {
     fetchAllToolAgents;
     shuffleArray;
-    fetchBlacklistedFiles;
+    fetchProjectFiles;
     retrieveFilesWithOpenPRs;
     fetchChangedFilesForPullRequestCreatedEvent;
     fetchFirstProjectForCloneUrl;
@@ -19,7 +19,7 @@ const ports: {
 } = {
     fetchAllToolAgents,
     shuffleArray,
-    fetchBlacklistedFiles,
+    fetchProjectFiles,
     retrieveFilesWithOpenPRs,
     fetchChangedFilesForPullRequestCreatedEvent,
     fetchFirstProjectForCloneUrl,
