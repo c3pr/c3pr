@@ -63,11 +63,13 @@ describe('c3prLOG5', () => {
         expect(_c3prLOG5.lcid).to.deep.equal('1');
         expect(_c3prLOG5.sha).to.deep.equal('2');
         expect(_c3prLOG5.euuid).to.deep.equal('3');
+        expect({..._c3prLOG5}).to.deep.equal({lcid: '1', sha: '2', euuid: '3'});
 
-        const ___c3prLOG5 = _c3prLOG5()()();
-        expect(___c3prLOG5.lcid).to.deep.equal('1');
-        expect(___c3prLOG5.sha).to.deep.equal('2');
-        expect(___c3prLOG5.euuid).to.deep.equal('3');
+        const ___c3prLOG5 = _c3prLOG5()({lcid: '11'})({sha: '22'})({euuid: '33'})();
+        expect(___c3prLOG5.lcid).to.deep.equal('11');
+        expect(___c3prLOG5.sha).to.deep.equal('22');
+        expect(___c3prLOG5.euuid).to.deep.equal('33');
+        expect({...___c3prLOG5}).to.deep.equal({lcid: '11', sha: '22', euuid: '33'});
 
     });
 
