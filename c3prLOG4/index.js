@@ -26,7 +26,7 @@ function c3prLOG4(message, options) {
         euuid: options.euuid,
         service_name,
         caller_name,
-        meta: Object.assign({ stack }, (options.meta || {})),
+        meta: Object.assign({ stack }, options.meta),
         error: options.error
     });
 }

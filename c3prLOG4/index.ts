@@ -7,14 +7,14 @@ import * as util from 'util';
 import functionScriptFileDetector from './functionScriptFileDetector';
 
 
-interface IC3prLOG4 {
+export interface IC3prLOG4 {
     (message: string, options: Log4Options): any;
     lcid(): string;
     testMode(): void;
     isEnvVarSet(): boolean;
 }
 
-interface Log4Options {
+export interface Log4Options {
     lcid: string;
     sha: string;
     euuid: string;
@@ -47,7 +47,7 @@ function c3prLOG4(message: string, options: Log4Options) {
         euuid: options.euuid,
         service_name,
         caller_name,
-        meta: {stack, ...(options.meta || {})},
+        meta: {stack, ...options.meta},
         error: options.error
     });
 }

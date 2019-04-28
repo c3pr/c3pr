@@ -9,7 +9,8 @@
     "noImplicitUseStrict": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/*.test.ts"
   ],
   "compileOnSave": true,
   "buildOnSave": true
