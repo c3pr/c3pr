@@ -11,7 +11,7 @@ function logFake(callsRecord, lcidGenerator?) {
 
 describe('c3prLOG5', () => {
 
-    it('c3prLOG5 basic', () => {
+    it('basic', () => {
 
         let calls = [];
         const c3prLOG5 = __c3prLOG5(logFake(calls));
@@ -22,7 +22,7 @@ describe('c3prLOG5', () => {
 
     });
 
-    it('c3prLOG5 empty calls', () => {
+    it('no-arg calls', () => {
 
         let calls = [];
         const c3prLOG5 = __c3prLOG5(logFake(calls, () => 'should-be-overriden'));
@@ -33,7 +33,7 @@ describe('c3prLOG5', () => {
 
     });
 
-    it('c3prLOG5 override at last', () => {
+    it('override at last call', () => {
 
         let calls = [];
         const c3prLOG5 = __c3prLOG5(logFake(calls));
@@ -52,6 +52,22 @@ describe('c3prLOG5', () => {
         c3prLOG5({sha: '1'})('msg');
 
         expect(calls).to.deep.equal([['msg', {lcid: 'generated-lcid', sha: '1'}]]);
+
+    });
+
+    it('lcid/sha/euuid should be available as props', () => {
+
+        const c3prLOG5 = __c3prLOG5(logFake([]));
+
+        const _c3prLOG5 = c3prLOG5({lcid: '1', sha: '2', euuid: '3'});
+        expect(_c3prLOG5.lcid).to.deep.equal('1');
+        expect(_c3prLOG5.sha).to.deep.equal('2');
+        expect(_c3prLOG5.euuid).to.deep.equal('3');
+
+        const ___c3prLOG5 = _c3prLOG5()()();
+        expect(___c3prLOG5.lcid).to.deep.equal('1');
+        expect(___c3prLOG5.sha).to.deep.equal('2');
+        expect(___c3prLOG5.euuid).to.deep.equal('3');
 
     });
 

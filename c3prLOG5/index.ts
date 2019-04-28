@@ -10,9 +10,13 @@ export const __c3prLOG5 = (c3prLOG4) => (messageOrLogOptionsToPartiallyApply?: s
         if (!partiallyAppliedLogOptions.lcid) {
             partiallyAppliedLogOptions.lcid = c3prLOG4.lcid();
         }
-        return (nextMessageOrLogOptionsToStack?: string | Partial<Log4Options>, nextLogOptions?: Partial<Log4Options>) => {
+        const nextCall = (nextMessageOrLogOptionsToStack?: string | Partial<Log4Options>, nextLogOptions?: Partial<Log4Options>) => {
             return __c3prLOG5(c3prLOG4)(nextMessageOrLogOptionsToStack, {...partiallyAppliedLogOptions, ...nextLogOptions});
         };
+        (nextCall as any).lcid = partiallyAppliedLogOptions.lcid;
+        (nextCall as any).sha = partiallyAppliedLogOptions.sha;
+        (nextCall as any).euuid = partiallyAppliedLogOptions.euuid;
+        return nextCall;
     }
 };
 
