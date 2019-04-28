@@ -1,10 +1,11 @@
 import config from '../config';
 
-const c3prHCC = require('../application/ChangesCommitted/handleChangesCommitted').c3pr;
+import handleChangesCommitted from "../application/ChangesCommitted/handleChangesCommitted";
 const c3prHTIC = require('../application/ToolInvocationCompleted/handleToolInvocationCompleted').c3pr;
 const handlePullRequestCreated = require('../application/PullRequestCreated/handlePullRequestCreated');
 const handlePullRequestUpdated = require('../application/PullRequestUpdated/handlePullRequestUpdated');
 
+import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 const sha = 'express-hub';
 const euuid = sha;
@@ -12,9 +13,10 @@ const euuid = sha;
 export = function (app) {
 
     app.post(config.c3pr.brain.ChangesCommittedCallbackUrl, function (request, response) {
-        const lcid = c3prLOG4.lcid();
-        c3prLOG4(`'ChangesCommitted' received.`, {lcid, sha, euuid});
-        c3prHCC.handleChangesCommitted({lcid, sha, euuid});
+        const _c3prLOG5 = c3prLOG5({sha, euuid});
+        _c3prLOG5(`'ChangesCommitted' received.`);
+        // noinspection JSIgnoredPromiseFromCall
+        handleChangesCommitted(_c3prLOG5);
         response.send();
     });
 
