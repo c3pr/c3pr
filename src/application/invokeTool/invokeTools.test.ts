@@ -1,5 +1,7 @@
-require("node-c3pr-logger").testMode();
+import c3prLOG4 from 'node-c3pr-logger/c3prLOG4';
+c3prLOG4.testMode();
 process.env.NODE_ENV = 'test';
+
 
 import { expect } from 'chai';
 require('chai').should();
@@ -12,11 +14,8 @@ const MockAdapter = require('axios-mock-adapter');
 const axiosMock = new MockAdapter(axios);
 
 import config from '../../config';
-config.c3pr.patchesUrl = 'http://changes-server/patches';
+import invokeTools from "./invokeTools";
 
-require("node-c3pr-logger").testMode();
-
-const invokeTools = require('./invokeTools').c3prBrain.invokeTools;
 
 function configureFetchAllToolAgents(agents) {
     axiosMock
@@ -29,8 +28,8 @@ describe('invokeTools', () => {
 
     it('should emit a ToolInvocationRequested for each file that have a tool available', async () => {
 
-        const parent = {event_type: "ChangesCommitted", uuid: "uuid-12312-3123123-12312" };
-        const changes_committed_root = "uuid-....123123123...";
+        const parentEvent = {event_type: "ChangesCommitted", uuid: "uuid-12312-3123123-12312" };
+        const changesCommittedRootEuuid = "uuid-....123123123...";
         const changes = {
             repository: {
                 full_path: "c3pr/sample-project-java-maven",
@@ -53,15 +52,15 @@ describe('invokeTools', () => {
         axiosMock
             .onPost(
                 `${config.c3pr.hub.c3prHubUrl}/api/v1/events/ToolInvocationRequested`,
-                {parent, changes_committed_root, repository: changes.repository, tool_id: "two", files: ['src/main/a/b/c/Main.js']}
+                {parentEvent, changesCommittedRootEuuid, repository: changes.repository, tool_id: "two", files: ['src/main/a/b/c/Main.js']}
             ).reply(() => { toolTwoCalled = true; return [200]; })
             .onPost(
                 `${config.c3pr.hub.c3prHubUrl}/api/v1/events/ToolInvocationRequested`,
-                {parent, changes_committed_root, repository: changes.repository, tool_id: "one", files: ['src/main/a/b/c/Main.java']}
+                {parentEvent, changesCommittedRootEuuid, repository: changes.repository, tool_id: "one", files: ['src/main/a/b/c/Main.java']}
             ).reply(() => { toolOneCalled = true; return [200]; });
 
         // execute
-        await invokeTools({parent, changes_committed_root, repository: changes.repository, files: changes.changed_files});
+        await invokeTools({parentEvent, changesCommittedRootEuuid, repository: changes.repository, files: changes.changed_files}, () => {});
 
         // verify
         expect(toolOneCalled).to.equal(true);

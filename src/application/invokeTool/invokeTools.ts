@@ -1,13 +1,17 @@
-const filterFilesWithExtensions = require('./filterFilesWithExtensions');
-import {decideApplicableToolAgents} from "./decideApplicableToolAgents";
-const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
 import config from '../../config';
+import retrieveFilesWithOpenPRs from "../../adapters/retrieveFilesWithOpenPRs";
+import fetchProjectFiles from "../../adapters/fetchProjectFiles";
+import fetchToolsNotYetInvokedForCommit from "./fetchToolsNotYetInvokedForCommit";
+import {generateInvocations} from "./generateInvocations";
+
+const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
 
 
-function invokeToolForFiles(parent, changes_committed_root, repository, tool_id, files, c3prLOG5) {
+function invokeToolForFiles({parentEvent, changesCommittedRootEuuid, repository}, tool_id, files, c3prLOG5) {
+
     const toolInvocationRequested = {
-        parent,
-        changes_committed_root,
+        parent: parentEvent,
+        changes_committed_root: changesCommittedRootEuuid,
         repository,
         tool_id,
         files
@@ -30,42 +34,23 @@ function invokeToolForFiles(parent, changes_committed_root, repository, tool_id,
     })
 }
 
-/**
- * NOTE: files will be changed_files[if ChangesCommitted] or unmodified_files[if ToolInvocationCompleted]
- *
- * - Fetch all available tool agents
- * - From the files array (FUTURE: and project configuration) enumerate which tool agents are eligible
- * - Pick one tool agent
- * - Create ToolInvocationRequested for such tool agent.
- */
+
 async function invokeTools({parentEvent, changesCommittedRootEuuid, repository, files}, c3prLOG5) {
-    const applicableToolAgents = await decideApplicableToolAgents(changesCommittedRootEuuid, files, c3prLOG5);
+    const invocationMetaData = {parentEvent, changesCommittedRootEuuid, repository};
 
-    c3prLOG5(`Applicable tool agents: ${applicableToolAgents.length}.`, {meta: {applicableToolAgents}});
+    const availableToolsNotYetInvokedForThisCommit = await fetchToolsNotYetInvokedForCommit(changesCommittedRootEuuid, c3prLOG5);
+    if (!availableToolsNotYetInvokedForThisCommit.length) { return []; }
 
-    let changedAndNotRefactoredFiles = [...files];
-    let invocations = [];
 
-    while(changedAndNotRefactoredFiles.length && applicableToolAgents.length) {
-        let tool = applicableToolAgents.pop();
+    const filesWithOpenPRs = await retrieveFilesWithOpenPRs(changesCommittedRootEuuid);
+    const filesChangedInThisCommitThatDontHaveOpenPRs = filesWithOpenPRs.filter(file => !filesWithOpenPRs.includes(file));
 
-        /** @type {Object[]} */
-        const filesForThisTool = filterFilesWithExtensions(changedAndNotRefactoredFiles, tool.extensions);
 
-        if (filesForThisTool.length) {
-            changedAndNotRefactoredFiles = changedAndNotRefactoredFiles.filter(f => !filesForThisTool.includes(f));
-            invocations.push(invokeToolForFiles(parentEvent, changesCommittedRootEuuid, repository, tool.tool_id, filesForThisTool, c3prLOG5));
-        }
-    }
+    const projectFilesPreferences = await fetchProjectFiles(changesCommittedRootEuuid);
 
-    if (!changedAndNotRefactoredFiles.length) {
-        c3prLOG5(`All files have been handled. Tool invocations complete. Remaining applicable tool agents: ${applicableToolAgents.length}`);
-    }
-    if (!applicableToolAgents.length) {
-        c3prLOG5(`All applicable TOOLS have been invoked (or all remaining files have open PRs awaiting evaluation). Tool invocations complete. Remaining changed and not refactored files: ${changedAndNotRefactoredFiles.length}`);
-    }
+    const invocations = generateInvocations(filesChangedInThisCommitThatDontHaveOpenPRs, availableToolsNotYetInvokedForThisCommit, projectFilesPreferences, c3prLOG5);
 
-    return Promise.all(invocations);
+    return invocations.map(({tool_id, files}) => invokeToolForFiles(invocationMetaData, tool_id, files, c3prLOG5));
 }
 
 export default invokeTools;
