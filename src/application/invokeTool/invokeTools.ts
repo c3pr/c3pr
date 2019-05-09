@@ -35,22 +35,21 @@ function invokeToolForFiles({parentEvent, changesCommittedRootEuuid, repository}
 }
 
 
-async function invokeTools({parentEvent, changesCommittedRootEuuid, repository, files}, c3prLOG5) {
-    const invocationMetaData = {parentEvent, changesCommittedRootEuuid, repository};
+async function invokeTools({parentEvent, changesCommittedRootEuuid, repository}, filesChangedInThisCommit, c3prLOG5) {
 
     const availableToolsNotYetInvokedForThisCommit = await fetchToolsNotYetInvokedForCommit(changesCommittedRootEuuid, c3prLOG5);
     if (!availableToolsNotYetInvokedForThisCommit.length) { return []; }
 
 
     const filesWithOpenPRs = await retrieveFilesWithOpenPRs(changesCommittedRootEuuid);
-    const filesChangedInThisCommitThatDontHaveOpenPRs = filesWithOpenPRs.filter(file => !filesWithOpenPRs.includes(file));
+    const filesChangedInThisCommitThatDontHaveOpenPRs = filesChangedInThisCommit.filter(file => !filesWithOpenPRs.includes(file));
 
 
     const projectFilesPreferences = await fetchProjectFiles(changesCommittedRootEuuid);
 
     const invocations = generateInvocations(filesChangedInThisCommitThatDontHaveOpenPRs, availableToolsNotYetInvokedForThisCommit, projectFilesPreferences, c3prLOG5);
 
-    return invocations.map(({tool_id, files}) => invokeToolForFiles(invocationMetaData, tool_id, files, c3prLOG5));
+    return invocations.map(({tool_id, files}) => invokeToolForFiles({parentEvent, changesCommittedRootEuuid, repository}, tool_id, files, c3prLOG5));
 }
 
 export default invokeTools;

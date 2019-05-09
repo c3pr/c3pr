@@ -24,9 +24,10 @@ async function handlerFunction(changesCommittedEvent, {lcid, sha, euuid}) {
         let result = await invokeTools({
             parentEvent,
             changesCommittedRootEuuid: changesCommittedEvent.uuid,
-            repository: changesCommittedEvent.payload.repository,
-            files: changesCommittedEvent.payload.changed_files
-        }, _c3prLOG5);
+            repository: changesCommittedEvent.payload.repository
+        },
+        changesCommittedEvent.payload.changed_files,
+        _c3prLOG5);
         return {new_status: 'PROCESSED', result};
     } catch (error) {
         _c3prLOG5(`Error while invoking tools.`, {error, meta: {changesCommittedEvent}});
