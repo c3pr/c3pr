@@ -1,19 +1,20 @@
-import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
+import invokeToolsForRemainingFiles from "./invokeToolsForRemainingFiles";
+import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 
 const createPullRequestRequested = require('../PullRequestRequested/createPullRequestRequested').c3pr.createPullRequestRequested;
 const emitPullRequestRequested = require('../PullRequestRequested/emitPullRequestRequested');
 
-const invokeToolsForRemainingFiles = require('./invokeToolsForRemainingFiles');
 
 function createAndEmitPullRequestRequested(toolInvocationCompletedEvent, {lcid, sha, euuid}) {
+    const _c3prLOG5 = c3prLOG5({lcid, sha, euuid});
     let result: any = {};
     if (toolInvocationCompletedEvent.payload.unmodified_files.length) {
-        c3prLOG4(`ToolInvocationCompleted has unmodified files. I will now attempt to invoke new tools.`, {lcid, sha, euuid, meta: {toolInvocationCompletedEvent}});
-        result.newToolInvocation = invokeToolsForRemainingFiles(toolInvocationCompletedEvent, {lcid, sha, euuid});
+        _c3prLOG5(`ToolInvocationCompleted has unmodified files. I will now attempt to invoke new tools.`, {meta: {toolInvocationCompletedEvent}});
+        result.newToolInvocation = invokeToolsForRemainingFiles(toolInvocationCompletedEvent, _c3prLOG5);
     }
 
     if (toolInvocationCompletedEvent.payload.changed_files.length) {
-        c3prLOG4(`ToolInvocationCompleted modified files. I will now issue a PullRequestRequested event.`, {lcid, sha, euuid, meta: {toolInvocationCompletedEvent}});
+        _c3prLOG5(`ToolInvocationCompleted modified files. I will now issue a PullRequestRequested event.`, {meta: {toolInvocationCompletedEvent}});
         const pullRequestRequested = createPullRequestRequested(toolInvocationCompletedEvent);
         result.prEmitted = emitPullRequestRequested(pullRequestRequested, {lcid, sha, euuid});
     }
