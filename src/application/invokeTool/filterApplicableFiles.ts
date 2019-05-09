@@ -7,7 +7,7 @@ interface ExcludedForTool {
     all_lines?: boolean; lines?: LineInterval[];
     reason?: string
 }
-interface PartialProjectFile {
+export interface PartialProjectFile {
     file_path: string;
     excluded_for_tools: ExcludedForTool[];
 }
