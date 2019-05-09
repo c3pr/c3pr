@@ -5,18 +5,16 @@ export interface LineInterval {
     start: number;
     end: number;
 }
+export interface ExcludedForTool {
+    all_tools?: boolean; tool_name?: string;
+    all_lines?: boolean; lines?: LineInterval[];
+    reason?: string
+}
 export interface ProjectFile {
     project_uuid: string;
     file_path: string;
-    analyses: [
-        {tool_name: string, lines: LineInterval[], date_time: string}
-        ],
-    excluded_for_tools:
-        ({all_tools: boolean, all_lines: boolean,    reason?: string} |
-            {all_tools: boolean, lines: LineInterval[], reason?: string} |
-            {tool_name: string,  all_lines: boolean,    reason?: string} |
-            {tool_name: string,  lines: LineInterval[], reason?: string})[]
-    ;
+    analyses: {tool_name: string, lines: LineInterval[], date_time: string}[],
+    excluded_for_tools: ExcludedForTool[];
 }
 
 export const fetchProjectFiles = (config) => (axios) =>

@@ -1,19 +1,12 @@
-interface LineInterval {
-    start: number;
-    end: number;
-}
-interface ExcludedForTool {
-    all_tools?: boolean; tool_name?: string;
-    all_lines?: boolean; lines?: LineInterval[];
-    reason?: string
-}
+import {ExcludedForTool, LineInterval} from "../../adapters/fetchProjectFiles";
+
 export interface PartialProjectFile {
     file_path: string;
     excluded_for_tools: ExcludedForTool[];
 }
 interface ChangedFile {
     file_path: string;
-    changed_line_intervals: LineInterval[];
+    changed_line_intervals: LineInterval[]; // TODO at the moment we ignore lines... see code below
 }
 
 
