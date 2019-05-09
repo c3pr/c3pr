@@ -29,7 +29,7 @@ async function perProjectEventCountOfType(event_type) {
 }
 
 function findAllOfType(event_type, query) {
-    return findAll({event_type, ...(query||{})});
+    return findAll({event_type, ...query});
 }
 
 function findAllOfStatus(status) {
