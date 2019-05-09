@@ -17,37 +17,37 @@ Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:5000/api/v1/projects/
+GET http://127.0.0.1:7300/api/v1/projects/
 Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
-GET http://127.0.0.1:5000/api/v1/projects/7ac33816-c794-4cf3-a5b4-5f7e2ff06543/prs
+GET http://127.0.0.1:7300/api/v1/projects/7ac33816-c794-4cf3-a5b4-5f7e2ff06543/prs
 Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
-GET http://127.0.0.1:5000/api/v1/projects/7ac33816-c794-4cf3-a5b4-5f7e2ff06543/prs/open/changed_files
+GET http://127.0.0.1:7300/api/v1/projects/7ac33816-c794-4cf3-a5b4-5f7e2ff06543/prs/open/changed_files
 Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
-GET http://127.0.0.1:5000/api/v1/projects/
+GET http://127.0.0.1:7300/api/v1/projects/
 Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
-GET http://127.0.0.1:5000/api/v1/projects/?name=c-3po-project
+GET http://127.0.0.1:7300/api/v1/projects/?name=c-3po-project
 Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
-GET http://127.0.0.1:5000/api/v1/projects/?clone_url_http=http://example.com/starwars/c-3po-project.git
+GET http://127.0.0.1:7300/api/v1/projects/?clone_url_http=http://example.com/starwars/c-3po-project.git
 Authorization: Bearer {{auth_jwt_token}}
 
 ###
 
-GET http://localhost:5000/api/v1/projects/?clone_url_http=http://c3prgitlab:8888/sample_user/sample-project-java-maven.git
+GET http://localhost:7300/api/v1/projects/?clone_url_http=http://c3prgitlab:8888/sample_user/sample-project-java-maven.git
 Authorization: Bearer {{auth_jwt_token}}
 
 ###
