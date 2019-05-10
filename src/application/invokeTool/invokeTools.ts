@@ -35,14 +35,23 @@ function invokeToolForFiles({parentEvent, changesCommittedRootEuuid, repository}
 }
 
 
+async function filterFilesChangedInThisCommitThatDontHaveOpenPRs(changesCommittedRootEuuid: any, filesChangedInThisCommit) {
+    const filesWithOpenPRs = await retrieveFilesWithOpenPRs(changesCommittedRootEuuid);
+    return filesChangedInThisCommit.filter(file => !filesWithOpenPRs.includes(file));
+}
+
+
 async function invokeTools({parentEvent, changesCommittedRootEuuid, repository}, filesChangedInThisCommit, c3prLOG5) {
 
     const availableToolsNotYetInvokedForThisCommit = await fetchToolsNotYetInvokedForCommit(changesCommittedRootEuuid, c3prLOG5);
     if (!availableToolsNotYetInvokedForThisCommit.length) { return []; }
 
 
-    const filesWithOpenPRs = await retrieveFilesWithOpenPRs(changesCommittedRootEuuid);
-    const filesChangedInThisCommitThatDontHaveOpenPRs = filesChangedInThisCommit.filter(file => !filesWithOpenPRs.includes(file));
+    const filesChangedInThisCommitThatDontHaveOpenPRs = await filterFilesChangedInThisCommitThatDontHaveOpenPRs(changesCommittedRootEuuid, filesChangedInThisCommit);
+    if (!filesChangedInThisCommitThatDontHaveOpenPRs.length) {
+        c3prLOG5(`All files in this commit have pending c3pr PRs. Skipping.`);
+        return [];
+    }
 
 
     const projectFilesPreferences = await fetchProjectFiles(changesCommittedRootEuuid);
