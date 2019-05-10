@@ -1,6 +1,6 @@
-import { encodeUuidToken } from "./auth";
-import { c3prBus } from '../bus/bus';
-import { v4 as uuidv4 } from 'uuid';
+import {encodeUuidToken} from "./auth";
+import {c3prBusSubscribeTo} from '../bus/bus';
+import {v4 as uuidv4} from 'uuid';
 
 function subscribe(subscriptions = []) {
     if (
@@ -10,7 +10,7 @@ function subscribe(subscriptions = []) {
         throw new Error(`Your request payload must be a subscriptions array with the format: [{eventType, callbackUrl}].`);
     }
     subscriptions.forEach(({eventType, callbackUrl}) => {
-        c3prBus.subscribeTo(eventType, callbackUrl);
+        c3prBusSubscribeTo(eventType, callbackUrl);
     });
 }
 

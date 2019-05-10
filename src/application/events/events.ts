@@ -1,7 +1,5 @@
-import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
-const lcid = c3prLOG4.lcid();
-const sha = 'events-init';
-const euuid = sha;
+import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
+import {c3prBusEmit, c3prBusOnNewSubscribers} from "../bus/bus";
 
 const config = require('../../config');
 
@@ -10,11 +8,10 @@ const eventsDB = require('./eventsDB');
 const Status = require('./status');
 const assert = require('assert');
 
-const c3prBus = require('../../application/bus/bus').c3prBus;
-c3prBus.onNewSubscribers((event_type) => {
-    let uuid = Status.peekUnprocessedEventOfType(event_type);
-    if (uuid) {
-        return c3prBus.emit(event_type);
+c3prBusOnNewSubscribers((event_type) => {
+    let event = Status.peekUnprocessed(event_type);
+    if (event) {
+        return c3prBusEmit(event_type, event);
     }
 });
 
@@ -26,7 +23,7 @@ async function register(event_type, payload) {
     await eventsDB.insert({uuid, event_type, meta: {status, processor_uuid: null, created: new Date().toISOString()}, payload});
     Status.addAsUnprocessed(event_type, uuid);
 
-    c3prBus.emit(event_type);
+    c3prBusEmit(event_type, payload);
 
     return uuid;
 }
@@ -43,10 +40,10 @@ async function reprocessParents(event_type) {
         Status.markForReprocessing(parentEventType, parentUUID, '<REPROCESS>');
         await eventsDB.persistAsUnprocessed(parentUUID);
 
-        const reprocessLCID = c3prLOG4.lcid();
         const sha = (e.payload.repository && e.payload.repository.revision) || 'unknown';
-        c3prLOG4(`Event patched as processed due to request to reprocess its parents.`, {lcid: reprocessLCID, sha, euuid: e.uuid});
-        c3prLOG4(`Event patched as unprocessed due to request to reprocess the child event.`, {lcid: reprocessLCID, sha, euuid: parentUUID, meta: {childEventType: e.event_type, childUUID: e.uuid}});
+        const _c3prLOG5 = c3prLOG5({sha});
+        _c3prLOG5(`Event patched as processed due to request to reprocess its parents.`, {euuid: e.uuid});
+        _c3prLOG5(`Event patched as unprocessed due to request to reprocess the child event.`, {euuid: parentUUID, meta: {childEventType: e.event_type, childUUID: e.uuid}});
         await patchAsProcessed(e.event_type, e.uuid, REPROCESS_PROCESSOR_UUID);
     }
 }
@@ -116,7 +113,8 @@ function patchAsUnprocessed(event_type, uuid, processor_uuid) {
 }
 
 async function initializeEventsOnStartup() {
-    c3prLOG4('Initializing events status database.', {lcid, sha, euuid});
+    const _c3prLOG5 = c3prLOG5({sha: 'initializeEventsOnStartup'});
+    _c3prLOG5('Initializing events status database.');
 
     const previouslyUnprocessedEvents = await eventsDB.findAllOfStatus(Status.UNPROCESSED);
     previouslyUnprocessedEvents.forEach(({event_type, uuid}) => Status.addAsUnprocessed(event_type, uuid));
@@ -128,9 +126,9 @@ async function initializeEventsOnStartup() {
         eventsDB.persistAsUnprocessed(uuid);
     });
     const previouslyUnprocessedEventTypes = Array.from(new Set(previouslyUnprocessedEvents.map(e => e.event_type)));
-    c3prLOG4(
+    _c3prLOG5(
         `Initialization complete. Previously UNPROCESSED events: ${previouslyUnprocessedEvents.length} [${previouslyUnprocessedEventTypes}]. Previously PROCESSING events: ${previouslyProcessingEvents.length}`,
-        {lcid, sha, euuid, meta: {previouslyUnprocessedEvents}}
+        {meta: {previouslyUnprocessedEvents}}
     );
 
     /**
@@ -146,13 +144,14 @@ async function initializeEventsOnStartup() {
     setInterval(() => {
         const eventTypesWithUnprocessedEvents = Status.getEventTypesWithUnprocessedEvents();
         for (let event_type of eventTypesWithUnprocessedEvents) {
-            c3prBus.emit(event_type);
+            const event_payload = peekUnprocessed(event_type);
+            c3prBusEmit(event_type, event_payload);
         }
     }, config.c3pr.hub.broadcastIntervalInMs).unref();
 }
 
 export = {
-    init: initializeEventsOnStartup().catch(error => c3prLOG4('Error on initializing events on startup.', {lcid, sha, euuid, error})),
+    init: initializeEventsOnStartup().catch(error => c3prLOG5('Error on initializing events on startup.', {sha: 'events.init', error})),
     register,
     find,
     findAll,
