@@ -15,14 +15,14 @@ describe('events', function () {
     let processor_uuid;
     let otherProcessorUUID;
 
-    before(() => {
+    beforeEach(() => {
         EVENT_TYPE = "evtType" + Math.random();
         payload = {a: Math.random()};
         processor_uuid = uuidv4();
         otherProcessorUUID = uuidv4();
     });
 
-    it('register -> peekUnprocessed', async () => {
+    (it('register -> peekUnprocessed', async () => {
         /// given
         /// when
         await events.register(EVENT_TYPE, payload);
@@ -32,9 +32,9 @@ describe('events', function () {
         expect(evt.event_type).to.deep.equal(EVENT_TYPE);
         expect(evt.meta.status).to.deep.equal(Status.UNPROCESSED);
         expect(evt.payload).to.deep.equal(payload);
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    it('patchAsProcessing', async () => {
+    (it('patchAsProcessing', async () => {
         /// given
         let uuid = await events.register(EVENT_TYPE, payload);
         /// when
@@ -43,9 +43,9 @@ describe('events', function () {
         let evt = await events.find(uuid);
         expect(evt.meta.status).to.equal(Status.PROCESSING);
         expect(evt.meta.processor_uuid).to.equal(processor_uuid);
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    it('patchAsProcessing can be called multiple times, if using the same processor_uuid', async () => {
+    (it('patchAsProcessing can be called multiple times, if using the same processor_uuid', async () => {
         /// given
         let uuid = await events.register(EVENT_TYPE, payload);
         await events.patchAsProcessing(EVENT_TYPE, uuid, processor_uuid);
@@ -55,9 +55,9 @@ describe('events', function () {
         let evt = await events.find(uuid);
         expect(evt.meta.status).to.equal(Status.PROCESSING);
         expect(evt.meta.processor_uuid).to.equal(processor_uuid);
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    it('patchAsProcessing should error if called with a different processor_uuid', async () => {
+    (it('patchAsProcessing should error if called with a different processor_uuid', async () => {
         /// given
         let uuid = await events.register(EVENT_TYPE, payload);
         await events.patchAsProcessing(EVENT_TYPE, uuid, processor_uuid);
@@ -69,9 +69,9 @@ describe('events', function () {
             /// then
             expect(e.toString()).to.equal(`Error: Event of UUID '${uuid}' and type '${EVENT_TYPE}' is already being processed by processor_uuid '${processor_uuid}'. processor_uuid you sent me: '${otherProcessorUUID}'.`);
         }
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    it('patch and peek CONCURRENTLY should not return multiple events', async () => {
+    (it('patch and peek CONCURRENTLY should not return multiple events', async () => {
         /// given
         await events.register(EVENT_TYPE, payload);
 
@@ -83,9 +83,9 @@ describe('events', function () {
         /// then
         expect(returnedEvents[1].uuid).to.equal(uuid);
         expect(returnedEvents[2].uuid).to.equal(uuid);
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    it('patchAsProcessed', async () => {
+    (it('patchAsProcessed', async () => {
         /// given
         let uuid = await events.register(EVENT_TYPE, payload);
         await events.patchAsProcessing(EVENT_TYPE, uuid, processor_uuid);
@@ -95,9 +95,9 @@ describe('events', function () {
         let evt = await events.find(uuid);
         expect(evt.meta.status).to.equal(Status.PROCESSED);
         expect(evt.meta.processor_uuid).to.equal(processor_uuid);
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    it('patchAsProcessed should throw error if evt is not PROCESSING', async () => {
+    (it('patchAsProcessed should throw error if evt is not PROCESSING', async () => {
         /// given
         let uuid = await events.register(EVENT_TYPE, payload);
         /// when
@@ -108,9 +108,9 @@ describe('events', function () {
             /// then
             expect(e.toString()).to.equal(`Error: Event of UUID '${uuid}' and type '${EVENT_TYPE}' is not currently being processed.`);
         }
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    it('patchAsProcessed can be called multiple times, if using the same processor_uuid', async () => {
+    (it('patchAsProcessed can be called multiple times, if using the same processor_uuid', async () => {
         /// given
         let uuid = await events.register(EVENT_TYPE, payload);
         await events.patchAsProcessing(EVENT_TYPE, uuid, processor_uuid);
@@ -121,9 +121,9 @@ describe('events', function () {
         let evt = await events.find(uuid);
         expect(evt.meta.status).to.equal(Status.PROCESSED);
         expect(evt.meta.processor_uuid).to.equal(processor_uuid);
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    it('patchAsProcessed should error if called with a different processor_uuid than when patchAsProcessing was called', async () => {
+    (it('patchAsProcessed should error if called with a different processor_uuid than when patchAsProcessing was called', async () => {
         /// given
         let uuid = await events.register(EVENT_TYPE, payload);
         await events.patchAsProcessing(EVENT_TYPE, uuid, processor_uuid);
@@ -136,9 +136,9 @@ describe('events', function () {
             expect(e.toString()).to.equal(`Error: Event of UUID '${uuid}' and type '${EVENT_TYPE}' is being processed by a different processor_uuid ('${processor_uuid}'), not the one you sent me ('${otherProcessorUUID}').`);
         }
 
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    it('patchAsProcessed should error if called with a different processor_uuid', async () => {
+    (it('patchAsProcessed should error if called with a different processor_uuid', async () => {
         /// given
         let uuid = await events.register(EVENT_TYPE, payload);
         await events.patchAsProcessing(EVENT_TYPE, uuid, processor_uuid);
@@ -151,9 +151,9 @@ describe('events', function () {
             /// then
             expect(e.toString()).to.equal(`Error: Event of UUID '${uuid}' and type '${EVENT_TYPE}' has been processed by a different processor_uuid: ${processor_uuid}. processor_uuid you sent me: ${otherProcessorUUID}.`);
         }
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    it('patchAsUnprocessed', async () => {
+    (it('patchAsUnprocessed', async () => {
         /// given
         let uuid = await events.register(EVENT_TYPE, payload);
         await events.patchAsProcessing(EVENT_TYPE, uuid, processor_uuid);
@@ -163,9 +163,9 @@ describe('events', function () {
         let evt = await events.find(uuid);
         expect(evt.meta.status).to.equal(Status.UNPROCESSED);
         expect(evt.meta.processor_uuid).to.equal(null);
-    }).timeout(6 * 1000);
+    }) as any).timeout(6 * 1000);
 
-    after(async () => {
+    afterAll(async () => {
         await eventsDB.close();
     })
 

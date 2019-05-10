@@ -8,8 +8,8 @@ const eventsDB = require('./eventsDB');
 const Status = require('./status');
 const assert = require('assert');
 
-c3prBusOnNewSubscribers((event_type) => {
-    let event = Status.peekUnprocessed(event_type);
+c3prBusOnNewSubscribers(async (event_type) => {
+    let event = await peekUnprocessed(event_type);
     if (event) {
         return c3prBusEmit(event_type, event);
     }
@@ -23,7 +23,7 @@ async function register(event_type, payload) {
     await eventsDB.insert({uuid, event_type, meta: {status, processor_uuid: null, created: new Date().toISOString()}, payload});
     Status.addAsUnprocessed(event_type, uuid);
 
-    c3prBusEmit(event_type, payload);
+    c3prBusEmit(event_type, {uuid, payload});
 
     return uuid;
 }
@@ -141,10 +141,10 @@ async function initializeEventsOnStartup() {
 
 
 
-    setInterval(() => {
+    setInterval(async () => {
         const eventTypesWithUnprocessedEvents = Status.getEventTypesWithUnprocessedEvents();
         for (let event_type of eventTypesWithUnprocessedEvents) {
-            const event_payload = peekUnprocessed(event_type);
+            const event_payload = await peekUnprocessed(event_type);
             c3prBusEmit(event_type, event_payload);
         }
     }, config.c3pr.hub.broadcastIntervalInMs).unref();

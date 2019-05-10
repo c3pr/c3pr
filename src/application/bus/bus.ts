@@ -48,10 +48,10 @@ export const _c3prBusSubscribeTo = (c3prLOG5) => (event_type, callbackUrl) => {
 
 export const _c3prBusEmit = (c3prLOG5) => (event_type, event_object) => {
     const _c3prLOG5 = c3prLOG5({
-        sha: (event_object && event_object.payload &&  event_object.payload.repository && event_object.payload.repository.revision) || 'unknown-sha',
-        euuid: event_object && event_object.uuid
+        sha: (event_object && event_object.payload &&  event_object.payload.repository && event_object.payload.repository.revision) || 'unknown-event-object',
+        euuid: event_object && event_object.uuid || 'unknown-event-object'
     });
-    _c3prLOG5(`Emitting '${event_type}'.`);
+    _c3prLOG5(`Emitting '${event_type}'. Motivated by: ${JSON.stringify({..._c3prLOG5, lcid: undefined})}`);
     hub.emit(event_type, event_object, _c3prLOG5);
 };
 
