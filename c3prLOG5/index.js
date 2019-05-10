@@ -11,18 +11,22 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// automatically generate lcid if none was provided
+function generateLcidIfNoneWasProvided(logOptions, c3prLOG4) {
+    if (!logOptions.lcid) {
+        return __assign({}, logOptions, { lcid: c3prLOG4.lcid() });
+    }
+    return logOptions;
+}
 exports.__c3prLOG5 = function (c3prLOG4) { return function (messageOrLogOptionsToPartiallyApply, logOptions) {
     if (typeof messageOrLogOptionsToPartiallyApply === "string") {
         // first arg is a message, proceed to actual call
-        return c3prLOG4(messageOrLogOptionsToPartiallyApply, logOptions);
+        return c3prLOG4(messageOrLogOptionsToPartiallyApply, generateLcidIfNoneWasProvided(logOptions, c3prLOG4));
     }
     else {
         // first arg is a logOptions object to be "partially applied"
         var partiallyAppliedLogOptions_1 = __assign({}, logOptions, messageOrLogOptionsToPartiallyApply);
-        // automatically generate lcid if none was provided
-        if (!partiallyAppliedLogOptions_1.lcid) {
-            partiallyAppliedLogOptions_1.lcid = c3prLOG4.lcid();
-        }
+        partiallyAppliedLogOptions_1 = generateLcidIfNoneWasProvided(partiallyAppliedLogOptions_1, c3prLOG4);
         var nextCall = function (nextMessageOrLogOptionsToStack, nextLogOptions) {
             return exports.__c3prLOG5(c3prLOG4)(nextMessageOrLogOptionsToStack, __assign({}, partiallyAppliedLogOptions_1, nextLogOptions));
         };

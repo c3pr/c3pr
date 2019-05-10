@@ -55,6 +55,17 @@ describe('c3prLOG5', () => {
 
     });
 
+    it('direct call without lcid also generates one', () => {
+
+        let calls = [];
+        const c3prLOG5 = __c3prLOG5(logFake(calls, () => 'generated-lcid'));
+
+        c3prLOG5('msg', {sha: '1x'});
+
+        expect(calls).to.deep.equal([['msg', {lcid: 'generated-lcid', sha: '1x'}]]);
+
+    });
+
     it('lcid/sha/euuid should be available as props', () => {
 
         const c3prLOG5 = __c3prLOG5(logFake([]));
