@@ -1,7 +1,12 @@
 <template>
   <div>
     <table class="event-table" v-for="contractType of Object.keys($data)" v-if="event_type === contractType">
-      <tbody><tr v-for="prop of $data[contractType]"><td class="grayed">{{ typeof prop === 'object' ? Object.values(prop)[0] : prop }}</td><td>{{ display(prop, payload) }}</td></tr></tbody>
+      <tbody>
+      <tr v-for="prop of $data[contractType]">
+        <td class="grayed">{{ typeof prop === 'object' ? Object.values(prop)[0] : prop }}</td>
+        <td>{{ display(prop, payload) }}</td>
+      </tr>
+      </tbody>
     </table>
   </div>
 </template>
