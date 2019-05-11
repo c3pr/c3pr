@@ -1,33 +1,26 @@
-const authExpressMiddleware = require("../application/auth/authExpressMiddleware");
+import {findAllLogsForEuuidGraph, findLogsBy} from "../application/logs/logsDB";
 
-const logsDB = require('../application/logs/logsDB');
+const authExpressMiddleware = require("../application/auth/authExpressMiddleware");
 
 export = function (app) {
 
     app.use('/api/v1/logs', authExpressMiddleware);
 
     app.get('/api/v1/logs', function ({query}, response) {
-        logsDB.findBy(query).then((logs) => {
+        findLogsBy(query).then((logs) => {
             response.status(200).send(logs);
         }).catch((e) => {
             response.status(500).send(e.toString());
         });
     });
 
-    app.get('/api/v1/logs/lcid/:lcid/', function ({params: {lcid}}, response) {
-        logsDB.findBy({lcid}).then((logs) => {
+    app.get('/api/v1/logs/euuid/:euuid/', async function ({params: {euuid}}, response) {
+        try {
+            let logs = await findAllLogsForEuuidGraph(euuid);
             response.status(200).send(logs);
-        }).catch((e) => {
+        } catch (e) {
             response.status(500).send(e.toString());
-        });
-    });
-
-    app.get('/api/v1/logs/euuid/:euuid/', function ({params: {euuid}}, response) {
-        logsDB.findBy({euuid}).then((logs) => {
-            response.status(200).send(logs);
-        }).catch((e) => {
-            response.status(500).send(e.toString());
-        });
+        }
     });
 
 };

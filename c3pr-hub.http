@@ -11,10 +11,12 @@ GET http://127.0.0.1:7300/api/v1/events/ChangesCommitted?payload.project_uuid=60
 Authorization: Bearer {{auth_token}}
 
 ###
-
-GET http://127.0.0.1:7300/api/v1/logs/id/f10c022e8f4e722aabfe6653cedbbabcdbfb820a
+GET http://127.0.0.1:7300/api/v1/logs/euuid/9312e1aa-418a-4424-8dc7-6d3ecbe45cc9
 Authorization: Bearer {{auth_token}}
 
+###
+GET http://127.0.0.1:7300/api/v1/logs/sha/37359043bb3a17114b6c3652bed25e1fed639dc7
+Authorization: Bearer {{auth_token}}
 ###
 
 PATCH http://localhost:7300/api/v1/projects/5b36aa1e6e3cbc0006213b97

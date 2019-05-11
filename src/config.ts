@@ -1,7 +1,7 @@
 const PORT = process.env.PORT;
 const C3PR_MONGO_URL = process.env.C3PR_MONGO_URL || 'mongodb://127.0.0.1:27017';
 const C3PR_MONGO_DATABASE = process.env.C3PR_MONGO_DATABASE || 'c3pr';
-const C3PR_MONGO_LOGS_COLLECTION = process.env.C3PR_MONGO_LOGS_COLLECTION || 'logs4';
+const C3PR_MONGO_LOGS_COLLECTION = process.env.C3PR_MONGO_LOGS_COLLECTION || 'logs44';
 
 export = {
     c3pr: {
