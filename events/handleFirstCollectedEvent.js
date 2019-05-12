@@ -10,7 +10,8 @@ function generateLogFunction(__c3prLOG5, outerLCID, outerSHA, outerEUUID) {
     return c3prLOG5_1.default({ lcid: outerLCID, sha: outerSHA || '!handle-first-event', ...(outerEUUID && { euuid: outerEUUID }) });
 }
 // TODO document this can return null (not the result) when no event is collected
-async function handleFirstCollectedEvent({ event_type, handlerFunction, c3prHubUrl, jwt, lcid: outerLCID, sha: outerSHA, euuid: outerEUUID }, __c3prLOG5) {
+async function handleFirstCollectedEvent(firstCollectedEventHandler, __c3prLOG5) {
+    const { event_type, handlerFunction, c3prHubUrl, jwt, lcid: outerLCID, sha: outerSHA, euuid: outerEUUID } = firstCollectedEventHandler;
     let _c3prLOG5 = generateLogFunction(__c3prLOG5, outerLCID, outerSHA, outerEUUID);
     _c3prLOG5(`Handling ${event_type}.`);
     let event;
