@@ -2,10 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
-const lcid = c3prLOG4.lcid();
-const sha = 'express-agent-init';
-const euuid = sha;
-
+const c3prLOG5 = require("node-c3pr-logger/c3prLOG5").default;
 const config = require('../config');
 
 const app = express();
@@ -22,5 +19,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.agent.port, () => {
-    c3prLOG4(`c3pr-agent version __C3PR_AGENT_EXECUTABLE_VERSION__ now online with Agent ID: ${config.c3pr.agent.agentId}`, {lcid, sha, euuid});
+    c3prLOG5(`c3pr-agent version __C3PR_AGENT_EXECUTABLE_VERSION__ now online with Agent ID: ${config.c3pr.agent.agentId}`, {sha: '!express-agent-init'});
 });
