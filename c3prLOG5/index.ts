@@ -6,19 +6,23 @@ function generateLcidIfNoneWasProvided(logOptions, c3prLOG4) {
     return logOptions;
 }
 
-function copyFromShaIntoEuuidIfEmpty(logOptions) {
+function addExclamationToInvalidSha(logOptions) {
+    return {...logOptions, ...(logOptions.sha && {sha: /^[0-9a-z]{40}$|^!/.test(logOptions.sha) ? logOptions.sha : '!'+logOptions.sha}),};
+}
+
+function copyShaIntoEuuidIfEmpty(logOptions) {
     return {...(logOptions.sha && {euuid: logOptions.sha}), ...logOptions};
 }
 
 export const __c3prLOG5 = (c3prLOG4) => (messageOrLogOptionsToPartiallyApply?: string | Partial<Log4Options>, logOptions?: Partial<Log4Options>) => {
     if (typeof messageOrLogOptionsToPartiallyApply === "string") {
         // first arg is a message, proceed to actual call
-        return c3prLOG4(messageOrLogOptionsToPartiallyApply, copyFromShaIntoEuuidIfEmpty(generateLcidIfNoneWasProvided(logOptions || {}, c3prLOG4)));
+        return c3prLOG4(messageOrLogOptionsToPartiallyApply, copyShaIntoEuuidIfEmpty(addExclamationToInvalidSha(generateLcidIfNoneWasProvided(logOptions || {}, c3prLOG4))));
     } else {
         // first arg is a logOptions object to be "partially applied"
         let partiallyAppliedLogOptions = {...logOptions, ...messageOrLogOptionsToPartiallyApply};
 
-        partiallyAppliedLogOptions = copyFromShaIntoEuuidIfEmpty(generateLcidIfNoneWasProvided(partiallyAppliedLogOptions, c3prLOG4));
+        partiallyAppliedLogOptions = copyShaIntoEuuidIfEmpty(addExclamationToInvalidSha(generateLcidIfNoneWasProvided(partiallyAppliedLogOptions, c3prLOG4)));
 
         const nextCall = (nextMessageOrLogOptionsToStack?: string | Partial<Log4Options>, nextLogOptions?: Partial<Log4Options>) => {
             return __c3prLOG5(c3prLOG4)(nextMessageOrLogOptionsToStack, {...partiallyAppliedLogOptions, ...nextLogOptions});
