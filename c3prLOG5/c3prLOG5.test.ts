@@ -106,6 +106,17 @@ describe('c3prLOG5', () => {
 
     });
 
+    it('null property options', () => {
+
+        let calls = [];
+        const c3prLOG5 = __c3prLOG5(logFake(calls, () => 'generated-lcid'));
+
+        c3prLOG5('msg', {lcid: null, sha: null, euuid: null});
+
+        expect(calls).to.deep.equal([['msg', {lcid: 'generated-lcid', sha: null, euuid: null}]]);
+
+    });
+
     describe('non-sha shas', () => {
 
         it('dont add ! to valid sha - direct call', () => {
