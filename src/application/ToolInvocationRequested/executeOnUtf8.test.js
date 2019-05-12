@@ -1,4 +1,3 @@
-require("node-c3pr-logger").testMode();
 const executeOnUtf8 = require('./executeOnUtf8');
 
 const path = require('path');
@@ -12,6 +11,7 @@ config.c3pr.agent.cloneDepth = 5;
 
 const ISO_8859_1 = 'ISO-8859-1';
 const UTF_8 = 'UTF-8';
+
 
 describe('executeOnUtf8', () => {
 

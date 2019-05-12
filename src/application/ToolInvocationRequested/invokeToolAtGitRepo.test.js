@@ -1,4 +1,3 @@
-require("node-c3pr-logger").testMode();
 const invokeToolAtGitRepo = require('./invokeToolAtGitRepo');
 
 const expect = require('chai').expect;
@@ -41,7 +40,7 @@ describe('invokeToolAtGitRepo', () => {
                     "rule": "sonar:StringCheckOnLeft"
                 }
             }
-        }, loadTools);
+        }, loadTools, console.log);
 
         expect(toolInvocationResult.files).to.deep.equal(["README.md", "pom.xml"]);
 
@@ -98,7 +97,7 @@ index ad8bb19..78c4a56 100644
                     "rule": "sonar:StringCheckOnLeft"
                 }
             }
-        }, loadTools);
+        }, loadTools, console.log);
 
         expect(toolInvocationResult.files).to.deep.equal([]);
         expect(toolInvocationResult.diff).to.be.equal('');
