@@ -26,7 +26,7 @@
         </td>
         <td>{{ log.service_name }}</td>
         <td style="font-size: x-small">{{ log.caller_name }}</td>
-        <td :title="log.message" class="message">
+        <td :title="log.message" class="message" :class="log.service_name">
           {{ log.message.substr(0, 70) }}
           <v-btn v-if="log.message.length > 70" color="primary" icon small @click="displayAtDialog(log.message)"><v-icon>message</v-icon></v-btn>
         </td>
@@ -98,11 +98,14 @@ export default {
   th { background-color: #ededed }
   table { font-family: sans-serif; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
   .message {
-    text-align: left; font-family: monospace; font-size: large;
-    background-color: gray;
+    text-align: left; font-family: monospace;
     color: white;
     padding: 5px
   }
+  .c3pr-hub { background-color: green; }
+  .c3pr-brain { background-color: cornflowerblue; }
+  .c3pr-repo-gitlab { background-color: orange; }
+  .c3pr-agent { background-color: gray; }
   .mono {
     text-align: left;
     font-family: monospace;
