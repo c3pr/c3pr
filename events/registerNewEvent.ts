@@ -7,7 +7,7 @@ function generateLogFunction(__c3prLOG5, outerLCID: any, outerSHA: any, outerEUU
     if (__c3prLOG5) {
         return __c3prLOG5;
     }
-    return c3prLOG5({lcid: outerLCID, sha: outerSHA || '!register-newfirst-event', ...(outerEUUID && {euuid: outerEUUID})});
+    return c3prLOG5({lcid: outerLCID, sha: outerSHA || '!register-new-event', ...(outerEUUID && {euuid: outerEUUID})});
 }
 
 interface NewEventArgs {

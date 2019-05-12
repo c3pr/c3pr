@@ -6,7 +6,7 @@ function generateLogFunction(__c3prLOG5, outerLCID, outerSHA, outerEUUID) {
     if (__c3prLOG5) {
         return __c3prLOG5;
     }
-    return c3prLOG5_1.default({ lcid: outerLCID, sha: outerSHA || '!register-newfirst-event', ...(outerEUUID && { euuid: outerEUUID }) });
+    return c3prLOG5_1.default({ lcid: outerLCID, sha: outerSHA || '!register-new-event', ...(outerEUUID && { euuid: outerEUUID }) });
 }
 async function registerNewEvent(args, __c3prLOG5) {
     const { event_type, payload, c3prHubUrl, jwt, lcid, sha, euuid, retryWait = 2000 } = args;
