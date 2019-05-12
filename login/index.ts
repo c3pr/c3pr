@@ -1,26 +1,25 @@
 import axios from 'axios';
-import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 
 const LOGIN_RETRY_TIME = 5 * 1000;
 
-async function login({loginUrl, username, password, subscriptions, lcid, sha, euuid = 'init?'}) {
+interface LoginArgs {
+    loginUrl: string;
+    username: string;
+    password: string;
+    subscriptions: string[];
+}
 
+export default async function c3prHubLogin({loginUrl, username, password, subscriptions}: LoginArgs, c3prLOG5) {
     try {
         const {data: jwt} = await axios.post(loginUrl, {username, password, subscriptions});
-        c3prLOG4(`Successfully logged in on C3PR-HUB (${loginUrl}).`, {lcid, sha, euuid});
+        c3prLOG5(`Successfully logged in on C3PR-HUB (${loginUrl}).`);
         return jwt;
     } catch (error) {
-        c3prLOG4(`Error while logging in at ${loginUrl}.`, {lcid, sha, euuid, error});
+        c3prLOG5(`Error while logging in at ${loginUrl}.`, {error});
         return new Promise(resolve => {
             setTimeout(() => {
-                resolve(login({loginUrl, username, password, subscriptions, lcid, sha, euuid}));
+                resolve(c3prHubLogin({loginUrl, username, password, subscriptions}, c3prLOG5));
             }, LOGIN_RETRY_TIME);
         })
     }
 }
-
-export = {
-    c3prHubClient: {
-        login
-    }
-};
