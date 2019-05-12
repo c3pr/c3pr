@@ -1,6 +1,5 @@
 const rimraf = require('rimraf');
 
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
 const cloneRepositoryLocally = require("node-c3pr-git-client/src/cloneRepositoryLocally");
 const generateGitPatchBase64 = require("node-c3pr-git-client/patch/generateGitPatchBase64").default;
 const c3prSH3 = require("node-c3pr-git-client/src/c3prSH3").default;
@@ -14,15 +13,14 @@ const config = require('../../config');
  *
  * @return {Promise<{files, patch}>}
  */
-async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, {lcid, sha, euuid}) {
+async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, c3prLOG5) {
 
-
-    c3prLOG4(`Invoking tool at git repo: ${toolInvocationRequested.repository.clone_url_http}`, {lcid, sha, euuid});
+    c3prLOG5(`Invoking tool at git repo: ${toolInvocationRequested.repository.clone_url_http}`);
 
     const tool = loadTools.toolsHash[toolInvocationRequested.tool_id];
     if (!tool) {
         const msg = `Tool of tool_id '${toolInvocationRequested.tool_id}' was not found!`;
-        c3prLOG4(msg, {lcid, sha, euuid, meta: {toolInvocation: toolInvocationRequested}});
+        c3prLOG5(msg, {meta: {toolInvocation: toolInvocationRequested}});
         // noinspection ExceptionCaughtLocallyJS
         throw new Error(msg);
     }
@@ -36,31 +34,31 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, {lcid, sh
             branch: toolInvocationRequested.repository.branch,
             revision: toolInvocationRequested.repository.revision,
             cloneDepth: config.c3pr.agent.cloneDepth,
-            lcid, sha, euuid
+            ...c3prLOG5
         });
 
-        c3prLOG4(`Done cloning at ${cloneFolder}.`, {lcid, sha, euuid});
+        c3prLOG5(`Done cloning at ${cloneFolder}.`);
 
         for (let file of toolInvocationRequested.files) {
             await executeOnUtf8(cloneFolder, file, async () => {
-                await c3prSH3(tool.command.replace(/#{filename}/g, file), {cwd: cloneFolder, maxBuffer: 1024 * 2000 /* 2MB */}, {stdout: true, lcid, sha, euuid});
+                await c3prSH3(tool.command.replace(/#{filename}/g, file), {cwd: cloneFolder, maxBuffer: 1024 * 2000 /* 2MB */}, {stdout: true, ...c3prLOG5});
             });
         }
 
-        c3prLOG4(`Done running tool on every modified file at ${cloneFolder}. Attempting to generate patch...`, {lcid, sha, euuid});
+        c3prLOG5(`Done running tool on every modified file at ${cloneFolder}. Attempting to generate patch...`);
 
-        let patch = await generateGitPatchBase64({cloneFolder, gitUserName: config.c3pr.agent.gitUserName, gitUserEmail: config.c3pr.agent.gitUserEmail, commitMessage: tool.pr_title}, {lcid, sha, euuid});
+        let patch = await generateGitPatchBase64({cloneFolder, gitUserName: config.c3pr.agent.gitUserName, gitUserEmail: config.c3pr.agent.gitUserEmail, commitMessage: tool.pr_title}, {...c3prLOG5});
 
-        c3prLOG4(`Patch generated.`, {lcid, sha, euuid});
+        c3prLOG5(`Patch generated.`);
         return patch;
     } catch (error) {
-        c3prLOG4(`Error during invokeToolAtGitRepo.`, {lcid, sha, euuid, error});
+        c3prLOG5(`Error during invokeToolAtGitRepo.`, {error});
         return {files: [], patch: {hexBase64: ''}};
     } finally {
-        c3prLOG4(`All work is done. Clone folder '${cloneFolder}' will be removed.`, {lcid, sha, euuid});
+        c3prLOG5(`All work is done. Clone folder '${cloneFolder}' will be removed.`);
         if (cloneFolder) {
             rimraf(cloneFolder, () => {
-                c3prLOG4(`Clone folder ${cloneFolder} removed.`, {lcid, sha, euuid});
+                c3prLOG5(`Clone folder ${cloneFolder} removed.`);
             });
         }
     }
