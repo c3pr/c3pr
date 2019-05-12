@@ -10,9 +10,14 @@ function generateLogFunction(__c3prLOG5, outerLCID: any, outerSHA: any, outerEUU
     return c3prLOG5({lcid: outerLCID, sha: outerSHA || '!handle-first-event', ...(outerEUUID && {euuid: outerEUUID})});
 }
 
+interface HandlerOutput {
+    new_status: 'PROCESSED' | 'UNPROCESSED';
+    result: any;
+}
+
 interface FirstCollectedEventHandler {
     event_type: string;
-    handlerFunction: (event: any, log: any) => Promise<any>;
+    handlerFunction: (event: any, log: any) => Promise<HandlerOutput> | HandlerOutput;
     c3prHubUrl: string;
     jwt: string;
     lcid?: string;
