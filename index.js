@@ -1,21 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const UNCONFIGURED = 'call hubClientConfig.init() before using any functions from node-c3pr-hub-client.';
-const UNCONFIGURED_ARG0 = () => { throw new Error(UNCONFIGURED); };
-const UNCONFIGURED_ARG1 = (ignore) => { throw new Error(UNCONFIGURED); };
-const UNCONFIGURED_ARG2 = (ignore, ignore2) => { throw new Error(UNCONFIGURED); };
+const UNCONFIGURED_ARG = (...ignored) => { throw new Error(UNCONFIGURED); };
 const hubClientConfig = {
     c3pr: {
         hub: {
             auth: {
-                jwt: UNCONFIGURED_ARG0,
+                jwt: UNCONFIGURED_ARG,
             },
             c3prHubUrl: UNCONFIGURED,
             loginUrl: UNCONFIGURED,
-            eventsUrl: UNCONFIGURED_ARG1,
-            projectsByCloneUrlHttp: UNCONFIGURED_ARG1,
-            prsForProjectUrl: UNCONFIGURED_ARG1,
-            prOfProjectUrl: UNCONFIGURED_ARG2,
+            eventsUrl: UNCONFIGURED_ARG,
+            projectsByCloneUrlHttp: UNCONFIGURED_ARG,
+            prsForProjectUrl: UNCONFIGURED_ARG,
+            prOfProjectUrl: UNCONFIGURED_ARG,
         },
     },
     init(C3PR_HUB_URL, jwt) {

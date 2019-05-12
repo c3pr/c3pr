@@ -1,7 +1,5 @@
 const UNCONFIGURED = 'call hubClientConfig.init() before using any functions from node-c3pr-hub-client.';
-const UNCONFIGURED_ARG0 = (): string => {throw new Error(UNCONFIGURED)};
-const UNCONFIGURED_ARG1 = (ignore): string => {throw new Error(UNCONFIGURED)};
-const UNCONFIGURED_ARG2= (ignore, ignore2): string => {throw new Error(UNCONFIGURED)};
+const UNCONFIGURED_ARG = (...ignored): string => {throw new Error(UNCONFIGURED)};
 
 
 const hubClientConfig = {
@@ -9,14 +7,14 @@ const hubClientConfig = {
 
         hub: {
             auth: {
-                jwt: UNCONFIGURED_ARG0,
+                jwt: UNCONFIGURED_ARG,
             },
             c3prHubUrl: UNCONFIGURED,
             loginUrl: UNCONFIGURED,
-            eventsUrl: UNCONFIGURED_ARG1,
-            projectsByCloneUrlHttp: UNCONFIGURED_ARG1,
-            prsForProjectUrl: UNCONFIGURED_ARG1,
-            prOfProjectUrl: UNCONFIGURED_ARG2,
+            eventsUrl: UNCONFIGURED_ARG,
+            projectsByCloneUrlHttp: UNCONFIGURED_ARG,
+            prsForProjectUrl: UNCONFIGURED_ARG,
+            prOfProjectUrl: UNCONFIGURED_ARG,
         },
 
     },
