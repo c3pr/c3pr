@@ -1,11 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 import config from '../config';
-
-import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
-const lcid = c3prLOG4.lcid();
-const sha = 'express';
-const euuid = sha;
+import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 
 const app = express();
 
@@ -19,5 +15,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.brain.c3prBrainPort, () => {
-    c3prLOG4(`C-3PR BRAIN is up at port ${config.c3pr.brain.c3prBrainPort}.`, {lcid, sha, euuid});
+    c3prLOG5(`C-3PR BRAIN is up at port ${config.c3pr.brain.c3prBrainPort}.`, {sha: '!express-brain'});
 });
