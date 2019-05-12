@@ -1,17 +1,14 @@
 import config from '../../../config';
 import inboundPorts from "../../../ports/inbound";
-
-import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
-const sha = 'express';
-const euuid = sha;
+import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 
 export default function (app) {
 
     app.post(config.c3pr.repoGitlab.PullRequestRequestedCallbackUrl, function (request, response) {
-        const lcid = c3prLOG4.lcid();
-        c3prLOG4(`'PullRequestRequested' received.`, {lcid, sha, euuid});
+        const _c3prLOG5 = c3prLOG5({sha: '!express-repo-gitlab'});
+        _c3prLOG5(`'PullRequestRequested' received.`);
         // noinspection JSIgnoredPromiseFromCall
-        inboundPorts.handlePullRequestRequested({lcid, sha, euuid});
+        inboundPorts.handlePullRequestRequested({..._c3prLOG5});
         response.send('Event received. I will process it, thanks.');
     });
 
