@@ -13,7 +13,7 @@ c3prHubLogin({
     subscriptions: [
         {eventType: "ToolInvocationRequested", callbackUrl: config.c3pr.agent.agentUrl + config.c3pr.agent.ToolInvocationRequestedCallbackUrl}
     ]},
-    ..._c3prLOG5
+    _c3prLOG5
 ).then(jwt => {
     config.c3pr.auth.jwt = jwt;
 
