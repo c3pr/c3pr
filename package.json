@@ -1,6 +1,6 @@
 {
   "name": "node-c3pr-hub-client",
-  "version": "13.0.0",
+  "version": "14.0.0",
   "description": "Client for c3pr-hub in node",
   "main": "index.js",
   "scripts": {
@@ -21,8 +21,8 @@
   "homepage": "https://github.com/c3pr/node-c3pr-hub-client",
   "dependencies": {
     "axios": "^0.18.0",
-    "axios-retry": "^3.1.0",
-    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#22.0.0"
+    "axios-retry": "^3.1.2",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#22.0.1"
   },
   "devDependencies": {
     "@types/node": "^10.0.4",
