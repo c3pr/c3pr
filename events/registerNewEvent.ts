@@ -1,11 +1,32 @@
 import axios from 'axios';
-const axiosRetry = require('axios-retry');
-const c3prLOG4 = require("node-c3pr-logger/c3prLOG4").default;
+import axiosRetry from 'axios-retry';
+import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 
 
-async function registerNewEvent({event_type, payload, c3prHubUrl, jwt, lcid, sha, euuid, retryWait = 2000}) {
+function generateLogFunction(__c3prLOG5, outerLCID: any, outerSHA: any, outerEUUID: any) {
+    if (__c3prLOG5) {
+        return __c3prLOG5;
+    }
+    return c3prLOG5({lcid: outerLCID, sha: outerSHA || '!register-newfirst-event', ...(outerEUUID && {euuid: outerEUUID})});
+}
+
+interface NewEventArgs {
+    event_type: string;
+    payload;
+    c3prHubUrl: string;
+    jwt: string;
+    lcid?: string;
+    sha?: string;
+    euuid?: string;
+    retryWait?: number;
+}
+
+async function registerNewEvent(args: NewEventArgs, __c3prLOG5?) {
+    const {event_type, payload, c3prHubUrl, jwt, lcid, sha, euuid, retryWait = 2000} = args;
+    let _c3prLOG5 = generateLogFunction(__c3prLOG5, lcid, sha, euuid);
+
     try {
-        c3prLOG4(`Registering new event of type '${event_type}'.`, {lcid, sha, euuid, meta: {event_type, payload}});
+        _c3prLOG5(`Registering new event of type '${event_type}'.`, {meta: {event_type, payload}});
         const client = axios.create({ baseURL: c3prHubUrl });
 
         // noinspection JSUnusedGlobalSymbols
@@ -14,7 +35,7 @@ async function registerNewEvent({event_type, payload, c3prHubUrl, jwt, lcid, sha
         const headers = {Authorization: `Bearer ${jwt}`};
         await client.post(`/api/v1/events/${event_type}`, payload, {headers});
     } catch (error) {
-        c3prLOG4(`Error while registering new event of type '${event_type}'.`, {lcid, sha, euuid, error, meta: {payload}});
+        _c3prLOG5(`Error while registering new event of type '${event_type}'.`, {error, meta: {payload}});
         throw error;
     }
 }
