@@ -5,7 +5,7 @@ const createPullRequestRequested = require('../PullRequestRequested/createPullRe
 const emitPullRequestRequested = require('../PullRequestRequested/emitPullRequestRequested');
 
 
-function createAndEmitPullRequestRequested(toolInvocationCompletedEvent, {lcid, sha, euuid}) {
+export default function createAndEmitPullRequestRequested(toolInvocationCompletedEvent, {lcid, sha, euuid}): {new_status, result} {
     const _c3prLOG5 = c3prLOG5({lcid, sha, euuid});
     let result: any = {};
     if (toolInvocationCompletedEvent.payload.unmodified_files.length) {
@@ -21,5 +21,3 @@ function createAndEmitPullRequestRequested(toolInvocationCompletedEvent, {lcid, 
 
     return {new_status: 'PROCESSED', result};
 }
-
-export = createAndEmitPullRequestRequested;
