@@ -113,7 +113,7 @@ function patchAsUnprocessed(event_type, uuid, processor_uuid) {
 }
 
 async function initializeEventsOnStartup() {
-    const _c3prLOG5 = c3prLOG5({sha: 'initializeEventsOnStartup'});
+    const _c3prLOG5 = c3prLOG5({sha: '!hub-events-initialize-on-startup'});
     _c3prLOG5('Initializing events status database.');
 
     const previouslyUnprocessedEvents = await eventsDB.findAllOfStatus(Status.UNPROCESSED);
@@ -151,7 +151,7 @@ async function initializeEventsOnStartup() {
 }
 
 export = {
-    init: initializeEventsOnStartup().catch(error => c3prLOG5('Error on initializing events on startup.', {sha: 'events.init', error})),
+    init: initializeEventsOnStartup().catch(error => c3prLOG5('Error on initializing events on startup.', {sha: '!hib-events-error-init', error})),
     register,
     find,
     findAll,

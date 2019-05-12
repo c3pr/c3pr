@@ -25,5 +25,5 @@ app.get('*', function(req, res){
 });
 
 app.listen(config.c3pr.hub.port, () => {
-    c3prLOG5(`C-3PR hub is up at port ${config.c3pr.hub.port}.`, {sha: 'hub-express-init'});
+    c3prLOG5(`C-3PR hub is up at port ${config.c3pr.hub.port}.`, {sha: '!hub-express-init'});
 });

@@ -33,7 +33,7 @@ function notify(callbackUrl, tryNumber, event_type, listener, event_object, c3pr
 }
 
 export const _c3prBusSubscribeTo = (c3prLOG5) => (event_type, callbackUrl) => {
-    const _c3prLOG5 = c3prLOG5({sha: 'c3prBusSubscribeTo'});
+    const _c3prLOG5 = c3prLOG5({sha: '!hub-bus-subscribe-to'});
     _c3prLOG5(`Subscribing to event '${event_type}' the URL ${callbackUrl}.`);
     if (listeners.find(ls => ls.event_type === event_type && ls.callbackUrl === callbackUrl)) {
         _c3prLOG5(`URL ${callbackUrl} already subscribed to event '${event_type}'. Skipping.`);
