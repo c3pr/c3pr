@@ -6,7 +6,7 @@ interface LoginArgs {
     loginUrl: string;
     username: string;
     password: string;
-    subscriptions: string[];
+    subscriptions: {eventType: string, callbackUrl: string}[];
 }
 
 export default async function c3prHubLogin({loginUrl, username, password, subscriptions}: LoginArgs, c3prLOG5) {
