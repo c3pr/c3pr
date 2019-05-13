@@ -22,6 +22,11 @@ export default {
     return {etag, events};
   },
 
+  async findEventByUuid(uuid) {
+    const { data: events } = await axios.get(`/api/v1/events?uuid=${uuid}`);
+    return events.length && events[0] || null;
+  },
+
   async perProjectEventCountOfType(event_type) {
     const { data: aggregations } = await axios.get(`/api/v1/events/${event_type}/analytics/count-per-project`);
     return aggregations;

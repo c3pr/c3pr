@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="about" v-if="project">
     <h1>{{project.name}}</h1>
       <br><hr><br>
 
@@ -15,8 +15,29 @@
 
       <div class="parent">
         <strong class="child" style="padding-right:10px">Project Url:</strong>
-        <input type="text" size="50" class="child" v-model="project.clone_url_http"/><br>
+        <input type="text" size="50" class="child" v-model="project.clone_url_http"/>
       </div>
+
+      <a :href="project.clone_url_http">{{ project.clone_url_http }}</a><br>
+
+    <br><hr><br>
+
+      <h1>PRs</h1>
+
+      <table style="margin: auto; margin-top: 10px;">
+        <tr>
+          <th>ID/Link</th>
+          <th>Event/Link</th>
+          <th>Status</th>
+          <th>Files</th>
+        </tr>
+        <tr v-for="pr of project.prs" :key="pr._id">
+          <td><a :href="pr.pr_url">{{ pr.pr_id }}</a></td>
+          <td><router-link :to= "{ name: 'event-by-uuid', params: { uuid: pr.PullRequestRequested }}">{{ pr.PullRequestRequested }}</router-link></td>
+          <td>{{ pr.status }}</td>
+          <td>{{ pr.changed_files }}</td>
+        </tr>
+      </table>
     <br/>
     <button v-on:click="postProject">Salvar</button>
   </div>
@@ -24,6 +45,8 @@
 
 <script>
 import axios from "../envs";
+import {mapActions, mapGetters} from "vuex";
+import {FETCH_ALL_PROJECTS, GET_ALL_PROJECTS, PROJECTS} from "../store/modules/projects";
 
 const proxyPrefix = "/api/hub";
 
@@ -32,9 +55,10 @@ export default {
   	Multiselect: window.VueMultiselect.default
 	},
   name: "Logs",
-   props: ['projectId', 'project'],
+   props: ['projectId'],
   data() {
     return {
+      project: null,
       options: [
         'maven',
         'java',
@@ -45,7 +69,18 @@ export default {
       ]
     };
   },
+  computed: {
+    ...mapGetters(PROJECTS, {projects: GET_ALL_PROJECTS})
+  },
+
+  created() {
+    this.fetchProjects().then(() => {
+      this.project = this.projects.find(p => p._id === this.projectId)
+    })
+  },
+
   methods: {
+    ...mapActions(PROJECTS, {fetchProjects: FETCH_ALL_PROJECTS}),
     postProject() {
       axios.patch('/api/v1/projects/' + this.projectId, {clone_url_http: this.project.clone_url_http, name: this.project.name, tags: this.project.tags})
     }
