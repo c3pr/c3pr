@@ -23,6 +23,10 @@ PATCH http://localhost:7300/api/v1/projects/5b36aa1e6e3cbc0006213b97
 Authorization: Bearer {{auth_token}}
 
 ###
+GET http://localhost:7300/api/v1/projects
+Authorization: Bearer {{auth_token}}
+###
+
 GET http://localhost:7300/api/v1/projects?uuid=6068bb20-6145-4e3c-a9d3-2096fd2db24b
 Authorization: Bearer {{auth_token}}
 ###
@@ -36,6 +40,14 @@ Authorization: Bearer {{auth_token}}
 
 ###
 GET http://localhost:7300/api/v1/events/ChangesCommitted/d1fd8808-9496-44b0-a259-20e6a7115e3d
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:7300/api/v1/events/?uuid=4c3d2741-dd7d-45da-a9b0-25818d7c193e
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:7300/api/v1/events/?payload.project_uuid=1eb106d7-188d-499b-8acc-ffd630c5688a
 Authorization: Bearer {{auth_token}}
 
 ###
