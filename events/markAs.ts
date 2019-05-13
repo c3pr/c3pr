@@ -1,5 +1,5 @@
 import axios from 'axios';
-import axiosRetry from 'axios-retry';
+import axiosRetry from 'axios-retry/lib';
 
 
 async function markAs({new_status, event_type, uuid, c3prHubUrl, jwt, retryWait = 2000}, c3prLOG5) {

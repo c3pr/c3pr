@@ -1,6 +1,6 @@
 "use strict";
 const axios_1 = require("axios");
-const axios_retry_1 = require("axios-retry");
+const lib_1 = require("axios-retry/lib");
 const c3prLOG5_1 = require("node-c3pr-logger/c3prLOG5");
 function generateLogFunction(__c3prLOG5, outerLCID, outerSHA, outerEUUID) {
     if (__c3prLOG5) {
@@ -15,7 +15,7 @@ async function registerNewEvent(args, __c3prLOG5) {
         _c3prLOG5(`Registering new event of type '${event_type}'.`, { meta: { event_type, payload } });
         const client = axios_1.default.create({ baseURL: c3prHubUrl });
         // noinspection JSUnusedGlobalSymbols
-        axios_retry_1.default(client, { retries: 3, retryDelay: retryCount => retryCount * retryWait, retryCondition() { return true; } });
+        lib_1.default(client, { retries: 3, retryDelay: retryCount => retryCount * retryWait, retryCondition() { return true; } });
         const headers = { Authorization: `Bearer ${jwt}` };
         await client.post(`/api/v1/events/${event_type}`, payload, { headers });
     }

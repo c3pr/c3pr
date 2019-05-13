@@ -1,5 +1,5 @@
 import axios from 'axios';
-import axiosRetry from 'axios-retry';
+import axiosRetry from 'axios-retry/lib';
 import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 
 
