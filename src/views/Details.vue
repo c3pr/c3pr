@@ -32,7 +32,7 @@
           <th>Files</th>
         </tr>
         <tr v-for="pr of project.prs" :key="pr._id">
-          <td><a :href="pr.pr_url">{{ pr.pr_id }}</a></td>
+          <td><a :href="pr.pr_url" target="_blank">Merge Request #{{ pr.pr_id }}</a></td>
           <td><router-link :to= "{ name: 'event-by-uuid', params: { uuid: pr.PullRequestRequested }}">{{ pr.PullRequestRequested }}</router-link></td>
           <td>{{ pr.status }}</td>
           <td>{{ pr.changed_files }}</td>
