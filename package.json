@@ -1,6 +1,6 @@
 {
   "name": "c3pr-dashboard",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "C-3PR Dashboard and Configuration Management Module",
   "scripts": {
     "start": "node src/index.js",
