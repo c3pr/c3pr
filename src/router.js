@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Dashboard from './views/Dashboard.vue';
-import Logs from './views/Logs.vue';
+import LogsForEvent from './views/LogsForEvent.vue';
 import Hub from './views/Hub.vue';
 import Projects from './views/Projects.vue';
 import Events from './views/Events.vue';
@@ -22,7 +22,7 @@ export default new Router({
     {
       path: '/logs/euuid/:euuid',
       name: 'logs-euuid',
-      component: Logs,
+      component: LogsForEvent,
       props: true
     },
     {

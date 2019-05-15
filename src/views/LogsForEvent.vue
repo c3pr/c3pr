@@ -53,7 +53,7 @@ import { LOGS, FETCH_LOGS_FOR_EVENT, GET_LOGS_FOR_EVENT } from "../store/modules
 import DisplayDialog from '../components/DisplayDialog.vue';
 
 export default {
-  name: 'Logs',
+  name: 'LogsForEvent',
 
   components: {DisplayDialog},
 

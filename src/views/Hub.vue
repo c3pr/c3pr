@@ -58,7 +58,7 @@ import moment from 'moment';
 import {BACKEND_HUB} from "../envs";
 
 export default {
-  name: 'Logs',
+  name: 'Hub',
   data() {
     return {
       fetchStatus: 'Click to re-fetch events',

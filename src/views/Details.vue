@@ -48,14 +48,13 @@ import axios from "../envs";
 import {mapActions, mapGetters} from "vuex";
 import {FETCH_ALL_PROJECTS, GET_ALL_PROJECTS, PROJECTS} from "../store/modules/projects";
 
-const proxyPrefix = "/api/hub";
 
 export default {
   components: {
   	Multiselect: window.VueMultiselect.default
 	},
-  name: "Logs",
-   props: ['projectId'],
+  name: "ProjectDetails",
+  props: ['projectId'],
   data() {
     return {
       project: null,
