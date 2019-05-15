@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:10-alpine
 
 # pkg's version is 4.3.1 for no reason. Can be updated freely. We just fixed so it is reproducible.
 RUN npm i -g pkg@4.3.1 replace-in-file
