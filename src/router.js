@@ -7,7 +7,7 @@ import Projects from './views/Projects.vue';
 import Events from './views/Events.vue';
 import EventsPerProject from './views/EventsPerProject.vue';
 import EventsPerProjectPerChangesCommitted from './views/EventsPerProjectPerChangesCommitted.vue';
-import Details from './views/Details.vue';
+import ProjectDetails from './views/ProjectDetails.vue';
 import EventByUuid from "./views/EventByUuid";
 
 Vue.use(Router);
@@ -60,8 +60,8 @@ export default new Router({
     },
     {
       path: '/project/:projectId/details',
-      name: 'details',
-      component: Details,
+      name: 'project-details',
+      component: ProjectDetails,
       props: true,
     }
   ],

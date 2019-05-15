@@ -17,7 +17,7 @@
           <td>{{ project.prs.filter(({status}) => status === "open").length }}</td>
           <td>{{ project.prs.filter(({status}) => status === "merged").length }}</td>
           <td>{{ project.prs.filter(({status}) => status === "closed").length }}</td>
-          <td><router-link :to= "{ name: 'details', params: { projectId: project._id, project: project }}">details</router-link></td>
+          <td><router-link :to= "{ name: 'prpoject-details', params: { projectId: project._id, project: project }}">details</router-link></td>
         </tr>
       </table>
   </div>

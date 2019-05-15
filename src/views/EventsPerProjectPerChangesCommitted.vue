@@ -24,7 +24,7 @@
         <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
         <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
 
-        <td><router-link :to= "{ name: 'details', params: { projectId: event._id, project: event }}">details</router-link></td>
+        <td><router-link :to= "{ name: 'project-details', params: { projectId: event._id, project: event }}">details</router-link></td>
         <td><router-link :to= "{ name: 'logs-euuid', params: { euuid: event.uuid }}">logs</router-link></td>
       </tr>
       </tbody>
