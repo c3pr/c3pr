@@ -1,6 +1,6 @@
 {
   "name": "c3pr-hub",
-  "version": "12.0.0",
+  "version": "13.0.0",
   "description": "C-3PR Events and Data Hub Module",
   "scripts": {
     "start": "node --require ts-node/register src/index.ts",
