@@ -50,9 +50,9 @@ export async function findAllLogsForEuuidGraph(euuid: any) {
 
         let query = {
             $or: [
-                {lcid: {$in: [...toQueryNow.lcids]}},
-                {sha: {$in: [...toQueryNow.shas]}},
-                {euuid: {$in: [...toQueryNow.euuids]}},
+                {lcid: {$in: Array.from(toQueryNow.lcids)}},
+                {sha: {$in: Array.from(toQueryNow.shas)}},
+                {euuid: {$in: Array.from(toQueryNow.euuids)}},
             ]
         };
 
