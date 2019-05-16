@@ -1,7 +1,4 @@
-require("node-c3pr-logger").testMode();
-process.env.NODE_ENV = 'test';
-
-const registerNewEvent = require('./registerNewEvent').c3prRNE.registerNewEvent;
+const c3prHubRegisterNewEvent = require('./registerNewEvent').default;
 
 const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
@@ -22,13 +19,13 @@ describe('registerNewEvent', () => {
             .onPost(`${c3prHubUrl}/api/v1/events/${event_type}`, payload).replyOnce(500)
             .onPost(`${c3prHubUrl}/api/v1/events/${event_type}`, payload).replyOnce(200);
 
-        await registerNewEvent({
+        await c3prHubRegisterNewEvent({
             event_type,
             c3prHubUrl,
             jwt,
             payload,
             retryWait: 50
-        });
+        }, console.log);
     });
 
 });
