@@ -1,4 +1,4 @@
-const c3prRNE = require('node-c3pr-hub-client/events/registerNewEvent').c3prRNE;
+const c3prHubRegisterNewEvent = require('node-c3pr-hub-client/events/registerNewEvent').default;
 const c3prLOG5 = require("node-c3pr-logger/c3prLOG5").default;
 
 const invokeToolAtGitRepo = require("./invokeToolAtGitRepo");
@@ -12,7 +12,9 @@ function generatePrBody(changed_files, toolPrBody, revision) {
     return (changed_files.length ? toolPrBody : '<no diff>') + `
 ---
 
-This fix was generated in response to the commit ${revision}.`;
+`+
+// `This fix was generated in response to the commit ${revision}.`
+`Esta correção foi gerada durante a análise do commit ${revision}.`
 }
 
 async function emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, _c3prLOG5) {
@@ -33,56 +35,64 @@ async function emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatc
 
     const diff_base64 = gitPatchBase64.patch.hexBase64;
 
-    let result = await c3prRNE.registerNewEvent({
-        event_type: `ToolInvocationCompleted`,
-        payload: {
-            parent,
-            changes_committed_root: toolInvocationRequested.changes_committed_root,
-            repository: toolInvocationRequested.repository,
-            changed_files,
-            unmodified_files,
-            pr_title,
-            pr_body,
-            diff_base64
-        },
-        c3prHubUrl: config.c3pr.hub.c3prHubUrl,
-        jwt: config.c3pr.auth.jwt
-    }, _c3prLOG5).catch(error => {
+    try {
+        let result = await c3prHubRegisterNewEvent(
+            {
+                event_type: `ToolInvocationCompleted`,
+                payload: {
+                    parent,
+                    changes_committed_root: toolInvocationRequested.changes_committed_root,
+                    repository: toolInvocationRequested.repository,
+                    changed_files,
+                    unmodified_files,
+                    pr_title,
+                    pr_body,
+                    diff_base64
+                },
+                c3prHubUrl: config.c3pr.hub.c3prHubUrl,
+                jwt: config.c3pr.auth.jwt
+            },
+            _c3prLOG5
+        );
+        if (changed_files.length) {
+            _c3prLOG5(`Tool invocation complete. A patch has been generated and sent.`);
+        } else {
+            _c3prLOG5(`Tool invocation complete. No patch has been generated.`);
+        }
+        return {new_status: 'PROCESSED', result};
+    } catch (error) {
         const meta = {toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested};
         _c3prLOG5(`Error while registering new event: ToolInvocationCompleted.`, {error, meta});
         return {new_status: 'UNPROCESSED', result: {error, meta}};
-    });
-
-    if (changed_files.length) {
-        _c3prLOG5(`Tool invocation complete. A patch has been generated and sent.`);
-    } else {
-        _c3prLOG5(`Tool invocation complete. No patch has been generated.`);
     }
-
-    return {new_status: 'PROCESSED', result};
 }
 
 async function emitToolInvocationFailed(toolInvocationRequestedEvent, failure_message, toolInvocationRequested, _c3prLOG5) {
     const meta = {toolInvocationRequestedEvent, failure_message, toolInvocationRequested};
     const parent = {event_type: toolInvocationRequestedEvent.event_type, uuid: toolInvocationRequestedEvent.uuid};
 
-    let result = await c3prRNE.registerNewEvent({
-        event_type: `ToolInvocationFailed`,
-        payload: {
-            parent,
-            changes_committed_root: toolInvocationRequested.changes_committed_root,
-            repository: toolInvocationRequested.repository,
-            failure_message
-        },
-        c3prHubUrl: config.c3pr.hub.c3prHubUrl,
-        jwt: config.c3pr.auth.jwt,
-    }, _c3prLOG5).catch(error => {
+    try {
+        let result = await c3prHubRegisterNewEvent(
+            {
+                event_type: `ToolInvocationFailed`,
+                payload: {
+                    parent,
+                    changes_committed_root: toolInvocationRequested.changes_committed_root,
+                    repository: toolInvocationRequested.repository,
+                    failure_message
+                },
+                c3prHubUrl: config.c3pr.hub.c3prHubUrl,
+                jwt: config.c3pr.auth.jwt,
+            },
+            _c3prLOG5
+        );
+
+        _c3prLOG5(`Tool invocation failed. Reason: ${failure_message}`, {meta});
+        return {new_status: 'PROCESSED', result};
+    } catch (error) {
         _c3prLOG5(`Error while registering new event: ToolInvocationFailed.`, {error, meta});
         return {new_status: 'UNPROCESSED', result: {error, meta}};
-    });
-
-    _c3prLOG5(`Tool invocation failed. Reason: ${failure_message}`, {meta});
-    return {new_status: 'PROCESSED', result};
+    }
 }
 
 async function handleToolInvocation(toolInvocationRequestedEvent, {lcid, sha, euuid}) {
