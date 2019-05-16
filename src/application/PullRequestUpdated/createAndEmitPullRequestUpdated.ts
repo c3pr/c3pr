@@ -1,5 +1,5 @@
-import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
-import {c3prRNE} from 'node-c3pr-hub-client/events/registerNewEvent';
+import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
+import c3prHubRegisterNewEvent from 'node-c3pr-hub-client/events/registerNewEvent';
 
 import {GitLabMergeRequestUpdated} from "../../ports/outbound/types/GitLabMergeRequestUpdated/GitLabMergeRequestUpdated";
 import config from '../../config';
@@ -38,15 +38,18 @@ function createPullRequestUpdated(gitLabMergeRequestUpdatedWebhook: GitLabMergeR
 }
 
 function emitPullRequestUpdated(pullRequestUpdated, {lcid, sha, euuid}) {
-    c3prLOG4(`Registering new event of type 'PullRequestUpdated' for repository ${pullRequestUpdated.repository.clone_url_http}.`, {lcid, sha, euuid, meta: {pullRequestUpdated}});
+    const _c3prLOG5 = c3prLOG5({lcid, sha, euuid});
+    _c3prLOG5(`Registering new event of type 'PullRequestUpdated' for repository ${pullRequestUpdated.repository.clone_url_http}.`, {meta: {pullRequestUpdated}});
 
-    return c3prRNE.registerNewEvent({
-        event_type: `PullRequestUpdated`,
-        payload: pullRequestUpdated,
-        c3prHubUrl: config.c3pr.hub.c3prHubUrl,
-        jwt: config.c3pr.hub.auth.jwt,
-        lcid, sha, euuid
-    }).catch(error => {
-        c3prLOG4(`Error while registering new event: PullRequestUpdated.`, {lcid, sha, euuid, error, meta: {pullRequestUpdated}});
+    return c3prHubRegisterNewEvent(
+        {
+            event_type: `PullRequestUpdated`,
+            payload: pullRequestUpdated,
+            c3prHubUrl: config.c3pr.hub.c3prHubUrl,
+            jwt: config.c3pr.hub.auth.jwt
+        },
+        _c3prLOG5
+    ).catch(error => {
+        _c3prLOG5(`Error while registering new event: PullRequestUpdated.`, {error, meta: {pullRequestUpdated}});
     });
 }

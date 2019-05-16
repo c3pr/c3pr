@@ -1,7 +1,7 @@
-import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
+import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 import {Event} from 'node-c3pr-hub-client';
 import handleFirstCollectedEvent from 'node-c3pr-hub-client/events/handleFirstCollectedEvent';
-import {c3prRNE} from 'node-c3pr-hub-client/events/registerNewEvent';
+import c3prHubRegisterNewEvent from 'node-c3pr-hub-client/events/registerNewEvent';
 
 import { createGitLabMR } from './createGitLabMR';
 
@@ -24,11 +24,11 @@ export async function handlePullRequestRequested({lcid, sha, euuid}): Promise<an
 }
 
 async function handlerFunction(pullRequestRequestedEvent: Event<any>, {lcid, sha, euuid}) {
-
+    const _c3prLOG5 = c3prLOG5({lcid, sha, euuid});
     const prr = pullRequestRequestedEvent.payload;
     const repository = prr.repository;
 
-    c3prLOG4(`Handling MR request title '${prr.pr_title}' rev '${repository.revision}'`, {lcid, sha, euuid, meta: {pullRequestRequestedEvent}});
+    _c3prLOG5(`Handling MR request title '${prr.pr_title}' rev '${repository.revision}'`, {meta: {pullRequestRequestedEvent}});
 
     try {
         let createMrResult = await createGitLabMR({
@@ -46,35 +46,39 @@ async function handlerFunction(pullRequestRequestedEvent: Event<any>, {lcid, sha
             lcid, sha, euuid
         });
 
-        c3prLOG4(`MR created successfully.`, {lcid, sha, euuid, meta: {pullRequestRequestedEvent}});
+        _c3prLOG5(`MR created successfully.`, {meta: {pullRequestRequestedEvent}});
 
         return {new_status: 'PROCESSED', result: {pullRequestRequestedEvent, createMrResult}}
     } catch (error) {
-        return await emitPullRequestFailed(pullRequestRequestedEvent, error.toString(), lcid, sha, euuid)
+        return await emitPullRequestFailed(pullRequestRequestedEvent, error.toString(), _c3prLOG5)
     }
 }
 
-async function emitPullRequestFailed(pullRequestRequestedEvent, failure_message, lcid, sha, euuid) {
+async function emitPullRequestFailed(pullRequestRequestedEvent, failure_message, _c3prLOG5): Promise<{new_status, result}> {
     const pullRequestRequested = pullRequestRequestedEvent.payload;
     const meta = {pullRequestRequestedEvent, failure_message};
     const parent = {event_type: pullRequestRequestedEvent.event_type, uuid: pullRequestRequestedEvent.uuid};
 
-    let result = await c3prRNE.registerNewEvent({
-        event_type: `PullRequestFailed`,
-        payload: {
-            parent,
-            changes_committed_root: pullRequestRequested.changes_committed_root,
-            repository: pullRequestRequested.repository,
-            failure_message
-        },
-        c3prHubUrl: config.c3pr.hub.c3prHubUrl,
-        jwt: config.c3pr.hub.auth.jwt,
-        lcid, sha, euuid
-    }).catch(error => {
-        c3prLOG4(`Error while registering new event: PullRequestFailed.`, {lcid, sha, euuid, error, meta});
+    try {
+        let result = await c3prHubRegisterNewEvent(
+            {
+                event_type: `PullRequestFailed`,
+                payload: {
+                    parent,
+                    changes_committed_root: pullRequestRequested.changes_committed_root,
+                    repository: pullRequestRequested.repository,
+                    failure_message
+                },
+                c3prHubUrl: config.c3pr.hub.c3prHubUrl,
+                jwt: config.c3pr.hub.auth.jwt
+            },
+            _c3prLOG5
+        );
+        _c3prLOG5(`Pull Request creation failed. Reason: ${failure_message}`, {meta});
+        return {new_status: 'PROCESSED', result};
+    } catch (error) {
+        _c3prLOG5(`Error while registering new event: PullRequestFailed.`, {error, meta});
         return {new_status: 'UNPROCESSED', result: {error, meta}};
-    });
+    }
 
-    c3prLOG4(`Pull Request creation failed. Reason: ${failure_message}`, {lcid, sha, euuid, meta});
-    return {new_status: 'PROCESSED', result};
 }
