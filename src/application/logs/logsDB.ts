@@ -6,6 +6,9 @@ const logs = client.then(cli => cli.db(config.c3pr.hub.mongoC3prDatabase).collec
 export async function findLogsBy(query) {
     return (await logs).find(query).toArray();
 }
+export async function findLogsByService(service, date) {
+    return (await logs).find({service_name: service, ...(date && {date_time: {$gte: date}})}).toArray();
+}
 
 export async function findAllLogsForEuuidGraph(euuid: any) {
     let logs = await findLogsBy({euuid});
