@@ -9,6 +9,7 @@ import EventsPerProject from './views/EventsPerProject.vue';
 import EventsPerProjectPerChangesCommitted from './views/EventsPerProjectPerChangesCommitted.vue';
 import ProjectDetails from './views/ProjectDetails.vue';
 import EventByUuid from "./views/EventByUuid";
+import LogsForService from "./views/LogsForService";
 
 Vue.use(Router);
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/hub',
       name: 'hub',
       component: Hub,
+    },
+    {
+      path: '/logs',
+      name: 'logs',
+      component: LogsForService,
     },
     {
       path: '/projects',

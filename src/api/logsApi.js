@@ -10,6 +10,11 @@ export default {
   async findForLcid(lcid) {
     const { data: logs } = await axios.get(`/api/v1/logs/lcid/${lcid}`);
     return logs;
+  },
+
+  async findForService(serviceName, date) {
+    const { data: logs } = await axios.get(`/api/v1/logs/service/${serviceName}?date=${date}`);
+    return logs;
   }
 
 }

@@ -5,7 +5,8 @@
         <router-link to="/">Dashboard</router-link> |
         <router-link to="/projects">Projects</router-link> |
         <router-link to="/events">Events</router-link> |
-        <router-link to="/hub">Hub</router-link>
+        <router-link to="/hub">Hub</router-link> |
+        <router-link to="/logs">Logs</router-link>
       </div>
       <router-view/>
     </v-app>

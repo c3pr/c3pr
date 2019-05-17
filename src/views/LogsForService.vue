@@ -6,13 +6,36 @@
     <h3>Service: {{ service }} </h3>
 
     <br>
+    <v-layout wrap justify-space-between>
+      <v-flex xs12 md4>
+      <v-select
+        v-model="service"
+        :items="services"
+        label="Service"
+        outline
+      ></v-select>
+      </v-flex>
+      <v-flex xs12 md4>
+      <v-text-field
+        v-model="date"
+        label="Date"
+      ></v-text-field>
+      </v-flex>
+      <v-flex xs12 md4>
+        <v-btn
+          color="success"
+          @click="fetchLogs"
+        >GO</v-btn>
+      </v-flex>
+    </v-layout>
+    <br>
 
     <table>
       <thead>
       <tr>
-        <th>date_time/lcid/sha/euuid</th>
+        <th>date_time</th>
+        <th>lcid/sha/euuid</th>
         <th>service<br>name</th>
-        <th>caller<br>name</th>
         <th>message</th>
         <th>error</th>
         <th>meta</th>
@@ -22,50 +45,49 @@
       <tr v-for="log of logs" :class="log.node" :key="log._id">
         <td class="mono">
           {{ log.date_time.replace(/[TZ]/g, ' ') }}<br>
+        </td>
+        <td class="mono">
           {{ log.lcid.substr(0, 11) }} {{ (log.sha || '').substr(0, 11) }} {{ log.euuid.substr(0, 11) }}
         </td>
         <td>{{ log.service_name }}</td>
-        <td style="font-size: x-small">{{ log.caller_name }}</td>
         <td :title="log.message" class="message" :class="log.service_name">
-          {{ log.message.substr(0, 70) }}
-          <v-btn v-if="log.message.length > 70" color="primary" icon small @click="displayAtDialog(log.message)"><v-icon>message</v-icon></v-btn>
+          {{ log.message.substr(0, 100) }}
+          <v-btn v-if="log.message.length > 100" color="primary" icon small class="compact-form" @click="displayAtDialog(log.message)"><v-icon>message</v-icon></v-btn>
         </td>
         <td>
-          <span v-if="log.error"><v-btn color="error" small icon @click="displayAtDialog(log.error)"><v-icon>error</v-icon></v-btn></span>
+          <span v-if="log.error"><v-btn color="error" small icon class="compact-form" @click="displayAtDialog(log.error)"><v-icon>error</v-icon></v-btn></span>
           <span v-else>(none)</span>
         </td>
-        <td><v-btn color="primary" icon small @click="displayAtDialog(log.metadata)"><v-icon>local_offer</v-icon></v-btn></td>
+        <td><v-btn color="primary" icon small class="compact-form" @click="displayAtDialog(log)"><v-icon>local_offer</v-icon></v-btn></td>
       </tr>
       </tbody>
     </table>
 
     <br>
 
-    <v-btn color="primary" icon small @click="reFetch"><v-icon>refresh</v-icon></v-btn>
+    <v-btn color="primary" icon small @click="fetchLogs"><v-icon>refresh</v-icon></v-btn>
 
     <display-dialog v-model="displayDialog" :content="objetctDisplayedAtDialog"></display-dialog>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { LOGS, FETCH_LOGS_FOR_EVENT, GET_LOGS_FOR_EVENT } from "../store/modules/logs";
 import DisplayDialog from '../components/DisplayDialog.vue';
+import logsApi from '../api/logsApi';
 
 export default {
   name: 'LogsForService',
 
   components: {DisplayDialog},
 
-  props: {
-    'service': String
-  },
-
   data() {
     return {
       displayDialog: false,
       objetctDisplayedAtDialog: null,
-      logs: []
+      services: ['c3pr-hub', 'c3pr-brain', 'c3pr-dashboard', 'c3pr-repo-gitlab', 'c3pr-agent'],
+      service: 'c3pr-hub',
+      logs: [],
+      date: this.today()
     };
   },
 
@@ -74,7 +96,7 @@ export default {
   },
 
   mounted() {
-    this.go();
+    this.fetchLogs();
   },
 
   methods: {
@@ -84,18 +106,12 @@ export default {
       this.$nextTick(() => this.displayDialog = true)
     },
 
-    async go() {
-      let x = await fetch('http://srv-codereview:7300/api/v1/login', {
-        method: 'POST',
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({username: "http-client", password: "pass"})
-      });
-      let token = await x.json();
+    async fetchLogs() {
+      this.logs = await logsApi.findForService(this.service, this.date);
+    },
 
-      let xx = await fetch('http://srv-codereview:7300/api/v1/logs?service_name=c3pr-hub', {
-        headers: {"Authorization": "Bearer " + token}
-      });
-      this.logs = await xx.json();
+    today() {
+      return new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000 )).toISOString().split("T")[0];
     }
   }
 
@@ -123,5 +139,10 @@ export default {
   pre {
     text-align: initial;
     white-space: pre-wrap;
+  }
+  .compact-form {
+    height: 4px !important;
+    transform: scale(0.5);
+    transform-origin: left;
   }
 </style>
