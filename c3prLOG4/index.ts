@@ -35,9 +35,9 @@ function c3prLOG4(message: string, options: Log4Options) {
     if (!options.lcid || !options.sha || !options.euuid) {
         throw new Error(`c3prLOG4(): lcid, sha and euuid are mandatory. Full args: ${JSON.stringify(arguments)}`);
     }
-    const extraKeys = Object.keys(arguments[1] || {}).filter(key => !["lcid", "sha", "euuid", "level", "meta", "error"].includes(key));
-    if (extraKeys.length) {
-        throw new Error(`c3prLOG4() has too many keys. Additional keys passed: ${JSON.stringify(extraKeys)}. Full args: ${JSON.stringify(arguments)}`);
+    const unknownKeys = Object.keys(options).filter(key => !["lcid", "sha", "euuid", "level", "meta", "error", "hide"].includes(key));
+    if (unknownKeys.length) {
+        throw new Error(`c3prLOG4() has unknown keys.\nAdditional keys passed: ${JSON.stringify(unknownKeys)}.\nFull args: ${JSON.stringify(arguments)}`);
     }
 
     const {stack, service_name, caller_name} = functionScriptFileDetector((options.level || 0) + 1);
