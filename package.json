@@ -1,6 +1,6 @@
 {
   "name": "node-c3pr-logger",
-  "version": "24.0.0",
+  "version": "25.0.0",
   "description": "c3pr's client for remote logging",
   "scripts": {
     "test": "mocha --require ts-node/register \"./{,!(node_modules)/**/}*.test.*s\""
