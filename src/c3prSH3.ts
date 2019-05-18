@@ -1,5 +1,5 @@
 import {exec, ExecOptions} from 'child_process';
-import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
+import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 
 function sh(command, options: { encoding: "buffer" | null } & ExecOptions | {}): Promise<{error, stdout, stderr}> {
     return new Promise((resolve => {
@@ -17,23 +17,27 @@ function replaceTokens(input, replacements: {regex:RegExp, replaceWith:string}[]
     return inputAfterReplacements;
 }
 
-export default async function c3prSH3(shCommand: string,
-                       shOptions: { encoding: "buffer" | null } & ExecOptions | {} = {},
-                       {lcid, sha, euuid, level: outerLevel, stdout: shouldStdOut = false, replacements}:
-                           {lcid: string, sha: string, euuid: string, level?: number, stdout?: boolean, replacements?: {regex:RegExp, replaceWith:string}[]}) {
+export default async function c3prSH3(
+        shCommand: string,
+        shOptions: { encoding: "buffer" | null } & ExecOptions | {} = {},
+        {lcid, sha, euuid, level: outerLevel, stdout: shouldStdOut = false, replacements}: {lcid?, sha?, euuid?, level?: number, stdout?: boolean, replacements?: {regex:RegExp, replaceWith:string}[]},
+        _c3prLOG5?
+    ) {
     const level = (outerLevel || 0) + 1;
+    const __c3prLOG5 = c3prLOG5(_c3prLOG5 || {lcid, sha, euuid, level});
+
     const hideTokens = s => replaceTokens(s, replacements || []);
 
-    c3prLOG4(`\$ ${hideTokens(shCommand)}`, {lcid, sha, euuid, level});
+    __c3prLOG5(`\$ ${hideTokens(shCommand)}`);
 
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (shouldStdOut) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        c3prLOG4(hideTokens(stdout), {lcid, sha, euuid, level});
+        __c3prLOG5(hideTokens(stdout));
     }
     if (error) {
-        c3prLOG4(`
+        __c3prLOG5(`
             [ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                         
             -- SHELL COMMAND FAILED --
@@ -47,8 +51,7 @@ export default async function c3prSH3(shCommand: string,
             ------------------------------
             STDERR:
             ${hideTokens(stderr)}
-            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`,
-            {lcid, sha, euuid, level}
+            [/ERROR] <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`
         );
         throw new Error(hideTokens(error));
     }
