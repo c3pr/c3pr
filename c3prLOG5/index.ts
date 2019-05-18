@@ -47,6 +47,7 @@ export const __c3prLOG5 = (c3prLOG4) => (messageOrLogOptionsToPartiallyApply?: s
         (nextCall as any).lcid = partiallyAppliedLogOptions.lcid;
         (nextCall as any).sha = partiallyAppliedLogOptions.sha;
         (nextCall as any).euuid = partiallyAppliedLogOptions.euuid;
+        if (partiallyAppliedLogOptions.level) (nextCall as any).level = partiallyAppliedLogOptions.level;
         return nextCall;
     }
 };

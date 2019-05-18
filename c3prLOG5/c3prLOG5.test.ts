@@ -229,5 +229,15 @@ describe('c3prLOG5', () => {
 
     });
 
+    it('expose level', () => {
+
+        let calls = [];
+        const c3prLOG5 = __c3prLOG5(logFake(calls, () => 'generated-lcid'));
+
+        expect(c3prLOG5({level: 123}).level).to.equal(123);
+        expect(c3prLOG5()({level: 123}).level).to.equal(123);
+
+    });
+
 });
 
