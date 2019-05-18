@@ -175,5 +175,20 @@ describe('c3prLOG5', () => {
 
     });
 
+    it('another c3prLOG5 as argument', () => {
+
+        let calls = [];
+        const c3prLOG5 = __c3prLOG5(logFake(calls, () => 'generated-lcid'));
+
+        const c3prLogArg = c3prLOG5({lcid: 'L1', sha: 'S2', euuid: 'E3'});
+
+        const c3prLOG5AfterArg = c3prLOG5(c3prLogArg);
+
+        c3prLOG5AfterArg('gogogo');
+
+        expect(calls).to.deep.equal([['gogogo', {lcid: 'L1', sha: '!S2', euuid: 'E3'}]]);
+
+    });
+
 });
 
