@@ -1,10 +1,11 @@
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import * as config from '../src/config';
 
 import * as mongodb from 'mongodb';
 import * as util from 'util';
 
 import functionScriptFileDetector from './functionScriptFileDetector';
+import hideTokens from "./hideTokens";
 
 
 export interface IC3prLOG4 {
@@ -18,6 +19,7 @@ export interface Log4Options {
     lcid: string;
     sha: string;
     euuid: string;
+    hide?: (string | {[key: string]: string})[]
     meta?: any;
     error?: Error;
     level?: number;
@@ -41,7 +43,7 @@ function c3prLOG4(message: string, options: Log4Options) {
     const {stack, service_name, caller_name} = functionScriptFileDetector((options.level || 0) + 1);
 
     return printAndInsertIntoDatabase({
-        message: augmentWithError(message, options),
+        message: hideTokens(augmentWithError(message, options), options.hide),
         lcid: options.lcid,
         sha: options.sha,
         euuid: options.euuid,
@@ -104,7 +106,7 @@ function printShort(euuid: string) {
 async function printAndInsertIntoDatabase(options: LogData) {
     showWarningIfDatabaseNotDefined();
 
-    console.log(`[${options.lcid}][${(options.sha || '').substring(0, 7)}][${printShort(options.euuid)}] <${options.caller_name}>`, options.message);
+    console.log(`[${options.lcid}][${options.sha.substring(0, 7)}][${printShort(options.euuid)}] <${options.caller_name}>`, options.message);
 
     if (!config.c3pr.logger.mongoUrl) {
         return;
