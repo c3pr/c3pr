@@ -3,7 +3,12 @@ const cloneRepositoryLocally = require('./cloneRepositoryLocally');
 const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 const path = require('path');
-require("node-c3pr-logger").testMode();
+
+const logger = x => console.log(x);
+logger.lcid = () => 'fake';
+const c3prLOG5 = require("node-c3pr-logger/c3prLOG5").__c3prLOG5(logger);
+
+
 
 describe('cloneRepositoryLocally', () => {
 
@@ -16,13 +21,29 @@ describe('cloneRepositoryLocally', () => {
             branch: 'branch-for-clone-tests',
             revision: '30b03c1d8aa6ee670534b80edd0dc39c12644259',
             cloneDepth: 5
-        }, {nodeName: 'CRL-test', correlationId: 'testC', moduleName: 'testM'});
+        }, c3prLOG5);
 
         expect(fs.existsSync(cloneFolder)).to.be.true;
         expect(fs.existsSync(path.join(cloneFolder, '.git'))).to.be.true;
         expect(fs.existsSync(path.join(cloneFolder, 'src', 'main', 'resources', 'some-branch-file.txt'))).to.be.true;
         expect(fs.existsSync(path.join(cloneFolder, 'src', 'main', 'resources', 'file-that-is-in-master-only.txt'))).to.be.false;
 
+        rimraf(cloneFolder);
+
     }).timeout(10 * 1000);
 
 });
+
+function rimraf(dir_path) {
+    if (fs.existsSync(dir_path)) {
+        fs.readdirSync(dir_path).forEach(function(entry) {
+            var entry_path = path.join(dir_path, entry);
+            if (fs.lstatSync(entry_path).isDirectory()) {
+                rimraf(entry_path);
+            } else {
+                fs.unlinkSync(entry_path);
+            }
+        });
+        fs.rmdirSync(dir_path);
+    }
+}
