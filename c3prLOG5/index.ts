@@ -14,13 +14,30 @@ function copyShaIntoEuuidIfEmpty(logOptions) {
     return {...(logOptions.sha && {euuid: logOptions.sha}), ...logOptions};
 }
 
+function normalizeHide(logOptions: Partial<Log4Options>) {
+    if (logOptions.hide && !Array.isArray(logOptions.hide)) {
+        return {...logOptions, hide: [logOptions.hide]};
+    }
+    return logOptions;
+}
+
+const arrayFy = x => !x ? [] : (Array.isArray(x) ? x : [x]);
+
+function accumulateHideProperty(logOptions: Partial<Log4Options>, messageOrLogOptionsToPartiallyApply: Partial<Log4Options>) {
+    if (!{...logOptions, ...messageOrLogOptionsToPartiallyApply}.hide) return undefined;
+    return {hide: arrayFy(logOptions && logOptions.hide).concat(arrayFy(messageOrLogOptionsToPartiallyApply && messageOrLogOptionsToPartiallyApply.hide))}
+}
+
 export const __c3prLOG5 = (c3prLOG4) => (messageOrLogOptionsToPartiallyApply?: string | Partial<Log4Options>, logOptions?: Partial<Log4Options>) => {
     if (typeof messageOrLogOptionsToPartiallyApply === "string") {
         // first arg is a message, proceed to actual call
-        return c3prLOG4(messageOrLogOptionsToPartiallyApply, copyShaIntoEuuidIfEmpty(addExclamationToInvalidSha(generateLcidIfNoneWasProvided(logOptions || {}, c3prLOG4))));
+        const message = messageOrLogOptionsToPartiallyApply;
+        const enrichedOptions = normalizeHide(copyShaIntoEuuidIfEmpty(addExclamationToInvalidSha(generateLcidIfNoneWasProvided(logOptions || {}, c3prLOG4))));
+
+        return c3prLOG4(message, enrichedOptions);
     } else {
         // first arg is a logOptions object to be "partially applied"
-        let partiallyAppliedLogOptions = {...logOptions, ...messageOrLogOptionsToPartiallyApply};
+        let partiallyAppliedLogOptions = {...logOptions, ...messageOrLogOptionsToPartiallyApply, ...accumulateHideProperty(logOptions, messageOrLogOptionsToPartiallyApply)};
 
         partiallyAppliedLogOptions = copyShaIntoEuuidIfEmpty(addExclamationToInvalidSha(generateLcidIfNoneWasProvided(partiallyAppliedLogOptions, c3prLOG4)));
 
@@ -35,4 +52,5 @@ export const __c3prLOG5 = (c3prLOG4) => (messageOrLogOptionsToPartiallyApply?: s
 };
 
 import c3prLOG4, {Log4Options} from "../c3prLOG4";
+
 export default __c3prLOG5(c3prLOG4);

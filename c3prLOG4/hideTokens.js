@@ -1,7 +1,8 @@
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const DEFAULT_REPLACEMENT_CHAR = '*';
+var DEFAULT_REPLACEMENT_CHAR = '*';
 function normalize(arr) {
-    return (arr || []).reduce((acc, x) => {
+    return (arr || []).reduce(function (acc, x) {
         if (typeof x === 'string') {
             return acc.concat([[x, DEFAULT_REPLACEMENT_CHAR.repeat(x.length)]]);
         }
@@ -14,11 +15,11 @@ function replaceAll(str, find, replace) {
     return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
 }
 function hideTokens(message, hide) {
-    let newMessage = message;
-    normalize(hide).forEach(([wordToHide, replacementValue]) => {
+    var newMessage = message;
+    normalize(hide).forEach(function (_a) {
+        var wordToHide = _a[0], replacementValue = _a[1];
         newMessage = replaceAll(newMessage, wordToHide, replacementValue);
     });
     return newMessage;
 }
 exports.default = hideTokens;
-//# sourceMappingURL=hideTokens.js.map

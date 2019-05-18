@@ -38,9 +38,9 @@ describe('c3prLOG5', () => {
         let calls = [];
         const c3prLOG5 = __c3prLOG5(logFake(calls));
 
-        c3prLOG5({lcid: '1'})({lcid: '2'})()()()()({sha: '3'})({lcid: '4', euuid: '5'})('msg', {meta: 'meta-stuff', lcid: '6', sha: '564fdgs654fg56sdf4f66s45df456e1fed639dc7', euuid: '9'});
+        c3prLOG5({lcid: '1', level: 3})({lcid: '2'})()()()()({sha: '3'})({lcid: '4', euuid: '5'})('msg', {meta: 'meta-stuff', lcid: '6', sha: '564fdgs654fg56sdf4f66s45df456e1fed639dc7', euuid: '9'});
 
-        expect(calls).to.deep.equal([['msg', {lcid: '6', sha: '564fdgs654fg56sdf4f66s45df456e1fed639dc7', euuid: '9', meta: 'meta-stuff'}]]);
+        expect(calls).to.deep.equal([['msg', {lcid: '6', sha: '564fdgs654fg56sdf4f66s45df456e1fed639dc7', euuid: '9', meta: 'meta-stuff', level: 3}]]);
 
     });
 
@@ -187,6 +187,45 @@ describe('c3prLOG5', () => {
         c3prLOG5AfterArg('gogogo');
 
         expect(calls).to.deep.equal([['gogogo', {lcid: 'L1', sha: '!S2', euuid: 'E3'}]]);
+
+    });
+
+    describe('hide property should be accumulated into an array, not overriden', () => {
+
+        let calls, c3prLOG5;
+        beforeEach(() => {
+            calls = [];
+            c3prLOG5 = __c3prLOG5(logFake(calls, () => '#'));
+        });
+
+        it('no array - string(first call)', () => {
+            c3prLOG5('dummy', {hide: 'x'});
+            expect(calls).to.deep.equal([['dummy', {hide: ['x'], lcid: '#'}]]);
+        });
+        it('no array - string(second call and on)', () => {
+            c3prLOG5()({hide: 'x'})('dummy');
+            expect(calls).to.deep.equal([['dummy', {hide: ['x'], lcid: '#'}]]);
+        });
+        it('array - string', () => {
+            c3prLOG5()({hide: ['x']})('dummy');
+            expect(calls).to.deep.equal([['dummy', {hide: ['x'], lcid: '#'}]]);
+        });
+        it('no array - multiple (from first call)', () => {
+            c3prLOG5({hide: 'a'})({hide: {b: 'c'}})({hide: {d: 'e', f: 'g'}})('dummy');
+            expect(calls).to.deep.equal([['dummy', {hide: ['a', {b: 'c'}, {d: 'e', f: 'g'}], lcid: '#'}]]);
+        });
+        it('no array - multiple (from second call and on)', () => {
+            c3prLOG5()({hide: 'a'})({hide: {b: 'c'}})({hide: {d: 'e', f: 'g'}})('dummy');
+            expect(calls).to.deep.equal([['dummy', {hide: ['a', {b: 'c'}, {d: 'e', f: 'g'}], lcid: '#'}]]);
+        });
+        it('array - multiple', () => {
+            c3prLOG5()({hide: ['a']})({hide: {b: 'c'}})({hide: [{d: 'e', f: 'g'}, 'h']})('dummy');
+            expect(calls).to.deep.equal([['dummy', {hide: ['a', {b: 'c'}, {d: 'e', f: 'g'}, 'h'], lcid: '#'}]]);
+        });
+        it('array empty - multiple', () => {
+            c3prLOG5({hide: []})({hide: ['a']})({hide: {b: 'c'}})({hide: [{d: 'e', f: 'g'}]})({hide: 'x'})('dummy');
+            expect(calls).to.deep.equal([['dummy', {hide: ['a', {b: 'c'}, {d: 'e', f: 'g'}, 'x'], lcid: '#'}]]);
+        });
 
     });
 
