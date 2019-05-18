@@ -30,7 +30,7 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
     // clones that single branch (maybe there is a somewhat slightly faster way of doing this with --mirror, though I feel it probably won't pay off)
     await c3prSH3(
         `git clone --config core.autocrlf=false -b ${branch} --depth ${cloneDepth} --single-branch ${repoURL} ${cloneFolder}`,
-        {replacements: tokenReplacementForLogFunction}, {..._c3prLOG5}
+        {}, {replacements: tokenReplacementForLogFunction}, _c3prLOG5
     );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,8 +55,8 @@ async function gitClone(cloneBaseDir, repoURL, cloneFolder, branch, gitSHA, clon
 
 const GITLAB_API_TOKEN = process.env.GITLAB_API_TOKEN || '-HCmXGsXkmrv7krhUiy3';
 
-async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, url, branch, revision, cloneDepth, lcid, sha, euuid}) {
-    const _c3prLOG5 = c3prLOG5({lcid, sha, euuid});
+async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, url, branch, revision, cloneDepth, lcid, sha, euuid}, _c3prLOG5) {
+    const __c3prLOG5 = c3prLOG5(_c3prLOG5 || {lcid, sha, euuid});
 
     const repoUrlWithToken = url.replace(/^http(s?):\/\//, `http$1://clone:${GITLAB_API_TOKEN}@`);
     const tokenReplacementForLogFunction = {regex: new RegExp(GITLAB_API_TOKEN, "g"), replaceWith: "<GITLAB_API_TOKEN>"};
@@ -65,7 +65,7 @@ async function cloneRepositoryLocally({localUniqueCorrelationId, cloneBaseDir, u
     const cloneFolder = path.resolve(path.join(cloneBaseDir, gitSHA, localUniqueCorrelationId));
 
     // clones at "cloneBaseDir/SHA/RANDOMUUID", e.g. "./tmp/59b20b8d5c6ff8d09518454d4dd8b7b30f095ab5/471ff3f9-2ada-48eb-a0f3-3ab70f3f0bdd"
-    await gitClone(cloneBaseDir, repoUrlWithToken, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId, tokenReplacementForLogFunction, _c3prLOG5);
+    await gitClone(cloneBaseDir, repoUrlWithToken, cloneFolder, branch, gitSHA, cloneDepth, localUniqueCorrelationId, tokenReplacementForLogFunction, __c3prLOG5);
 
     return cloneFolder;
 
