@@ -9,15 +9,15 @@
           <th>Open PRs</th>
           <th>Merged PRs</th>
           <th>Closed PRs</th>
-          <th>Actions</th>
+          <th>-</th>
         </tr>
         <tr v-for="project in projects" :key="project._id">
           <td>{{project.name}}</td>
-          <td>{{project.clone_url_http}}</td>
-          <td>{{ project.prs.filter(({status}) => status === "open").length }}</td>
-          <td>{{ project.prs.filter(({status}) => status === "merged").length }}</td>
-          <td>{{ project.prs.filter(({status}) => status === "closed").length }}</td>
-          <td><router-link :to= "{ name: 'prpoject-details', params: { projectId: project._id, project: project }}">details</router-link></td>
+          <td><a :href="project.clone_url_http.replace('.git', '')">{{project.clone_url_http}}</a></td>
+          <td><a :href="mergeRequestsLink(project)">{{ project.prs.filter(({status}) => status === "open").length }}</a></td>
+          <td><a :href="mergeRequestsLink(project)">{{ project.prs.filter(({status}) => status === "merged").length }}</a></td>
+          <td><a :href="mergeRequestsLink(project)">{{ project.prs.filter(({status}) => status === "closed").length }}</a></td>
+          <td><router-link :to= "{ name: 'project-details', params: { projectId: project._id, project: project }}">details</router-link></td>
         </tr>
       </table>
   </div>
@@ -54,7 +54,10 @@ export default {
   },
 
   methods: {
-    ...mapActions(PROJECTS, {fetchProjects: FETCH_ALL_PROJECTS})
+    ...mapActions(PROJECTS, {fetchProjects: FETCH_ALL_PROJECTS}),
+    mergeRequestsLink(project) {
+      return project.clone_url_http.replace('.git', '/merge_requests');
+    }
   }
 };
 </script>
