@@ -4,6 +4,7 @@ import fetchProjectFiles from "../../adapters/fetchProjectFiles";
 import fetchToolsNotYetInvokedForCommit from "./fetchToolsNotYetInvokedForCommit";
 import {generateInvocations} from "./generateInvocations";
 import c3prHubRegisterNewEvent from 'node-c3pr-hub-client/events/registerNewEvent';
+import {prioritizeToolsForCommit} from "./prioritizeToolsForCommit";
 
 
 function invokeToolForFiles({parentEvent, changesCommittedRootEuuid, repository}, tool_id, files, c3prLOG5) {
@@ -47,6 +48,8 @@ async function invokeTools({parentEvent, changesCommittedRootEuuid, repository},
     const availableToolsNotYetInvokedForThisCommit = await fetchToolsNotYetInvokedForCommit(changesCommittedRootEuuid, c3prLOG5);
     if (!availableToolsNotYetInvokedForThisCommit.length) { return []; }
 
+    const prioritizedNotYetInvokedTools = await prioritizeToolsForCommit(changesCommittedRootEuuid, availableToolsNotYetInvokedForThisCommit);
+
 
     const filesChangedInThisCommitThatDontHaveOpenPRs = await filterFilesChangedInThisCommitThatDontHaveOpenPRs(changesCommittedRootEuuid, filesChangedInThisCommit);
     if (!filesChangedInThisCommitThatDontHaveOpenPRs.length) {
@@ -57,7 +60,7 @@ async function invokeTools({parentEvent, changesCommittedRootEuuid, repository},
 
     const projectFilesPreferences = await fetchProjectFiles(changesCommittedRootEuuid);
 
-    const invocations = generateInvocations(filesChangedInThisCommitThatDontHaveOpenPRs, availableToolsNotYetInvokedForThisCommit, projectFilesPreferences, c3prLOG5);
+    const invocations = generateInvocations(filesChangedInThisCommitThatDontHaveOpenPRs, prioritizedNotYetInvokedTools, projectFilesPreferences, c3prLOG5);
 
     return invocations.map(({tool_id, files}) => invokeToolForFiles({parentEvent, changesCommittedRootEuuid, repository}, tool_id, files, c3prLOG5));
 }
