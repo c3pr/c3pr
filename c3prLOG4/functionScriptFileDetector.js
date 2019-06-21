@@ -1,14 +1,13 @@
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var path = require('path');
+const path = require('path');
 exports.functionScriptFileDetectorConfig = {
     path_separator: '\\' + path.sep
 };
 function getFullStack() {
-    var stack = new Error().stack;
+    const stack = new Error().stack;
     return stack.split('\n');
 }
-var SKIPPED_LINES = 3; // notice the first lines bellow are 'Error' and the calls relative to functionScriptFileDetector itself, which is why we always skip them
+const SKIPPED_LINES = 3; // notice the first lines bellow are 'Error' and the calls relative to functionScriptFileDetector itself, which is why we always skip them
 /*
 [ 'Error',
   '    at getFullStack (G:\\MSc-Tools\\c3pr\\node-c3pr-logger\\c3prLOG4\\functionScriptFileDetector.js:7:19)',
@@ -27,7 +26,7 @@ var SKIPPED_LINES = 3; // notice the first lines bellow are 'Error' and the call
   '    at tryOnImmediate (timers.js:751:5)',
   '    at processImmediate [as _immediateCallback] (timers.js:722:5)' ]
  */
-var INVALID_NAMES = [
+const INVALID_NAMES = [
     'Object.t.default', 't.default', 'Promise.all.then'
 ];
 function transformName(name) {
@@ -36,12 +35,11 @@ function transformName(name) {
     }
     return name.replace(/^Object\./, '');
 }
-function getCallerName(fullStack, level) {
-    if (level === void 0) { level = 0; }
-    var callerName;
-    for (var i = SKIPPED_LINES + level; i < fullStack.length; i++) {
-        var line = fullStack[i];
-        var match = line.match(/at (.*?) \(/);
+function getCallerName(fullStack, level = 0) {
+    let callerName;
+    for (let i = SKIPPED_LINES + level; i < fullStack.length; i++) {
+        let line = fullStack[i];
+        const match = line.match(/at (.*?) \(/);
         if (match && match[1]) {
             if (!INVALID_NAMES.includes(match[1])) {
                 return transformName(match[1]);
@@ -53,16 +51,14 @@ function getCallerName(fullStack, level) {
     return callerName || '(unknown caller)';
 }
 exports.getCallerName = getCallerName;
-function getServiceName(stack, s) {
-    if (s === void 0) { s = exports.functionScriptFileDetectorConfig.path_separator; }
-    var regExp = new RegExp(s + "([^" + s + "]+)" + s + "node_modules" + s);
-    var service_name;
-    for (var _i = 0, stack_1 = stack; _i < stack_1.length; _i++) {
-        var line = stack_1[_i];
+function getServiceName(stack, s = exports.functionScriptFileDetectorConfig.path_separator) {
+    const regExp = new RegExp(`${s}([^${s}]+)${s}node_modules${s}`);
+    let service_name;
+    for (let line of stack) {
         if (!service_name && line.includes("(evalmachine")) {
             service_name = "evalmachine";
         }
-        var matches = line.match(regExp);
+        let matches = line.match(regExp);
         if (matches && matches[1]) {
             return matches[1];
         }
@@ -70,9 +66,9 @@ function getServiceName(stack, s) {
     return service_name || 'unknown';
 }
 exports.getServiceName = getServiceName;
-function functionScriptFileDetector(level) {
-    if (level === void 0) { level = 0; }
-    var fullStack = getFullStack();
+function functionScriptFileDetector(level = 0) {
+    const fullStack = getFullStack();
     return { stack: fullStack, service_name: getServiceName(fullStack), caller_name: getCallerName(fullStack, level) };
 }
 exports.default = functionScriptFileDetector;
+//# sourceMappingURL=functionScriptFileDetector.js.map
