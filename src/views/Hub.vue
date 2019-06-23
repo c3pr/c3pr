@@ -31,6 +31,7 @@
           <th>tool_id</th>
           <th>extensions</th>
           <th>tags</th>
+          <th>weight</th>
           <th>agent_id</th>
           <th>expiration_time</th>
           <th>last_updated</th>
@@ -41,6 +42,7 @@
           <td>{{ agent.tool_id }}</td>
           <td>{{ agent.extensions }}</td>
           <td>{{ agent.tags }}</td>
+          <td>{{ agent.weight }}</td>
           <td>{{ agent.agent_id }}</td>
           <td :title="agent.expiration_time">{{ ago(agent.expiration_time) }}</td>
           <td :title="agent.last_updated">{{ ago(agent.last_updated) }}</td>
@@ -75,7 +77,7 @@ export default {
     },
     async fetchRegistry() {
       const { data } = await axios.get(BACKEND_HUB + '/api/v1/agents');
-      this.registry = data;
+      this.registry = data.sort((t1, t2) => t1.weight||0 - t2.weight||0);
     },
     async fetchEvents() {
       const {data} = await axios.get(BACKEND_HUB + '/api/v1/events');
