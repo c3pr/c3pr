@@ -25,13 +25,14 @@ function extractFileChanges(fileNames) {
         return previousValue;
     }, { added: [], modified: [], renamed: [], deleted: [] });
 }
+exports.EMPTY_PATCH = () => ({ files: { added: [], modified: [], renamed: [], deleted: [] }, patch: { hexBase64: '', plain: '', header: '', footer: '' } });
 async function generateGitPatchBase64({ cloneFolder, gitUserName, gitUserEmail, commitMessage }, { lcid, sha, euuid }) {
     await c3prSH3_1.default(`git add -A`, { cwd: cloneFolder }, { lcid, sha, euuid });
     const diffFilePath = `${cloneFolder}/1`;
     // let fileNames = await c3prSH3(`git diff --staged --name-only`, {cwd: cloneFolder}, {lcid, sha, euuid});
     let fileNames = await c3prSH3_1.default(`git status --short`, { cwd: cloneFolder }, { lcid, sha, euuid });
     if (fileNames.trim() === '') {
-        return { files: { added: [], modified: [], renamed: [], deleted: [] }, patch: { hexBase64: '', plain: '', header: '', footer: '' } };
+        return exports.EMPTY_PATCH();
     }
     // await c3prSH3(`git diff --staged --ignore-space-change > changes.patch`, {cwd: cloneFolder}, {lcid, sha, euuid});
     // console.log('\n\n\n\n\n\n');

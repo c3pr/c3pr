@@ -44,6 +44,8 @@ function extractFileChanges(fileNames: string):FileChanges {
     }, {added: [], modified: [], renamed: [], deleted: []});
 }
 
+export const EMPTY_PATCH = () => ({files: {added: [], modified: [], renamed: [], deleted: []}, patch: {hexBase64: '', plain: '', header: '', footer: ''}});
+
 async function generateGitPatchBase64({cloneFolder, gitUserName, gitUserEmail, commitMessage}, {lcid, sha, euuid}): Promise<GitPatchBase64> {
 
     await c3prSH3(`git add -A`, {cwd: cloneFolder}, {lcid, sha, euuid});
@@ -54,7 +56,7 @@ async function generateGitPatchBase64({cloneFolder, gitUserName, gitUserEmail, c
     let fileNames = await c3prSH3(`git status --short`, {cwd: cloneFolder}, {lcid, sha, euuid});
 
     if (fileNames.trim() === '') {
-        return {files: {added: [], modified: [], renamed: [], deleted: []}, patch: {hexBase64: '', plain: '', header: '', footer: ''}};
+        return EMPTY_PATCH();
     }
 
     // await c3prSH3(`git diff --staged --ignore-space-change > changes.patch`, {cwd: cloneFolder}, {lcid, sha, euuid});
