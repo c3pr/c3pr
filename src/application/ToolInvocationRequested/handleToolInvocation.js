@@ -95,6 +95,9 @@ async function emitToolInvocationFailed(toolInvocationRequestedEvent, failure_me
     }
 }
 
+// TODO import from client next time version is updated
+const EMPTY_PATCH = () => ({files: {added: [], modified: [], renamed: [], deleted: []}, patch: {hexBase64: '', plain: '', header: '', footer: ''}});
+
 async function handleToolInvocation(toolInvocationRequestedEvent, {lcid, sha, euuid}) {
     const _c3prLOG5 = c3prLOG5({lcid, sha, euuid});
     const toolInvocationRequested = toolInvocationRequestedEvent.payload;
@@ -105,7 +108,8 @@ async function handleToolInvocation(toolInvocationRequestedEvent, {lcid, sha, eu
         let gitPatchBase64 = await invokeToolAtGitRepo(toolInvocationRequested, loadTools, _c3prLOG5);
         return await emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, _c3prLOG5);
     } catch (error) {
-        return await emitToolInvocationFailed(toolInvocationRequestedEvent, error.toString(), toolInvocationRequested, _c3prLOG5);
+        await emitToolInvocationFailed(toolInvocationRequestedEvent, error.toString(), toolInvocationRequested, _c3prLOG5);
+        return await emitToolInvocationCompleted(toolInvocationRequestedEvent, EMPTY_PATCH(), toolInvocationRequested, _c3prLOG5);
     }
 }
 
