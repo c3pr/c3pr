@@ -39,30 +39,44 @@ function loadTools() {
         throw new Error(`Path pointed by 'C3PR_AGENT_TOOLS_PATH' does not exist: ${config.c3pr.agent.agentToolsPath}`);
     }
 
-    _c3prLOG5(`Loading tools YAML files...`);
-    return getYamlFiles(config.c3pr.agent.agentToolsPath).map(filePath => {
+    const DEFAULT_WEIGHT = 100;
+    const yamlFileToAgent = filePath => {
         try {
             const loadedYaml = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'));
-            const {disabled, tool_id, extensions, tags, default_weight, command, pr_title, pr_body} = loadedYaml;
-            const weight = loadedYaml.default_weight || 100;
+            const {disabled, tool_id, extensions, tags, default_weight, command, pr_title, pr_body, multiple} = loadedYaml;
 
-            if (disabled) { _c3prLOG5(`Tool in YAML file ${filePath} is disabled! Ignoring file!`); return null; }
+            const defaults = {disabled, tool_id, extensions, tags, command, pr_title, pr_body};
 
-            if (!tool_id        ) { _c3prLOG5(        `tool_id does not exist in YAML file ${filePath}! Ignoring file!`); return null; }
-            if (!extensions     ) { _c3prLOG5(     `extensions does not exist in YAML file ${filePath}! Ignoring file!`); return null; }
-            if (!tags           ) { _c3prLOG5(           `tags does not exist in YAML file ${filePath}! Ignoring file!`); return null; }
-            if (!default_weight ) { _c3prLOG5( `default_weight does not exist in YAML file ${filePath}! Using ${weight} as value.`); }
-            if (!command        ) { _c3prLOG5(        `command does not exist in YAML file ${filePath}! Ignoring file!`); return null; }
-            if (!pr_title       ) { _c3prLOG5(       `pr_title does not exist in YAML file ${filePath}! Ignoring file!`); return null; }
-            if (!pr_body        ) { _c3prLOG5(        `pr_body does not exist in YAML file ${filePath}! Ignoring file!`); return null; }
+            return (multiple || [{default_weight}]).map(eachDeclaredAgent => {
+                const agent = {...defaults, ...eachDeclaredAgent, weight: eachDeclaredAgent.default_weight || DEFAULT_WEIGHT};
 
-            return {tool_id, extensions, tags, weight, command, pr_title, pr_body};
-            //return {tool_id, extensions, tags};
+                if (!agent.tool_id) { _c3prLOG5(`tool_id does not exist in a tool at YAML file ${filePath}! Ignoring tool!`); return null; }
+
+                if (agent.disabled) { _c3prLOG5(`Tool ${agent.tool_id} in YAML file ${filePath} is disabled! Ignoring tool!`); return null; }
+
+                if (!agent.extensions     ) { _c3prLOG5(     `extensions does not exist in tool ${agent.tool_id} at YAML file ${filePath}! Ignoring tool!`); return null; }
+                if (!agent.tags           ) { _c3prLOG5(           `tags does not exist in tool ${agent.tool_id} at YAML file ${filePath}! Ignoring tool!`); return null; }
+                if (!agent.default_weight ) { _c3prLOG5( `default_weight does not exist in tool ${agent.tool_id} at YAML file ${filePath}! Using ${DEFAULT_WEIGHT} as value.`); }
+                if (!agent.command        ) { _c3prLOG5(        `command does not exist in tool ${agent.tool_id} at YAML file ${filePath}! Ignoring tool!`); return null; }
+                if (!agent.pr_title       ) { _c3prLOG5(       `pr_title does not exist in tool ${agent.tool_id} at YAML file ${filePath}! Ignoring tool!`); return null; }
+                if (!agent.pr_body        ) { _c3prLOG5(        `pr_body does not exist in tool ${agent.tool_id} at YAML file ${filePath}! Ignoring tool!`); return null; }
+
+                return agent;
+            }).filter(a => a);
         } catch (e) {
             _c3prLOG5(`ERROR Reading YAML file ${filePath}: ${e}`);
-            return null;
+            return [];
         }
-    }).filter(f => f);
+    };
+
+    _c3prLOG5(`Loading tools YAML files...`);
+    const yamlFiles = getYamlFiles(config.c3pr.agent.agentToolsPath);
+    const agents = [];
+    for (let yamlFile of yamlFiles) {
+        const as = yamlFileToAgent(yamlFile);
+        agents.push(...as);
+    }
+    return agents;
 }
 
 const tools = loadTools();
