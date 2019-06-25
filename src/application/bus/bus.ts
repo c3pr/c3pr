@@ -21,7 +21,7 @@ function removeListener(event_type, callbackUrl, listener, c3prLOG5) {
 function notify(callbackUrl, tryNumber, event_type, listener, event_object, c3prLOG5) {
     c3prLOG5(`Notifying for event '${event_type}' the URL ${callbackUrl}.` + (tryNumber > 1 ? ` Try number ${tryNumber} of ${config.c3pr.hub.bus.maxRetries + 1}.` : ``));
 
-    axios.post(callbackUrl).catch(() => {
+    axios.post(callbackUrl, event_object).catch(() => {
         if (tryNumber > config.c3pr.hub.bus.maxRetries) {
             removeListener(event_type, callbackUrl, listener, c3prLOG5);
             return;

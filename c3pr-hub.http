@@ -23,6 +23,10 @@ GET http://127.0.0.1:7300/api/v1/logs/sha/37359043bb3a17114b6c3652bed25e1fed639d
 Authorization: Bearer {{auth_token}}
 ###
 
+GET http://srv-codereview:7300/api/v1/logs?service_name=c3pr-hub
+Authorization: Bearer {{auth_token}}
+###
+
 PATCH http://localhost:7300/api/v1/projects/5b36aa1e6e3cbc0006213b97
 Authorization: Bearer {{auth_token}}
 
