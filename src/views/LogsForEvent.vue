@@ -106,6 +106,7 @@ export default {
   .c3pr-brain { background-color: cornflowerblue; }
   .c3pr-repo-gitlab { background-color: orange; }
   .c3pr-agent { background-color: gray; }
+  .evalmachine { background-color: gray; }
   .mono {
     text-align: left;
     font-family: monospace;
