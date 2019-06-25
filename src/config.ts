@@ -12,10 +12,10 @@ export = {
             mongoC3prDatabase: C3PR_MONGO_DATABASE,
             mongoEventsCollection: 'events',
 
-            uncollectPollingInMs: 5 * 60 * 1000, // five minutes
-            uncollectTimeoutInMs: 60 * 60 * 1000, // one hour
+            uncollectPollingInMs: 4 * 60 * 1000, // 4 minutes
+            uncollectTimeoutInMs: 10 * 60 * 1000, // 10 minutes
 
-            broadcastIntervalInMs: 5 * 60 * 1000, // five minutes
+            broadcastIntervalInMs: 2 * 60 * 1000, // 2 minutes
 
             mongoProjectsCollection: 'projects',
             mongoPRsCollection: 'prs',
