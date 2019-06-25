@@ -104,6 +104,11 @@ async function handleToolInvocation(toolInvocationRequestedEvent, {lcid, sha, eu
 
     _c3prLOG5(`C-3PR Agent received invocation: ${toolInvocationRequested.tool_id}. Files: ${JSON.stringify(toolInvocationRequested.files)}`, {meta: {toolInvocationRequestedEvent}});
 
+    if (!loadTools.toolsHash[toolInvocationRequested.tool_id]) {
+        _c3prLOG5(`Received tool invocation is not from a tool_id of mine: ${toolInvocationRequested.tool_id}. Skipping.`, {meta: {toolInvocationRequestedEvent}});
+        return {skipped: true};
+    }
+
     try {
         let gitPatchBase64 = await invokeToolAtGitRepo(toolInvocationRequested, loadTools, _c3prLOG5);
         return await emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, _c3prLOG5);
