@@ -10,7 +10,7 @@ module.exports = function (app) {
         const _c3prLOG5 = c3prLOG5({sha: '!express-agent-hub-listener-controller'});
         _c3prLOG5(`'ToolInvocationRequested' request received.`);
         // noinspection JSIgnoredPromiseFromCall
-        handleToolInvocationRequested(_c3prLOG5);
+        handleToolInvocationRequested(request, _c3prLOG5);
         response.send();
     });
 

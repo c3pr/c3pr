@@ -3,8 +3,15 @@ const config = require('../../config');
 
 const handleToolInvocation = require('./handleToolInvocation');
 
+const loadTools = require('../tools/loadTools');
 
-function handleToolInvocationRequested(c3prLOG5) {
+function handleToolInvocationRequested(request, c3prLOG5) {
+
+    if (!loadTools.toolsHash[request.body.payload.tool_id]) {
+        c3prLOG5(`Received tool invocation is not from a tool_id of mine: ${request.body.payload.tool_id}. Skipping.`, {meta: {request_body: request.body}});
+        return {skipped: true};
+    }
+
     return handleFirstCollectedEvent({
         event_type: `ToolInvocationRequested`,
         handlerFunction: handleToolInvocation,
