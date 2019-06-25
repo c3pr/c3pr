@@ -9,7 +9,7 @@ function generateLogFunction(__c3prLOG5, outerLCID, outerSHA, outerEUUID) {
     }
     return c3prLOG5_1.default({ lcid: outerLCID, sha: outerSHA || '!handle-first-event', ...(outerEUUID && { euuid: outerEUUID }) });
 }
-// TODO document this can return null (not the result) when no event is collected
+// TODO document this can return null (not the result) when no event is collected OR when handlerFunction() returns skipped===true
 async function handleFirstCollectedEvent(firstCollectedEventHandler, __c3prLOG5) {
     const { event_type, handlerFunction, c3prHubUrl, jwt, lcid: outerLCID, sha: outerSHA, euuid: outerEUUID } = firstCollectedEventHandler;
     let _c3prLOG5 = generateLogFunction(__c3prLOG5, outerLCID, outerSHA, outerEUUID);
@@ -37,6 +37,10 @@ async function handleFirstCollectedEvent(firstCollectedEventHandler, __c3prLOG5)
             _c3prLOG5(`Couldn't mark ${event_type}/${event.uuid} as UNPROCESSED. You must do it **MANUALLY**. If you don't, you'll have to wait until the PROCESSING status times out.`, { error, meta: { handlerFunction, event } });
         });
         return;
+    }
+    if (handlerFunctionResult.skipped) {
+        _c3prLOG5(`handlerFunction() returned skipped===true. We'll do nothing, then.`, { meta: { handlerFunction, event } });
+        return null;
     }
     if (!handlerFunctionResult || !handlerFunctionResult.new_status) {
         throw new Error(`<handleFirstCollectedEvent> Handler function should return an object of format {new_status, result?} (only new_status is mandatory).
