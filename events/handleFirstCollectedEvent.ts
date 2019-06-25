@@ -11,6 +11,7 @@ function generateLogFunction(__c3prLOG5, outerLCID: any, outerSHA: any, outerEUU
 }
 
 interface HandlerOutput {
+    skipped: boolean;
     new_status: 'PROCESSED' | 'UNPROCESSED';
     result: any;
 }
@@ -25,7 +26,7 @@ interface FirstCollectedEventHandler {
     euuid?: string;
 }
 
-// TODO document this can return null (not the result) when no event is collected
+// TODO document this can return null (not the result) when no event is collected OR when handlerFunction() returns skipped===true
 async function handleFirstCollectedEvent(firstCollectedEventHandler: FirstCollectedEventHandler, __c3prLOG5?) {
     const {event_type, handlerFunction, c3prHubUrl, jwt, lcid: outerLCID, sha: outerSHA, euuid: outerEUUID} = firstCollectedEventHandler;
     let _c3prLOG5 = generateLogFunction(__c3prLOG5, outerLCID, outerSHA, outerEUUID);
@@ -59,6 +60,11 @@ async function handleFirstCollectedEvent(firstCollectedEventHandler: FirstCollec
             );
         });
         return;
+    }
+
+    if (handlerFunctionResult.skipped) {
+        _c3prLOG5(`handlerFunction() returned skipped===true. We'll do nothing, then.`, {meta: {handlerFunction, event}});
+        return null;
     }
 
     if (!handlerFunctionResult || !handlerFunctionResult.new_status) {
