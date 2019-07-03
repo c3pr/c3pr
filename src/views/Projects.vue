@@ -9,6 +9,7 @@
           <th>Open PRs</th>
           <th>Merged PRs</th>
           <th>Closed PRs</th>
+          <th>Last Modification</th>
           <th>-</th>
           <th>-</th>
         </tr>
@@ -18,6 +19,7 @@
           <td><a :href="mergeRequestsLink(project)">{{ project.prs.filter(({status}) => status === "open").length }}</a></td>
           <td><a :href="mergeRequestsLink(project)">{{ project.prs.filter(({status}) => status === "merged").length }}</a></td>
           <td><a :href="mergeRequestsLink(project)">{{ project.prs.filter(({status}) => status === "closed").length }}</a></td>
+          <td>>{{ (changesCommittedPerProject.find(ccpp => ccpp._id.project_uuid === project.uuid) || {last_modified: "ERROR"}).last_modified }}</td>
           <td><router-link :to= "{ name: 'project-details', params: { projectId: project._id, project: project }}">details</router-link></td>
           <td><router-link :to="{ name: 'events-per-project', params: { project_uuid: project.uuid }}">commit events</router-link></td>
         </tr>
@@ -28,6 +30,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { PROJECTS, FETCH_ALL_PROJECTS, GET_ALL_PROJECTS } from "../store/modules/projects";
+import {EVENTS, FETCH_CHANGES_COMMITTED_PER_PROJECT, GET_CHANGES_COMMITTED_PER_PROJECT} from "../store/modules/events";
 
 export default {
   name: "Projects",
@@ -48,19 +51,23 @@ export default {
   },
 
   computed: {
-    ...mapGetters(PROJECTS, {projects: GET_ALL_PROJECTS})
+    ...mapGetters(PROJECTS, {projects: GET_ALL_PROJECTS}),
+    ...mapGetters(EVENTS, {changesCommittedPerProject: GET_CHANGES_COMMITTED_PER_PROJECT}),
   },
 
   created() {
     this.fetchProjects();
+    this.fetchChangesCommittedPerProject();
   },
 
   methods: {
     ...mapActions(PROJECTS, {fetchProjects: FETCH_ALL_PROJECTS}),
+    ...mapActions(EVENTS, {fetchChangesCommittedPerProject: FETCH_CHANGES_COMMITTED_PER_PROJECT}),
     mergeRequestsLink(project) {
       return project.clone_url_http.replace('.git', '/merge_requests');
-    }
+    },
   }
+
 };
 </script>
 
