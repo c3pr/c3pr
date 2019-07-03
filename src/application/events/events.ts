@@ -112,6 +112,14 @@ function patchAsUnprocessed(event_type, uuid, processor_uuid) {
     return eventsDB.persistAsUnprocessed(uuid);
 }
 
+async function broadcastUnprocessedEvents() {
+    const eventTypesWithUnprocessedEvents = Status.getEventTypesWithUnprocessedEvents();
+    for (let event_type of eventTypesWithUnprocessedEvents) {
+        const event_payload = await peekUnprocessed(event_type);
+        c3prBusEmit(event_type, event_payload);
+    }
+}
+
 async function initializeEventsOnStartup() {
     const _c3prLOG5 = c3prLOG5({sha: '!hub-events-initialize-on-startup'});
     _c3prLOG5('Initializing events status database.');
@@ -140,14 +148,7 @@ async function initializeEventsOnStartup() {
     }, config.c3pr.hub.uncollectPollingInMs).unref();
 
 
-
-    setInterval(async () => {
-        const eventTypesWithUnprocessedEvents = Status.getEventTypesWithUnprocessedEvents();
-        for (let event_type of eventTypesWithUnprocessedEvents) {
-            const event_payload = await peekUnprocessed(event_type);
-            c3prBusEmit(event_type, event_payload);
-        }
-    }, config.c3pr.hub.broadcastIntervalInMs).unref();
+    setInterval(broadcastUnprocessedEvents, config.c3pr.hub.broadcastIntervalInMs).unref();
 }
 
 export = {
@@ -161,6 +162,7 @@ export = {
     patchAsProcessed,
     patchAsUnprocessed,
     analyticsPerProjectEventCountOfType,
-    reprocessParents
+    reprocessParents,
+    broadcastUnprocessedEvents
 };
 

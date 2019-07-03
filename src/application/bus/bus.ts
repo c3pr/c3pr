@@ -51,7 +51,7 @@ export const _c3prBusEmit = (c3prLOG5) => (event_type, event_object) => {
         sha: (event_object && event_object.payload &&  event_object.payload.repository && event_object.payload.repository.revision) || 'unknown-event-object',
         euuid: event_object && event_object.uuid || 'unknown-event-object'
     });
-    _c3prLOG5(`Emitting '${event_type}'. Motivated by: ${JSON.stringify({..._c3prLOG5, lcid: undefined})}`);
+    _c3prLOG5(`Emitting '${event_type}'. Motivated by: ${JSON.stringify({..._c3prLOG5, lcid: undefined})}`, {meta: {event_object}});
     hub.emit(event_type, event_object, _c3prLOG5);
 };
 

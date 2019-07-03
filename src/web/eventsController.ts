@@ -52,6 +52,14 @@ export = function (app) {
         });
     });
 
+    app.get('/api/v1/events/broadcast', function ({query}, response) {
+        events.broadcastUnprocessedEvents().then(() => {
+            response.status(200).send('Broadcasted!');
+        }).catch((e) => {
+            response.status(500).send(e.toString());
+        });
+    });
+
     // curl -sD - http://127.0.0.1:7300/api/v1/events/MY_TYPE --header "Authorization: Bearer $(curl -s -X POST http://127.0.0.1:7300/api/v1/login | tr -d '"')"
     // curl -sD - http://127.0.0.1:7300/api/v1/events/ToolInvocationRequested?payload.parent.uuid=b5ae279d-2e5e-49d6-922c-fcc443e22204 --header "Authorization: Bearer $(curl -s -X POST http://127.0.0.1:7300/api/v1/login | tr -d '"')"
     app.get('/api/v1/events/:eventType/', function ({params: {eventType}, query}, response) {
