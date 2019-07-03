@@ -7,6 +7,7 @@
         <th>uuid</th>
         <th>event_type</th>
         <th>status</th>
+        <th>processor</th>
         <th>created</th>
         <th>modified</th>
         <th>Logs</th>
@@ -18,6 +19,7 @@
         <td>{{ event.uuid.split("-")[0] }}</td>
         <td>{{ event.event_type }}</td>
         <td>{{ event.meta.status }}</td>
+        <td>{{ event.meta.processor_uuid }}</td>
         <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
         <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
         <td><router-link :to= "{ name: 'logs-euuid', params: { euuid: event.uuid }}">logs</router-link></td>

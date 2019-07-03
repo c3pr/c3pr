@@ -18,7 +18,7 @@
         <td>{{ ccpp.count }}</td>
         <td>{{ ccpp.last_modified }}</td>
         <td>
-          <router-link :to="{ name: 'events-per-project', params: { project_uuid: ccpp._id.project_uuid }}">all events</router-link>
+          <router-link :to="{ name: 'events-per-project', params: { project_uuid: ccpp._id.project_uuid }}">commit events</router-link>
         </td>
       </tr>
       </tbody>
