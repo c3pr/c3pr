@@ -5,6 +5,7 @@ function logFake(callsRecord, lcidGenerator?) {
     const logFunction = function (...a) {
         callsRecord.push(a);
     };
+    // @ts-ignore
     logFunction.lcid = lcidGenerator;
     return logFunction;
 }

@@ -15,7 +15,7 @@ function c3prLOG4(message, options) {
     if (!options.lcid || !options.sha || !options.euuid) {
         throw new Error(`c3prLOG4(): lcid, sha and euuid are mandatory. Full args: ${JSON.stringify(arguments)}`);
     }
-    const unknownKeys = Object.keys(options).filter(key => !["lcid", "sha", "euuid", "level", "meta", "error", "hide"].includes(key));
+    const unknownKeys = Object.keys(options).filter(key => !["lcid", "sha", "euuid", "level", "meta", "error", "hide", "service_name", "caller_name"].includes(key));
     if (unknownKeys.length) {
         throw new Error(`c3prLOG4() has unknown keys.\nAdditional keys passed: ${JSON.stringify(unknownKeys)}.\nFull args: ${JSON.stringify(arguments)}`);
     }
@@ -25,8 +25,8 @@ function c3prLOG4(message, options) {
         lcid: options.lcid,
         sha: options.sha,
         euuid: options.euuid,
-        service_name,
-        caller_name,
+        service_name: options.service_name || service_name,
+        caller_name: options.caller_name || caller_name,
         meta: Object.assign({ stack }, options.meta),
         error: options.error
     });
