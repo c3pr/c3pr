@@ -11,11 +11,18 @@ export default {
         format: 'cjs'
     },
     external: ['events', 'path', 'tty', 'util', 'fs', 'net', 'buffer', 'string_decoder', 'stream', 'zlib', 'querystring', 'url', 'http', 'crypto', 'module', 'tls',
-        'os', 'process', 'dns', 'punycode', 'https', 'dgram', 'assert', 'child_process'],
+        'os', 'process', 'dns', 'punycode', 'https', 'dgram', 'assert', 'child_process', 'domain'],
 
     plugins: [
         resolve(),
-        commonjs(),
+        commonjs({
+            namedExports: {
+                // left-hand side can be an absolute path, a path
+                // relative to the current directory, or the name
+                // of a module in node_modules
+                'node_modules/lru_map/lru.js': [ 'LRUMap' ]
+            }
+        }),
         json(),
         minify(),
         replace({
