@@ -1,5 +1,4 @@
 const c3prHubRegisterNewEvent = require('node-c3pr-hub-client/events/registerNewEvent').default;
-const c3prLOG5 = require("node-c3pr-logger/c3prLOG5").default;
 
 const invokeToolAtGitRepo = require("./invokeToolAtGitRepo");
 
@@ -98,23 +97,23 @@ async function emitToolInvocationFailed(toolInvocationRequestedEvent, failure_me
 // TODO import from client next time version is updated
 const EMPTY_PATCH = () => ({files: {added: [], modified: [], renamed: [], deleted: []}, patch: {hexBase64: '', plain: '', header: '', footer: ''}});
 
-async function handleToolInvocation(toolInvocationRequestedEvent, {lcid, sha, euuid}) {
-    const _c3prLOG5 = c3prLOG5({lcid, sha, euuid});
+async function handleToolInvocation(toolInvocationRequestedEvent, c3prLOG5) {
+    c3prLOG5 = c3prLOG5({caller_name: 'handleToolInvocation'});
     const toolInvocationRequested = toolInvocationRequestedEvent.payload;
 
-    _c3prLOG5(`C-3PR Agent received invocation: ${toolInvocationRequested.tool_id}. Files: ${JSON.stringify(toolInvocationRequested.files)}`, {meta: {toolInvocationRequestedEvent}});
+    c3prLOG5(`C-3PR Agent received invocation: ${toolInvocationRequested.tool_id}. Files: ${JSON.stringify(toolInvocationRequested.files)}`, {meta: {toolInvocationRequestedEvent}});
 
     if (!loadTools.toolsHash[toolInvocationRequested.tool_id]) {
-        _c3prLOG5(`Received tool invocation is not from a tool_id of mine: ${toolInvocationRequested.tool_id}. Skipping.`, {meta: {toolInvocationRequestedEvent}});
+        c3prLOG5(`Received tool invocation is not from a tool_id of mine: ${toolInvocationRequested.tool_id}. Skipping.`, {meta: {toolInvocationRequestedEvent}});
         return {skipped: true};
     }
 
     try {
-        let gitPatchBase64 = await invokeToolAtGitRepo(toolInvocationRequested, loadTools, _c3prLOG5);
-        return await emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, _c3prLOG5);
+        let gitPatchBase64 = await invokeToolAtGitRepo(toolInvocationRequested, loadTools, c3prLOG5);
+        return await emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, c3prLOG5);
     } catch (error) {
-        await emitToolInvocationFailed(toolInvocationRequestedEvent, error.toString(), toolInvocationRequested, _c3prLOG5);
-        return await emitToolInvocationCompleted(toolInvocationRequestedEvent, EMPTY_PATCH(), toolInvocationRequested, _c3prLOG5);
+        await emitToolInvocationFailed(toolInvocationRequestedEvent, error.toString(), toolInvocationRequested, c3prLOG5);
+        return await emitToolInvocationCompleted(toolInvocationRequestedEvent, EMPTY_PATCH(), toolInvocationRequested, c3prLOG5);
     }
 }
 
