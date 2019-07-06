@@ -19,7 +19,7 @@ export default {
         json(),
         minify(),
         replace({
-            __C3PR_AGENT_EXECUTABLE_VERSION__: require('./package.json').version
+            __C3PR_AGENT_BUNDLE_VERSION__: require('./package.json').version
         })
     ],
 };
