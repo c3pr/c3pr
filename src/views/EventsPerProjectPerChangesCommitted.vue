@@ -5,7 +5,10 @@
     <h4>Changes Committed: {{ changes_committed_uuid }}</h4>
     <h4>Project: {{ project_uuid }}</h4>
 
-    <event-list :events="getEventsForProject()"></event-list>
+    <br><br>
+
+    <event-list v-if="loaded" :events="getEventsForProject()"></event-list>
+    <div v-else class="loading">Loading events...</div>
 
   </div>
 </template>
@@ -31,15 +34,18 @@
   },
 
   data() {
-    return {};
+    return {
+      loaded: false
+    };
   },
 
   computed: {
     ...mapGetters(EVENTS, {getEventsForProjectByChangesCommitted: GET_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED})
   },
 
-  mounted() {
-    this.fetchEventsForProjectByChangesCommitted({project_uuid: this.project_uuid, changes_committed_uuid: this.changes_committed_uuid});
+  async mounted() {
+    await this.fetchEventsForProjectByChangesCommitted({project_uuid: this.project_uuid, changes_committed_uuid: this.changes_committed_uuid});
+    this.loaded = true
   },
 
   methods: {

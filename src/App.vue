@@ -34,4 +34,15 @@
   color: #42b983;
   text-decoration: none;
 }
+
+.loading {
+  font-weight: bold;
+  animation: blinker 1.5s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
 </style>
