@@ -110,10 +110,6 @@ export default {
 
 <style scoped>
   td, th { border: 1px solid black; border-collapse: collapse; padding: 0 5px 0 5px }
-  th, .grayed { background-color: #ededed; font-weight: bold; }
+  th { background-color: #ededed; font-weight: bold; }
   table { font-family: monospace; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
-  pre {
-    text-align: initial;
-    white-space: pre-wrap;
-  }
 </style>
