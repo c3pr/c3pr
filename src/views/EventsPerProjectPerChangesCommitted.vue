@@ -30,6 +30,10 @@
       </tbody>
     </table>
 
+    <hr>
+
+    <event-list :events="getEventsForProject()"></event-list>
+
   </div>
 </template>
 
@@ -41,11 +45,12 @@
     GET_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED
   } from "../store/modules/events";
   import EventDetail from '../components/EventDetail.vue';
+  import EventList from "../components/EventList";
 
   export default {
   name: "EventsPerProjectPerChangesCommitted",
 
-  components: {EventDetail},
+  components: {EventDetail, EventList},
 
   props: {
     'project_uuid': String,
