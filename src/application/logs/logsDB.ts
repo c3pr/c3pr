@@ -7,7 +7,7 @@ export async function findLogsBy(query) {
     return (await logs).find(query).toArray();
 }
 export async function findLogsByService(service, date) {
-    return (await logs).find({service_name: service, ...(date && {date_time: {$gte: date}})}).toArray();
+    return (await logs).find({service_name: { $regex : new RegExp("^" + service) }, ...(date && {date_time: {$gte: date}})}).toArray();
 }
 
 export async function findAllLogsForEuuidGraph(euuid: any) {
