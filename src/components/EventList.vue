@@ -23,7 +23,7 @@
         <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
         <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
         <td><router-link :to= "{ name: 'logs-euuid', params: { euuid: event.uuid }}">logs</router-link></td>
-        <td><v-btn color="primary" small @click="eventDisplayedAtDialog = event"><v-icon>local_offer</v-icon>Details</v-btn></td>
+        <td><a href="#" @click.prevent.stop="eventDisplayedAtDialog = event">details</a></td>
       </tr>
       </tbody>
     </table>
