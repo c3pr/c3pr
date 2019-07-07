@@ -71,44 +71,20 @@ export default {
 </script>
 
 <style scoped>
-table.project-table td,
-table.project-table th {
+table td,
+table th {
   border: 1px solid black;
   border-collapse: collapse;
-  padding: 2px;
+  padding: 5px;
 }
 
 th {
   background-color: #ededed;
 }
 
-table.project-table {
-  font-family: sans-serif;
-  font-size: small;
+table {
   border-collapse: collapse;
   margin: auto;
   text-align: left;
-}
-
-.message {
-  text-align: left;
-  font-family: monospace;
-}
-
-.c3pr-repo-github {
-  color: purple;
-}
-
-.c3pr {
-  color: blue;
-}
-
-.c3pr-agent {
-  color: green;
-}
-
-pre {
-  text-align: initial;
-  white-space: pre-wrap;
 }
 </style>

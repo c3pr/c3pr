@@ -51,23 +51,8 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .event-table {
-        margin: 0;
-    }
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+  td, th { border: 1px solid black; border-collapse: collapse; padding: 0 5px 0 5px }
+  th { background-color: #ededed; font-weight: bold; }
+  table { font-family: monospace; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
 </style>
