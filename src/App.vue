@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app style="background: #2b2b2b; color: #bababa;">
+    <v-app dark style="color: #bababa;">
       <div id="nav">
         <router-link to="/">Dashboard</router-link> |
         <router-link to="/projects">Projects</router-link> |

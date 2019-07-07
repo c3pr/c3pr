@@ -13,10 +13,9 @@
         <th>status</th>
         <th>created</th>
         <th>modified</th>
-        <th width="365px">message</th>
-        <th title="Modified Files">Files</th>
-        <th>Events</th>
-        <th>Logs</th>
+        <th width="365px">commit message</th>
+        <th title="Modified Files">files</th>
+        <th>-</th>
       </tr>
       </thead>
       <tbody>
@@ -29,8 +28,10 @@
           {{ event.payload['source-webhook'].commits[0].message.substring(0, 50) }}{{ event.payload['source-webhook'].commits[0].message.length > 50 ? '...' : '' }}
         </td>
         <td :title="event.payload.changed_files.join('\n')">{{ event.payload.changed_files.length }}</td>
-        <td><router-link :to= "{ name: 'events-per-project-per-changes-committed', params: { project_uuid, changes_committed_uuid: event.uuid }}">events for this commit</router-link></td>
-        <td><router-link :to= "{ name: 'logs-euuid', params: { euuid: event.uuid }}">logs</router-link></td>
+        <td>
+          [<router-link :to= "{ name: 'events-per-project-per-changes-committed', params: { project_uuid, changes_committed_uuid: event.uuid }}">events for this commit</router-link>]
+          [<router-link :to= "{ name: 'logs-euuid', params: { euuid: event.uuid }}">logs</router-link>]
+        </td>
       </tr>
       </tbody>
     </table>

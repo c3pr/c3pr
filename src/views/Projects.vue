@@ -9,19 +9,20 @@
           <th>Open PRs</th>
           <th>Merged PRs</th>
           <th>Closed PRs</th>
-          <th>Last Modification</th>
-          <th>-</th>
+          <th>Last Received Commit</th>
           <th>-</th>
         </tr>
         <tr v-for="project in projects" :key="project._id">
           <td>{{project.name}}</td>
           <td><a :href="project.clone_url_http.replace('.git', '')">{{project.clone_url_http}}</a></td>
-          <td><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "open").length }}</a></td>
-          <td><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "merged").length }}</a></td>
-          <td><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "closed").length }}</a></td>
+          <td class="centered"><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "open").length }}</a></td>
+          <td class="centered"><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "merged").length }}</a></td>
+          <td class="centered"><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "closed").length }}</a></td>
           <td>{{ (changesCommittedPerProject.find(ccpp => ccpp._id.project_uuid === project.uuid) || {last_modified: "-"}).last_modified }}</td>
-          <td><router-link :to= "{ name: 'project-details', params: { projectId: project._id, project: project }}">details</router-link></td>
-          <td><router-link :to="{ name: 'events-per-project', params: { project_uuid: project.uuid }}">commit events</router-link></td>
+          <td>
+            [<router-link :to= "{ name: 'project-details', params: { projectId: project._id, project: project }}">details</router-link>]
+            [<router-link :to="{ name: 'events-per-project', params: { project_uuid: project.uuid }}">commit events</router-link>]
+          </td>
         </tr>
       </table>
   </div>
@@ -72,4 +73,5 @@ export default {
 
 <style scoped>
 td, th { padding: 5px; }
+.centered { text-align: center; }
 </style>

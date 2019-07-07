@@ -54,12 +54,11 @@
 <style scoped>
   .message {
     text-align: left; font-family: monospace;
-    color: white;
   }
   .c3pr-hub { background-color: #005900; }
   .c3pr-brain { background-color: #41629c; }
   .c3pr-repo-gitlab { background-color: #544500; }
-  .c3pr-agent, .c3pragent, .evalmachine { background-color: gray; }
+  .c3pr-agent, .c3pragent, .evalmachine { background-color: #111111; }
   .mono {
     text-align: left;
     font-family: monospace;
