@@ -36,6 +36,11 @@
 }
 a {
   color: #a5c261 !important;
+  text-decoration: none;
+}
+a:hover {
+  color: #cc7832 !important;
+  text-decoration: underline;
 }
 
 td, th { border: 1px solid #808080; border-collapse: collapse; padding: 0 5px 0 5px; }
