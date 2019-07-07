@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app>
+    <v-app style="background: #3c3f41; color: #bababa;">
       <div id="nav">
         <router-link to="/">Dashboard</router-link> |
         <router-link to="/projects">Projects</router-link> |
@@ -34,7 +34,9 @@
   color: #42b983;
   text-decoration: none;
 }
-
+a {
+  color: #a5c261 !important;
+}
 .loading {
   font-weight: bold;
   animation: blinker 1.5s linear infinite;
