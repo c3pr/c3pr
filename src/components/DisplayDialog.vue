@@ -55,4 +55,8 @@
   a {
     color: #42b983;
   }
+  pre {
+    text-align: initial;
+    white-space: pre-wrap;
+  }
 </style>
