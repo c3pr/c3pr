@@ -3,7 +3,7 @@
     <div class="text-xs-center">
       <v-dialog :value="shouldDisplay">
         <v-card>
-          <v-card-title class="headline grey lighten-2" primary-title>Details</v-card-title>
+          <v-card-title class="headline grey" primary-title>Details</v-card-title>
           <v-card-text>
             <pre style="font-size: x-small">{{ formattedObjetctDisplayedAtDialog }}</pre>
           </v-card-text>
