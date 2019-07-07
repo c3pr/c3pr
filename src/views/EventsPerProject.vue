@@ -37,6 +37,10 @@
       </tbody>
     </table>
 
+    <hr>
+
+    <event-list :events="getEventsForProject()"></event-list>
+
   </div>
 </template>
 
@@ -44,11 +48,12 @@
 import { mapActions, mapGetters } from 'vuex';
 import { EVENTS, FETCH_EVENTS_FOR_PROJECT, GET_EVENTS_BY_TYPE_FOR_PROJECT } from "../store/modules/events";
 import EventDetail from '../components/EventDetail.vue';
+import EventList from "../components/EventList";
 
 export default {
   name: "Events",
 
-  components: {EventDetail},
+  components: {EventDetail, EventList},
 
   props: {
     'project_uuid': String
