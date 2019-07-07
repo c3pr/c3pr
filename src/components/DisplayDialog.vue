@@ -28,6 +28,9 @@
       },
       formattedObjetctDisplayedAtDialog() {
         if (!this.value) { return ""; }
+        if (typeof this.value === "string") {
+          return this.value;
+        }
         const objectAsString = JSON.stringify(this.value || "", null, 2);
         const withLineBreaks = (objectAsString).replace(/([^\\])(?:\\r)?\\n/g, "$1\n");
         return withLineBreaks.replace(/([^\\])\\t/g, "$1\t");
