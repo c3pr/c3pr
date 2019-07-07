@@ -1,49 +1,17 @@
 <template>
   <div class="about">
 
-    <h1>Logs for Event ({{ getLogsForEvent.length }})</h1>
+    <h1>Logs for Event <span v-if="loaded">({{ getLogsForEvent.length }})</span></h1>
 
     <h3>Event: {{ euuid }} </h3>
 
     <br>
 
-    <table>
-      <thead>
-      <tr>
-        <th>date_time/lcid/sha/euuid</th>
-        <th>service<br>name</th>
-        <th>caller<br>name</th>
-        <th>message</th>
-        <th>error</th>
-        <th>meta</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="log of getLogsForEvent" :class="log.node" :key="log._id">
-        <td class="mono">
-          {{ log.date_time.replace(/[TZ]/g, ' ') }}<br>
-          {{ log.lcid.substr(0, 11) }} {{ (log.sha || '').substr(0, 11) }} {{ log.euuid.substr(0, 11) }}
-        </td>
-        <td>{{ log.service_name }}</td>
-        <td style="font-size: x-small">{{ log.caller_name }}</td>
-        <td :title="log.message" class="message" :class="log.service_name">
-          {{ log.message.substr(0, 70) }}
-          <v-btn v-if="log.message.length > 70" color="primary" icon small @click="objetctDisplayedAtDialog = log.message"><v-icon>message</v-icon></v-btn>
-        </td>
-        <td>
-          <span v-if="log.error"><v-btn color="error" small icon @click="objetctDisplayedAtDialog = log.error"><v-icon>error</v-icon></v-btn></span>
-          <span v-else>(none)</span>
-        </td>
-        <td><v-btn color="primary" icon small @click="objetctDisplayedAtDialog = log.metadata"><v-icon>local_offer</v-icon></v-btn></td>
-      </tr>
-      </tbody>
-    </table>
+    <v-btn v-if="loaded" color="primary" icon small @click="reFetch"><v-icon>refresh</v-icon></v-btn>
 
-    <br>
+    <log-list v-if="loaded" :logs="getLogsForEvent"></log-list>
+    <div v-else class="loading">Loading logs...</div>
 
-    <v-btn color="primary" icon small @click="reFetch"><v-icon>refresh</v-icon></v-btn>
-
-    <display-dialog v-model="objetctDisplayedAtDialog"></display-dialog>
   </div>
 </template>
 
@@ -51,11 +19,12 @@
 import { mapActions, mapGetters } from 'vuex';
 import { LOGS, FETCH_LOGS_FOR_EVENT, GET_LOGS_FOR_EVENT } from "../store/modules/logs";
 import DisplayDialog from '../components/DisplayDialog.vue';
+import LogList from "../components/LogList";
 
 export default {
   name: 'LogsForEvent',
 
-  components: {DisplayDialog},
+  components: {LogList},
 
   props: {
     'euuid': String
@@ -63,7 +32,7 @@ export default {
 
   data() {
     return {
-      objetctDisplayedAtDialog: null
+      loaded: false
     };
   },
 
@@ -78,8 +47,10 @@ export default {
   methods: {
     ...mapActions(LOGS, {fetchLogsForEvent: FETCH_LOGS_FOR_EVENT}),
 
-    reFetch() {
-      this.fetchLogsForEvent(this.euuid);
+    async reFetch() {
+      this.loaded = false;
+      await this.fetchLogsForEvent(this.euuid);
+      this.loaded = true;
     }
   }
 
@@ -90,21 +61,6 @@ export default {
   td, th { border: 1px solid black; border-collapse: collapse; padding: 2px }
   th { background-color: #ededed }
   table { font-family: sans-serif; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
-  .message {
-    text-align: left; font-family: monospace;
-    color: white;
-    padding: 5px
-  }
-  .c3pr-hub { background-color: green; }
-  .c3pr-brain { background-color: cornflowerblue; }
-  .c3pr-repo-gitlab { background-color: orange; }
-  .c3pr-agent { background-color: gray; }
-  .evalmachine { background-color: gray; }
-  .mono {
-    text-align: left;
-    font-family: monospace;
-    font-size: x-small;
-  }
   pre {
     text-align: initial;
     white-space: pre-wrap;

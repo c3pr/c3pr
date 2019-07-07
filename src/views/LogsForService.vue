@@ -1,12 +1,12 @@
 <template>
   <div class="about">
 
-    <h1>Logs for Service ({{ logs.length }})</h1>
+    <h1>Logs for Service <span v-if="loaded">({{ logs.length }})</span></h1>
 
     <h3>Service: {{ service }} </h3>
 
     <br>
-    <v-layout wrap justify-space-between>
+    <v-layout wrap justify-space-between style="margin: 0 20% 0 20%; border: 1px black solid">
       <v-flex xs12 md4>
       <v-select
         v-model="service"
@@ -21,7 +21,7 @@
         label="Date"
       ></v-text-field>
       </v-flex>
-      <v-flex xs12 md4>
+      <v-flex xs12 md2>
         <v-btn
           color="success"
           @click="fetchLogs"
@@ -30,55 +30,26 @@
     </v-layout>
     <br>
 
-    <table>
-      <thead>
-      <tr>
-        <th>date_time</th>
-        <th>lcid/sha/euuid</th>
-        <th>service<br>name</th>
-        <th>message</th>
-        <th>error</th>
-        <th>meta</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="log of logs" :class="log.node" :key="log._id">
-        <td class="mono">
-          {{ log.date_time.replace(/[TZ]/g, ' ') }}<br>
-        </td>
-        <td class="mono">
-          {{ log.lcid.substr(0, 11) }} {{ (log.sha || '').substr(0, 11) }} {{ log.euuid.substr(0, 11) }}
-        </td>
-        <td>{{ log.service_name }}</td>
-        <td :title="log.message" class="message" :class="log.service_name">
-          {{ log.message.substr(0, 100) }}
-          <v-btn v-if="log.message.length > 100" color="primary" icon small class="compact-form" @click="objetctDisplayedAtDialog = log.message"><v-icon>message</v-icon></v-btn>
-        </td>
-        <td>
-          <span v-if="log.error"><v-btn color="error" small icon class="compact-form" @click="objetctDisplayedAtDialog = log.error"><v-icon>error</v-icon></v-btn></span>
-          <span v-else>(none)</span>
-        </td>
-        <td><v-btn color="primary" icon small class="compact-form" @click="objetctDisplayedAtDialog = log"><v-icon>local_offer</v-icon></v-btn></td>
-      </tr>
-      </tbody>
-    </table>
+    <v-btn v-if="loaded" color="primary" icon small @click="fetchLogs"><v-icon>refresh</v-icon></v-btn>
 
-    <br>
+    <log-list v-if="loaded" :logs="logs"></log-list>
+    <div v-else class="loading">Loading logs...</div>
 
-    <v-btn color="primary" icon small @click="fetchLogs"><v-icon>refresh</v-icon></v-btn>
+    <br><br><br>
+    <br><br><br>
 
-    <display-dialog v-model="objetctDisplayedAtDialog"></display-dialog>
   </div>
 </template>
 
 <script>
 import DisplayDialog from '../components/DisplayDialog.vue';
 import logsApi from '../api/logsApi';
+import LogList from "../components/LogList";
 
 export default {
   name: 'LogsForService',
 
-  components: {DisplayDialog},
+  components: {DisplayDialog, LogList},
 
   data() {
     return {
@@ -86,7 +57,8 @@ export default {
       services: ['c3pr-hub', 'c3pr-brain', 'c3pr-dashboard', 'c3pr-repo-gitlab', 'c3pr-agent'],
       service: 'c3pr-hub',
       logs: [],
-      date: this.today()
+      date: this.today(),
+      loaded: false
     };
   },
 
@@ -99,7 +71,12 @@ export default {
 
   methods: {
     async fetchLogs() {
+      this.loaded = false;
       this.logs = await logsApi.findForService(this.service, this.date);
+      if (this.service === 'c3pr-agent') {
+        this.logs = this.logs.concat(await logsApi.findForService('evalmachine', this.date));
+      }
+      this.loaded = true;
     },
 
     today() {
