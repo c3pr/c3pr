@@ -1,11 +1,12 @@
 {
   "name": "c3pr-agent",
-  "version": "20.0.0",
+  "version": "21.0.0",
   "description": "C3PR Container agent",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
     "debug": "node %NODE_DEBUG_OPTION% src/index.js",
+    "debug-bundle": "node %NODE_DEBUG_OPTION% dist/c3pr-agent.js",
     "test": "mocha src/**/*.test.js",
     "bundle": "rollup -c"
   },
@@ -25,7 +26,6 @@
   },
   "homepage": "https://github.com/c3pr/c3pr-agent",
   "dependencies": {
-    "@sentry/node": "^5.4.3",
     "axios": "0.19.0",
     "body-parser": "^1.18.2",
     "chardet": "github:c3pr/node-chardet#v0.5.0-patch",
