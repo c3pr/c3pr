@@ -16,10 +16,10 @@
         <tr v-for="project in projects" :key="project._id">
           <td>{{project.name}}</td>
           <td><a :href="project.clone_url_http.replace('.git', '')">{{project.clone_url_http}}</a></td>
-          <td><a :href="mergeRequestsLink(project)">{{ project.prs.filter(({status}) => status === "open").length }}</a></td>
-          <td><a :href="mergeRequestsLink(project)">{{ project.prs.filter(({status}) => status === "merged").length }}</a></td>
-          <td><a :href="mergeRequestsLink(project)">{{ project.prs.filter(({status}) => status === "closed").length }}</a></td>
-          <td>>{{ (changesCommittedPerProject.find(ccpp => ccpp._id.project_uuid === project.uuid) || {last_modified: "ERROR"}).last_modified }}</td>
+          <td><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "open").length }}</a></td>
+          <td><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "merged").length }}</a></td>
+          <td><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "closed").length }}</a></td>
+          <td>{{ (changesCommittedPerProject.find(ccpp => ccpp._id.project_uuid === project.uuid) || {last_modified: "-"}).last_modified }}</td>
           <td><router-link :to= "{ name: 'project-details', params: { projectId: project._id, project: project }}">details</router-link></td>
           <td><router-link :to="{ name: 'events-per-project', params: { project_uuid: project.uuid }}">commit events</router-link></td>
         </tr>
@@ -41,9 +41,8 @@ export default {
         'Maven',
         'Gradle',
         'Java',
-        'starwars',
         'Vue.js',
-        'JavaScript',
+        'JavaScript ES5',
         'TypeScript',
         'Angular'
       ]
