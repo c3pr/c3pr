@@ -28,13 +28,13 @@
         <td style="font-size: x-small">{{ log.caller_name }}</td>
         <td :title="log.message" class="message" :class="log.service_name">
           {{ log.message.substr(0, 70) }}
-          <v-btn v-if="log.message.length > 70" color="primary" icon small @click="displayAtDialog(log.message)"><v-icon>message</v-icon></v-btn>
+          <v-btn v-if="log.message.length > 70" color="primary" icon small @click="objetctDisplayedAtDialog = log.message"><v-icon>message</v-icon></v-btn>
         </td>
         <td>
-          <span v-if="log.error"><v-btn color="error" small icon @click="displayAtDialog(log.error)"><v-icon>error</v-icon></v-btn></span>
+          <span v-if="log.error"><v-btn color="error" small icon @click="objetctDisplayedAtDialog = log.error"><v-icon>error</v-icon></v-btn></span>
           <span v-else>(none)</span>
         </td>
-        <td><v-btn color="primary" icon small @click="displayAtDialog(log.metadata)"><v-icon>local_offer</v-icon></v-btn></td>
+        <td><v-btn color="primary" icon small @click="objetctDisplayedAtDialog = log.metadata"><v-icon>local_offer</v-icon></v-btn></td>
       </tr>
       </tbody>
     </table>
@@ -43,7 +43,7 @@
 
     <v-btn color="primary" icon small @click="reFetch"><v-icon>refresh</v-icon></v-btn>
 
-    <display-dialog v-model="displayDialog" :content="objetctDisplayedAtDialog"></display-dialog>
+    <display-dialog v-model="objetctDisplayedAtDialog"></display-dialog>
   </div>
 </template>
 
@@ -63,7 +63,6 @@ export default {
 
   data() {
     return {
-      displayDialog: false,
       objetctDisplayedAtDialog: null
     };
   },
@@ -77,12 +76,6 @@ export default {
   },
 
   methods: {
-    displayAtDialog(obj) {
-      this.objetctDisplayedAtDialog = obj;
-      this.displayDialog = false;
-      this.$nextTick(() => this.displayDialog = true)
-    },
-
     ...mapActions(LOGS, {fetchLogsForEvent: FETCH_LOGS_FOR_EVENT}),
 
     reFetch() {

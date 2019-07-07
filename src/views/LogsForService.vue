@@ -52,13 +52,13 @@
         <td>{{ log.service_name }}</td>
         <td :title="log.message" class="message" :class="log.service_name">
           {{ log.message.substr(0, 100) }}
-          <v-btn v-if="log.message.length > 100" color="primary" icon small class="compact-form" @click="displayAtDialog(log.message)"><v-icon>message</v-icon></v-btn>
+          <v-btn v-if="log.message.length > 100" color="primary" icon small class="compact-form" @click="objetctDisplayedAtDialog = log.message"><v-icon>message</v-icon></v-btn>
         </td>
         <td>
-          <span v-if="log.error"><v-btn color="error" small icon class="compact-form" @click="displayAtDialog(log.error)"><v-icon>error</v-icon></v-btn></span>
+          <span v-if="log.error"><v-btn color="error" small icon class="compact-form" @click="objetctDisplayedAtDialog = log.error"><v-icon>error</v-icon></v-btn></span>
           <span v-else>(none)</span>
         </td>
-        <td><v-btn color="primary" icon small class="compact-form" @click="displayAtDialog(log)"><v-icon>local_offer</v-icon></v-btn></td>
+        <td><v-btn color="primary" icon small class="compact-form" @click="objetctDisplayedAtDialog = log"><v-icon>local_offer</v-icon></v-btn></td>
       </tr>
       </tbody>
     </table>
@@ -67,7 +67,7 @@
 
     <v-btn color="primary" icon small @click="fetchLogs"><v-icon>refresh</v-icon></v-btn>
 
-    <display-dialog v-model="displayDialog" :content="objetctDisplayedAtDialog"></display-dialog>
+    <display-dialog v-model="objetctDisplayedAtDialog"></display-dialog>
   </div>
 </template>
 
@@ -82,7 +82,6 @@ export default {
 
   data() {
     return {
-      displayDialog: false,
       objetctDisplayedAtDialog: null,
       services: ['c3pr-hub', 'c3pr-brain', 'c3pr-dashboard', 'c3pr-repo-gitlab', 'c3pr-agent'],
       service: 'c3pr-hub',
@@ -92,7 +91,6 @@ export default {
   },
 
   computed: {
-
   },
 
   mounted() {
@@ -100,12 +98,6 @@ export default {
   },
 
   methods: {
-    displayAtDialog(obj) {
-      this.objetctDisplayedAtDialog = obj;
-      this.displayDialog = false;
-      this.$nextTick(() => this.displayDialog = true)
-    },
-
     async fetchLogs() {
       this.logs = await logsApi.findForService(this.service, this.date);
     },

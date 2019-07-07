@@ -50,17 +50,14 @@
   import {PROJECTS, FETCH_ALL_PROJECTS, GET_ALL_PROJECTS} from "../store/modules/projects";
   import EventDetail from '../components/EventDetail.vue';
   import EventList from '../components/EventList.vue';
-  import DisplayDialog from '../components/DisplayDialog.vue';
 
   export default {
     name: "Events",
 
-    components: {DisplayDialog, EventDetail, EventList},
+    components: {EventDetail, EventList},
 
     data() {
       return {
-        objetctDisplayedAtDialog: null,
-        displayDialog: false
       };
     },
 
