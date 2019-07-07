@@ -4,13 +4,16 @@
     <h1>Projects</h1>
       <table style="margin: auto; margin-top: 10px;">
         <tr>
-          <th>Name</th>
-          <th>Clone-Url</th>
-          <th>Open PRs</th>
-          <th>Merged PRs</th>
-          <th>Closed PRs</th>
-          <th>Last Received Commit</th>
-          <th>-</th>
+          <th rowspan="2">Name</th>
+          <th rowspan="2">Clone-Url</th>
+          <th colspan="3">Pull/Merge Requests</th>
+          <th rowspan="2">Last Received Commit</th>
+          <th rowspan="2">-</th>
+        </tr>
+        <tr>
+          <th>Open</th>
+          <th>Merged</th>
+          <th>Closed</th>
         </tr>
         <tr v-for="project in projects" :key="project._id">
           <td>{{project.name}}</td>
