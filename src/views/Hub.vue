@@ -109,7 +109,4 @@ export default {
 </script>
 
 <style scoped>
-  td, th { border: 1px solid black; border-collapse: collapse; padding: 0 5px 0 5px }
-  th { background-color: #ededed; font-weight: bold; }
-  table { font-family: monospace; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
 </style>

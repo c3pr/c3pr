@@ -88,31 +88,9 @@ export default {
 </script>
 
 <style scoped>
-  td, th { border: 1px solid black; border-collapse: collapse; padding: 2px }
-  th { background-color: #ededed }
   table { font-family: sans-serif; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
-  .message {
-    text-align: left; font-family: monospace;
-    color: white;
-    padding: 5px
-  }
-  .c3pr-hub { background-color: green; }
-  .c3pr-brain { background-color: cornflowerblue; }
-  .c3pr-repo-gitlab { background-color: orange; }
-  .c3pr-agent { background-color: gray; }
-  .evalmachine { background-color: gray; }
-  .mono {
-    text-align: left;
-    font-family: monospace;
-    font-size: x-small;
-  }
   pre {
     text-align: initial;
     white-space: pre-wrap;
-  }
-  .compact-form {
-    height: 4px !important;
-    transform: scale(0.5);
-    transform-origin: left;
   }
 </style>

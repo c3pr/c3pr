@@ -58,8 +58,6 @@ export default {
 </script>
 
 <style scoped>
-  td, th { border: 1px solid black; border-collapse: collapse; padding: 2px }
-  th { background-color: #ededed }
   table { font-family: sans-serif; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
   pre {
     text-align: initial;

@@ -52,21 +52,13 @@
 </script>
 
 <style scoped>
-  td, th { border: 1px solid black; border-collapse: collapse; padding: 0 5px 0 5px }
-  th { background-color: #ededed; font-weight: bold; }
-  table { font-family: monospace; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
-  pre {
-    text-align: initial;
-    white-space: pre-wrap;
-  }
-
   .message {
     text-align: left; font-family: monospace;
     color: white;
   }
-  .c3pr-hub { background-color: green; }
-  .c3pr-brain { background-color: cornflowerblue; }
-  .c3pr-repo-gitlab { background-color: orange; }
+  .c3pr-hub { background-color: #005900; }
+  .c3pr-brain { background-color: #41629c; }
+  .c3pr-repo-gitlab { background-color: #544500; }
   .c3pr-agent, .c3pragent, .evalmachine { background-color: gray; }
   .mono {
     text-align: left;

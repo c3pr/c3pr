@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app style="background: #3c3f41; color: #bababa;">
+    <v-app style="background: #2b2b2b; color: #bababa;">
       <div id="nav">
         <router-link to="/">Dashboard</router-link> |
         <router-link to="/projects">Projects</router-link> |
@@ -37,6 +37,11 @@
 a {
   color: #a5c261 !important;
 }
+
+td, th { border: 1px solid #808080; border-collapse: collapse; padding: 0 5px 0 5px; }
+th { background-color: #2a4847; color: #e8bf6a; font-weight: bold; }
+table { font-family: monospace; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
+
 .loading {
   font-weight: bold;
   animation: blinker 1.5s linear infinite;
