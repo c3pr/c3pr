@@ -5,33 +5,6 @@
     <h4>Changes Committed: {{ changes_committed_uuid }}</h4>
     <h4>Project: {{ project_uuid }}</h4>
 
-    <table>
-      <thead>
-      <tr>
-        <th>uuid</th>
-        <th>event_type</th>
-        <th>status</th>
-        <th>created</th>
-        <th>modified</th>
-        <th>payload</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="event of getEventsForProject()" :class="event.node">
-        <td>{{ event.uuid.split("-")[0] }}</td>
-        <td>{{ event.event_type }}</td>
-        <td>{{ event.meta.status }}</td>
-        <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
-        <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
-
-        <td><router-link :to= "{ name: 'project-details', params: { projectId: event._id, project: event }}">details</router-link></td>
-        <td><router-link :to= "{ name: 'logs-euuid', params: { euuid: event.uuid }}">logs</router-link></td>
-      </tr>
-      </tbody>
-    </table>
-
-    <hr>
-
     <event-list :events="getEventsForProject()"></event-list>
 
   </div>
