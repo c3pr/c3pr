@@ -1,5 +1,8 @@
-import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 import {c3prBusEmit, c3prBusOnNewSubscribers} from "../bus/bus";
+
+import i_c3prLOG5 from "node-c3pr-logger/c3prLOG5";
+// @ts-ignore
+const c3prLOG5 = i_c3prLOG5({service_name: 'c3pr-hub'});
 
 const config = require('../../config');
 
@@ -113,9 +116,12 @@ function patchAsUnprocessed(event_type, uuid, processor_uuid) {
 }
 
 async function broadcastUnprocessedEvents() {
+    const _c3prLOG5 = c3prLOG5({sha: '!hub-events-broadcast-unprocessed-events', caller_name: 'broadcastUnprocessedEvents'});
     const eventTypesWithUnprocessedEvents = Status.getEventTypesWithUnprocessedEvents();
+    _c3prLOG5('Broadcasting now. eventTypesWithUnprocessedEvents: ' + JSON.stringify(eventTypesWithUnprocessedEvents), {meta: {eventTypesWithUnprocessedEvents}});
     for (let event_type of eventTypesWithUnprocessedEvents) {
         const event_payload = await peekUnprocessed(event_type);
+        _c3prLOG5('Peeked ' + event_payload.uuid + ' for ' + event_type + ". Emitting.", {meta: {event_type, event_payload}, lcid: event_payload.uuid, euuid: event_payload.uuid});
         c3prBusEmit(event_type, event_payload);
     }
 }
