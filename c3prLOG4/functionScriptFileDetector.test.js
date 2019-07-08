@@ -49,7 +49,17 @@ const SAMPLE_STACKS = {
     ]
 };
 
-
+function wrapWithStringIncludesAlwaysReturningFalse(fn) {
+    return (...args) => {
+        const includes = String.prototype.includes;
+        String.prototype.includes = () => false;
+        try {
+            return fn(...args);
+        } finally {
+            String.prototype.includes = includes;
+        }
+    };
+}
 
 describe('functionScriptFileDetector', () => {
 
@@ -57,7 +67,7 @@ describe('functionScriptFileDetector', () => {
         function directCall() {
             return functionScriptFileDetector();
         }
-        const out = directCall();
+        const out = wrapWithStringIncludesAlwaysReturningFalse(directCall)();
         delete out.stack;
         expect(out).to.deep.equal({
             service_name: 'node-c3pr-logger',
@@ -72,7 +82,7 @@ describe('functionScriptFileDetector', () => {
         function secondLevelCall() {
             return directCall();
         }
-        const out = secondLevelCall();
+        const out = wrapWithStringIncludesAlwaysReturningFalse(secondLevelCall)();
         delete out.stack;
         expect(out).to.deep.equal({
             service_name: 'node-c3pr-logger',
@@ -84,7 +94,7 @@ describe('functionScriptFileDetector', () => {
         function secondLevelCallArrow() {
             return (() => functionScriptFileDetector())();
         }
-        const out = secondLevelCallArrow();
+        const out = wrapWithStringIncludesAlwaysReturningFalse(secondLevelCallArrow)();
         delete out.stack;
         expect(out).to.deep.equal({
             service_name: 'node-c3pr-logger',
@@ -131,6 +141,29 @@ describe('functionScriptFileDetector', () => {
         it('3', () => {
             const service_name = getServiceName(SAMPLE_STACKS.stack3, '\\/');
             expect(service_name).to.deep.equal("c3pr-repo-gitlab");
+        });
+
+    });
+
+    describe('getServiceName', () => {
+
+        const stack = [
+            "Error: ",
+            "    at getFullStack (/opt/c3pr-brain/node_modules/node-c3pr-logger/c3prLOG4/functionScriptFileDetector.js:8:17)",
+            "    at Object.functionScriptFileDetector [as default] (/opt/c3pr-brain/node_modules/node-c3pr-logger/c3prLOG4/functionScriptFileDetector.js:75:21)",
+            "    at c3prLOG4 (/opt/c3pr-brain/node_modules/node-c3pr-logger/c3prLOG4/index.ts:43:74)",
+            "    at /opt/c3pr-brain/node_modules/node-c3pr-logger/c3prLOG5/index.ts:37:16",
+            "    at nextCall (/opt/c3pr-brain/node_modules/node-c3pr-logger/c3prLOG5/index.ts:45:40)",
+            "    at invokeToolForFiles (/opt/c3pr-brain/src/application/invokeTool/invokeTools.ts:20:5)",
+            "    at /opt/c3pr-brain/src/application/invokeTool/invokeTools.ts:65:50",
+            "    at Array.map (<anonymous>)",
+            "    at Object.<anonymous> (/opt/c3pr-brain/src/application/invokeTool/invokeTools.ts:65:24)",
+            "    at step (/opt/c3pr-brain/src/application/invokeTool/invokeTools.ts:32:23)"
+        ];
+
+        it('1', () => {
+            const caller_name = getCallerName(stack);
+            expect(caller_name).to.deep.equal("invokeToolForFiles");
         });
 
     });

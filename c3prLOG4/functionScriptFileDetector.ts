@@ -30,7 +30,7 @@ const SKIPPED_LINES = 3; // notice the first lines bellow are 'Error' and the ca
  */
 
 const INVALID_NAMES = [
-    'Object.t.default', 't.default', 'Promise.all.then'
+    'Object.t.default', 't.default', 'Promise.all.then', 'nextCall'
 ];
 function transformName(name) {
     if (INVALID_NAMES.includes(name)) {
@@ -42,6 +42,7 @@ export function getCallerName(fullStack: string[], level = 0) {
     let callerName;
     for (let i = SKIPPED_LINES + level; i < fullStack.length; i++) {
         let line = fullStack[i];
+        if (line.includes("node-c3pr-logger")) continue;
         const match = line.match(/at (.*?) \(/);
         if (match && match[1]) {
             if (!INVALID_NAMES.includes(match[1])) {
