@@ -5,7 +5,7 @@ const path = require('path');
 const config = require('../../config');
 const c3prLOG5 = require("node-c3pr-logger/c3prLOG5").default;
 
-const _c3prLOG5 = c3prLOG5({sha: '!load-tools'});
+const _c3prLOG5 = c3prLOG5({sha: '!load-tools', caller_name: 'loadTools'});
 
 function getYamlFiles(dir) {
     const yamlFiles = [];

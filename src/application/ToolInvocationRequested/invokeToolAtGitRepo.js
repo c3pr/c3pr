@@ -21,6 +21,7 @@ function addRepoCredentials(url) {
  * @return {Promise<{files, patch}>}
  */
 async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, c3prLOG5) {
+    c3prLOG5 = c3prLOG5({caller_name: 'invokeToolAtGitRepo'});
 
     c3prLOG5(`Invoking tool at git repo: ${toolInvocationRequested.repository.clone_url_http}`);
 

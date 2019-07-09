@@ -23,6 +23,8 @@ function broadcast(summary, c3prLOG5) {
 }
 
 function hubRegistryBroadcast(c3prLOG5) {
+    c3prLOG5 = c3prLOG5({caller_name: 'hubRegistryBroadcast'});
+
     const summary = loadTools.toolsSummary;
     c3prLOG5(`Now broadcasting to C-3PR HUB's Agent Registry API: ${config.c3pr.hub.agentsUrl}.`, {meta: {summary}});
 
