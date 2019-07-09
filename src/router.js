@@ -10,6 +10,7 @@ import EventsPerProjectPerChangesCommitted from './views/EventsPerProjectPerChan
 import ProjectDetails from './views/ProjectDetails.vue';
 import EventByUuid from "./views/EventByUuid";
 import LogsForService from "./views/LogsForService";
+import Latex from "./views/Latex";
 
 Vue.use(Router);
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/logs',
       name: 'logs',
       component: LogsForService,
+    },
+    {
+      path: '/latex',
+      name: 'latex',
+      component: Latex,
     },
     {
       path: '/projects',

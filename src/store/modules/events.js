@@ -6,6 +6,7 @@ export const EVENTS = 'EVENTS';
 export const FETCH_EVENTS_FOR_PROJECT = 'FETCH_EVENTS_FOR_PROJECT';
 export const FETCH_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED = 'FETCH_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED';
 export const FETCH_CHANGES_COMMITTED_PER_PROJECT = 'FETCH_CHANGES_COMMITTED_PER_PROJECT';
+export const FETCH_TOOL_INVOCATIONS_PER_PROJECT = 'FETCH_TOOL_INVOCATIONS_PER_PROJECT';
 export const PROCESS_EVENTS = 'PROCESS_EVENTS';
 
 export const FETCH_EVENTS_UNPROCESSED_AND_PROCESSING = 'FETCH_EVENTS_UNPROCESSED_AND_PROCESSING';
@@ -13,6 +14,7 @@ export const FETCH_EVENTS_UNPROCESSED_AND_PROCESSING = 'FETCH_EVENTS_UNPROCESSED
 export const GET_EVENTS_BY_TYPE_FOR_PROJECT = 'GET_EVENTS_BY_TYPE_FOR_PROJECT';
 export const GET_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED = 'GET_EVENTS_FOR_PROJECT_BY_CHANGES_COMMITTED';
 export const GET_CHANGES_COMMITTED_PER_PROJECT = 'GET_CHANGES_COMMITTED_PER_PROJECT';
+export const GET_TOOL_INVOCATIONS_PER_PROJECT = 'GET_TOOL_INVOCATIONS_PER_PROJECT';
 
 export const GET_EVENTS = 'GET_EVENTS';
 export const GET_EVENTS_UNPROCESSED = 'GET_EVENTS_UNPROCESSED';
@@ -22,11 +24,13 @@ export const UPDATE_EVENT = 'UPDATE_EVENT';
 export const UPDATE_EVENT_FOR_PROJECT = 'UPDATE_EVENT_FOR_PROJECT';
 export const UPDATE_EVENTS_FOR_PROJECT = 'UPDATE_EVENTS_FOR_PROJECT';
 export const UPDATE_CHANGES_COMMITTED_PER_PROJECT = 'UPDATE_CHANGES_COMMITTED_PER_PROJECT';
+export const UPDATE_TOOL_INVOCATIONS_PER_PROJECT = 'UPDATE_TOOL_INVOCATIONS_PER_PROJECT';
 
 
 const state = {
   eventType: 'ChangesCommitted',
   changesCommittedPerProject: [],
+  toolInvocationRequestedPerProject: [],
   eventsPerProject: {
     /*
     "6068bb20-6145-4e3c-a9d3-2096fd2db24b": { // project key
@@ -46,6 +50,9 @@ function flatten(arrayOfArrays) {
 const getters = {
   [GET_CHANGES_COMMITTED_PER_PROJECT]: state => {
     return state.changesCommittedPerProject;
+  },
+  [GET_TOOL_INVOCATIONS_PER_PROJECT]: state => {
+    return state.toolInvocationRequestedPerProject;
   },
   [GET_EVENTS_BY_TYPE_FOR_PROJECT]: state => (project_uuid, event_type) => {
     return state.eventsPerProject[project_uuid] && state.eventsPerProject[project_uuid][event_type];
@@ -99,6 +106,10 @@ const actions = {
   async [FETCH_CHANGES_COMMITTED_PER_PROJECT]({ state, commit }) {
     const changesCommittedPerProject = await eventsApi.perProjectEventCountOfType('ChangesCommitted');
     commit(UPDATE_CHANGES_COMMITTED_PER_PROJECT, changesCommittedPerProject);
+  },
+  async [FETCH_TOOL_INVOCATIONS_PER_PROJECT]({ state, commit }) {
+    const toolInvocationRequestedPerProject = await eventsApi.perProjectEventCountOfType('ToolInvocationRequested');
+    commit(UPDATE_TOOL_INVOCATIONS_PER_PROJECT, toolInvocationRequestedPerProject);
   }
 };
 
@@ -128,6 +139,9 @@ const mutations = {
   },
   [UPDATE_CHANGES_COMMITTED_PER_PROJECT](state, changesCommittedPerProject) {
     state.changesCommittedPerProject = changesCommittedPerProject;
+  },
+  [UPDATE_TOOL_INVOCATIONS_PER_PROJECT](state, toolInvocationRequestedPerProject) {
+    state.toolInvocationRequestedPerProject = toolInvocationRequestedPerProject;
   }
 };
 
