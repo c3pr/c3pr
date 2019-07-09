@@ -22,9 +22,15 @@ async function findAll(query = {}) {
 }
 
 async function perProjectEventCountOfType(event_type) {
+    if (event_type === 'ChangesCommitted') {
+        return (await events).aggregate([
+            {$match: {event_type}},
+            {$group: {_id: {project_uuid: "$payload.project_uuid"}, count: {$sum: 1}, last_modified: {$max: "$meta.modified"}}},
+        ]).toArray();
+    }
     return (await events).aggregate([
         {$match: {event_type}},
-        {$group: {_id: {project_uuid: "$payload.project_uuid"}, count: {$sum: 1}, last_modified: {$max: "$meta.modified"}}},
+        {$group: {_id: {project_url: "$payload.repository.clone_url_http"}, count: {$sum: 1}, last_modified: {$max: "$meta.modified"}}},
     ]).toArray();
 }
 
