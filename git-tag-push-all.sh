@@ -31,3 +31,6 @@ git tag $(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' package.json)
 # git push --tags
 
 # cd ../c3pr-tool-walkmod-sonar
+
+echo ''
+read -n1 -r -p "Press any key to exit..." key
