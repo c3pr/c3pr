@@ -50,6 +50,9 @@ const mutations = {
   },
 
   [UPDATE_PRS_FOR_PROJECT](state, {project_uuid, prs}) {
+    prs._open = prs.filter(({status}) => status === "open").length;
+    prs._merged = prs.filter(({status}) => status === "merged").length;
+    prs._closed = prs.filter(({status}) => status === "closed").length;
     Vue.set(state.prs, project_uuid, prs);
   }
 };

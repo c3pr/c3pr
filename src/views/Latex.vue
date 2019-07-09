@@ -33,19 +33,20 @@ this.projects.length +
 \\begin{table}[]
 \\centering
 \\resizebox{\\textwidth}{!}{%
-\\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
 \\hline
-\\multirow{2}{*}{Project} & \\multicolumn{3}{l|}{Pull Requests} & \\multirow{2}{*}{KLOCs} & \\multirow{2}{*}{Tags} & \\multirow{2}{*}{Commits} & \\multirow{2}{*}{\\begin{tabular}[c]{@{}l@{}}Tool\\\\ Invocations\\end{tabular}} \\\\ \\cline{2-4}
-                         & Open     & Merged     & Closed     &                        &                       &                          &                                                                             \\\\ \\hline
+\\multirow{2}{*}{Project} & \\multicolumn{4}{l|}{Pull Requests} & \\multirow{2}{*}{KLOCs} & \\multirow{2}{*}{Tags} & \\multirow{2}{*}{Commits} & \\multirow{2}{*}{\\begin{tabular}[c]{@{}l@{}}Tool\\\\ Invocations\\end{tabular}} \\\\ \\cline{2-4}
+                         & Open     & Merged     & Closed     & Total     &                        &                       &                          &                                                                             \\\\ \\hline
 ${this.projects.map(p =>
   p.name + " & " +
-  p.prs.filter(({status}) => status === "open").length + " & " +
-  p.prs.filter(({status}) => status === "merged").length + " & " +
-  p.prs.filter(({status}) => status === "closed").length + " & " +
-  " klocs " + " & " +
-  " lang " + " & " +
-  this.changesCommittedPerProject.filter(ccpp => ccpp._id.project_uuid === p.uuid).length + " & " +
-  this.toolInvocationsPerProject.filter(ccpp => ccpp._id.project_uuid === p.uuid).length +
+  p.prs._open + " & " +
+  p.prs._merged + (!p.prs._merged ? '' : " (" + (p.prs._merged / (p.prs._merged + p.prs._closed) * 100).toFixed(0) + "%)") + " & " +
+  p.prs._closed + (!p.prs._closed ? '' : " (" + (p.prs._closed / (p.prs._merged + p.prs._closed) * 100).toFixed(0) + "%)") + " & " +
+  p.prs.length + " & " +
+  (p.klocs || '?') + " & " +
+  p.tags.join(", ") + " & " +
+  (this.changesCommittedPerProject.find(ccpp => ccpp._id.project_uuid === p.uuid) || {count:0}).count + " & " +
+    (this.toolInvocationsPerProject.find(tipp => tipp._id.project_url === p.clone_url_http) || {count:0}).count +
   "  \\\\ \\hline \n"
 ).join("")}
 \\end{tabular}%
