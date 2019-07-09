@@ -8,7 +8,7 @@ const config = require('../../config');
 
 const uuidv4 = require('uuid/v4');
 const eventsDB = require('./eventsDB');
-const Status = require('./status');
+import Status from './status';
 const assert = require('assert');
 
 c3prBusOnNewSubscribers(async (event_type) => {
@@ -24,7 +24,6 @@ async function register(event_type, payload) {
     let status = Status.UNPROCESSED;
 
     await eventsDB.insert({uuid, event_type, meta: {status, processor_uuid: null, created: new Date().toISOString()}, payload});
-    Status.addAsUnprocessed(event_type, uuid);
 
     c3prBusEmit(event_type, {uuid, payload});
 
@@ -37,10 +36,8 @@ async function reprocessParents(event_type) {
     let events = await findAll({event_type, "meta.status": Status.UNPROCESSED});
     for(let e of events) {
         await patchAsProcessing(e.event_type, e.uuid, REPROCESS_PROCESSOR_UUID);
-        let parentEventType = e.payload.parent.event_type;
         let parentUUID = e.payload.parent.uuid;
 
-        Status.markForReprocessing(parentEventType, parentUUID, '<REPROCESS>');
         await eventsDB.persistAsUnprocessed(parentUUID);
 
         const sha = (e.payload.repository && e.payload.repository.revision) || 'unknown';
@@ -70,58 +67,36 @@ function findAllOfType(event_type, query) {
     return eventsDB.findAllOfType(event_type, query);
 }
 
-function peekUnprocessed(event_type) {
+async function peekUnprocessed(event_type) {
     assert.ok(event_type, "event_type is required");
-    let uuid = Status.peekUnprocessedEventOfType(event_type);
-    if (!uuid) {
+    const unprocessedEventOfType = await eventsDB.findAll({'meta.status': Status.UNPROCESSED, event_type});
+    let first = unprocessedEventOfType[0];
+    if (!first) {
         return Promise.resolve(null);
     }
-    return eventsDB.find(uuid);
+    return eventsDB.find(first.uuid);
 }
 
 function patchAsProcessing(event_type, uuid, processor_uuid) {
     assert.ok(event_type && uuid && processor_uuid, "Missing required arguments");
-    Status.addAsProcessing(event_type, uuid, processor_uuid);
     return eventsDB.persistAsProcessing(uuid, processor_uuid);
 }
 
-/**
- * If the uuid is not at EVENTS_PROCESSING, it errors.
- */
 async function patchAsProcessed(event_type, uuid, processor_uuid) {
-    assert.ok(event_type && uuid && processor_uuid, "Missing required arguments");
-    if (!Status.currentlyProcessing(event_type, uuid)) {
-        let evt = await eventsDB.find(uuid);
-        if (!evt) {
-            throw new Error(`Event of UUID '${uuid}' and type '${event_type}' doesn't exist.`)
-        }
-        if (evt.meta.status === Status.PROCESSED && evt.meta.processor_uuid === processor_uuid) {
-            return;
-        }
-        if (evt.meta.status === Status.PROCESSED && evt.meta.processor_uuid !== processor_uuid) {
-            throw new Error(`Event of UUID '${uuid}' and type '${event_type}' has been processed by a different processor_uuid: ${evt.meta.processor_uuid}. processor_uuid you sent me: ${processor_uuid}.`)
-        }
-    }
-    Status.removeAsProcessing(event_type, uuid, processor_uuid);
     return eventsDB.persistAsProcessed(uuid, processor_uuid);
 }
 
-// noinspection JSUnusedLocalSymbols
-function patchAsUnprocessed(event_type, uuid, processor_uuid) {
-    // TODO maybe only mark it as unprocessed if processor_uuid is the same (this makes sense when we call this function from the controller. don't know if it makes sense for the other places)
-    assert.ok(event_type && uuid, "Missing required arguments");
-    Status.removeAsProcessing(event_type, uuid, '<TIMED_OUT>');
-    Status.addAsUnprocessed(event_type, uuid);
-    return eventsDB.persistAsUnprocessed(uuid);
+function patchAsUnprocessed(event_type, uuid, processor_uuid?) {
+    return eventsDB.persistAsUnprocessed(uuid, processor_uuid);
 }
 
 async function broadcastUnprocessedEvents() {
     const _c3prLOG5 = c3prLOG5({sha: '!hub-events-broadcast-unprocessed-events', caller_name: 'broadcastUnprocessedEvents'});
-    const eventTypesWithUnprocessedEvents = Status.getEventTypesWithUnprocessedEvents();
-    _c3prLOG5('Broadcasting now. eventTypesWithUnprocessedEvents: ' + JSON.stringify(eventTypesWithUnprocessedEvents), {meta: {eventTypesWithUnprocessedEvents}});
-    for (let event_type of eventTypesWithUnprocessedEvents) {
-        const event_payload = await peekUnprocessed(event_type);
-        _c3prLOG5('Peeked ' + event_payload.uuid + ' for ' + event_type + ". Emitting.", {meta: {event_type, event_payload}, lcid: event_payload.uuid, euuid: event_payload.uuid});
+    const unprocessedEvents = await eventsDB.findAllOfStatus(Status.UNPROCESSED);
+    _c3prLOG5('Broadcasting now. '+unprocessedEvents.length+' unprocessed events.', {meta: {unprocessedEvents}});
+    for (let event_payload of unprocessedEvents) {
+        const event_type = event_payload.event_type;
+        _c3prLOG5('Fetched ' + event_payload.uuid + ' for ' + event_type + ". Emitting.", {meta: {event_type, event_payload}, lcid: event_payload.uuid, euuid: event_payload.uuid});
         c3prBusEmit(event_type, event_payload);
     }
 }
@@ -131,14 +106,10 @@ async function initializeEventsOnStartup() {
     _c3prLOG5('Initializing events status database.');
 
     const previouslyUnprocessedEvents = await eventsDB.findAllOfStatus(Status.UNPROCESSED);
-    previouslyUnprocessedEvents.forEach(({event_type, uuid}) => Status.addAsUnprocessed(event_type, uuid));
 
     const previouslyProcessingEvents = await eventsDB.findAllOfStatus(Status.PROCESSING);
-    previouslyProcessingEvents.forEach(({event_type, uuid}) => {
-        Status.addAsUnprocessed(event_type, uuid);
-        // noinspection JSIgnoredPromiseFromCall
-        eventsDB.persistAsUnprocessed(uuid);
-    });
+    previouslyProcessingEvents.forEach(({event_type, uuid}) => eventsDB.persistAsUnprocessed(uuid));
+
     const previouslyUnprocessedEventTypes = Array.from(new Set(previouslyUnprocessedEvents.map(e => e.event_type)));
     _c3prLOG5(
         `Initialization complete. Previously UNPROCESSED events: ${previouslyUnprocessedEvents.length} [${previouslyUnprocessedEventTypes}]. Previously PROCESSING events: ${previouslyProcessingEvents.length}`,
@@ -148,13 +119,14 @@ async function initializeEventsOnStartup() {
     /**
      * Marks as UNPROCESSED all events that have status = PROCESSING for longer than config.c3pr.hub.uncollectTimeoutInMs.
      */
-    setTimeout(() => {
-        const allTimedOut = Status.retrieveAllTimedOut(config.c3pr.hub.uncollectTimeoutInMs);
+    setTimeout(async () => {
+        const allTimedOut = await eventsDB.findAll({"meta.modified" : { $lte : new Date(Date.now() - config.c3pr.hub.uncollectTimeoutInMs)}});
         allTimedOut.forEach(({event_type, uuid}) => patchAsUnprocessed(event_type, uuid, 'uncollect-timeout'))
     }, config.c3pr.hub.uncollectPollingInMs).unref();
 
-
     setInterval(broadcastUnprocessedEvents, config.c3pr.hub.broadcastIntervalInMs).unref();
+
+    // no good in broadcasting right now, as there most probably won't exist no node connected to this new instance of the HUB
 }
 
 export = {

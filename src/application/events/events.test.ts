@@ -6,7 +6,7 @@ config.c3pr.hub.mongoEventsCollection += "-test";
 
 const events = require('./events');
 const eventsDB = require('./eventsDB');
-const Status = require('./status');
+import Status from './status';
 
 describe('events', function () {
 
