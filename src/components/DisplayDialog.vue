@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-xs-center">
-      <v-dialog :value="shouldDisplay">
+      <v-dialog :value="shouldDisplay" @keydown.esc="$emit('input', null)">
         <v-card>
           <v-card-title class="headline grey" primary-title>Details</v-card-title>
           <v-card-text>
