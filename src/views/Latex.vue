@@ -30,18 +30,18 @@
         'pre',
 this.projects.length +
 `
-\\begin{table}[]
+\\begin{table}[h]
 \\centering
 \\resizebox{\\textwidth}{!}{%
 \\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
 \\hline
-\\multirow{2}{*}{Project} & \\multicolumn{4}{l|}{Pull Requests} & \\multirow{2}{*}{KLOCs} & \\multirow{2}{*}{Tags} & \\multirow{2}{*}{Commits} & \\multirow{2}{*}{\\begin{tabular}[c]{@{}l@{}}Tool\\\\ Invocations\\end{tabular}} \\\\ \\cline{2-4}
+\\multirow{2}{*}{Project} & \\multicolumn{4}{l|}{Pull Requests} & \\multirow{2}{*}{KLOCs} & \\multirow{2}{*}{Tags} & \\multirow{2}{*}{Commits} & \\multirow{2}{*}{\\begin{tabular}[c]{@{}l@{}}Tool\\\\ Invocations\\end{tabular}} \\\\ \\cline{2-5}
                          & Open     & Merged     & Closed     & Total     &                        &                       &                          &                                                                             \\\\ \\hline
 ${this.projects.map(p =>
   (p.short_name || p.name) + " & " +
   p.prs._open + " & " +
-  p.prs._merged + (!p.prs._merged ? '' : " (" + (p.prs._merged / (p.prs._merged + p.prs._closed) * 100).toFixed(0) + "%)") + " & " +
-  p.prs._closed + (!p.prs._closed ? '' : " (" + (p.prs._closed / (p.prs._merged + p.prs._closed) * 100).toFixed(0) + "%)") + " & " +
+  p.prs._merged + (!p.prs._merged ? '' : " (" + (p.prs._merged / (p.prs._merged + p.prs._closed) * 100).toFixed(0) + "\\%)") + " & " +
+  p.prs._closed + (!p.prs._closed ? '' : " (" + (p.prs._closed / (p.prs._merged + p.prs._closed) * 100).toFixed(0) + "\\%)") + " & " +
   p.prs.length + " & " +
   (p.klocs || '?') + " & " +
   p.tags.join(", ") + " & " +
