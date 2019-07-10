@@ -40,7 +40,7 @@ function removeAllAgents() {
 setInterval(removeExpiredAgents, config.c3pr.hub.agentRegistry.cleanRegistryStepInMs).unref();
 
 export = {
-    init: removeExpiredAgents().then(async () => { c3prLOG5(`Agents initialized. Database has ${(await agentRegistryDB.findAll()).length} agents.`, {sha: '!hub-agent-registry'}); }),
+    init: removeExpiredAgents().then(async () => { c3prLOG5(`Agents initialized. Database has ${(await agentRegistryDB.findAll()).length} agents.`, {caller_name: 'agentRegistry.ts', sha: '!hub-agent-registry'}); }),
     putAgent,
     findAll: agentRegistryDB.findAll,
     removeAllAgents
