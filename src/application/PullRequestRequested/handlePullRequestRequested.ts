@@ -23,7 +23,7 @@ export async function handlePullRequestRequested({lcid, sha, euuid}): Promise<an
     }
 }
 
-async function handlerFunction(pullRequestRequestedEvent: Event<any>, {lcid, sha, euuid}) {
+async function handlerFunction(pullRequestRequestedEvent: Event<any>, {lcid, sha, euuid}): Promise<any> {
     const _c3prLOG5 = c3prLOG5({lcid, sha, euuid});
     const prr = pullRequestRequestedEvent.payload;
     const repository = prr.repository;
