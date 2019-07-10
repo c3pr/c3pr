@@ -1,6 +1,6 @@
 {
   "name": "c3pr-repo-gitlab",
-  "version": "18.0.0",
+  "version": "19.0.0",
   "description": "C3PR Repository Adapter for GitLab",
   "scripts": {
     "start": "node --require ts-node/register src/index.ts",
