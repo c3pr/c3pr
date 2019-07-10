@@ -44,6 +44,7 @@ async function filterFilesChangedInThisCommitThatDontHaveOpenPRs(changesCommitte
 
 
 async function invokeTools({parentEvent, changesCommittedRootEuuid, repository}, filesChangedInThisCommit, c3prLOG5) {
+    c3prLOG5 = c3prLOG5({caller_name: 'invokeTools'});
 
     const availableToolsNotYetInvokedForThisCommit = await fetchToolsNotYetInvokedForCommit(changesCommittedRootEuuid, c3prLOG5);
     if (!availableToolsNotYetInvokedForThisCommit.length) { return []; }
