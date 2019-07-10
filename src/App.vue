@@ -9,8 +9,8 @@
         <router-link to="/logs">Logs</router-link>
       </div>
       <router-view/>
+      <br><br><br>
     </v-app>
-    <br><br><br>
   </div>
 </template>
 

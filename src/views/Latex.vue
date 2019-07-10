@@ -38,7 +38,7 @@ this.projects.length +
 \\multirow{2}{*}{Project} & \\multicolumn{4}{l|}{Pull Requests} & \\multirow{2}{*}{KLOCs} & \\multirow{2}{*}{Tags} & \\multirow{2}{*}{Commits} & \\multirow{2}{*}{\\begin{tabular}[c]{@{}l@{}}Tool\\\\ Invocations\\end{tabular}} \\\\ \\cline{2-4}
                          & Open     & Merged     & Closed     & Total     &                        &                       &                          &                                                                             \\\\ \\hline
 ${this.projects.map(p =>
-  p.name + " & " +
+  (p.short_name || p.name) + " & " +
   p.prs._open + " & " +
   p.prs._merged + (!p.prs._merged ? '' : " (" + (p.prs._merged / (p.prs._merged + p.prs._closed) * 100).toFixed(0) + "%)") + " & " +
   p.prs._closed + (!p.prs._closed ? '' : " (" + (p.prs._closed / (p.prs._merged + p.prs._closed) * 100).toFixed(0) + "%)") + " & " +
