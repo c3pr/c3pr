@@ -43,7 +43,7 @@ ${this.projects.map(p =>
   p.prs._merged + (!p.prs._merged ? '' : " (" + (p.prs._merged / (p.prs._merged + p.prs._closed) * 100).toFixed(0) + "\\%)") + " & " +
   p.prs._closed + (!p.prs._closed ? '' : " (" + (p.prs._closed / (p.prs._merged + p.prs._closed) * 100).toFixed(0) + "\\%)") + " & " +
   p.prs.length + " & " +
-  (p.klocs || '?') + " & " +
+  (p.locs || '?') + " & " +
   p.tags.join(", ") + " & " +
   (this.changesCommittedPerProject.find(ccpp => ccpp._id.project_uuid === p.uuid) || {count:0}).count + " & " +
     (this.toolInvocationsPerProject.find(tipp => tipp._id.project_url === p.clone_url_http) || {count:0}).count +
