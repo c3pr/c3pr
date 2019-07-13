@@ -2,74 +2,29 @@ import {ImportMock} from 'ts-mock-imports';
 import {expect} from 'chai';
 import calculatePreferences from "./calculatePreferences";
 import * as eventsDBModule from "../events/eventsDB";
-
-
-const project_clone_url = 'http://git.example.com/some-project.git';
-const ppus = [
-    {
-        project_clone_url,
-        event_type: 'ProjectPreferencesUpdated',
-        command: 'UPDATE_WEIGHT_PROJECT_WIDE',
-        arguments: {tool_id: 'tool:a', weight_modification: -1}
-    },
-    {
-        project_clone_url,
-        event_type: 'ProjectPreferencesUpdated',
-        command: 'UPDATE_WEIGHT_PER_FILE',
-        arguments: {tool_id: 'tool:a', file_path: 'src/main/java/com/example/Main.java', weight_modification: -6}
-    },
-    {
-        project_clone_url,
-        event_type: 'ProjectPreferencesUpdated',
-        command: 'UPDATE_WEIGHT_PER_FILE',
-        arguments: {tool_id: 'tool:a', file_path: 'src/main/java/com/example/Main.java', weight_modification: -4}
-    },
-    {
-        project_clone_url,
-        event_type: 'ProjectPreferencesUpdated',
-        command: 'DISABLE_TOOL_PROJECT_WIDE',
-        arguments: {tool_id: 'tool:b'}
-    },
-    {
-        project_clone_url,
-        event_type: 'ProjectPreferencesUpdated',
-        command: 'DISABLE_TOOL_PER_FILE',
-        arguments: {tool_id: 'tool:c', file_path: 'src/main/java/com/example/Main.java'}
-    },
-    {
-        project_clone_url,
-        event_type: 'ProjectPreferencesUpdated',
-        command: 'DISABLE_TOOL_PER_FILE',
-        arguments: {tool_id: 'tool:d', file_path: 'src/main/java/com/example/Main.java'}
-    },
-    {
-        project_clone_url,
-        event_type: 'ProjectPreferencesUpdated',
-        command: 'ENABLE_TOOL_PER_FILE',
-        arguments: {tool_id: 'tool:d', file_path: 'src/main/java/com/example/Main.java'}
-    },
-    {
-        project_clone_url,
-        event_type: 'ProjectPreferencesUpdated',
-        command: 'DISABLE_TOOL_PROJECT_WIDE',
-        arguments: {tool_id: 'tool:e'}
-    },
-    {
-        project_clone_url,
-        event_type: 'ProjectPreferencesUpdated',
-        command: 'ENABLE_TOOL_PROJECT_WIDE',
-        arguments: {tool_id: 'tool:e'}
-    }
-];
+import updatePreferences from "./updatePreferences";
 
 describe('calculatePreferences', () => {
+    const project_clone_url = 'http://git.example.com/some-project.git';
+
     let eventsDBMockManager;
     beforeEach('mock setup', () => eventsDBMockManager = ImportMock.mockStaticClass(eventsDBModule));
     afterEach('mock teardown', () => eventsDBMockManager.restore());
 
-
     it('calculatePreferences', async () => {
+        const ppus = [];
+        eventsDBMockManager.replace('insert', s => ppus.push(s));
         eventsDBMockManager.mock('findAll', Promise.resolve(ppus));
+
+        await updatePreferences.updateWeightProjectWide(project_clone_url, 'tool:a', -1);
+        await updatePreferences.updateWeightPerFile(project_clone_url, 'src/main/java/com/example/Main.java', 'tool:a', -6);
+        await updatePreferences.updateWeightPerFile(project_clone_url, 'src/main/java/com/example/Main.java', 'tool:a', -4);
+        await updatePreferences.disableToolProjectWide(project_clone_url, 'tool:b');
+        await updatePreferences.disableToolPerFile(project_clone_url, 'src/main/java/com/example/Main.java', 'tool:c');
+        await updatePreferences.disableToolPerFile(project_clone_url, 'src/main/java/com/example/Main.java', 'tool:d');
+        await updatePreferences.enableToolPerFile(project_clone_url, 'src/main/java/com/example/Main.java', 'tool:d');
+        await updatePreferences.disableToolProjectWide(project_clone_url, 'tool:e');
+        await updatePreferences.enableToolProjectWide(project_clone_url, 'tool:e');
 
         const expectedPrefs = {
             project_wide: {
