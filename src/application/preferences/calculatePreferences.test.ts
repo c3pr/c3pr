@@ -1,6 +1,6 @@
 import {ImportMock} from 'ts-mock-imports';
 import {expect} from 'chai';
-import preferencesForProject from "./preferencesForProject";
+import calculatePreferences from "./calculatePreferences";
 import * as eventsDBModule from "../events/eventsDB";
 
 
@@ -86,7 +86,7 @@ describe('preferencesForProject', function () {
                 }
             }
         };
-        let actualPrefs = await preferencesForProject('http://git.example.com/some-project.git');
+        let actualPrefs = await calculatePreferences('http://git.example.com/some-project.git');
 
         expect(actualPrefs).to.deep.equal(expectedPrefs);
     });

@@ -10,7 +10,7 @@ export interface ProjectPreferences {
     per_file: { [file_path: string]: { [tool_id: string]: ToolPreferences } };
 }
 
-export default async function preferencesForProject(cloneUrl: string): Promise<ProjectPreferences> {
+export default async function calculatePreferences(cloneUrl: string): Promise<ProjectPreferences> {
     const ppus = await eventsDB.findAll({project_clone_url: cloneUrl, event_type: 'ProjectPreferencesUpdated'});
 
     const prefs: ProjectPreferences = {
