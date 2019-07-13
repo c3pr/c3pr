@@ -10,19 +10,19 @@ const ppus = [
         project_clone_url,
         event_type: 'ProjectPreferencesUpdated',
         command: 'UPDATE_WEIGHT_PROJECT_WIDE',
-        arguments: {tool_id: 'tool:a', amount: -1}
+        arguments: {tool_id: 'tool:a', weight_modification: -1}
     },
     {
         project_clone_url,
         event_type: 'ProjectPreferencesUpdated',
         command: 'UPDATE_WEIGHT_PER_FILE',
-        arguments: {tool_id: 'tool:a', file_path: 'src/main/java/com/example/Main.java', amount: -6}
+        arguments: {tool_id: 'tool:a', file_path: 'src/main/java/com/example/Main.java', weight_modification: -6}
     },
     {
         project_clone_url,
         event_type: 'ProjectPreferencesUpdated',
         command: 'UPDATE_WEIGHT_PER_FILE',
-        arguments: {tool_id: 'tool:a', file_path: 'src/main/java/com/example/Main.java', amount: -4}
+        arguments: {tool_id: 'tool:a', file_path: 'src/main/java/com/example/Main.java', weight_modification: -4}
     },
     {
         project_clone_url,
@@ -62,13 +62,13 @@ const ppus = [
     }
 ];
 
-describe('calculatePreferences', function () {
+describe('calculatePreferences', () => {
     let eventsDBMockManager;
     beforeEach('mock setup', () => eventsDBMockManager = ImportMock.mockStaticClass(eventsDBModule));
     afterEach('mock teardown', () => eventsDBMockManager.restore());
 
 
-    it('calculatePreferences', async function () {
+    it('calculatePreferences', async () => {
         eventsDBMockManager.mock('findAll', Promise.resolve(ppus));
 
         const expectedPrefs = {

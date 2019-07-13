@@ -30,11 +30,11 @@ export default async function calculatePreferences(cloneUrl: string): Promise<Pr
         switch (currentValue.command) {
             case 'UPDATE_WEIGHT_PROJECT_WIDE':
                 initPerProject(previousValue, currentValue.arguments.tool_id);
-                previousValue.project_wide[currentValue.arguments.tool_id].weight_modification += currentValue.arguments.amount;
+                previousValue.project_wide[currentValue.arguments.tool_id].weight_modification += currentValue.arguments.weight_modification;
                 break;
             case 'UPDATE_WEIGHT_PER_FILE':
                 initPerTool(previousValue, currentValue.arguments.file_path, currentValue.arguments.tool_id);
-                previousValue.per_file[currentValue.arguments.file_path][currentValue.arguments.tool_id].weight_modification += currentValue.arguments.amount;
+                previousValue.per_file[currentValue.arguments.file_path][currentValue.arguments.tool_id].weight_modification += currentValue.arguments.weight_modification;
                 break;
             case 'DISABLE_TOOL_PROJECT_WIDE':
                 initPerProject(previousValue, currentValue.arguments.tool_id);
