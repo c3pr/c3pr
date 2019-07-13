@@ -1,4 +1,5 @@
 import eventsDB from "../events/eventsDB";
+import {PPU_ACTIONS} from "./updatePreferences";
 
 export interface ToolPreferences {
     weight_modification: number;
@@ -28,29 +29,29 @@ export default async function calculatePreferences(cloneUrl: string): Promise<Pr
 
     return ppus.reduce((previousValue: ProjectPreferences, currentValue) => {
         switch (currentValue.command) {
-            case 'UPDATE_WEIGHT_PROJECT_WIDE':
-                initPerProject(previousValue, currentValue.arguments.tool_id);
-                previousValue.project_wide[currentValue.arguments.tool_id].weight_modification += currentValue.arguments.weight_modification;
+            case PPU_ACTIONS.UPDATE_WEIGHT_PROJECT_WIDE:
+                initPerProject(previousValue, currentValue.args.tool_id);
+                previousValue.project_wide[currentValue.args.tool_id].weight_modification += currentValue.args.weight_modification;
                 break;
-            case 'UPDATE_WEIGHT_PER_FILE':
-                initPerTool(previousValue, currentValue.arguments.file_path, currentValue.arguments.tool_id);
-                previousValue.per_file[currentValue.arguments.file_path][currentValue.arguments.tool_id].weight_modification += currentValue.arguments.weight_modification;
+            case PPU_ACTIONS.UPDATE_WEIGHT_PER_FILE:
+                initPerTool(previousValue, currentValue.args.file_path, currentValue.args.tool_id);
+                previousValue.per_file[currentValue.args.file_path][currentValue.args.tool_id].weight_modification += currentValue.args.weight_modification;
                 break;
-            case 'DISABLE_TOOL_PROJECT_WIDE':
-                initPerProject(previousValue, currentValue.arguments.tool_id);
-                previousValue.project_wide[currentValue.arguments.tool_id].enabled = false;
+            case PPU_ACTIONS.DISABLE_TOOL_PROJECT_WIDE:
+                initPerProject(previousValue, currentValue.args.tool_id);
+                previousValue.project_wide[currentValue.args.tool_id].enabled = false;
                 break;
-            case 'DISABLE_TOOL_PER_FILE':
-                initPerTool(previousValue, currentValue.arguments.file_path, currentValue.arguments.tool_id);
-                previousValue.per_file[currentValue.arguments.file_path][currentValue.arguments.tool_id].enabled = false;
+            case PPU_ACTIONS.DISABLE_TOOL_PER_FILE:
+                initPerTool(previousValue, currentValue.args.file_path, currentValue.args.tool_id);
+                previousValue.per_file[currentValue.args.file_path][currentValue.args.tool_id].enabled = false;
                 break;
-            case 'ENABLE_TOOL_PROJECT_WIDE':
-                initPerProject(previousValue, currentValue.arguments.tool_id);
-                previousValue.project_wide[currentValue.arguments.tool_id].enabled = true;
+            case PPU_ACTIONS.ENABLE_TOOL_PROJECT_WIDE:
+                initPerProject(previousValue, currentValue.args.tool_id);
+                previousValue.project_wide[currentValue.args.tool_id].enabled = true;
                 break;
-            case 'ENABLE_TOOL_PER_FILE':
-                initPerTool(previousValue, currentValue.arguments.file_path, currentValue.arguments.tool_id);
-                previousValue.per_file[currentValue.arguments.file_path][currentValue.arguments.tool_id].enabled = true;
+            case PPU_ACTIONS.ENABLE_TOOL_PER_FILE:
+                initPerTool(previousValue, currentValue.args.file_path, currentValue.args.tool_id);
+                previousValue.per_file[currentValue.args.file_path][currentValue.args.tool_id].enabled = true;
                 break;
             default:
                 throw Error('Unknown PPU command: '+currentValue.command);

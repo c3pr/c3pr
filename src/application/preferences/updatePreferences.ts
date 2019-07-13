@@ -1,5 +1,5 @@
 import eventsDB from "../events/eventsDB";
-import * as uuid from "uuid";
+import utils from "../../infrastructure/utils";
 
 const UPDATE_WEIGHT_PROJECT_WIDE = 'UPDATE_WEIGHT_PROJECT_WIDE';
 const UPDATE_WEIGHT_PER_FILE = 'UPDATE_WEIGHT_PER_FILE';
@@ -19,64 +19,63 @@ export const PPU_ACTIONS = Object.freeze({
 
 export const ProjectPreferencesUpdated = 'ProjectPreferencesUpdated';
 
-function updateWeightProjectWide(project_clone_url: string, tool_id: string, weight_modification: number) {
-    return eventsDB.insert({
+function ppu({project_clone_url, command, args}: {project_clone_url: string, command: string, args: {[s: string]: string|number}}) {
+    return {
         project_clone_url,
-        uuid: uuid.v4(),
+        uuid: utils.uuid(),
+        timestamp: utils.timestamp(),
         event_type: ProjectPreferencesUpdated,
+        command,
+        args
+    };
+}
+
+function updateWeightProjectWide(project_clone_url: string, tool_id: string, weight_modification: number) {
+    return eventsDB.insert(ppu({
+        project_clone_url,
         command: PPU_ACTIONS.UPDATE_WEIGHT_PROJECT_WIDE,
-        arguments: {tool_id, weight_modification}
-    });
+        args: {tool_id, weight_modification}
+    }));
 }
 
 function updateWeightPerFile(project_clone_url: string, file_path: string, tool_id: string, weight_modification: number) {
-    return eventsDB.insert({
+    return eventsDB.insert(ppu({
         project_clone_url,
-        uuid: uuid.v4(),
-        event_type: ProjectPreferencesUpdated,
         command: PPU_ACTIONS.UPDATE_WEIGHT_PER_FILE,
-        arguments: {file_path, tool_id, weight_modification}
-    });
+        args: {file_path, tool_id, weight_modification}
+    }));
 }
 
 function disableToolProjectWide(project_clone_url: string, tool_id: string) {
-    return eventsDB.insert({
+    return eventsDB.insert(ppu({
         project_clone_url,
-        uuid: uuid.v4(),
-        event_type: ProjectPreferencesUpdated,
         command: PPU_ACTIONS.DISABLE_TOOL_PROJECT_WIDE,
-        arguments: {tool_id}
-    });
+        args: {tool_id}
+    }));
 }
 
 function disableToolPerFile(project_clone_url: string, file_path: string, tool_id: string) {
-    return eventsDB.insert({
+    return eventsDB.insert(ppu({
         project_clone_url,
-        uuid: uuid.v4(),
-        event_type: ProjectPreferencesUpdated,
         command: PPU_ACTIONS.DISABLE_TOOL_PER_FILE,
-        arguments: {file_path, tool_id}
-    });
+        args: {file_path, tool_id}
+    }));
 }
 
 function enableToolProjectWide(project_clone_url: string, tool_id: string) {
-    return eventsDB.insert({
+    return eventsDB.insert(ppu({
         project_clone_url,
-        uuid: uuid.v4(),
-        event_type: ProjectPreferencesUpdated,
         command: PPU_ACTIONS.ENABLE_TOOL_PROJECT_WIDE,
-        arguments: {tool_id}
-    });
+        args: {tool_id}
+    }));
 }
 
 function enableToolPerFile(project_clone_url: string, file_path: string, tool_id: string) {
-    return eventsDB.insert({
+    return eventsDB.insert(ppu({
         project_clone_url,
-        uuid: uuid.v4(),
-        event_type: ProjectPreferencesUpdated,
         command: PPU_ACTIONS.ENABLE_TOOL_PER_FILE,
-        arguments: {file_path, tool_id}
-    });
+        args: {file_path, tool_id}
+    }));
 }
 
 export default {

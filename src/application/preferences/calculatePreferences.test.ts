@@ -2,14 +2,21 @@ import {ImportMock} from 'ts-mock-imports';
 import {expect} from 'chai';
 import calculatePreferences from "./calculatePreferences";
 import * as eventsDBModule from "../events/eventsDB";
+import * as utilsModule from "../../infrastructure/utils";
 import updatePreferences from "./updatePreferences";
 
 describe('calculatePreferences', () => {
     const project_clone_url = 'http://git.example.com/some-project.git';
 
-    let eventsDBMockManager;
-    beforeEach('mock setup', () => eventsDBMockManager = ImportMock.mockStaticClass(eventsDBModule));
-    afterEach('mock teardown', () => eventsDBMockManager.restore());
+    let eventsDBMockManager, utilsMockManager;
+    beforeEach('mock setup', () => {
+        eventsDBMockManager = ImportMock.mockStaticClass(eventsDBModule);
+        utilsMockManager = ImportMock.mockStaticClass(utilsModule);
+    });
+    afterEach('mock teardown', () => {
+        eventsDBMockManager.restore();
+        utilsMockManager.restore();
+    });
 
     it('calculatePreferences', async () => {
         const ppus = [];
