@@ -1,24 +1,21 @@
-import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
-
 import config from '../../config';
 import ports from "../../ports/outbound";
 import {Commit, GitLabPush} from "../../ports/outbound/types/GitLabPush/GitLabPush";
 import {sortCommits} from "./sortCommits";
 
 
-
-async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits: Commit[], {lcid, sha, euuid}) {
+async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits: Commit[], c3prLOG5) {
     const commits = sortCommits(webhookCommits);
 
     const changesetFiles = new Set();
     for(let commit of commits) {
         if (commit.author.email === config.c3pr.repoGitlab.gitlab.botUserEmail) {
-            c3prLOG4(`Skipping commit ${commit.id}, since its author is the bot (${commit.author.email}).`, {lcid, sha, euuid, meta: {commit}});
+            c3prLOG5(`Skipping commit ${commit.id}, since its author is the bot (${commit.author.email}).`, {meta: {commit}});
             continue;
         }
         const gitLabCommit = await ports.getGitLabCommit(urlEncodedOrgNameProjectName, commit.id);
         if (gitLabCommit.parent_ids.length > 1) {
-            c3prLOG4(`Skipping commit ${commit.id}, because it is a merge.`, {lcid, sha, euuid, meta: {commit, gitLabCommit}});
+            c3prLOG5(`Skipping commit ${commit.id}, because it is a merge.`, {meta: {commit, gitLabCommit}});
             continue;
         }
 
@@ -42,8 +39,8 @@ async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits:
     return changeset;
 }
 
-async function createChangesCommitted(webhookPayload: GitLabPush, {lcid, sha, euuid}) {
-    const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits, {lcid, sha, euuid});
+async function createChangesCommitted(webhookPayload: GitLabPush, c3prLOG5) {
+    const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits, c3prLOG5);
 
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
     const project_uuid = await ports.fetchFirstProjectForCloneUrl(clone_url_http);
@@ -56,7 +53,7 @@ async function createChangesCommitted(webhookPayload: GitLabPush, {lcid, sha, eu
             full_path: webhookPayload.project.path_with_namespace,
             clone_url_http,
 
-            // TODO maybe it would be more secure to send down the refs and git fetch the refs instead of the branch... This seems rather sketchy
+            // TODO maybe it would be safer to send down the refs and git fetch the refs instead of the branch... This seems rather sketchy
             branch: webhookPayload.ref.replace(/refs\/heads\//, ''),
             revision: webhookPayload.after
         },

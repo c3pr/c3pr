@@ -1,13 +1,11 @@
-import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
+import {createAndEmitChangesCommitted} from '../ChangesCommitted/createAndEmitChangesCommitted';
 
-import { createAndEmitChangesCommitted } from '../ChangesCommitted/createAndEmitChangesCommitted';
-
-export default function handlePush(webhookPayload, {lcid, sha, euuid}) {
+export default function handlePush(webhookPayload, c3prLOG5) {
     const lastCommit = webhookPayload.commits[0];
-    c3prLOG4(`Handling webhook invoked for ${webhookPayload.repository.git_http_url}. Message: '${lastCommit.message.trim()}'.`, {lcid, sha, euuid, meta: {webhookPayload}});
+    c3prLOG5(`Handling webhook invoked for ${webhookPayload.repository.git_http_url}. Message: '${lastCommit.message.trim()}'.`, {meta: {webhookPayload}});
 
-    return createAndEmitChangesCommitted(webhookPayload, {lcid, sha, euuid})
+    return createAndEmitChangesCommitted(webhookPayload, c3prLOG5)
         .catch(error => {
-            c3prLOG4(`Error while handling webhook.`, {lcid, sha, euuid, meta: {webhookPayload}, error});
+            c3prLOG5(`Error while handling webhook.`, {meta: {webhookPayload}, error});
         });
 }
