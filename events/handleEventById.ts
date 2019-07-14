@@ -2,13 +2,13 @@ import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 import {collectEventByIdAndMarkAsProcessing} from "./collectEventAndMarkAsProcessing";
 import {markAsProcessed, markAsUnprocessed} from "./markAs";
 
-interface HandlerOutput {
-    skipped: boolean;
+export interface HandlerOutput {
+    skipped?: boolean;
     new_status: 'PROCESSED' | 'UNPROCESSED';
     result: any;
 }
 
-interface EventByIdHandler {
+export interface EventByIdHandler {
     event_type: string;
     event_uuid: string;
     handlerFunction: (event: any, log: any) => Promise<HandlerOutput> | HandlerOutput;
