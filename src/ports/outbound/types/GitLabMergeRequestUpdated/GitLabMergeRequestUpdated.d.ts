@@ -66,7 +66,7 @@ export interface ObjectAttributes {
   total_time_spent: number;
   human_total_time_spent?: null;
   human_time_estimate?: null;
-  action: 'open' | 'reopen' | 'close' | 'update';
+  action: 'open' | 'merge' | 'reopen' | 'close' | 'update'; // https://gitlab.com/gitlab-org/gitlab-ce/commit/4ffdb83e713b1ffa9578c02d31cfd0d9afe56ca7
 }
 export interface MergeParams {
   force_remove_source_branch?: null;

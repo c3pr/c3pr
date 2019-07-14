@@ -1,6 +1,8 @@
-import {createAndEmitPullRequestUpdated} from "../PullRequestUpdated/createAndEmitPullRequestUpdated";
 import {GitLabMergeRequestUpdated} from "../../ports/outbound/types/GitLabMergeRequestUpdated/GitLabMergeRequestUpdated";
 import config from "../../config";
+import createPullRequestUpdatedFromMergeRequestHook
+    from "../PullRequestUpdated/createPullRequestUpdatedFromMergeRequestHook";
+import emitPullRequestUpdated from "../PullRequestUpdated/emitPullRequestUpdated";
 
 
 export default function handleMergeRequest(webhookPayload: GitLabMergeRequestUpdated, c3prLOG5) {
@@ -19,4 +21,9 @@ export default function handleMergeRequest(webhookPayload: GitLabMergeRequestUpd
     }
 
     return createAndEmitPullRequestUpdated(webhookPayload, c3prLOG5);
+}
+
+export function createAndEmitPullRequestUpdated(gitLabMergeRequestUpdatedWebhook: GitLabMergeRequestUpdated, c3prLOG5) {
+    const pullRequestUpdated = createPullRequestUpdatedFromMergeRequestHook(gitLabMergeRequestUpdatedWebhook);
+    return emitPullRequestUpdated(pullRequestUpdated, c3prLOG5);
 }
