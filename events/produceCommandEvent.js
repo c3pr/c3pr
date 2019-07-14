@@ -9,6 +9,7 @@ async function produceCommandEvent(event, config, c3prLOG5) {
     const payload = {
         event_type,
         project_clone_http_url: event.project_clone_http_url,
+        commit_hash: event.commit_hash,
         uuid: uuid(),
         timestamp: timestamp(),
         command: event.command,

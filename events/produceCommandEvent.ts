@@ -3,8 +3,9 @@ import axiosRetry from 'axios-retry/lib';
 import uuidv4 from "uuid/v4";
 
 export interface CommandEvent {
-    event_type: string; // TOPIC
-    project_clone_http_url: string; // KEY
+    event_type: string;
+    project_clone_http_url: string;
+    commit_hash?: string;
     // will be generated -> uuid: string;
     // will be generated -> timestamp: string;
     command: string;
@@ -24,6 +25,7 @@ export default async function produceCommandEvent(event: CommandEvent, config: C
     const payload = {
         event_type,
         project_clone_http_url: event.project_clone_http_url,
+        commit_hash: event.commit_hash,
         uuid: uuid(),
         timestamp: timestamp(),
         command: event.command,
