@@ -30,6 +30,7 @@
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#27.0.0",
     "node-c3pr-repo": "github:c3pr/node-c3pr-repo#15.0.0",
     "node-c3pr-git-client": "github:c3pr/node-c3pr-git-client#17.0.0",
+    "@sentry/node": "^5.4.3",
     "ts-node": "^6.2.0",
     "typescript": "^2.9.2",
     "uuid": "^3.3.2"
