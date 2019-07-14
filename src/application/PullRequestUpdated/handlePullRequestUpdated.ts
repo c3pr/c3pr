@@ -1,13 +1,13 @@
 import config from '../../config';
-const handleFirstCollectedEvent = require('node-c3pr-hub-client/events/handleFirstCollectedEvent').default;
+import updatePR from "./updatePR";
+import handleFirstCollectedEvent from 'node-c3pr-hub-client/events/handleFirstCollectedEvent';
 
-const updatePR = require('./updatePR');
 
 
 function handlePullRequestUpdated({lcid, sha, euuid}) {
     return handleFirstCollectedEvent({
         event_type: `PullRequestUpdated`,
-        handlerFunction: updatePR,
+        handlerFunction: updatePR as any,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.auth.jwt,
         lcid, sha, euuid
