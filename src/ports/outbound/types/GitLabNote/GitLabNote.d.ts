@@ -142,7 +142,7 @@ export interface MergeRequest {
     milestone_id?: any;
     source_branch: string;
     source_project_id: number;
-    state: string;
+    state: 'opened' | 'closed' | 'merged';
     target_branch: string;
     target_project_id: number;
     time_estimate: number;

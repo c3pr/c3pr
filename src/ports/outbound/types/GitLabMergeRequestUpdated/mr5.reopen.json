@@ -1,0 +1,129 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "name": "Administrator",
+    "username": "root",
+    "avatar_url": "https://www.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=80&d=identicon"
+  },
+  "project": {
+    "id": 1,
+    "name": "sample-project-java-maven",
+    "description": null,
+    "web_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+    "avatar_url": null,
+    "git_ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "git_http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git",
+    "namespace": "sample_user",
+    "visibility_level": 0,
+    "path_with_namespace": "sample_user/sample-project-java-maven",
+    "default_branch": "master",
+    "ci_config_path": null,
+    "homepage": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+    "url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git"
+  },
+  "object_attributes": {
+    "assignee_id": null,
+    "author_id": 1,
+    "created_at": "2019-07-14 05:59:36 UTC",
+    "description": "",
+    "head_pipeline_id": null,
+    "id": 10,
+    "iid": 10,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": null
+    },
+    "merge_status": "can_be_merged",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "master",
+    "source_project_id": 5,
+    "state": "opened",
+    "target_branch": "master",
+    "target_project_id": 1,
+    "time_estimate": 0,
+    "title": "dbz-mr-title",
+    "updated_at": "2019-07-14 06:16:47 UTC",
+    "updated_by_id": 1,
+    "url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven/merge_requests/10",
+    "source": {
+      "id": 5,
+      "name": "sample-project-java-maven",
+      "description": null,
+      "web_url": "http://c3prgitlab:8888/root/sample-project-java-maven",
+      "avatar_url": null,
+      "git_ssh_url": "git@c3prgitlab:root/sample-project-java-maven.git",
+      "git_http_url": "http://c3prgitlab:8888/root/sample-project-java-maven.git",
+      "namespace": "root",
+      "visibility_level": 0,
+      "path_with_namespace": "root/sample-project-java-maven",
+      "default_branch": "master",
+      "ci_config_path": null,
+      "homepage": "http://c3prgitlab:8888/root/sample-project-java-maven",
+      "url": "git@c3prgitlab:root/sample-project-java-maven.git",
+      "ssh_url": "git@c3prgitlab:root/sample-project-java-maven.git",
+      "http_url": "http://c3prgitlab:8888/root/sample-project-java-maven.git"
+    },
+    "target": {
+      "id": 1,
+      "name": "sample-project-java-maven",
+      "description": null,
+      "web_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+      "avatar_url": null,
+      "git_ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+      "git_http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git",
+      "namespace": "sample_user",
+      "visibility_level": 0,
+      "path_with_namespace": "sample_user/sample-project-java-maven",
+      "default_branch": "master",
+      "ci_config_path": null,
+      "homepage": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+      "url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+      "ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+      "http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git"
+    },
+    "last_commit": {
+      "id": "2315f276f84f778255cd6967a45610709cd62b61",
+      "message": "dbz-commit-msg",
+      "timestamp": "2019-07-14T05:58:58Z",
+      "url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven/commit/2315f276f84f778255cd6967a45610709cd62b61",
+      "author": {
+        "name": "Administrator",
+        "email": "admin@example.com"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "human_total_time_spent": null,
+    "human_time_estimate": null,
+    "action": "reopen"
+  },
+  "labels": [],
+  "changes": {
+    "state": {
+      "previous": "closed",
+      "current": "opened"
+    },
+    "updated_at": {
+      "previous": "2019-07-14 06:09:56 UTC",
+      "current": "2019-07-14 06:16:47 UTC"
+    },
+    "total_time_spent": {
+      "previous": null,
+      "current": 0
+    }
+  },
+  "repository": {
+    "name": "sample-project-java-maven",
+    "url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "description": null,
+    "homepage": "http://c3prgitlab:8888/sample_user/sample-project-java-maven"
+  }
+}
