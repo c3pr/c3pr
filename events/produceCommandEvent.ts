@@ -10,6 +10,7 @@ export interface CommandEvent {
     // will be generated -> timestamp: string;
     command: string;
     args: {[s: string]: any};
+    meta?: any;
 }
 
 export interface Config {
@@ -22,6 +23,7 @@ export default async function produceCommandEvent(event: CommandEvent, config: C
     const event_type = event.event_type;
     const {c3prHubUrl, jwt, retryWait = 2000} = config;
 
+    // we dont use spread because we care about the order and not adding extra props
     const payload = {
         event_type,
         project_clone_http_url: event.project_clone_http_url,
@@ -29,7 +31,8 @@ export default async function produceCommandEvent(event: CommandEvent, config: C
         uuid: uuid(),
         timestamp: timestamp(),
         command: event.command,
-        args: event.args
+        args: event.args,
+        meta: event.meta
     };
 
     try {

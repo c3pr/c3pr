@@ -6,6 +6,7 @@ const v4_1 = require("uuid/v4");
 async function produceCommandEvent(event, config, c3prLOG5) {
     const event_type = event.event_type;
     const { c3prHubUrl, jwt, retryWait = 2000 } = config;
+    // we dont use spread because we care about the order and not adding extra props
     const payload = {
         event_type,
         project_clone_http_url: event.project_clone_http_url,
@@ -13,7 +14,8 @@ async function produceCommandEvent(event, config, c3prLOG5) {
         uuid: uuid(),
         timestamp: timestamp(),
         command: event.command,
-        args: event.args
+        args: event.args,
+        meta: event.meta
     };
     try {
         c3prLOG5(`Registering new event for type '${event_type}'.`, { meta: { payload } });
