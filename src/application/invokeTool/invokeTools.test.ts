@@ -6,8 +6,9 @@ process.env.NODE_ENV = 'test';
 import { expect } from 'chai';
 require('chai').should();
 
-import ports from '../ports';
-ports.shuffleArray = a => a; // shuffleArray won't shuffle a thing
+import * as shuffleArrayModule from "../../adapters/shuffleArray";
+// @ts-ignore
+shuffleArrayModule.shuffleArray = a => a; // shuffleArray won't shuffle a thing
 
 const axios = require('axios');
 const MockAdapter = require('axios-mock-adapter');
