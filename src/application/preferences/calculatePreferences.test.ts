@@ -20,7 +20,7 @@ describe('calculatePreferences', () => {
 
     it('calculatePreferences', async () => {
         const ppus = [];
-        eventsDBMockManager.replace('insert', s => ppus.push(s));
+        eventsDBMockManager.replace('registerNewEventAsProcessed', (...a) => ppus.push({payload: a[1]}));
         eventsDBMockManager.mock('findAll', Promise.resolve(ppus));
 
         await updatePreferences.updateWeightProjectWide(project_clone_url, 'tool:a', -1);
