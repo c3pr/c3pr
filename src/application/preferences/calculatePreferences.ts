@@ -1,15 +1,6 @@
 import eventsDB from "../events/eventsDB";
 import {PPU_ACTIONS} from "./updatePreferences";
-
-export interface ToolPreferences {
-    weight_modification: number;
-    enabled: boolean;
-}
-
-export interface ProjectPreferences {
-    project_wide: { [tool_id: string]: ToolPreferences };
-    per_file: { [file_path: string]: { [tool_id: string]: ToolPreferences } };
-}
+import {ProjectPreferences} from "./ProjectPreferences";
 
 const defaultPreferences = () => ({weight_modification: 0, enabled: true});
 
