@@ -13,8 +13,8 @@ function initPerTool(previousValue: ProjectPreferences, filePath, toolId) {
     previousValue.per_file[filePath][toolId] = previousValue.per_file[filePath][toolId] || defaultPreferences();
 }
 
-export default async function calculatePreferencesFromPPUs(cloneUrl: string): Promise<ProjectPreferences> {
-    const ppus = await eventsDB.findAll({project_clone_url: cloneUrl, event_type: 'ProjectPreferencesUpdated'});
+export default async function calculatePreferencesFromPPUs(clone_url_http: string): Promise<ProjectPreferences> {
+    const ppus = await eventsDB.findAll({event_type: 'ProjectPreferencesUpdated', 'payload.repository.clone_url_http': clone_url_http});
 
     const prefs: ProjectPreferences = {project_wide: {}, per_file: {}};
 
