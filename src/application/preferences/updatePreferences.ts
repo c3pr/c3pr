@@ -1,5 +1,4 @@
 import eventsDB from "../events/eventsDB";
-import utils from "../../infrastructure/utils";
 
 const UPDATE_WEIGHT_PROJECT_WIDE = 'UPDATE_WEIGHT_PROJECT_WIDE';
 const UPDATE_WEIGHT_PER_FILE = 'UPDATE_WEIGHT_PER_FILE';
@@ -19,63 +18,60 @@ export const PPU_ACTIONS = Object.freeze({
 
 export const ProjectPreferencesUpdated = 'ProjectPreferencesUpdated';
 
-function ppu({project_clone_url, command, args}: {project_clone_url: string, command: string, args: {[s: string]: string|number}}) {
-    return {
-        project_clone_url,
-        uuid: utils.uuid(),
-        timestamp: utils.timestamp(),
-        event_type: ProjectPreferencesUpdated,
+function ppu({clone_url_http, command, args}: {clone_url_http: string, command: string, args: {[s: string]: string|number}}) {
+    return eventsDB.registerNewEventAsProcessed(ProjectPreferencesUpdated, {
+        repository: {clone_url_http},
         command,
         args
-    };
+    });
 }
 
-function updateWeightProjectWide(project_clone_url: string, tool_id: string, weight_modification: number) {
-    return eventsDB.insert(ppu({
-        project_clone_url,
+function updateWeightProjectWide(clone_url_http: string, tool_id: string, weight_modification: number, reason: string = null) {
+    return ppu({
+        clone_url_http,
         command: PPU_ACTIONS.UPDATE_WEIGHT_PROJECT_WIDE,
-        args: {tool_id, weight_modification}
-    }));
+        args: {tool_id, weight_modification, reason}
+    });
 }
 
-function updateWeightPerFile(project_clone_url: string, file_path: string, tool_id: string, weight_modification: number) {
-    return eventsDB.insert(ppu({
-        project_clone_url,
+function updateWeightPerFile(clone_url_http: string, file_path: string, tool_id: string, weight_modification: number, reason: string = null) {
+    return ppu({
+        clone_url_http,
         command: PPU_ACTIONS.UPDATE_WEIGHT_PER_FILE,
-        args: {file_path, tool_id, weight_modification}
-    }));
+        args: {file_path, tool_id, weight_modification, reason}
+    });
 }
 
-function disableToolProjectWide(project_clone_url: string, tool_id: string) {
-    return eventsDB.insert(ppu({
-        project_clone_url,
+function disableToolProjectWide(clone_url_http: string, tool_id: string, reason: string = null) {
+    return ppu({
+        clone_url_http,
         command: PPU_ACTIONS.DISABLE_TOOL_PROJECT_WIDE,
-        args: {tool_id}
-    }));
+        args: {tool_id, reason}
+    });
 }
 
-function disableToolPerFile(project_clone_url: string, file_path: string, tool_id: string) {
-    return eventsDB.insert(ppu({
-        project_clone_url,
+function disableToolPerFile(clone_url_http: string, file_path: string, tool_id: string, reason: string = null) {
+    return ppu({
+        clone_url_http,
         command: PPU_ACTIONS.DISABLE_TOOL_PER_FILE,
-        args: {file_path, tool_id}
-    }));
+        args: {file_path, tool_id, reason}
+    });
 }
 
-function enableToolProjectWide(project_clone_url: string, tool_id: string) {
-    return eventsDB.insert(ppu({
-        project_clone_url,
+function enableToolProjectWide(clone_url_http: string, tool_id: string, reason: string = null) {
+    return ppu({
+        clone_url_http,
         command: PPU_ACTIONS.ENABLE_TOOL_PROJECT_WIDE,
-        args: {tool_id}
-    }));
+        args: {tool_id, reason}
+    });
 }
 
-function enableToolPerFile(project_clone_url: string, file_path: string, tool_id: string) {
-    return eventsDB.insert(ppu({
-        project_clone_url,
+function enableToolPerFile(clone_url_http: string, file_path: string, tool_id: string, reason: string = null) {
+    return ppu({
+        clone_url_http,
         command: PPU_ACTIONS.ENABLE_TOOL_PER_FILE,
-        args: {file_path, tool_id}
-    }));
+        args: {file_path, tool_id, reason}
+    });
 }
 
 export default {
