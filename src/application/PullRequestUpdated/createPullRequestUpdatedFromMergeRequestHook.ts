@@ -22,6 +22,6 @@ export default function createPullRequestUpdatedFromMergeRequestHook(gitLabMerge
 
         command: getCommand(gitLabMergeRequestUpdatedWebhook.object_attributes.action),
 
-        'source-webhook': gitLabMergeRequestUpdatedWebhook
+        source_webhook: gitLabMergeRequestUpdatedWebhook
     }
 }
