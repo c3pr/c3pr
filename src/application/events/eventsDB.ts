@@ -18,7 +18,7 @@ async function find(uuid) {
 }
 
 async function findAll(query = {}) {
-    return (await events).find(query).toArray();
+    return (await events).find(query).sort({'meta.created': 1, 'timestamp': 1}).toArray();
 }
 
 async function perProjectEventCountOfType(event_type) {
