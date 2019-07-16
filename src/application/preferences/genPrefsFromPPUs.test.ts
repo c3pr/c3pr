@@ -1,11 +1,11 @@
 import {ImportMock} from 'ts-mock-imports';
 import {expect} from 'chai';
-import calculatePreferencesFromPPUs from "./calculatePreferencesFromPPUs";
+import genPrefsFromPPUs from "./genPrefsFromPPUs";
 import * as eventsDBModule from "../events/eventsDB";
 import * as utilsModule from "../../infrastructure/utils";
 import updatePreferences from "./updatePreferences";
 
-describe('calculatePreferencesFromPPUs', () => {
+describe('genPrefsFromPPUs', () => {
     const project_clone_url = 'http://git.example.com/some-project.git';
 
     let eventsDBMockManager, utilsMockManager;
@@ -18,7 +18,7 @@ describe('calculatePreferencesFromPPUs', () => {
         utilsMockManager.restore();
     });
 
-    it('calculatePreferencesFromPPUs', async () => {
+    it('genPrefsFromPPUs', async () => {
         const ppus = [];
         eventsDBMockManager.replace('registerNewEventAsProcessed', (...a) => ppus.push({payload: a[1]}));
         eventsDBMockManager.mock('findAll', Promise.resolve(ppus));
@@ -47,7 +47,7 @@ describe('calculatePreferencesFromPPUs', () => {
                 }
             }
         };
-        let actualPrefs = await calculatePreferencesFromPPUs('http://git.example.com/some-project.git');
+        let actualPrefs = await genPrefsFromPPUs('http://git.example.com/some-project.git');
 
         expect(actualPrefs).to.deep.equal(expectedPrefs);
     });

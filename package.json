@@ -42,6 +42,7 @@
     "axios-mock-adapter": "^1.15.0",
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
+    "nyc": "^14.1.1",
     "sinon": "^4.5.0",
     "ts-mock-imports": "^1.2.6"
   }
