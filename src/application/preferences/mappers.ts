@@ -1,7 +1,7 @@
-import {initPerTool, UpdatePresCommand} from "./ProjectPreferences";
+import {initPerTool, UpdatePrefsCommand} from "./ProjectPreferences";
 
-export function modifyWeightOfToolForAllFiles(files: string[], tool_id: string, timestamp: string, weight_modification: number): UpdatePresCommand[] {
-    const commands: UpdatePresCommand[] = [];
+export function modifyWeightOfToolForAllFiles(files: string[], tool_id: string, timestamp: string, weight_modification: number): UpdatePrefsCommand[] {
+    const commands: UpdatePrefsCommand[] = [];
     for (const file of files) {
         commands.push({
             apply: (projectPreferences) => {
@@ -23,8 +23,8 @@ export function modifyWeightOfToolForAllFiles(files: string[], tool_id: string, 
     return commands;
 }
 
-export function removePrFromOpenPrsForFile(files: string[], pr_id: number, timestamp: string): UpdatePresCommand[] {
-    const commands: UpdatePresCommand[] = [];
+export function removePrFromOpenPrsForFile(files: string[], pr_id: number, timestamp: string): UpdatePrefsCommand[] {
+    const commands: UpdatePrefsCommand[] = [];
     for (const file of files) {
         commands.push({
             apply: (projectPreferences) => {
@@ -41,7 +41,7 @@ export function removePrFromOpenPrsForFile(files: string[], pr_id: number, times
 
 
 export function disableToolForAllChangedFiles(files: string[], tool_id: string, timestamp: string) {
-    const commands: UpdatePresCommand[] = [];
+    const commands: UpdatePrefsCommand[] = [];
     for (const file of files) {
         commands.push({
             apply: (projectPreferences) => {
@@ -56,8 +56,8 @@ export function disableToolForAllChangedFiles(files: string[], tool_id: string, 
 
 
 
-export function addPrToOpenPrsForFile(files: string[], pr_id: number, timestamp: string): UpdatePresCommand[] {
-    const commands: UpdatePresCommand[] = [];
+export function addPrToOpenPrsForFile(files: string[], pr_id: number, timestamp: string): UpdatePrefsCommand[] {
+    const commands: UpdatePrefsCommand[] = [];
     for (const file of files) {
         commands.push({
             apply: (projectPreferences) => {

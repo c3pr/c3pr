@@ -12,7 +12,7 @@ export interface ProjectPreferences {
     open_prs: { [file_path: string]: number[] };
 }
 
-export interface UpdatePresCommand {
+export interface UpdatePrefsCommand {
     apply: (projectPreferences: ProjectPreferences) => ProjectPreferences;
     timestamp: string;
 }

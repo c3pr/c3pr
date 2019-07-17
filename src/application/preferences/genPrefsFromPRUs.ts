@@ -1,6 +1,6 @@
 import eventsDB from "../events/eventsDB";
 import {
-    UpdatePresCommand,
+    UpdatePrefsCommand,
     WEIGHT_MODIFICATION_PER_CLOSED_PR,
     WEIGHT_MODIFICATION_PER_MERGED_PR
 } from "./ProjectPreferences";
@@ -24,11 +24,11 @@ type PRStatus = 'open' | 'closed' | 'merged';
 
 
 
-async function processComment(files: string[], tool_id: string, timestamp: string, text: string): Promise<UpdatePresCommand[]> {
+async function processComment(files: string[], tool_id: string, timestamp: string, text: string): Promise<UpdatePrefsCommand[]> {
     if (!text.includes('@c3pr-bot') && !text.includes('@c3pr\\-bot') && !text.includes('@c3pr\\\\-bot')) {
         return [];
     }
-    const commands: UpdatePresCommand[] = [];
+    const commands: UpdatePrefsCommand[] = [];
     if (text.includes("bug")) {
         commands.push(...disableToolForAllChangedFiles(files, tool_id, timestamp));
     } else if (text.includes("manual")) {
@@ -39,7 +39,7 @@ async function processComment(files: string[], tool_id: string, timestamp: strin
 }
 
 
-async function handlePRU(command: any, clone_url_http: string, args: any, commands: UpdatePresCommand[], created: any, pr_id: any, status: any) {
+async function handlePRU(command: any, clone_url_http: string, args: any, commands: UpdatePrefsCommand[], created: any, pr_id: any, status: any) {
     if (command === PullRequestUpdatedCommands.ADD_COMMENT) {
         let filesAndTool = await filesAndToolForPR(clone_url_http, args.pr_id);
         return processComment(filesAndTool.changed_files, filesAndTool.tool_id, created, args.text);
@@ -49,7 +49,7 @@ async function handlePRU(command: any, clone_url_http: string, args: any, comman
         if (s === 'open') {
             return addPrToOpenPrsForFile(filesAndTool.changed_files, pr_id, created);
         } else {
-            const commands: UpdatePresCommand[] = removePrFromOpenPrsForFile(filesAndTool.changed_files, pr_id, created);
+            const commands: UpdatePrefsCommand[] = removePrFromOpenPrsForFile(filesAndTool.changed_files, pr_id, created);
             if (s === 'merged') {
                 // increase weight
                 commands.push(...modifyWeightOfToolForAllFiles(filesAndTool.changed_files, filesAndTool.tool_id, created, WEIGHT_MODIFICATION_PER_MERGED_PR));
@@ -61,9 +61,9 @@ async function handlePRU(command: any, clone_url_http: string, args: any, comman
     }
 }
 
-export default async function genPrefsFromPRUs(clone_url_http: string): Promise<UpdatePresCommand[]> {
+export default async function genPrefsFromPRUs(clone_url_http: string): Promise<UpdatePrefsCommand[]> {
     const prus = await eventsDB.findAll({event_type: 'PullRequestUpdated', 'payload.repository.clone_url_http': clone_url_http});
-    const commands: UpdatePresCommand[] = [];
+    const commands: UpdatePrefsCommand[] = [];
     for (const {meta: {created}, payload: {pr_id, status, command, args}} of prus) {
         commands.push(...await handlePRU(command, clone_url_http, args, commands, created, pr_id, status));
     }

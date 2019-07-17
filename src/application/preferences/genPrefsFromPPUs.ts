@@ -1,6 +1,6 @@
 import eventsDB from "../events/eventsDB";
 import {PPU_ACTIONS} from "./updatePreferences";
-import {initPerProject, initPerTool, ProjectPreferences, UpdatePresCommand} from "./ProjectPreferences";
+import {initPerProject, initPerTool, ProjectPreferences, UpdatePrefsCommand} from "./ProjectPreferences";
 
 function genPPUCommand(payload): (projectPreferences: ProjectPreferences) => ProjectPreferences {
     switch (payload.command) {
@@ -39,7 +39,7 @@ function genPPUCommand(payload): (projectPreferences: ProjectPreferences) => Pro
     }
 }
 
-export default async function genPrefsFromPPUs(clone_url_http: string): Promise<UpdatePresCommand[]> {
+export default async function genPrefsFromPPUs(clone_url_http: string): Promise<UpdatePrefsCommand[]> {
     const ppus = await eventsDB.findAll({event_type: 'ProjectPreferencesUpdated', 'payload.repository.clone_url_http': clone_url_http});
 
     return ppus.map(({meta: {created: timestamp}, payload}) => ({apply: genPPUCommand(payload), timestamp}));
