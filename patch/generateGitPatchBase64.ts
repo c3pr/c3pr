@@ -1,5 +1,4 @@
 import c3prSH3 from "../src/c3prSH3";
-import {FileChanges} from "./generateGitPatchBase64";
 
 const fs = require('fs');
 
@@ -46,14 +45,15 @@ function extractFileChanges(fileNames: string):FileChanges {
 
 export const EMPTY_PATCH = () => ({files: {added: [], modified: [], renamed: [], deleted: []}, patch: {hexBase64: '', plain: '', header: '', footer: ''}});
 
-async function generateGitPatchBase64({cloneFolder, gitUserName, gitUserEmail, commitMessage}, {lcid, sha, euuid}): Promise<GitPatchBase64> {
+async function generateGitPatchBase64({cloneFolder, gitUserName, gitUserEmail, commitMessage}, c3prLOG5): Promise<GitPatchBase64> {
+    c3prLOG5 = c3prLOG5({caller_name: 'generateGitPatchBase64'});
 
-    await c3prSH3(`git add -A`, {cwd: cloneFolder}, {lcid, sha, euuid});
+    await c3prSH3(`git add -A`, {cwd: cloneFolder}, {}, c3prLOG5);
 
     const diffFilePath = `${cloneFolder}/1`;
 
     // let fileNames = await c3prSH3(`git diff --staged --name-only`, {cwd: cloneFolder}, {lcid, sha, euuid});
-    let fileNames = await c3prSH3(`git status --short`, {cwd: cloneFolder}, {lcid, sha, euuid});
+    let fileNames = await c3prSH3(`git status --short`, {cwd: cloneFolder}, {}, c3prLOG5);
 
     if (fileNames.trim() === '') {
         return EMPTY_PATCH();
@@ -68,9 +68,9 @@ async function generateGitPatchBase64({cloneFolder, gitUserName, gitUserEmail, c
     // ADD and COMMIT CHANGES
     const userNameNoQuotes = gitUserName.replace(/'/g, '');
     const userEmailNoQuotes = gitUserEmail.replace(/'/g, '');
-    await c3prSH3(`git -c user.name='${userNameNoQuotes}' -c user.email='${userEmailNoQuotes}' commit -m "${commitMessage.replace(/"/g, '\\"')}"`, {cwd: cloneFolder}, {lcid, sha, euuid});
+    await c3prSH3(`git -c user.name='${userNameNoQuotes}' -c user.email='${userEmailNoQuotes}' commit -m "${commitMessage.replace(/"/g, '\\"')}"`, {cwd: cloneFolder}, {}, c3prLOG5);
 
-    await c3prSH3(`git format-patch --ignore-space-at-eol --numbered-files -n -1 HEAD`, {cwd: cloneFolder}, {lcid, sha, euuid});
+    await c3prSH3(`git format-patch --ignore-space-at-eol --numbered-files -n -1 HEAD`, {cwd: cloneFolder}, {}, c3prLOG5);
 
     const plain = fs.readFileSync(diffFilePath, 'utf8');
 

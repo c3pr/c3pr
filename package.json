@@ -1,6 +1,6 @@
 {
   "name": "node-c3pr-git-client",
-  "version": "17.0.0",
+  "version": "18.0.0",
   "description": "Node.js layer above shell git command line",
   "main": "index.js",
   "scripts": {

@@ -24,20 +24,21 @@ export default async function c3prSH3(
         _c3prLOG5?
     ) {
     const level = (outerLevel || 0) + 1;
-    const __c3prLOG5 = c3prLOG5(_c3prLOG5 || {lcid, sha, euuid, level});
+    const __c3prLOG5 = _c3prLOG5 || c3prLOG5({lcid, sha, euuid});
+    const ___c3prLOG5 = __c3prLOG5({level});
 
     const hideTokens = s => replaceTokens(s, replacements || []);
 
-    __c3prLOG5(`\$ ${hideTokens(shCommand)}`);
+    ___c3prLOG5(`\$ ${hideTokens(shCommand)}`);
 
     let {error, stdout, stderr} = await sh(shCommand, shOptions);
     if (shouldStdOut) {
         if (stdout.trim() === "")
             stdout = '<empty output>';
-        __c3prLOG5(hideTokens(stdout));
+        ___c3prLOG5(hideTokens(stdout));
     }
     if (error) {
-        __c3prLOG5(`
+        ___c3prLOG5(`
             [ERROR] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                         
             -- SHELL COMMAND FAILED --
