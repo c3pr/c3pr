@@ -6,6 +6,7 @@ const uuid_1 = require("uuid");
 const c3prLOG4_1 = require("node-c3pr-logger/c3prLOG4");
 const c3prSH3_1 = require("node-c3pr-git-client/src/c3prSH3");
 const applyGitPatchBase64_1 = require("node-c3pr-git-client/patch/applyGitPatchBase64");
+const os = require("os");
 const C3PR_CLONES_FOLDER = process.env.C3PR_CLONES_FOLDER || '/tmp/';
 async function forkAndApplyPatch({ createForkIfNotExists, addAuthenticationToCloneUrl, tokenReplacementForLogFunction, mainRepoOrgRepo, mainRepoBranch, mainRepoHash, gitUserName, gitUserEmail, prCommitMessage, patchContent, mainRepoCloneUrl, lcid, sha, euuid }) {
     const stagingFolderName = `${mainRepoHash}_${uuid_1.v4()}`;
@@ -14,7 +15,7 @@ async function forkAndApplyPatch({ createForkIfNotExists, addAuthenticationToClo
     const forkRepoOrg = forkInfo.organization;
     const forkRepoProject = forkInfo.forkName;
     const forkRepoCloneUrl = addAuthenticationToCloneUrl(forkInfo.cloneUrl);
-    const forkRepoBranch = stagingFolderName;
+    const forkRepoBranch = 'C3PR_' + mainRepoHash.substring(0, 8) + '_' + os.hostname().substring(0, 3) + Date.now().toString(16);
     await c3prSH3_1.default(`git init ${stagingFolder}`, {}, { lcid, sha, euuid });
     // create brand new orphan branch
     await c3prSH3_1.default(`git checkout --orphan ${forkRepoBranch}`, { cwd: stagingFolder }, { lcid, sha, euuid });

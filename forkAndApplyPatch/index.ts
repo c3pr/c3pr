@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 import c3prSH3 from "node-c3pr-git-client/src/c3prSH3";
 import applyGitPatchBase64 from "node-c3pr-git-client/patch/applyGitPatchBase64";
+import * as os from "os";
 
 const C3PR_CLONES_FOLDER = process.env.C3PR_CLONES_FOLDER || '/tmp/';
 
@@ -29,7 +30,7 @@ async function forkAndApplyPatch({
     const forkRepoOrg = forkInfo.organization;
     const forkRepoProject = forkInfo.forkName;
     const forkRepoCloneUrl = addAuthenticationToCloneUrl(forkInfo.cloneUrl);
-    const forkRepoBranch = stagingFolderName;
+    const forkRepoBranch = 'C3PR_' + mainRepoHash.substring(0, 8) + '_' + os.hostname().substring(0, 3) + Date.now().toString(16);
 
     await c3prSH3(`git init ${stagingFolder}`, {}, {lcid, sha, euuid});
 
