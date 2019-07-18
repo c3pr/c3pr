@@ -61,7 +61,7 @@ describe('invokeTools', () => {
             ).reply(() => { toolOneCalled = true; return [200]; });
 
         // execute
-        await invokeTools({parentEvent, changesCommittedRootEuuid, repository: changes.repository, files: changes.changed_files}, () => {});
+        await invokeTools({parentEvent, changesCommittedRootEuuid, repository: changes.repository}, changes.changed_files, () => {});
 
         // verify
         expect(toolOneCalled).to.equal(true);
