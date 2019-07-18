@@ -1,4 +1,3 @@
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const c3prSH3_1 = require("../src/c3prSH3");
 const fs = require('fs');
