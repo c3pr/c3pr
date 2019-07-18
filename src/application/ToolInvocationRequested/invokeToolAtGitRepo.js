@@ -55,7 +55,7 @@ async function invokeToolAtGitRepo(toolInvocationRequested, loadTools, c3prLOG5)
 
         c3prLOG5(`Done running tool on every modified file at ${cloneFolder}. Attempting to generate patch...`);
 
-        let patch = await generateGitPatchBase64({cloneFolder, gitUserName: config.c3pr.agent.gitUserName, gitUserEmail: config.c3pr.agent.gitUserEmail, commitMessage: tool.pr_title}, {...c3prLOG5});
+        let patch = await generateGitPatchBase64({cloneFolder, gitUserName: config.c3pr.agent.gitUserName, gitUserEmail: config.c3pr.agent.gitUserEmail, commitMessage: tool.pr_title}, c3prLOG5);
 
         c3prLOG5(`Patch generated.`);
         return patch;
