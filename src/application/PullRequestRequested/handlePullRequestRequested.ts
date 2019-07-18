@@ -24,27 +24,29 @@ export async function handlePullRequestRequested({lcid, sha, euuid}): Promise<an
 }
 
 async function handlerFunction(pullRequestRequestedEvent: Event<any>, {lcid, sha, euuid}): Promise<any> {
-    const _c3prLOG5 = c3prLOG5({lcid, sha, euuid});
+    const _c3prLOG5 = c3prLOG5({lcid, sha, euuid, caller_name: 'handlePullRequestRequested'});
     const prr = pullRequestRequestedEvent.payload;
     const repository = prr.repository;
 
     _c3prLOG5(`Handling MR request title '${prr.pr_title}' rev '${repository.revision}'`, {meta: {pullRequestRequestedEvent}});
 
     try {
-        let createMrResult = await createGitLabMR({
-            mainRepoOrgRepo: repository.full_path,
-            mainRepoBranch: repository.branch,
-            mainRepoHash: repository.revision,
-            gitLabUrl: config.c3pr.repoGitlab.gitlab.url,
-            gitLabApiToken: config.c3pr.repoGitlab.gitlab.apiToken,
-            gitUserName: config.c3pr.repoGitlab.gitlab.botUserName,
-            gitUserEmail: config.c3pr.repoGitlab.gitlab.botUserEmail,
-            pr_assignee: prr.assignee,
-            pr_title: prr.pr_title,
-            pr_body: prr.pr_body,
-            patchHexBase64: prr.diff_base64,
-            lcid, sha, euuid
-        });
+        let createMrResult = await createGitLabMR(
+            {
+                mainRepoOrgRepo: repository.full_path,
+                mainRepoBranch: repository.branch,
+                mainRepoHash: repository.revision,
+                gitLabUrl: config.c3pr.repoGitlab.gitlab.url,
+                gitLabApiToken: config.c3pr.repoGitlab.gitlab.apiToken,
+                gitUserName: config.c3pr.repoGitlab.gitlab.botUserName,
+                gitUserEmail: config.c3pr.repoGitlab.gitlab.botUserEmail,
+                pr_assignee: prr.assignee,
+                pr_title: prr.pr_title,
+                pr_body: prr.pr_body,
+                patchHexBase64: prr.diff_base64
+            },
+            _c3prLOG5
+        );
 
         _c3prLOG5(`MR created successfully.`, {meta: {pullRequestRequestedEvent}});
 

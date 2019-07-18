@@ -53,14 +53,15 @@ function generateForkName(urlEncodedOrgNameProjectName) {
 /**
  * Forks the given project under the gitlab bot user account.
  */
-async function createForkIfNotExists(orgNameProjectName, {lcid, sha, euuid}): Promise<{organization: string, forkName: string, cloneUrl: string}> {
+async function createForkIfNotExists(orgNameProjectName, c3prLOG5): Promise<{organization: string, forkName: string, cloneUrl: string}> {
+    c3prLOG5 = c3prLOG5({caller_name: 'createForkIfNotExists'});
     let urlEncodedOrgNameProjectName = encodeGroupProjectPath(orgNameProjectName);
 
     const forkName = generateForkName(urlEncodedOrgNameProjectName);
     const forkId = encodeURIComponent(config.c3pr.repoGitlab.gitlab.botUserName + '/' + forkName);
     try {
         let projectData = await getGitLabProject(forkId);
-        c3prLOG4(`Fork '${forkId}' already exists, returning.`,{lcid, sha, euuid, meta: {forkId, orgNameProjectName}});
+        c3prLOG5(`Fork '${forkId}' already exists, returning.`, {meta: {forkId, orgNameProjectName}});
 
         /** @namespace projectData.http_url_to_repo */
         return {
@@ -69,13 +70,13 @@ async function createForkIfNotExists(orgNameProjectName, {lcid, sha, euuid}): Pr
             cloneUrl: config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(projectData.http_url_to_repo)
         };
     } catch (error) {
-        c3prLOG4(`Fork '${forkId}' does not exist, will be created.`, {lcid, sha, euuid, error, meta: {forkId, orgNameProjectName}});
+        c3prLOG5(`Fork '${forkId}' does not exist, will be created.`, {error, meta: {forkId, orgNameProjectName}});
     }
 
     try {
-        let projectId = await scheduleForkCreation(urlEncodedOrgNameProjectName, {lcid, sha, euuid});
-        await waitForForkCompletion(projectId, {lcid, sha, euuid});
-        let cloneUrl = await renameFork(projectId, forkName, {lcid, sha, euuid});
+        let projectId = await scheduleForkCreation(urlEncodedOrgNameProjectName, {...c3prLOG5});
+        await waitForForkCompletion(projectId, {...c3prLOG5});
+        let cloneUrl = await renameFork(projectId, forkName, {...c3prLOG5});
 
         return {
             organization: config.c3pr.repoGitlab.gitlab.botUserName,
@@ -83,7 +84,7 @@ async function createForkIfNotExists(orgNameProjectName, {lcid, sha, euuid}): Pr
             cloneUrl
         }
     } catch (error) {
-        c3prLOG4(`Error while creating fork.`, {lcid, sha, euuid, error, meta: {urlEncodedOrgNameProjectName, forkName}});
+        c3prLOG5(`Error while creating fork.`, {error, meta: {urlEncodedOrgNameProjectName, forkName}});
         throw error;
     }
 
