@@ -45,6 +45,9 @@ a:hover {
 }
 
 td, th { border: 1px solid #808080; border-collapse: collapse; padding: 0 5px 0 5px; }
+tr:hover {
+  background-color: #000000;
+}
 th { background-color: #2a4847; color: #e8bf6a; font-weight: bold; }
 table { font-family: monospace; font-size: small; border-collapse: collapse; margin: auto; text-align: left; }
 

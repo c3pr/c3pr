@@ -5,6 +5,7 @@
         <tr>
           <th>date</th>
           <th>sha</th>
+          <th>euuid</th>
           <th>service</th>
           <th>caller_name</th>
           <th>message</th>
@@ -15,9 +16,10 @@
         <tbody>
         <tr v-for="log of logs" :class="log.node" :key="log._id">
           <td>{{ log.date_time.replace(/[TZ]/g, ' ') }}</td>
-          <td><a href="#" @click.prevent.stop="objetctDisplayedAtDialog = {lcid: log.lcid, sha: log.sha, euuid: log.euuid}">{{ (log.sha || '').substr(0, 7) }}</a></td>
+          <td><a href="#" @click.prevent.stop="objetctDisplayedAtDialog = {lcid: log.lcid, sha: log.sha, euuid: log.euuid}">{{ (log.sha || '').substr(0, 4) }}</a></td>
+          <td><a href="#" @click.prevent.stop="objetctDisplayedAtDialog = {lcid: log.lcid, sha: log.sha, euuid: log.euuid}">{{ (log.euuid || '').substr(0, 4) }}</a></td>
           <td>{{ log.service_name }}</td>
-          <td style="font-size: x-small">{{ log.caller_name }}</td>
+          <td style="font-size: xx-small">{{ log.caller_name }}</td>
           <td :title="log.message" class="message" :class="log.service_name">
             {{ log.message.substr(0, logMessageSize) }}
             <a v-if="log.message.length > logMessageSize" href="#" @click.prevent.stop="objetctDisplayedAtDialog = log.message" class="message">[...]</a>

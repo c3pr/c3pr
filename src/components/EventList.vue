@@ -5,6 +5,7 @@
       <thead>
       <tr>
         <th>sha</th>
+        <th>uuid</th>
         <th>event_type</th>
         <th>status</th>
         <th>created</th>
@@ -15,6 +16,7 @@
       <tbody>
       <tr v-for="event of events">
         <td>{{ sha(event) }}</td>
+        <td>{{ event.uuid.substring(0, 4) }}</td>
         <td>{{ event.event_type }}</td>
         <td>{{ status(event) }}</td>
         <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
