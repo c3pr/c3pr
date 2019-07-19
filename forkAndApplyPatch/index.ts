@@ -21,6 +21,8 @@ interface ForkAndApplyPatchArgs {
     mainRepoCloneUrl;
 }
 
+let forkCount = 0;
+
 export async function forkAndApplyPatch(
     {
         createForkIfNotExists,
@@ -47,7 +49,7 @@ export async function forkAndApplyPatch(
     const forkRepoOrg = forkInfo.organization;
     const forkRepoProject = forkInfo.forkName;
     const forkRepoCloneUrl = addAuthenticationToCloneUrl(forkInfo.cloneUrl);
-    const forkRepoBranch = 'C3PR_' + mainRepoHash.substring(0, 8) + '_' + os.hostname().substring(0, 3) + Date.now().toString(16);
+    const forkRepoBranch = 'C3PR_' + mainRepoHash.substring(0, 8) + '_' + os.hostname().substring(0, 2) + (++forkCount % 36).toString(36) + Date.now().toString(36);
 
     await c3prSH3(`git init ${stagingFolder}`, {}, {}, c3prLOG5);
 
