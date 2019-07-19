@@ -41,14 +41,6 @@ export = function (app) {
         });
     });
 
-    app.get('/api/v1/projects/:project_uuid/prs/open/changed_files', function ({params: {project_uuid}}, response) {
-        prsDB.findFilesWithOpenPR(project_uuid).then((prs) => {
-            response.status(200).send(prs);
-        }).catch((e) => {
-            response.status(500).send(e.toString());
-        });
-    });
-
     app.post('/api/v1/projects/:project_uuid/prs', function ({body, params: {project_uuid}}, response) {
         prsDB.newPR({...body, project_uuid}).then((prs) => {
             response.status(200).send(prs);

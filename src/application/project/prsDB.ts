@@ -9,10 +9,6 @@ async function insert(data) {
     return (await prsDB).insertOne(data);
 }
 
-async function findBy(query) {
-    return (await prsDB).find(query).toArray();
-}
-
 async function findAllOfProject(project_uuid) {
     return (await prsDB).find({project_uuid}).toArray();
 }
@@ -46,14 +42,8 @@ async function updatePR({project_uuid, pr_id, status, assignee}) {
     );
 }
 
-async function findFilesWithOpenPR(project_uuid) {
-    const openPRs = await findBy({project_uuid, status: PR_STATUS.OPEN});
-    return openPRs.reduce((changedFiles, openPR) => [...changedFiles, ...openPR.changed_files], [])
-}
-
 export = {
     newPR,
     updatePR,
-    findAllOfProject,
-    findFilesWithOpenPR
+    findAllOfProject
 };
