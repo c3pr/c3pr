@@ -2,12 +2,14 @@ import config from '../../config';
 import ports from "../../ports/outbound";
 import {Commit, GitLabPush} from "../../ports/outbound/types/GitLabPush/GitLabPush";
 import {sortCommits} from "./sortCommits";
+import {ChangesCommitted} from "./ChangesCommitted";
 
 
 async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits: Commit[], c3prLOG5) {
     const commits = sortCommits(webhookCommits);
 
     const changesetFiles = new Set();
+    let renames = [];
     for(let commit of commits) {
         if (commit.author.email === config.c3pr.repoGitlab.gitlab.botUserEmail) {
             c3prLOG5(`Skipping commit ${commit.id}, since its author is the bot (${commit.author.email}).`, {meta: {commit}});
@@ -26,27 +28,28 @@ async function extractChangedFiles(urlEncodedOrgNameProjectName, webhookCommits:
             } else if (modifiedFile.renamed_file) {
                 changesetFiles.delete(modifiedFile.old_path);
                 changesetFiles.add(modifiedFile.new_path);
+
+                renames.push({from: modifiedFile.old_path, to: modifiedFile.new_path});
             } else if (modifiedFile.deleted_file) {
                 changesetFiles.delete(modifiedFile.new_path);
             } else {
-                changesetFiles.add(modifiedFile.new_path);
+                changesetFiles.add(modifiedFile.new_path); // here new_path === old_path, so either would work
             }
         });
     }
 
-    const changeset = Array.from(changesetFiles.values());
-    changeset.sort();
-    return changeset;
+    const changed_files = Array.from(changesetFiles.values());
+    changed_files.sort();
+    return {changed_files, renames};
 }
 
-async function createChangesCommitted(webhookPayload: GitLabPush, c3prLOG5) {
-    const changed_files = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits, c3prLOG5);
+async function createChangesCommitted(webhookPayload: GitLabPush, c3prLOG5): Promise<ChangesCommitted> {
+    const {changed_files, renames} = await extractChangedFiles(encodeURIComponent(webhookPayload.project.path_with_namespace), webhookPayload.commits, c3prLOG5);
 
     const clone_url_http = config.c3pr.repoGitlab.gitlab.normalizeGitLabUrl(webhookPayload.repository.git_http_url);
     const project_uuid = await ports.fetchFirstProjectForCloneUrl(clone_url_http);
 
     return {
-        date: new Date().toISOString(),
         project_uuid,
         repository: {
             push_user: {id: webhookPayload.user_id, username: webhookPayload.user_username},
@@ -58,7 +61,8 @@ async function createChangesCommitted(webhookPayload: GitLabPush, c3prLOG5) {
             revision: webhookPayload.after
         },
         changed_files,
-        'source-webhook': webhookPayload
+        renames,
+        source_webhook: webhookPayload
     }
 }
 
