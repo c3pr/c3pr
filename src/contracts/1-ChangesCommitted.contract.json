@@ -1,5 +1,4 @@
 {
-  "date": "2018-02-12T14:05:08.893Z",
   "project_uuid": "proj-ect-uuid-123-123",
 
   "repository": {
@@ -11,6 +10,9 @@
   },
 
   "changed_files": ["src/main/resources/second.java", "src/main/resources/third.txt"],
-
-  "source-webhook": {"source-webhook": "here"}
+  "renames": [{
+    "from": "src/a.js",
+    "to":  "src/b.js"
+  }],
+  "source_webhook": {}
 }
