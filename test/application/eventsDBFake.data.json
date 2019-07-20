@@ -1,0 +1,1178 @@
+[
+  {
+    "uuid": "UUID-01",
+    "event_type": "ProjectPreferencesUpdated",
+    "meta": {"created": "2000-01-01T00:01:00.000Z"},
+    "payload":  {
+      "repository": {"clone_url_http": "http://git.foo/bar.git"},
+      "command": "UPDATE_WEIGHT_PER_FILE",
+      "args": {
+        "file_path": "src/fx.js",
+        "tool_id": "tool:weight_modified",
+        "weight_modification": -100,
+        "reason": "someReason1"
+      }
+    }
+  },
+  {
+    "uuid": "UUID-02",
+    "event_type": "ChangesCommitted",
+    "meta": {"created": "2000-01-01T00:02:00.000Z"},
+    "payload": {
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": ["src/f1.js", "src/f2.js", "src/f3.c"],
+      "renames": [{"from": "src/fx.js", "to": "src/f1.js"}]
+    }
+  },
+  {
+    "uuid": "UUID-03",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2000-01-01T00:03:00.000Z"},
+    "payload": {
+      "parent": {"event_type": "ChangesCommitted", "uuid": "UUID-02"},
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool:t1",
+      "files": ["src/f1.js", "src/f2.js"]
+    }
+  },
+  {
+    "uuid": "UUID-04",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2000-01-01T00:04:00.000Z"},
+    "payload": {
+      "parent": {"event_type": "ChangesCommitted", "uuid": "UUID-02"},
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool:t2",
+      "files": ["src/f3.c"]
+    }
+  },
+  {
+    "uuid": "fa7ccc9e-e214-45a7-97d5-2b6b9a10cb28",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-08T14:58:26.024Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "UUID-03"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "7299a1c4-902b-4a56-bb89-1c440f1ac9bd",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-08T14:58:26.097Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "fa7ccc9e-e214-45a7-97d5-2b6b9a10cb28"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:RemoveUselessImports",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "395e8595-3057-443b-ba2d-04d896ddc8c1",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-08T15:32:09.030Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "7299a1c4-902b-4a56-bb89-1c440f1ac9bd"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "480c6848-e315-44de-9a38-d976c9b49b10",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-08T15:32:09.163Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "395e8595-3057-443b-ba2d-04d896ddc8c1"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:StaticInitializedFieldToFinal",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "cfc4b409-1b8c-4b2c-af0b-ea1584266ed2",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-08T16:03:13.319Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "480c6848-e315-44de-9a38-d976c9b49b10"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "64f6e42c-267e-4e84-8b33-66c1465811df",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-08T16:03:13.454Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "cfc4b409-1b8c-4b2c-af0b-ea1584266ed2"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:UseCollectionIsEmpty",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "c52a2f95-fce2-4710-8979-11a23a5ec70f",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-08T16:35:54.284Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "64f6e42c-267e-4e84-8b33-66c1465811df"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "d3a47049-c51e-44c9-8cca-58d21e820135",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-08T16:35:54.427Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "c52a2f95-fce2-4710-8979-11a23a5ec70f"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:RemoveEmptyStatement",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "95a3a198-4ec8-492a-9ca6-0e863d13acf1",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-08T23:34:26.597Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "d3a47049-c51e-44c9-8cca-58d21e820135"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "e71b34fc-83cf-4451-b5bb-93d923661d18",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-08T23:34:51.266Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "95a3a198-4ec8-492a-9ca6-0e863d13acf1"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:CollapsibleIfStatements",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "fccf4edc-db70-4f94-8b0f-839c6f75cd6b",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T00:22:01.271Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "e71b34fc-83cf-4451-b5bb-93d923661d18"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "aa071c30-3c91-4b08-921a-9b2c1cf496c0",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T00:22:01.388Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "fccf4edc-db70-4f94-8b0f-839c6f75cd6b"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:RedundantCastsShouldNotBeUsed",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "710ba930-d8b0-4c50-98ea-333eaf076e7b",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T01:00:33.108Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "aa071c30-3c91-4b08-921a-9b2c1cf496c0"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "e6b74543-2155-460d-a028-cc83d001e1cb",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T01:00:33.221Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "710ba930-d8b0-4c50-98ea-333eaf076e7b"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:RemoveLiteralBoolean",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "a507d974-2457-4db9-b69f-6e2c4a39ed47",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T01:00:34.204Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "aa071c30-3c91-4b08-921a-9b2c1cf496c0"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "44f92356-197d-4eba-983b-422acb7e581e",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T01:00:34.318Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "a507d974-2457-4db9-b69f-6e2c4a39ed47"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:RemoveUselessParentheses",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "50f2b49a-eb51-4665-895d-5690822acf3c",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T01:32:05.525Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "e6b74543-2155-460d-a028-cc83d001e1cb"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "fc41dd40-04a2-480d-932c-20c48e3ffa7d",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T01:32:05.643Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "50f2b49a-eb51-4665-895d-5690822acf3c"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:ArrayDesignatorOnType",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "b6c1424f-1d26-47a0-a826-0c25c1a2a7c7",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T01:32:26.160Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "44f92356-197d-4eba-983b-422acb7e581e"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [
+        "e"
+      ],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": "w2"
+    }
+  },
+  {
+    "uuid": "a1bf2261-e906-4d4b-93b5-529acdebe941",
+    "event_type": "PullRequestRequested",
+    "meta": {"created": "2018-08-09T01:32:26.230Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "b6c1424f-1d26-47a0-a826-0c25c1a2a7c7"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": "w2"
+    }
+  },
+  {
+    "uuid": "294707f3-3e0c-4b4f-bf0e-10c32bd4284c",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T01:32:26.310Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "b6c1424f-1d26-47a0-a826-0c25c1a2a7c7"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:RemoveCodeComment",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "69095b5d-6e13-4d53-a593-9e8e1badbb04",
+    "event_type": "PullRequestCreated",
+    "meta": {"created": "2018-08-09T01:32:45.407Z"},
+    "payload": {
+      "parent": {
+        "event_type": "PullRequestRequested",
+        "uuid": "a1bf2261-e906-4d4b-93b5-529acdebe941"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "pr_id": 36,
+      "pr_url": "http://git.example.com/essteeai/sagas2/merge_requests/36"
+    }
+  },
+  {
+    "uuid": "593a8f33-f560-4dd4-b041-3b69d7a2f128",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T02:04:12.471Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "294707f3-3e0c-4b4f-bf0e-10c32bd4284c"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [
+        "g"
+      ],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": "w2"
+    }
+  },
+  {
+    "uuid": "e0fa5a00-8e94-41bc-8a9a-b3b17ec60f60",
+    "event_type": "PullRequestRequested",
+    "meta": {"created": "2018-08-09T02:04:12.523Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "593a8f33-f560-4dd4-b041-3b69d7a2f128"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": "w2"
+    }
+  },
+  {
+    "uuid": "995277fd-710f-42ba-a343-209f599133c5",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T02:04:12.609Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "593a8f33-f560-4dd4-b041-3b69d7a2f128"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:DeclarationsShouldUseCollectionInterfaces",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "8347635f-5b4d-43b7-ba49-d2994def36d6",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T02:04:21.245Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "fc41dd40-04a2-480d-932c-20c48e3ffa7d"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "427f1ca4-d925-4d84-afa0-23f031f12150",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T02:04:21.374Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "8347635f-5b4d-43b7-ba49-d2994def36d6"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:VariableImmediatelyReturned",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "1076e154-1a3c-4139-9c3b-99f15a0954fd",
+    "event_type": "PullRequestCreated",
+    "meta": {"created": "2018-08-09T02:04:31.595Z"},
+    "payload": {
+      "parent": {
+        "event_type": "PullRequestRequested",
+        "uuid": "e0fa5a00-8e94-41bc-8a9a-b3b17ec60f60"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "pr_id": 39,
+      "pr_url": "http://git.example.com/essteeai/sagas2/merge_requests/39"
+    }
+  },
+  {
+    "uuid": "1bdbbedf-c412-4d68-ba52-d6e3a0168545",
+    "event_type": "PullRequestUpdated",
+    "meta": {"created": "2018-08-09T02:19:15.287Z"},
+    "payload": {
+      "repository": {
+        "clone_url_http": "http://git.foo/bar.git"
+      },
+      "pr_id": 36,
+      "status": "merged"
+    }
+  },
+  {
+    "uuid": "4655276e-c627-4907-8ef2-4874a74ce646",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T02:40:09.423Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "995277fd-710f-42ba-a343-209f599133c5"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "d1f36a55-229d-4ba9-9a03-641495eb0d56",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T02:40:09.486Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "4655276e-c627-4907-8ef2-4874a74ce646"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:AddCurlyBrackets",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "092cb8fe-9251-415a-bc96-760390d9c660",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T02:40:37.035Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "427f1ca4-d925-4d84-afa0-23f031f12150"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [
+        "d"
+      ],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": "w2"
+    }
+  },
+  {
+    "uuid": "6347033c-f129-4430-90ba-578cdf750c78",
+    "event_type": "PullRequestRequested",
+    "meta": {"created": "2018-08-09T02:40:37.109Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "092cb8fe-9251-415a-bc96-760390d9c660"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": "w2"
+    }
+  },
+  {
+    "uuid": "09cb3b13-f04a-4f43-ac57-86e3922e4367",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T02:40:37.193Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "092cb8fe-9251-415a-bc96-760390d9c660"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:RemoveUselessVariables",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "6230b1e9-fb55-44a1-be25-7c700df58c07",
+    "event_type": "PullRequestCreated",
+    "meta": {"created": "2018-08-09T02:40:56.507Z"},
+    "payload": {
+      "parent": {
+        "event_type": "PullRequestRequested",
+        "uuid": "6347033c-f129-4430-90ba-578cdf750c78"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "pr_id": 40,
+      "pr_url": "http://git.example.com/essteeai/sagas2/merge_requests/40"
+    }
+  },
+  {
+    "uuid": "5d5cc02f-3d57-4796-9346-0d488bbb1a78",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T03:08:18.557Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "d1f36a55-229d-4ba9-9a03-641495eb0d56"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "82a4524e-512a-4f11-a4e1-9a348e89d19f",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T03:08:18.674Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "5d5cc02f-3d57-4796-9346-0d488bbb1a78"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:LocalVarsShouldComplyWithNamingConvention",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "162e6738-0115-4739-a7f9-4e54a5096ca1",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T03:09:20.188Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "09cb3b13-f04a-4f43-ac57-86e3922e4367"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "c51526d5-fb47-4be1-be4e-c9e3b48426df",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T03:09:20.296Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "162e6738-0115-4739-a7f9-4e54a5096ca1"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:PrimitiveInstantiationForToString",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "0df414e1-f260-4cef-aa6e-e2e4662f0012",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T03:43:30.765Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "82a4524e-512a-4f11-a4e1-9a348e89d19f"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "37e7b372-e05f-4d8e-811f-ca9d607d6cb3",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T03:43:30.843Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "0df414e1-f260-4cef-aa6e-e2e4662f0012"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:RemoveEmptyMethod",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "b59c3474-7927-4cd3-8a75-ccccc73c8b56",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T03:43:56.745Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "c51526d5-fb47-4be1-be4e-c9e3b48426df"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "e6e49155-7804-40c0-be28-95923e588913",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T03:43:56.804Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "b59c3474-7927-4cd3-8a75-ccccc73c8b56"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:AddSwitchDefaultCase",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "e",
+        "f",
+        "g",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "9e608248-a0e8-4e42-8686-75a0f852042f",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T04:18:46.181Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "37e7b372-e05f-4d8e-811f-ca9d607d6cb3"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "f53934ca-7937-40db-8356-093073501ecc",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2018-08-09T04:18:46.241Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationCompleted",
+        "uuid": "9e608248-a0e8-4e42-8686-75a0f852042f"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool-x:UseStringEquals",
+      "files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ]
+    }
+  },
+  {
+    "uuid": "a633b8d9-3249-4018-ace5-f699ff4438b5",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T04:19:24.071Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "e6e49155-7804-40c0-be28-95923e588913"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "e",
+        "f",
+        "g",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "8afe693a-f574-42f9-a356-9fd489f2633d",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2018-08-09T04:43:18.605Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "f53934ca-7937-40db-8356-093073501ecc"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": [],
+      "unmodified_files": [
+        "src/f1.js",
+        "src/f2.js",
+        "src/f3.c",
+        "d",
+        "f",
+        "h"
+      ],
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": ""
+    }
+  },
+  {
+    "uuid": "1eb601a4-e73d-496c-a72e-b6e0af1bd0e0",
+    "event_type": "PullRequestUpdated",
+    "meta": {"created": "2018-08-09T18:17:25.309Z"},
+    "payload": {
+      "repository": {
+        "clone_url_http": "http://git.foo/bar.git"
+      },
+      "pr_id": 40,
+      "status": "merged"
+    }
+  },
+  {
+    "uuid": "0eb48246-bfb3-4970-a240-58193de8d4a3",
+    "event_type": "PullRequestUpdated",
+    "meta": {"created": "2018-08-13T17:26:41.253Z"},
+    "payload": {
+      "repository": {
+        "clone_url_http": "http://git.foo/bar.git"
+      },
+      "pr_id": 39,
+      "status": "closed"
+    }
+  }
+]
