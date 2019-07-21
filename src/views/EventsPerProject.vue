@@ -24,8 +24,8 @@
         <td>{{ status(event) }}</td>
         <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
         <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
-        <td :title="event.payload['source-webhook'].commits[0].message">
-          {{ event.payload['source-webhook'].commits[0].message.substring(0, 50) }}{{ event.payload['source-webhook'].commits[0].message.length > 50 ? '...' : '' }}
+        <td :title="webhook(event).commits[0].message">
+          {{ webhook(event).commits[0].message.substring(0, 50) }}{{ webhook(event).commits[0].message.length > 50 ? '...' : '' }}
         </td>
         <td :title="event.payload.changed_files.join('\n')">{{ event.payload.changed_files.length }}</td>
         <td>
@@ -43,7 +43,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { EVENTS, FETCH_EVENTS_FOR_PROJECT, GET_EVENTS_BY_TYPE_FOR_PROJECT } from "../store/modules/events";
-import {sha, status} from "../app/events";
+import {sha, status, webhook} from "../app/events";
 
 export default {
   name: "Events",
@@ -76,7 +76,8 @@ export default {
     },
     ...mapActions(EVENTS, {fetchEventsForProject: FETCH_EVENTS_FOR_PROJECT}),
     sha,
-    status
+    status,
+    webhook
   }
 };
 </script>

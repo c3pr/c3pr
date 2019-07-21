@@ -10,3 +10,10 @@ export function status(event) {
       return event.meta.status;
   }
 }
+export function webhook(event) {
+  return event && event.payload && (event.payload['source-webhook'] || event.payload.source_webhook);
+}
+
+export function parent(event) {
+  return event && event.payload && event.payload.parent && event.payload.parent.uuid;
+}
