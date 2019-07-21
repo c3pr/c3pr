@@ -10,5 +10,5 @@
     "username": "root"
   },
 
-  "source-webhook": {"source-webhook": "here"}
+  "source_webhook": {"source webhook": "here"}
 }

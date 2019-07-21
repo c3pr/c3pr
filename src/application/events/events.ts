@@ -38,7 +38,7 @@ async function reprocessParents(event_type) {
         await patchAsProcessing(e.event_type, e.uuid, REPROCESS_PROCESSOR_UUID);
         let parentUUID = e.payload.parent.uuid;
 
-        await eventsDB.persistAsUnprocessed(parentUUID);
+        await eventsDB.persistAsUnprocessed(parentUUID, 'reprocess-parents');
 
         const sha = (e.payload.repository && e.payload.repository.revision) || 'unknown';
         const _c3prLOG5 = c3prLOG5({sha});
@@ -86,7 +86,7 @@ async function patchAsProcessed(event_type, uuid, processor_uuid) {
     return eventsDB.persistAsProcessed(uuid, processor_uuid);
 }
 
-function patchAsUnprocessed(event_type, uuid, processor_uuid?) {
+function patchAsUnprocessed(event_type, uuid, processor_uuid) {
     return eventsDB.persistAsUnprocessed(uuid, processor_uuid);
 }
 

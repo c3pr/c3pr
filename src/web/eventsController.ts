@@ -109,6 +109,7 @@ export = function (app) {
         });
     });
 
+    // meant for dashboard (manual) use only
     app.patch('/api/v1/events/:eventType/:uuid/meta/unprocessed', function ({params: {eventType, uuid}, decodeJwtToken}, response) {
         const jwtToken = decodeJwtToken(); if (!jwtToken) { response.status(401).send('Invalid token'); return; }
         let processor_uuid = jwtToken.sub;

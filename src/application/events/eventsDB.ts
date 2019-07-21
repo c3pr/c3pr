@@ -2,6 +2,7 @@ const config = require('../../config');
 import Status from './status';
 
 const client = require('../../infrastructure/db');
+import {Mutex} from 'await-semaphore';
 
 
 
@@ -42,6 +43,9 @@ function findAllOfStatus(status) {
     return findAll({'meta.status': status});
 }
 
+
+
+const eventStatusMutex = new Mutex();
 async function markStatus(uuid, status, processor_uuid) {
     return (await events).update(
         {uuid},
@@ -49,27 +53,31 @@ async function markStatus(uuid, status, processor_uuid) {
     );
 }
 
-function persistAsUnprocessed(uuid, processor_uuid?) {
-    return markStatus(uuid, Status.UNPROCESSED, processor_uuid);
+function persistAsUnprocessed(uuid, processor_uuid) {
+    return eventStatusMutex.use(() => markStatus(uuid, Status.UNPROCESSED, processor_uuid));
 }
 
 async function persistAsProcessing(uuid, processor_uuid) {
-    const event = await find(uuid);
-    if (event.meta.status !== Status.UNPROCESSED) {
-        throw new Error(`Event ${uuid} was not UNPROCESSED. Attempt to mark as PROCESSING by ${processor_uuid} failed.`)
-    }
-    return markStatus(uuid, Status.PROCESSING, processor_uuid);
+    return eventStatusMutex.use(async () => {
+        const event = await find(uuid);
+        if (event.meta.status !== Status.UNPROCESSED) {
+            throw new Error(`Event ${uuid} was not UNPROCESSED. Attempt to mark as PROCESSING by ${processor_uuid} failed.`)
+        }
+        return markStatus(uuid, Status.PROCESSING, processor_uuid);
+    });
 }
 
 async function persistAsProcessed(uuid, processor_uuid) {
-    const event = await find(uuid);
-    if (event.meta.status !== Status.PROCESSING) {
-        throw new Error(`Event ${uuid} was not PROCESSING. Attempt to mark as PROCESSED by ${processor_uuid} failed.`)
-    }
-    if (event.meta.processor_uuid !== processor_uuid) {
-        throw new Error(`Attempt to mark ${uuid} as PROCESSED by ${processor_uuid} when it has been previously marked as PROCESSING by ${event.meta.processor_uuid}.`)
-    }
-    return markStatus(uuid, Status.PROCESSED, processor_uuid);
+    return eventStatusMutex.use(async () => {
+        const event = await find(uuid);
+        if (event.meta.status !== Status.PROCESSING) {
+            throw new Error(`Event ${uuid} was not PROCESSING. Attempt to mark as PROCESSED by ${processor_uuid} failed.`)
+        }
+        if (event.meta.processor_uuid !== processor_uuid) {
+            throw new Error(`Attempt to mark ${uuid} as PROCESSED by ${processor_uuid} when it has been previously marked as PROCESSING by ${event.meta.processor_uuid}.`)
+        }
+        return markStatus(uuid, Status.PROCESSED, processor_uuid);
+    });
 }
 
 export = {
