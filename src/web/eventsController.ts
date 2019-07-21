@@ -20,6 +20,7 @@ export = function (app) {
     });
 
     // curl -sD - http://127.0.0.1:7300/api/v1/events/MY_TYPE/2231a335-c00e-4246-961b-c23ff8ba8b0f --header "Authorization: Bearer $(curl -s -X POST http://127.0.0.1:7300/api/v1/login | tr -d '"')"
+    // equally accepted path: '/api/v1/events/uuid/:uuid'
     app.get('/api/v1/events/:eventType/:uuid', function ({params: {eventType, uuid}}, response) {
         events.find(uuid).then((evt) => {
             if (evt) {
@@ -88,8 +89,9 @@ export = function (app) {
     });
 
     // curl --data '{"key": "added", "value": "booo", "timeout": 10000}' --header "Content-Type: application/json" -X PATCH http://127.0.0.1:7300/api/registry
-    app.patch('/api/v1/events/:eventType/:uuid/meta/processing', function ({params: {eventType, uuid}, decodedJwtToken}, response) {
-        let processor_uuid = decodedJwtToken.sub;
+    app.patch('/api/v1/events/:eventType/:uuid/meta/processing', function ({params: {eventType, uuid}, decodeJwtToken}, response) {
+        const jwtToken = decodeJwtToken(); if (!jwtToken) { response.status(401).send('Invalid token'); return; }
+        let processor_uuid = jwtToken.sub;
         events.patchAsProcessing(eventType, uuid, processor_uuid).then(() => {
             response.status(200).send();
         }).catch((e) => {
@@ -97,8 +99,9 @@ export = function (app) {
         });
     });
 
-    app.patch('/api/v1/events/:eventType/:uuid/meta/processed', function ({params: {eventType, uuid}, decodedJwtToken}, response) {
-        let processor_uuid = decodedJwtToken.sub;
+    app.patch('/api/v1/events/:eventType/:uuid/meta/processed', function ({params: {eventType, uuid}, decodeJwtToken}, response) {
+        const jwtToken = decodeJwtToken(); if (!jwtToken) { response.status(401).send('Invalid token'); return; }
+        let processor_uuid = jwtToken.sub;
         events.patchAsProcessed(eventType, uuid, processor_uuid).then(() => {
             response.status(200).send();
         }).catch((e) => {
@@ -106,8 +109,9 @@ export = function (app) {
         });
     });
 
-    app.patch('/api/v1/events/:eventType/:uuid/meta/unprocessed', function ({params: {eventType, uuid}, decodedJwtToken}, response) {
-        let processor_uuid = decodedJwtToken.sub;
+    app.patch('/api/v1/events/:eventType/:uuid/meta/unprocessed', function ({params: {eventType, uuid}, decodeJwtToken}, response) {
+        const jwtToken = decodeJwtToken(); if (!jwtToken) { response.status(401).send('Invalid token'); return; }
+        let processor_uuid = jwtToken.sub;
         events.patchAsUnprocessed(eventType, uuid, processor_uuid).then(() => {
             response.status(200).send();
         }).catch((e) => {
