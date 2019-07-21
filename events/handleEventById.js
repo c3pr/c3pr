@@ -30,13 +30,12 @@ async function handleResult(handlerFunctionResult, { event, handlerFunction, c3p
     }
     return handlerFunctionResult.result;
 }
-// TODO document this can return null (not the result) when no event is collected OR when handlerFunction() returns skipped===true
-async function handleEventById({ event_type, event_uuid, handlerFunction, c3prHubUrl, jwt }, c3prLOG5) {
+async function handleEventById({ event_uuid, handlerFunction, c3prHubUrl, jwt }, c3prLOG5) {
     c3prLOG5 = c3prLOG5({ caller_name: 'handleEventById', euuid: event_uuid });
-    c3prLOG5(`Handling by id ${event_type}::${event_uuid}.`);
-    let event = await collectEventAndMarkAsProcessing_1.collectEventByIdAndMarkAsProcessing({ event_type, event_uuid, c3prHubUrl, jwt }, c3prLOG5);
+    c3prLOG5(`Handling by uuid ${event_uuid}.`);
+    let event = await collectEventAndMarkAsProcessing_1.collectEventByIdAndMarkAsProcessing({ event_uuid, c3prHubUrl, jwt }, c3prLOG5);
     if (!event) {
-        return;
+        return null;
     }
     c3prLOG5 = c3prLOG5({ euuid: event.uuid });
     try {
@@ -45,10 +44,10 @@ async function handleEventById({ event_type, event_uuid, handlerFunction, c3prHu
     }
     catch (error) {
         c3prLOG5(`Error while executing handlerFunction() for event handling.`, { error, meta: { handlerFunction, event } });
-        markAs_1.markAsUnprocessed({ event_type, uuid: event.uuid, c3prHubUrl, jwt }, c3prLOG5).catch(error => {
-            c3prLOG5(`Couldn't mark ${event_type}/${event.uuid} as UNPROCESSED. You must do it **MANUALLY**. If you don't, you'll have to wait until the PROCESSING status times out.`, { error, meta: { handlerFunction, event } });
+        markAs_1.markAsUnprocessed({ event_type: event.event_type, uuid: event.uuid, c3prHubUrl, jwt }, c3prLOG5).catch(error => {
+            c3prLOG5(`Couldn't mark ${event.event_type}/${event.uuid} as UNPROCESSED. You must do it **MANUALLY**. If you don't, you'll have to wait until the PROCESSING status times out.`, { error, meta: { handlerFunction, event } });
         });
-        return;
+        return null;
     }
 }
 // noinspection JSUnusedGlobalSymbols

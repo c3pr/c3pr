@@ -9,9 +9,8 @@ export interface HandlerOutput {
 }
 
 export interface EventByIdHandler {
-    event_type: string;
     event_uuid: string;
-    handlerFunction: (event: any, log: any) => Promise<HandlerOutput> | HandlerOutput;
+    handlerFunction: (event: any, c3prLOG5: any) => Promise<HandlerOutput> | HandlerOutput;
     c3prHubUrl: string;
     jwt: string;
 }
@@ -54,15 +53,14 @@ async function handleResult(handlerFunctionResult: HandlerOutput, {event, handle
     return handlerFunctionResult.result;
 }
 
-// TODO document this can return null (not the result) when no event is collected OR when handlerFunction() returns skipped===true
-async function handleEventById({event_type, event_uuid, handlerFunction, c3prHubUrl, jwt}: EventByIdHandler, c3prLOG5) {
+async function handleEventById({event_uuid, handlerFunction, c3prHubUrl, jwt}: EventByIdHandler, c3prLOG5): Promise<any | null> {
     c3prLOG5 = c3prLOG5({caller_name: 'handleEventById', euuid: event_uuid});
 
-    c3prLOG5(`Handling by id ${event_type}::${event_uuid}.`);
+    c3prLOG5(`Handling by uuid ${event_uuid}.`);
 
-    let event = await collectEventByIdAndMarkAsProcessing({event_type, event_uuid, c3prHubUrl, jwt}, c3prLOG5);
+    let event = await collectEventByIdAndMarkAsProcessing({event_uuid, c3prHubUrl, jwt}, c3prLOG5);
     if (!event) {
-        return;
+        return null;
     }
     c3prLOG5 = c3prLOG5({euuid: event.uuid});
 
@@ -72,13 +70,13 @@ async function handleEventById({event_type, event_uuid, handlerFunction, c3prHub
     } catch (error) {
         c3prLOG5(`Error while executing handlerFunction() for event handling.`, {error, meta: {handlerFunction, event}});
 
-        markAsUnprocessed({event_type, uuid: event.uuid, c3prHubUrl, jwt}, c3prLOG5).catch(error => {
+        markAsUnprocessed({event_type: event.event_type, uuid: event.uuid, c3prHubUrl, jwt}, c3prLOG5).catch(error => {
             c3prLOG5(
-                `Couldn't mark ${event_type}/${event.uuid} as UNPROCESSED. You must do it **MANUALLY**. If you don't, you'll have to wait until the PROCESSING status times out.`,
+                `Couldn't mark ${event.event_type}/${event.uuid} as UNPROCESSED. You must do it **MANUALLY**. If you don't, you'll have to wait until the PROCESSING status times out.`,
                 {error, meta: {handlerFunction, event}}
             );
         });
-        return;
+        return null;
     }
 
 }
