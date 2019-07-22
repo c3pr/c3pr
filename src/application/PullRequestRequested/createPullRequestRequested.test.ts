@@ -1,18 +1,7 @@
-require("node-c3pr-logger").testMode();
-process.env.NODE_ENV = 'test';
-
 import { expect } from 'chai';
 require('chai').should();
 
-// noinspection ES6UnusedImports
-import config from '../../config';
-
 const createPullRequestRequested = require('./createPullRequestRequested').c3pr.createPullRequestRequested;
-
-// noinspection JSUnusedLocalSymbols
-const axios = require('axios');
-// noinspection JSUnusedLocalSymbols
-const MockAdapter = require('axios-mock-adapter');
 
 const toolInvocationCompleted = {
     event_type: "ToolInvocationCompleted",
