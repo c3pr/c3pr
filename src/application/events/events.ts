@@ -92,8 +92,13 @@ function patchAsUnprocessed(event_type, uuid, processor_uuid) {
 
 async function broadcastUnprocessedEvents() {
     const _c3prLOG5 = c3prLOG5({sha: '!hub-events-broadcast-unprocessed-events', caller_name: 'broadcastUnprocessedEvents'});
+    let processingEvents = await eventsDB.findAllOfStatus(Status.PROCESSING).length;
+    if (processingEvents > config.c3pr.hub.numberOfSimultaneousProcessingEvents) {
+        return;
+    }
     let unprocessedEvents = await eventsDB.findAllOfStatus(Status.UNPROCESSED);
-    unprocessedEvents = unprocessedEvents.filter(({event_type}) => !event_type.includes('Failed'));
+    unprocessedEvents = unprocessedEvents.filter(({event_type}) => !event_type.includes('Failed')).slice(0, config.c3pr.hub.numberOfSimultaneousProcessingEvents);
+
     _c3prLOG5('Broadcasting now. '+unprocessedEvents.length+' unprocessed events.', {meta: {unprocessedEvents}});
     for (let event_payload of unprocessedEvents) {
         const event_type = event_payload.event_type;

@@ -24,6 +24,8 @@ export = {
 
             mongoLogsCollection: C3PR_MONGO_LOGS_COLLECTION,
 
+            numberOfSimultaneousProcessingEvents: 5,
+
             bus: {
                 maxRetries: 2,
                 retryWaitingTimeInMs: 5 * 1000 // 5 seconds
