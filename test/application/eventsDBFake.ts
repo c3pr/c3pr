@@ -33,6 +33,7 @@ async function findAll(query) {
     });
 }
 
+eventsDBModule.default.find = async (uuid) => (await findAll({uuid}))[0];
 eventsDBModule.default.findAll = findAll;
 console.log('eventsDBFake loaded.');
 
