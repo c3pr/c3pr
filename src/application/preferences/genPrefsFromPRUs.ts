@@ -6,11 +6,11 @@ import {
 } from "./ProjectPreferences";
 import {
     addPrToOpenPrsForFile,
-    disableToolForAllChangedFiles,
     modifyWeightOfToolForAllFiles,
     removePrFromOpenPrsForFile
 } from "./mappers";
 import filesAndToolForPR from "./filesAndToolForPr";
+import {generateCommandsFromComment} from "../comments/processComment";
 
 const PullRequestUpdatedCommands = {
     OPEN_PULL_REQUEST: 'OPEN_PULL_REQUEST',
@@ -23,26 +23,10 @@ const PullRequestUpdatedCommands = {
 type PRStatus = 'open' | 'closed' | 'merged';
 
 
-
-async function processComment(files: string[], tool_id: string, timestamp: string, text: string): Promise<UpdatePrefsCommand[]> {
-    if (!text.includes('@c3pr-bot') && !text.includes('@c3pr\\-bot') && !text.includes('@c3pr\\\\-bot')) {
-        return [];
-    }
-    const commands: UpdatePrefsCommand[] = [];
-    if (text.includes("bug")) {
-        commands.push(...disableToolForAllChangedFiles(files, tool_id, timestamp));
-    } else if (text.includes("manual")) {
-        // restore weight lost by closed (non-merged) PR
-        commands.push(...modifyWeightOfToolForAllFiles(files, tool_id, timestamp, WEIGHT_MODIFICATION_PER_CLOSED_PR * -1));
-    }
-    return commands;
-}
-
-
 async function handlePRU(command: any, clone_url_http: string, args: any, commands: UpdatePrefsCommand[], created: any, pr_id: any, status: any) {
     if (command === PullRequestUpdatedCommands.ADD_COMMENT) {
         let filesAndTool = await filesAndToolForPR(clone_url_http, args.pr_id);
-        return processComment(filesAndTool.changed_files, filesAndTool.tool_id, created, args.text);
+        return generateCommandsFromComment(filesAndTool.changed_files, filesAndTool.tool_id, created, args.text);
     } else {
         let filesAndTool = await filesAndToolForPR(clone_url_http, pr_id);
         const s = status as PRStatus;
