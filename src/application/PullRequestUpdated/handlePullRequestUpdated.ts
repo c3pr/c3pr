@@ -2,6 +2,7 @@ import config from '../../config';
 import {fetchFirstProjectForCloneUrl} from "node-c3pr-hub-client/projects/fetchFirstProjectForCloneUrl";
 import {updatePrOfProject} from "node-c3pr-hub-client/projects/updatePrOfProject";
 import handleEventById from "node-c3pr-hub-client/events/handleEventById";
+import replyToUserComment from "../CommentPullRequest/replyToUserComment";
 
 export default function handlePullRequestUpdated(request, c3prLOG5) {
     c3prLOG5 = c3prLOG5({caller_name: 'handlePullRequestUpdated'});
@@ -17,7 +18,8 @@ export default function handlePullRequestUpdated(request, c3prLOG5) {
 async function handlerFunction(pullRequestUpdatedEvent, c3prLOG5): Promise<any> {
     c3prLOG5 = c3prLOG5({caller_name: 'handlePullRequestUpdated#hF'});
 
-    if (pullRequestUpdatedEvent.payload.command === 'ADD_COMMENT') {
+    if (pullRequestUpdatedEvent.payload.command === 'COMMENT_ADDED') {
+        await replyToUserComment(pullRequestUpdatedEvent, c3prLOG5);
         return {new_status: 'PROCESSED', result: 'nothing-to-do'};
     }
 

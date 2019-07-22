@@ -18,13 +18,14 @@ const PullRequestUpdatedCommands = {
     REOPEN_PULL_REQUEST: 'REOPEN_PULL_REQUEST',
     CLOSE_PULL_REQUEST: 'CLOSE_PULL_REQUEST',
     UPDATE_PULL_REQUEST: 'UPDATE_PULL_REQUEST',
-    ADD_COMMENT: 'ADD_COMMENT'
+    COMMENT_ADDED: 'COMMENT_ADDED'
 };
 type PRStatus = 'open' | 'closed' | 'merged';
 
 
 async function handlePRU(command: any, clone_url_http: string, args: any, commands: UpdatePrefsCommand[], created: any, pr_id: any, status: any) {
-    if (command === PullRequestUpdatedCommands.ADD_COMMENT) {
+    if (command === PullRequestUpdatedCommands.COMMENT_ADDED) {
+        if (!args.bot_is_mentioned) { return []; }
         let filesAndTool = await filesAndToolForPR(clone_url_http, args.pr_id);
         return generateCommandsFromComment(filesAndTool.changed_files, filesAndTool.tool_id, created, args.text);
     } else {
