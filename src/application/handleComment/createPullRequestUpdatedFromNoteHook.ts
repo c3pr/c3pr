@@ -6,6 +6,10 @@ function escapeUsernameForReply(username) {
     return '@' + username.replace(/-/g, '\\-');
 }
 
+function mentionsC3prBotNickname(text: string) {
+    return text.includes('@c3pr-bot') || text.includes('@c3pr\\-bot') || text.includes('@c3pr\\\\-bot');
+}
+
 export default function createPullRequestUpdatedFromNoteHook(gitLabNoteWebhook: GitLabNote) {
     return {
         repository: {
@@ -23,6 +27,7 @@ export default function createPullRequestUpdatedFromNoteHook(gitLabNoteWebhook: 
         command: 'ADD_COMMENT',
         args: {
             pr_id: gitLabNoteWebhook.merge_request.iid,
+            bot_is_mentioned: mentionsC3prBotNickname(gitLabNoteWebhook.object_attributes.note),
             text: gitLabNoteWebhook.object_attributes.note,
             author: {
                 id: gitLabNoteWebhook.object_attributes.author_id,
