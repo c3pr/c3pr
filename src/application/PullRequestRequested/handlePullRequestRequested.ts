@@ -1,6 +1,5 @@
-import c3prLOG5 from "node-c3pr-logger/c3prLOG5";
 import {Event} from 'node-c3pr-hub-client';
-import handleFirstCollectedEvent from 'node-c3pr-hub-client/events/handleFirstCollectedEvent';
+import handleEventById from 'node-c3pr-hub-client/events/handleEventById';
 import c3prHubRegisterNewEvent from 'node-c3pr-hub-client/events/registerNewEvent';
 
 import { createGitLabMR } from './createGitLabMR';
@@ -9,26 +8,29 @@ import config from '../../config';
 import {createAndEmitPullRequestCreated} from "../PullRequestCreated/createAndEmitPullRequestCreated";
 
 
-export async function handlePullRequestRequested({lcid, sha, euuid}): Promise<any> {
-    let handleResult = await handleFirstCollectedEvent({
-        event_type: `PullRequestRequested`,
+export async function handlePullRequestRequested(request, c3prLOG5): Promise<any> {
+    c3prLOG5 = c3prLOG5({caller_name: 'handlePullRequestRequested'});
+
+    let handleResult = handleEventById({
+        event_uuid: request.body.uuid,
         handlerFunction,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.hub.auth.jwt,
-        lcid, sha, euuid
-    });
+    }, c3prLOG5);
+
     if (handleResult) {
-        let {pullRequestRequestedEvent, createMrResult} = handleResult;
-        return createAndEmitPullRequestCreated(pullRequestRequestedEvent, createMrResult, {lcid, sha, euuid});
+        let {pullRequestRequestedEvent, createMrResult} = handleResult as any;
+        return createAndEmitPullRequestCreated(pullRequestRequestedEvent, createMrResult, c3prLOG5);
     }
 }
 
-async function handlerFunction(pullRequestRequestedEvent: Event<any>, {lcid, sha, euuid}): Promise<any> {
-    const _c3prLOG5 = c3prLOG5({lcid, sha, euuid, caller_name: 'handlePullRequestRequested'});
+async function handlerFunction(pullRequestRequestedEvent: Event<any>, c3prLOG5): Promise<any> {
+    c3prLOG5 = c3prLOG5({caller_name: 'handlePullRequestRequested'});
+
     const prr = pullRequestRequestedEvent.payload;
     const repository = prr.repository;
 
-    _c3prLOG5(`Handling MR request title '${prr.pr_title}' rev '${repository.revision}'`, {meta: {pullRequestRequestedEvent}});
+    c3prLOG5(`Handling MR request title '${prr.pr_title}' rev '${repository.revision}'`, {meta: {pullRequestRequestedEvent}});
 
     try {
         let createMrResult = await createGitLabMR(
@@ -45,18 +47,18 @@ async function handlerFunction(pullRequestRequestedEvent: Event<any>, {lcid, sha
                 pr_body: prr.pr_body,
                 patchHexBase64: prr.diff_base64
             },
-            _c3prLOG5
+            c3prLOG5
         );
 
-        _c3prLOG5(`MR created successfully.`, {meta: {pullRequestRequestedEvent}});
+        c3prLOG5(`MR created successfully.`, {meta: {pullRequestRequestedEvent}});
 
         return {new_status: 'PROCESSED', result: {pullRequestRequestedEvent, createMrResult}}
     } catch (error) {
-        return await emitPullRequestFailed(pullRequestRequestedEvent, error.toString(), _c3prLOG5)
+        return await emitPullRequestFailed(pullRequestRequestedEvent, error.toString(), c3prLOG5)
     }
 }
 
-async function emitPullRequestFailed(pullRequestRequestedEvent, failure_message, _c3prLOG5): Promise<{new_status, result}> {
+async function emitPullRequestFailed(pullRequestRequestedEvent, failure_message, c3prLOG5): Promise<{new_status, result}> {
     const pullRequestRequested = pullRequestRequestedEvent.payload;
     const meta = {pullRequestRequestedEvent, failure_message};
     const parent = {event_type: pullRequestRequestedEvent.event_type, uuid: pullRequestRequestedEvent.uuid};
@@ -74,12 +76,12 @@ async function emitPullRequestFailed(pullRequestRequestedEvent, failure_message,
                 c3prHubUrl: config.c3pr.hub.c3prHubUrl,
                 jwt: config.c3pr.hub.auth.jwt
             },
-            _c3prLOG5
+            c3prLOG5
         );
-        _c3prLOG5(`Pull Request creation failed. Reason: ${failure_message}`, {meta});
+        c3prLOG5(`Pull Request creation failed. Reason: ${failure_message}`, {meta});
         return {new_status: 'PROCESSED', result};
     } catch (error) {
-        _c3prLOG5(`Error while registering new event: PullRequestFailed.`, {error, meta});
+        c3prLOG5(`Error while registering new event: PullRequestFailed.`, {error, meta});
         return {new_status: 'UNPROCESSED', result: {error, meta}};
     }
 
