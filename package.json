@@ -1,7 +1,8 @@
 {
   "name": "c3pr-hub",
-  "version": "30.0.0",
-  "description": "C-3PR Events and Auth Module",
+  "version": "31.0.0",
+  "description": "C-3PR Events and Auth",
+  "private": true,
   "scripts": {
     "start": "node --require ts-node/register src/index.ts",
     "debug": "node %NODE_DEBUG_OPTION% --require ts-node/register src/index.ts",

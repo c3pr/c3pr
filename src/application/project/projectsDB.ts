@@ -14,10 +14,6 @@ async function findBy(query) {
     return (await projects).find(query).toArray();
 }
 
-async function projectDoesNotExist(query) {
-    return !(await (await projects).find(query).toArray()).length;
-}
-
 function findAll() {
     return findBy({});
 }
@@ -57,7 +53,6 @@ export default {
     updateProject,
     findBy,
     findAll,
-    projectDoesNotExist
 };
 
 // noinspection BadExpressionStatementJS
