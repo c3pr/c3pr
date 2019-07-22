@@ -2,6 +2,9 @@ import {GitLabNote} from "../../ports/outbound/types/GitLabNote/GitLabNote";
 import extractRevisionFromMrDescription from "../PullRequestUpdated/extractRevisionFromMrDescription";
 import {getStatus} from "../PullRequestUpdated/getStatus";
 
+function escapeUsernameForReply(username) {
+    return '@' + username.replace(/-/g, '\\-');
+}
 
 export default function createPullRequestUpdatedFromNoteHook(gitLabNoteWebhook: GitLabNote) {
     return {
@@ -23,7 +26,7 @@ export default function createPullRequestUpdatedFromNoteHook(gitLabNoteWebhook: 
             text: gitLabNoteWebhook.object_attributes.note,
             author: {
                 id: gitLabNoteWebhook.object_attributes.author_id,
-                username: gitLabNoteWebhook.user.username
+                mention_handle: escapeUsernameForReply(gitLabNoteWebhook.user.username)
             }
         },
 
