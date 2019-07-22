@@ -1,6 +1,6 @@
 {
   "name": "c3pr-dashboard",
-  "version": "12.0.0",
+  "version": "13.0.0",
   "description": "C-3PR Dashboard and Configuration Management Module",
   "scripts": {
     "start": "node src/index.js",
@@ -26,7 +26,7 @@
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "node-c3pr-logger": "github:c3pr/node-c3pr-logger#27.0.0",
-    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#22.0.0",
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#29.0.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
