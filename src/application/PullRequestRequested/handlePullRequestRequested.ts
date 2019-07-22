@@ -13,7 +13,7 @@ export async function handlePullRequestRequested(request, c3prLOG5): Promise<any
 
     let handleResult = handleEventById({
         event_uuid: request.body.uuid,
-        handlerFunction,
+        handlerFunction: handlerFunction as any,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
         jwt: config.c3pr.hub.auth.jwt,
     }, c3prLOG5);
@@ -25,7 +25,7 @@ export async function handlePullRequestRequested(request, c3prLOG5): Promise<any
 }
 
 async function handlerFunction(pullRequestRequestedEvent: Event<any>, c3prLOG5): Promise<any> {
-    c3prLOG5 = c3prLOG5({caller_name: 'handlePullRequestRequested'});
+    c3prLOG5 = c3prLOG5({caller_name: 'handlePullRequestRequested#hf'});
 
     const prr = pullRequestRequestedEvent.payload;
     const repository = prr.repository;

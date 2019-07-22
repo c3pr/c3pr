@@ -21,8 +21,8 @@ process.on('uncaughtException', function (err) {
 });
 //////////// END ERROR TRACING CODE
 
-import inboundPorts from "./ports/inbound";
+import {c3prRepoGitLabLogin} from "./application/login/login";
 
-inboundPorts.c3prRepoGitLabLogin().then(() => {
+c3prRepoGitLabLogin().then(() => {
     require('./adapters/inbound/web/express');
 });

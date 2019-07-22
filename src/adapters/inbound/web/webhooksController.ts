@@ -1,11 +1,10 @@
-import inboundPorts from "../../../ports/inbound";
-
+import {handleWebhook} from "../../../application/handleWebhook/handleWebhook";
 
 export default function (app) {
 
     app.post('/webhooks', function (request, response) {
         // noinspection JSIgnoredPromiseFromCall
-        inboundPorts.handleWebhook(request.body);
+        handleWebhook(request.body);
         response.send('Webhook received for processing, thanks.');
     });
 
