@@ -8,7 +8,7 @@ function authExpressMiddleware(request, response, next) {
         try {
             request.decodeJwtToken = function() {
                 try {
-                    decodeToken(request.headers.authorization.split(' ')[1]);
+                    return decodeToken(request.headers.authorization.split(' ')[1]);
                 } catch (e) {
                     console.log('Error decoding a received JWT token. Request: ', request.url);
                     return null;
