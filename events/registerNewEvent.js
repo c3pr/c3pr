@@ -8,7 +8,7 @@ async function c3prHubRegisterNewEvent(args, c3prLOG5) {
         c3prLOG5(`Registering new event of type '${event_type}'.`, { meta: { event_type, payload } });
         const client = axios_1.default.create({ baseURL: c3prHubUrl });
         // noinspection JSUnusedGlobalSymbols
-        lib_1.default(client, { retries: 3, retryDelay: retryCount => retryCount * retryWait, retryCondition() { return true; } });
+        lib_1.default(client, { retries: 3, retryDelay: retryCount => retryCount * retryWait });
         const headers = { Authorization: `Bearer ${jwt}` };
         await client.post(`/api/v1/events/${event_type}`, payload, { headers });
     }

@@ -17,7 +17,7 @@ export default async function c3prHubRegisterNewEvent(args: NewEventArgs, c3prLO
         const client = axios.create({ baseURL: c3prHubUrl });
 
         // noinspection JSUnusedGlobalSymbols
-        axiosRetry(client, { retries: 3, retryDelay: retryCount => retryCount * retryWait, retryCondition() { return true; } });
+        axiosRetry(client, { retries: 3, retryDelay: retryCount => retryCount * retryWait });
 
         const headers = {Authorization: `Bearer ${jwt}`};
         await client.post(`/api/v1/events/${event_type}`, payload, {headers});

@@ -20,7 +20,7 @@ async function produceCommandEvent(event, config, c3prLOG5) {
     try {
         c3prLOG5(`Registering new event for type '${event_type}'.`, { meta: { payload } });
         const client = axios_1.default.create({ baseURL: c3prHubUrl });
-        lib_1.default(client, { retries: 3, retryDelay: retryCount => retryCount * retryWait, retryCondition() { return true; } });
+        lib_1.default(client, { retries: 3, retryDelay: retryCount => retryCount * retryWait });
         const headers = { Authorization: `Bearer ${jwt}` };
         await client.post(`/api/v1/events/${event_type}`, payload, { headers });
     }
