@@ -1,16 +1,6 @@
-const axios = require('axios').default;
+import {markAsProcessing} from "./markAs";
+import axios from 'axios';
 
-async function patchAsProcessing(event, c3prHubUrl: string, headers, c3prLOG5) {
-    try {
-        await axios.patch(`${c3prHubUrl}/api/v1/events/${event.event_type}/${event.uuid}/meta/processing`, {}, {headers});
-    } catch (error) {
-        c3prLOG5(`Error while marking event ${event.uuid} of type ${event.event_type} as processing.`, {
-            euuid: event.uuid,
-            error
-        });
-        throw error;
-    }
-}
 
 export async function collectEventAndMarkAsProcessing({event_type, c3prHubUrl, jwt}, c3prLOG5): Promise<any | null> {
     const headers = {Authorization: `Bearer ${jwt}`};
@@ -22,7 +12,7 @@ export async function collectEventAndMarkAsProcessing({event_type, c3prHubUrl, j
         return null;
     }
 
-    await patchAsProcessing(event, c3prHubUrl, headers, c3prLOG5);
+    await markAsProcessing({event_type: event.event_type, uuid: event.uuid, c3prHubUrl, jwt}, c3prLOG5);
     return event;
 }
 
@@ -31,7 +21,6 @@ export async function collectEventByIdAndMarkAsProcessing({event_uuid, c3prHubUr
     try {
         const headers = {Authorization: `Bearer ${jwt}`};
 
-        /** @namespace event.payload */
         let {data: event, status} = await axios.get(`${c3prHubUrl}/api/v1/events/uuid/${event_uuid}`, {headers});
 
         if (status !== 200) {
@@ -43,7 +32,7 @@ export async function collectEventByIdAndMarkAsProcessing({event_uuid, c3prHubUr
             return null;
         }
 
-        await patchAsProcessing(event, c3prHubUrl, headers, c3prLOG5);
+        await markAsProcessing({event_type: event.event_type, uuid: event.uuid, c3prHubUrl, jwt}, c3prLOG5);
         return event;
     } catch (error) {
         c3prLOG5(`Error while collecting ${event_uuid}`, {error, meta: {event_uuid}});
