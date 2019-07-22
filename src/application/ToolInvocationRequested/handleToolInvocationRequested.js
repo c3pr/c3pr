@@ -14,7 +14,6 @@ function handleToolInvocationRequested(request, c3prLOG5) {
     }
 
     return handleEventById({
-        event_type: `ToolInvocationRequested`,
         event_uuid: request.body.uuid,
         handlerFunction: handleToolInvocation,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
