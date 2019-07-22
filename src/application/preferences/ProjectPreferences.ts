@@ -15,6 +15,7 @@ export interface ProjectPreferences {
 export interface UpdatePrefsCommand {
     apply: (projectPreferences: ProjectPreferences) => ProjectPreferences;
     timestamp: string;
+    // event_uuid: string;
 }
 
 const defaultPreferences = () => ({enabled: true, weight_modification: 0});

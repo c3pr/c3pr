@@ -1,72 +1,74 @@
-import c3prLOG4 from 'node-c3pr-logger/c3prLOG4';
-c3prLOG4.testMode();
-process.env.NODE_ENV = 'test';
+import {expect} from 'chai';
 
-
-import { expect } from 'chai';
-require('chai').should();
-
-import * as shuffleArrayModule from "../../adapters/shuffleArray";
-// @ts-ignore
-shuffleArrayModule.shuffleArray = a => a; // shuffleArray won't shuffle a thing
-
-const axios = require('axios');
-const MockAdapter = require('axios-mock-adapter');
-const axiosMock = new MockAdapter(axios);
-
-import config from '../../config';
+import eventsDBFake from '../../../test/application/eventsDBFake';
 import invokeTools from "./invokeTools";
 
+import * as c3prHubRegisterNewEventModule from 'node-c3pr-hub-client/events/registerNewEvent';
 
-function configureFetchAllToolAgents(agents) {
-    axiosMock
-        .onGet(config.c3pr.hub.agentsUrl, {headers: {Authorization: `Bearer ${config.c3pr.auth.jwt}`}})
-        .reply(200, agents, {'content-type': 'application/json'});
-}
+import * as fetchAllToolAgentsModule from "./fetchAllToolAgents";
+let toolAgents = [];
+(fetchAllToolAgentsModule as any).default = () => toolAgents;
 
+const fakeLOG = () => fakeLOG;
+
+const rrr = {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"};
 
 describe('invokeTools', () => {
 
-    it('should emit a ToolInvocationRequested for each file that have a tool available', async () => {
-
-        const parentEvent = {event_type: "ChangesCommitted", uuid: "uuid-12312-3123123-12312" };
-        const changesCommittedRootEuuid = "uuid-....123123123...";
-        const changes = {
-            repository: {
-                full_path: "c3pr/sample-project-java-maven",
-                push_user: {id: 1, username: "someusername"},
-                clone_url_http: "https://github.com/c3pr/sample-project-java-maven.git",
-                branch: "branch-for-clone-tests",
-                revision: "13b7eedacc076e8a16ae565b535fd48edb9a044a"
-            },
-            changed_files: ['src/main/a/b/c/Main.java', 'src/main/a/b/c/Main.js', 'src/boo.txt'],
-        };
-
-        const agents = [
-            {tool_id: "one", extensions: ["java", "js"], tags: ["java", "js"]},
-            {tool_id: "two", extensions: ["js"],         tags: ["js"]},
-        ];
-        configureFetchAllToolAgents(agents);
-
-        let toolOneCalled = false;
-        let toolTwoCalled = false;
-        axiosMock
-            .onPost(
-                `${config.c3pr.hub.c3prHubUrl}/api/v1/events/ToolInvocationRequested`,
-                {parentEvent, changesCommittedRootEuuid, repository: changes.repository, tool_id: "two", files: ['src/main/a/b/c/Main.js']}
-            ).reply(() => { toolTwoCalled = true; return [200]; })
-            .onPost(
-                `${config.c3pr.hub.c3prHubUrl}/api/v1/events/ToolInvocationRequested`,
-                {parentEvent, changesCommittedRootEuuid, repository: changes.repository, tool_id: "one", files: ['src/main/a/b/c/Main.java']}
-            ).reply(() => { toolOneCalled = true; return [200]; });
-
-        // execute
-        await invokeTools({parentEvent, changesCommittedRootEuuid, repository: changes.repository}, changes.changed_files, () => {});
-
-        // verify
-        expect(toolOneCalled).to.equal(true);
-        expect(toolTwoCalled).to.equal(true);
+    let rne;
+    beforeEach(() => {
+        rne = c3prHubRegisterNewEventModule.default;
+        (c3prHubRegisterNewEventModule as any).default = async ({event_type, payload}) => ({event_type, payload});
+        eventsDBFake.load();
+    });
+    afterEach(() => {
+        (c3prHubRegisterNewEventModule as any).default = rne;
+        eventsDBFake.unload();
     });
 
-});
+    it('no tirs', async () => {
+        // setup:
+        eventsDBFake.setOptions({cutTime: "2000-01-01T00:02:00.000Z"});
 
+        toolAgents = [
+            {tool_id: "tool:t1", extensions: ["js"], tags: [], weight: 100},
+            {tool_id: "tool:t2", extensions: ["c"], tags: [], weight: 100},
+            {tool_id: "tool:t3", extensions: ["js"], tags: [], weight: 200},
+        ];
+
+        // execute:
+        let invocationPromises = await invokeTools(
+            {parentEvent: null, changesCommittedRootEuuid: "UUID-02", repository: rrr},
+            ["src/f1.js", "src/f2.js", "src/f3.c"],
+            fakeLOG
+        );
+
+        const invocations = await Promise.all(invocationPromises);
+        // console.log(JSON.stringify(invocations, null, '  '));
+
+        // verify:
+        expect(invocations).to.deep.equal([
+            {
+                event_type: "ToolInvocationRequested",
+                payload: {
+                    changes_committed_root: "UUID-02",
+                    files: ["src/f1.js", "src/f2.js"],
+                    parent: null,
+                    repository: {clone_url_http: "http://git.foo/bar.git", revision: "sha-1"},
+                    tool_id: "tool:t1",
+                },
+            },
+            {
+                event_type: "ToolInvocationRequested",
+                payload: {
+                    changes_committed_root: "UUID-02",
+                    files: ["src/f3.c"],
+                    parent: null,
+                    repository: {clone_url_http: "http://git.foo/bar.git", revision: "sha-1"},
+                    tool_id: "tool:t2",
+                }
+            }
+        ]);
+    }).timeout(2_000);
+
+});

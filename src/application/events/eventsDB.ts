@@ -23,20 +23,20 @@ const events = () => (async () => {
     return (await dbClientConnected).db(config.c3pr.brain.mongoC3prDatabase).collection(config.c3pr.brain.mongoEventsCollection);
 })();
 
-async function insert(e) {
+export async function ___insert(e) {
     return (await events()).insertOne(e);
 }
 
 async function find(uuid) {
-    return (await events()).findOne({uuid});
+    return (await (await qry({uuid})).limit(1).toArray())[0];
+}
+
+async function qry(query) {
+    return (await events()).find(query).sort({'meta.created': 1, 'timestamp': 1});
 }
 
 async function findAll(query = {}) {
-    return (await events()).find(query).sort({'meta.created': 1, 'timestamp': 1}).toArray();
-}
-
-function findAllOfType(event_type, query) {
-    return findAll({event_type, ...query});
+    return (await qry(query)).toArray();
 }
 
 async function close() {
@@ -48,13 +48,12 @@ function registerNewEventAsProcessed(event_type, payload) {
     let uuid = utils.uuid();
 
     const now = new Date().toISOString();
-    return insert({uuid, event_type, meta: {status: Status.PROCESSED, processor_uuid: 'c3pr-brain', created: now, modified: now}, payload});
+    return ___insert({uuid, event_type, meta: {status: Status.PROCESSED, processor_uuid: 'c3pr-brain', created: now, modified: now}, payload});
 }
 
 export default {
     registerNewEventAsProcessed,
     find,
     findAll,
-    findAllOfType,
     close,
 };

@@ -4,6 +4,7 @@ import genPrefsFromPPUs from "./genPrefsFromPPUs";
 import * as eventsDBModule from "../events/eventsDB";
 import * as utilsModule from "../../infrastructure/utils";
 import updatePreferences from "./updatePreferences";
+import {commandsToPreferences} from "./generateProjectPreferences";
 
 describe('genPrefsFromPPUs', () => {
     const project_clone_url = 'http://git.example.com/some-project.git';
@@ -20,7 +21,8 @@ describe('genPrefsFromPPUs', () => {
 
     it('genPrefsFromPPUs', async () => {
         const ppus = [];
-        eventsDBMockManager.replace('registerNewEventAsProcessed', (...a) => ppus.push({payload: a[1]}));
+
+        eventsDBMockManager.replace('registerNewEventAsProcessed', (...a) => ppus.push({meta: {created: new Date(ppus.length).toISOString()}, payload: a[1]}));
         eventsDBMockManager.mock('findAll', Promise.resolve(ppus));
 
         await updatePreferences.updateWeightProjectWide(project_clone_url, 'tool:a', -1);
@@ -34,6 +36,7 @@ describe('genPrefsFromPPUs', () => {
         await updatePreferences.enableToolProjectWide(project_clone_url, 'tool:e');
 
         const expectedPrefs = {
+            open_prs: {},
             project_wide: {
                 'tool:a': {enabled: true, weight_modification: -1},
                 'tool:b': {enabled: false, weight_modification: 0},
@@ -47,8 +50,8 @@ describe('genPrefsFromPPUs', () => {
                 }
             }
         };
-        let actualPrefs = await genPrefsFromPPUs('http://git.example.com/some-project.git');
+        let commands = await genPrefsFromPPUs('http://git.example.com/some-project.git');
 
-        expect(actualPrefs).to.deep.equal(expectedPrefs);
+        expect(commandsToPreferences(commands)).to.deep.equal(expectedPrefs);
     });
 });

@@ -1,10 +1,10 @@
 import config from '../../config';
-import retrieveFilesWithOpenPRs from "../../adapters/retrieveFilesWithOpenPRs";
-import fetchProjectFiles from "../../adapters/fetchProjectFiles";
-import fetchToolsNotYetInvokedForCommit from "./fetchToolsNotYetInvokedForCommit";
 import {generateInvocations} from "./generateInvocations";
 import c3prHubRegisterNewEvent from 'node-c3pr-hub-client/events/registerNewEvent';
-import {prioritizeToolsForCommit} from "./prioritizeToolsForCommit";
+import {ProjectPreferences} from "../preferences/ProjectPreferences";
+import generateProjectPreferences from "../preferences/generateProjectPreferences";
+import fetchAllToolAgents from "./fetchAllToolAgents";
+import calculateToolsAlreadyInvokedPerFile from "./calculateToolsAlreadyInvokedPerFile";
 
 
 function invokeToolForFiles({parentEvent, changesCommittedRootEuuid, repository}, tool_id, files, c3prLOG5) {
@@ -36,34 +36,14 @@ function invokeToolForFiles({parentEvent, changesCommittedRootEuuid, repository}
     });
 }
 
-
-async function filterFilesChangedInThisCommitThatDontHaveOpenPRs(changesCommittedRootEuuid: any, filesChangedInThisCommit) {
-    const filesWithOpenPRs = await retrieveFilesWithOpenPRs(changesCommittedRootEuuid);
-    return filesChangedInThisCommit.filter(file => !filesWithOpenPRs.includes(file));
-}
-
-
-async function invokeTools({parentEvent, changesCommittedRootEuuid, repository}, filesChangedInThisCommit, c3prLOG5) {
+export default async function invokeTools({parentEvent, changesCommittedRootEuuid, repository}, filesChangedInThisCommit, c3prLOG5) {
     c3prLOG5 = c3prLOG5({caller_name: 'invokeTools'});
 
-    const availableToolsNotYetInvokedForThisCommit = await fetchToolsNotYetInvokedForCommit(changesCommittedRootEuuid, c3prLOG5);
-    if (!availableToolsNotYetInvokedForThisCommit.length) { return []; }
+    const projectPreferences: ProjectPreferences = await generateProjectPreferences(repository.clone_url_http);
+    const availableToolAgents = await fetchAllToolAgents();
+    const toolsAlreadyInvokedPerFile = await calculateToolsAlreadyInvokedPerFile(changesCommittedRootEuuid);
 
-    const prioritizedNotYetInvokedTools = await prioritizeToolsForCommit(changesCommittedRootEuuid, availableToolsNotYetInvokedForThisCommit);
-
-
-    const filesChangedInThisCommitThatDontHaveOpenPRs = await filterFilesChangedInThisCommitThatDontHaveOpenPRs(changesCommittedRootEuuid, filesChangedInThisCommit);
-    if (!filesChangedInThisCommitThatDontHaveOpenPRs.length) {
-        c3prLOG5(`All files in this commit have pending c3pr PRs. Skipping.`);
-        return [];
-    }
-
-
-    const projectFilesPreferences = await fetchProjectFiles(changesCommittedRootEuuid);
-
-    const invocations = generateInvocations(filesChangedInThisCommitThatDontHaveOpenPRs, prioritizedNotYetInvokedTools, projectFilesPreferences, c3prLOG5);
+    const invocations = generateInvocations(projectPreferences, filesChangedInThisCommit, availableToolAgents, toolsAlreadyInvokedPerFile, c3prLOG5);
 
     return invocations.map(({tool_id, files}) => invokeToolForFiles({parentEvent, changesCommittedRootEuuid, repository}, tool_id, files, c3prLOG5));
 }
-
-export default invokeTools;

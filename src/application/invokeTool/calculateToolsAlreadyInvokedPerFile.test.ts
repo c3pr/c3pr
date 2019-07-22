@@ -1,14 +1,17 @@
 import {expect} from 'chai';
 
-import setOptions from '../../../test/application/eventsDBFake';
+import eventsDBFake from '../../../test/application/eventsDBFake';
 import calculateToolsAlreadyInvokedPerFile from "./calculateToolsAlreadyInvokedPerFile";
 
 
 describe('calculateToolsAlreadyInvokedPerFile', () => {
 
+    beforeEach(eventsDBFake.load);
+    afterEach(eventsDBFake.unload);
+
     it('no tirs', async () => {
         // setup:
-        setOptions({cutTime: "2000-01-01T00:02:00.000Z", events});
+        eventsDBFake.setOptions({cutTime: "2000-01-01T00:02:00.000Z", events});
 
         // execute:
         let actualToolsAlreadyInvoked = await calculateToolsAlreadyInvokedPerFile("UUID-02");
@@ -20,7 +23,7 @@ describe('calculateToolsAlreadyInvokedPerFile', () => {
 
     it('one tir', async () => {
         // setup:
-        setOptions({cutTime: "2000-01-01T00:03:00.000Z", events});
+        eventsDBFake.setOptions({cutTime: "2000-01-01T00:03:00.000Z", events});
 
         // execute:
         let actualToolsAlreadyInvoked = await calculateToolsAlreadyInvokedPerFile("UUID-02");
@@ -39,7 +42,7 @@ describe('calculateToolsAlreadyInvokedPerFile', () => {
 
     it('two tirs', async () => {
         // setup:
-        setOptions({cutTime: "2000-01-01T00:04:00.000Z", events});
+        eventsDBFake.setOptions({cutTime: "2000-01-01T00:04:00.000Z", events});
 
         // execute:
         let actualToolsAlreadyInvoked = await calculateToolsAlreadyInvokedPerFile("UUID-02");

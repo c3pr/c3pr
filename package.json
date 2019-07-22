@@ -6,6 +6,7 @@
     "start": "node --require ts-node/register src/index.ts",
     "debug": "node %NODE_DEBUG_OPTION% --require ts-node/register src/index.ts",
     "test": "mocha --require ts-node/register src/**/*.test.ts",
+    "test-debug": "mocha %NODE_DEBUG_OPTION% --require ts-node/register src/**/*.test.ts",
     "ts-node": "ts-node"
   },
   "repository": {

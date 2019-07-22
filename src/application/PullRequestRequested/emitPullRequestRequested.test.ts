@@ -1,4 +1,4 @@
-require("node-c3pr-logger").testMode();
+require("node-c3pr-logger/c3prLOG4").default.testMode();
 process.env.NODE_ENV = 'test';
 
 import { expect } from 'chai';
@@ -11,9 +11,6 @@ const MockAdapter = require('axios-mock-adapter');
 const axiosMock = new MockAdapter(axios);
 
 import config from '../../config';
-config.c3pr.patchesUrl = 'http://changes-server/patches';
-
-require("node-c3pr-logger").testMode();
 
 
 describe('emitPullRequestRequested', () => {
@@ -35,7 +32,7 @@ describe('emitPullRequestRequested', () => {
             ).reply(() => { pullRequestRequestedEmitted = true; return [200]; });
 
         // execute
-        await emitPullRequestRequested(pullRequestRequested);
+        await emitPullRequestRequested(pullRequestRequested, {lcid: 'lcid', sha: 'sha', euuid: 'euuid'});
 
         // verify
         expect(pullRequestRequestedEmitted).to.equal(true);
