@@ -81,7 +81,8 @@ export function generateInvocations(projectPreferences: ProjectPreferences,
     const invocations = Object.entries(toolsChosen).map(([tool_id, files]) => ({tool_id, files}));
 
     if (!invocations.length) {
-        c3prLOG5(`Current state generated no invocations. Nothing else to do for this commit.`, {meta: {projectPreferences, filesToAnalyze, availableTools, toolsAlreadyInvokedPerFile}});
+        c3prLOG5(`Current state generated no invocations. Either all tools have been invoked, disabled or the files already have PRs created. Nothing else to do for this commit.`,
+            {meta: {projectPreferences, filesToAnalyze, availableTools, toolsAlreadyInvokedPerFile}});
     }
     return invocations;
 }
