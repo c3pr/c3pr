@@ -15,7 +15,7 @@ function euuid(request) {
     return request.body && request.body.uuid;
 }
 function sha(request) {
-    return request.body.payload && request.body.payload.repository && request.body.payload.repository.revision || '!express-agent-hub-listener-controller';
+    return request.body.payload && request.body.payload.repository && request.body.payload.repository.revision || '!express-hub-listener-controller';
 }
 
 export = function (app) {
