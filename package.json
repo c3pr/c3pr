@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "debug": "node %NODE_DEBUG_OPTION% src/index.js",
-    "debug-fake-tool": "node %NODE_DEBUG_OPTION% tests/e2e/index.js",
+    "debug-agent-fake-tool": "node %NODE_DEBUG_OPTION% tests/e2e/index.js",
     "debug-bundle": "node %NODE_DEBUG_OPTION% dist/c3pr-agent.js",
     "test": "mocha src/**/*.test.js",
     "bundle": "rollup -c"
