@@ -6,7 +6,14 @@ function authExpressMiddleware(request, response, next) {
         response.status(401).send(`Please send a "Authorization: Bearer TOKEN-JWT" header.`);
     } else {
         try {
-            request.decodeJwtToken = () => decodeToken(request.headers.authorization.split(' ')[1]);
+            request.decodeJwtToken = function() {
+                try {
+                    decodeToken(request.headers.authorization.split(' ')[1]);
+                } catch (e) {
+                    console.log('Error decoding a received JWT token. Request: ', request.url);
+                    return null;
+                }
+            };
             next();
         } catch (e) {
             let errorStatus = (e.toString() === 'Error: Signature verification failed') ? 401 : 500;

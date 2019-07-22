@@ -14,12 +14,7 @@ function encodeUuidToken(sub) {
     });
 }
 function decodeToken(token) {
-    try {
-        return jwt.decode(token, secret);
-    } catch (e) {
-        console.log('Error decoding a received JWT token.');
-        return null;
-    }
+    return jwt.decode(token, secret);
 }
 
 export { encodeUuidToken, decodeToken };
