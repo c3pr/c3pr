@@ -24,7 +24,7 @@ export default function createPullRequestUpdatedFromNoteHook(gitLabNoteWebhook: 
             username: null
         },
 
-        command: 'ADD_COMMENT',
+        command: 'COMMENT_ADDED',
         args: {
             pr_id: gitLabNoteWebhook.merge_request.iid,
             bot_is_mentioned: mentionsC3prBotNickname(gitLabNoteWebhook.object_attributes.note),
