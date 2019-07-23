@@ -1,6 +1,6 @@
 import eventsDB from "../events/eventsDB";
 import {UpdatePrefsCommand} from "./ProjectPreferences";
-import {addPrToOpenPrsForFile} from "./mappers";
+import {addPrToOpenPrsForFile} from "./updatePrefsCommandMappers";
 import filesAndToolForPR from "./filesAndToolForPr";
 
 export default async function genPrefsFromPRCs(clone_url_http: string): Promise<UpdatePrefsCommand[]> {

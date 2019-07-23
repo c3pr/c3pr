@@ -1,5 +1,5 @@
 import {UpdatePrefsCommand, WEIGHT_MODIFICATION_PER_CLOSED_PR} from "../preferences/ProjectPreferences";
-import {disableToolForAllChangedFiles, modifyWeightOfToolForAllFiles} from "../preferences/mappers";
+import {disableToolForAllChangedFiles, modifyWeightOfToolForAllFiles} from "../preferences/updatePrefsCommandMappers";
 
 interface Comment {
     matches(text: string): boolean;

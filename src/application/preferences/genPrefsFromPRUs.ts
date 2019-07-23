@@ -8,7 +8,7 @@ import {
     addPrToOpenPrsForFile,
     modifyWeightOfToolForAllFiles,
     removePrFromOpenPrsForFile
-} from "./mappers";
+} from "./updatePrefsCommandMappers";
 import filesAndToolForPR from "./filesAndToolForPr";
 import {generateCommandsFromComment} from "../comments/processComment";
 
