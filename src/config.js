@@ -13,6 +13,8 @@ const C3PR_CLONE_DEPTH = process.env.C3PR_CLONE_DEPTH || 50;
 const C3PR_GIT_BOT_USER_USERNAME = process.env.C3PR_GIT_BOT_USER_USERNAME || 'c3pr-bot';
 const C3PR_GIT_BOT_USER_EMAIL = process.env.C3PR_GIT_BOT_USER_EMAIL || 'c3prbot@gmail.com';
 
+const C3PR_AGENT_MAX_CONCURRENT_EXECUTIONS = process.env.C3PR_AGENT_MAX_CONCURRENT_EXECUTIONS || 4;
+
 const config = {
     c3pr: {
         auth: {
@@ -33,6 +35,8 @@ const config = {
             agentId: C3PR_AGENT_ID,
             cloneDir: C3PR_CLONE_DIR,
             cloneDepth: C3PR_CLONE_DEPTH,
+
+            numberOfMaxConcurrentToolExecutions: C3PR_AGENT_MAX_CONCURRENT_EXECUTIONS,
 
             gitUserName: C3PR_GIT_BOT_USER_USERNAME,
             gitUserEmail: C3PR_GIT_BOT_USER_EMAIL,

@@ -1,3 +1,5 @@
+const Semaphore = require('await-semaphore').Semaphore;
+
 const c3prHubRegisterNewEvent = require('node-c3pr-hub-client/events/registerNewEvent').default;
 
 const invokeToolAtGitRepo = require("./invokeToolAtGitRepo");
@@ -6,13 +8,15 @@ const config = require('../../config');
 
 const loadTools = require('../tools/loadTools');
 
+const EMPTY_PATCH = require('node-c3pr-git-client/patch/generateGitPatchBase64').EMPTY_PATCH;
+
 
 function generatePrBody(changed_files, toolPrBody, revision) {
     return (changed_files.length ? toolPrBody : '<no diff>') + `
 ---
 
 `+
-// `This fix was generated in response to the commit ${revision}.`
+// `This fix was generated in response to commit ${revision}.`
 `Esta correção foi gerada durante a análise do commit ${revision}.`
 }
 
@@ -94,27 +98,28 @@ async function emitToolInvocationFailed(toolInvocationRequestedEvent, failure_me
     }
 }
 
-// TODO import from client next time version is updated
-const EMPTY_PATCH = () => ({files: {added: [], modified: [], renamed: [], deleted: []}, patch: {hexBase64: '', plain: '', header: '', footer: ''}});
+const agentToolExecutionSemaphore = new Semaphore(config.c3pr.agent.numberOfMaxConcurrentToolExecutions);
 
 async function handleToolInvocation(toolInvocationRequestedEvent, c3prLOG5) {
     c3prLOG5 = c3prLOG5({caller_name: 'handleToolInvocation'});
-    const toolInvocationRequested = toolInvocationRequestedEvent.payload;
+    return agentToolExecutionSemaphore.use(async () => {
+        const toolInvocationRequested = toolInvocationRequestedEvent.payload;
 
-    c3prLOG5(`C-3PR Agent received invocation: ${toolInvocationRequested.tool_id}. Files: ${JSON.stringify(toolInvocationRequested.files)}`, {meta: {toolInvocationRequestedEvent}});
+        c3prLOG5(`C-3PR Agent received invocation: ${toolInvocationRequested.tool_id}. Files: ${JSON.stringify(toolInvocationRequested.files)}`, {meta: {toolInvocationRequestedEvent}});
 
-    if (!loadTools.toolsHash[toolInvocationRequested.tool_id]) {
-        c3prLOG5(`Received tool invocation is not from a tool_id of mine: ${toolInvocationRequested.tool_id}. Skipping.`, {meta: {toolInvocationRequestedEvent}});
-        return {skipped: true};
-    }
+        if (!loadTools.toolsHash[toolInvocationRequested.tool_id]) {
+            c3prLOG5(`Received tool invocation is not from a tool_id of mine: ${toolInvocationRequested.tool_id}. Skipping.`, {meta: {toolInvocationRequestedEvent}});
+            return {skipped: true};
+        }
 
-    try {
-        let gitPatchBase64 = await invokeToolAtGitRepo(toolInvocationRequested, loadTools, c3prLOG5);
-        return await emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, c3prLOG5);
-    } catch (error) {
-        await emitToolInvocationFailed(toolInvocationRequestedEvent, error.toString(), toolInvocationRequested, c3prLOG5);
-        return await emitToolInvocationCompleted(toolInvocationRequestedEvent, EMPTY_PATCH(), toolInvocationRequested, c3prLOG5);
-    }
+        try {
+            let gitPatchBase64 = await invokeToolAtGitRepo(toolInvocationRequested, loadTools, c3prLOG5);
+            return await emitToolInvocationCompleted(toolInvocationRequestedEvent, gitPatchBase64, toolInvocationRequested, c3prLOG5);
+        } catch (error) {
+            await emitToolInvocationFailed(toolInvocationRequestedEvent, error.toString(), toolInvocationRequested, c3prLOG5);
+            return await emitToolInvocationCompleted(toolInvocationRequestedEvent, EMPTY_PATCH(), toolInvocationRequested, c3prLOG5);
+        }
+    });
 }
 
 module.exports = handleToolInvocation;
