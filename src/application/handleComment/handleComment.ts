@@ -10,6 +10,11 @@ export default async function handleComment(gitLabNote: GitLabNote, c3prLOG5) {
         c3prLOG5(`Note event is ignored. The PR is not authored by the bot.`, {meta: {gitLabNote, bot_user_id: config.c3pr.repoGitlab.gitlab.bot_user_id}});
         return;
     }
+    if (gitLabNote.object_attributes.author_id === config.c3pr.repoGitlab.gitlab.bot_user_id) {
+        c3prLOG5(`Note event is ignored. The comment was written by the bot.`, {meta: {gitLabNote, bot_user_id: config.c3pr.repoGitlab.gitlab.bot_user_id}});
+        return;
+    }
+
     const sha = extractRevisionFromMrDescription(gitLabNote.merge_request.description);
     c3prLOG5 = c3prLOG5({sha, euuid: 'note-webhook:'+gitLabNote.object_attributes.id});
 
