@@ -11,7 +11,7 @@ import {createAndEmitPullRequestCreated} from "../PullRequestCreated/createAndEm
 export async function handlePullRequestRequested(request, c3prLOG5): Promise<any> {
     c3prLOG5 = c3prLOG5({caller_name: 'handlePullRequestRequested'});
 
-    let handleResult = handleEventById({
+    let handleResult = await handleEventById({
         event_uuid: request.body.uuid,
         handlerFunction: handlerFunction as any,
         c3prHubUrl: config.c3pr.hub.c3prHubUrl,
