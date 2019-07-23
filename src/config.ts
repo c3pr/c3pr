@@ -33,6 +33,7 @@ const config = {
             c3prRepoGitlabPort: require('url').parse(C3PR_REPO_GITLAB_URL).port || 80,
 
             PullRequestRequestedCallbackUrl: `/callbacks/PullRequestRequested`,
+            CommentPullRequestCallbackUrl: `/callbacks/CommentPullRequest`,
 
             webhooksUrl: WEBHOOKS_URL,
 

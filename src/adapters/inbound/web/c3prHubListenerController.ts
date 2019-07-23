@@ -1,6 +1,7 @@
 const Sentry = require('@sentry/node');
 import config from '../../../config';
 import {handlePullRequestRequested} from "../../../application/PullRequestRequested/handlePullRequestRequested";
+import {handleCommentPullRequest} from "../../../application/CommentPullRequest/handleCommentPullRequest";
 
 
 import __c3prLOG5 from "node-c3pr-logger/c3prLOG5";
@@ -17,10 +18,18 @@ export default function (app) {
 
     app.post(config.c3pr.repoGitlab.PullRequestRequestedCallbackUrl, function (request, response) {
         const _c3prLOG5 = c3prLOG5({sha: sha(request), euuid: euuid(request)});
-        _c3prLOG5(`'PullRequestRequested' request received.`);
+        _c3prLOG5(`'PullRequestRequested' command received.`);
 
         handlePullRequestRequested(request, _c3prLOG5).catch(Sentry.captureException);
-        response.send('Event received. I will process it, thanks.');
+        response.send('Comment received. I will process it, thanks.');
+    });
+
+    app.post(config.c3pr.repoGitlab.CommentPullRequestCallbackUrl, function (request, response) {
+        const _c3prLOG5 = c3prLOG5({sha: sha(request), euuid: euuid(request)});
+        _c3prLOG5(`'CommentPullRequest' command received.`);
+
+        handleCommentPullRequest(request, _c3prLOG5).catch(Sentry.captureException);
+        response.send('Comment received. I will process it, thanks.');
     });
 
 };
