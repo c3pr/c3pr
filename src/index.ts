@@ -1,6 +1,6 @@
 //////////// BEGIN ERROR TRACING CODE
 const Sentry = require('@sentry/node');
-Sentry.init({ dsn: 'https://ca35d507f8184162a6f3d3151f3de475@sentry.io/1494586' });
+Sentry.init({ dsn: process.env.C3PR_SENTRY_DSN, serverName: require('os').hostname() });
 
 process.on('unhandledRejection', function (err) {
     Sentry.captureException(err);
