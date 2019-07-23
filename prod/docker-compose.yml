@@ -8,6 +8,7 @@ services:
     ports:
       - 7300:7300
     environment:
+      C3PR_SENTRY_DSN: ${C3PR_SENTRY_DSN}
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
       PORT: 7300
 
@@ -16,6 +17,7 @@ services:
     expose:
       - 7301 # used by hub at callback
     environment:
+      C3PR_SENTRY_DSN: ${C3PR_SENTRY_DSN}
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
       C3PR_HUB_URL: http://c3pr-hub:7300
       C3PR_BRAIN_URL: http://c3pr-brain:7301
@@ -25,6 +27,7 @@ services:
     ports:
       - 7305:7305 # used by c3pr-dashboard-ui, via end user's browser
     environment:
+      C3PR_SENTRY_DSN: ${C3PR_SENTRY_DSN}
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
       PORT: 7305
       C3PR_HUB_URL: http://c3pr-hub:7300
@@ -39,6 +42,7 @@ services:
 #    ports:
 #      - 7302:7302
 #    environment:
+#      C3PR_SENTRY_DSN: ${C3PR_SENTRY_DSN}
 #      C3PR_MONGO_URL: ${C3PR_MONGO_URL}
 #      PORT: 7302
 #      C3PR_REPO_GITHUB_URL: http://c3pr-repo-github:7302
@@ -50,6 +54,7 @@ services:
     ports:
       - 7304:7304 # used at gitlab integration settings
     environment:
+      C3PR_SENTRY_DSN: ${C3PR_SENTRY_DSN}
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
       PORT: 7304
       C3PR_REPO_GITLAB_URL: http://c3pr-repo-gitlab:7304
@@ -63,6 +68,7 @@ services:
     expose:
       - 5003 # used by hub at callbacks
     environment:
+      C3PR_SENTRY_DSN: ${C3PR_SENTRY_DSN}
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
       GITLAB_API_TOKEN: ${GITLAB_API_TOKEN}
       C3PR_AGENT_ID: c3pr-tool-walkmod-sonar
@@ -74,6 +80,7 @@ services:
     expose:
       - 5003 # used by hub at callbacks
     environment:
+      C3PR_SENTRY_DSN: ${C3PR_SENTRY_DSN}
       C3PR_MONGO_URL: ${C3PR_MONGO_URL}
       GITLAB_API_TOKEN: ${GITLAB_API_TOKEN}
       C3PR_AGENT_ID: c3pr-tool-eslint-tslint-custom-rules
