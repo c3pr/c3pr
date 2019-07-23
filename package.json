@@ -1,6 +1,6 @@
 {
   "name": "c3pr-agent",
-  "version": "24.0.0",
+  "version": "25.0.0",
   "description": "C3PR Container agent",
   "main": "index.js",
   "scripts": {
