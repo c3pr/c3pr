@@ -10,7 +10,7 @@ export default function createPullRequestUpdatedFromMergeRequestHook(gitLabMerge
     return {
         repository: {
             clone_url_http: gitLabMergeRequestUpdatedWebhook.project.git_http_url,
-            revision: extractRevisionFromMrDescription(gitLabMergeRequestUpdatedWebhook.object_attributes.description),
+            revision: extractRevisionFromMrDescription(gitLabMergeRequestUpdatedWebhook.object_attributes.description, gitLabMergeRequestUpdatedWebhook.object_attributes.source_branch),
             full_path: gitLabMergeRequestUpdatedWebhook.project.path_with_namespace,
         },
 

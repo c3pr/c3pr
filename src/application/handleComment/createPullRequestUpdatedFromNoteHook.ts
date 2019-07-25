@@ -14,7 +14,7 @@ export default function createPullRequestUpdatedFromNoteHook(gitLabNoteWebhook: 
     return {
         repository: {
             clone_url_http: gitLabNoteWebhook.project.git_http_url,
-            revision: extractRevisionFromMrDescription(gitLabNoteWebhook.merge_request.description)
+            revision: extractRevisionFromMrDescription(gitLabNoteWebhook.merge_request.description, gitLabNoteWebhook.merge_request.source_branch)
         },
 
         pr_id: gitLabNoteWebhook.merge_request.iid,
