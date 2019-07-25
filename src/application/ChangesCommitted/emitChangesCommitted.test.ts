@@ -1,6 +1,6 @@
 import {emitChangesCommitted} from "./emitChangesCommitted";
 
-require("node-c3pr-logger").testMode();
+require("node-c3pr-logger/c3prLOG4").default.testMode();
 process.env.NODE_ENV = 'test';
 
 import { expect } from 'chai';

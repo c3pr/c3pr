@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon = require('sinon');
 import {createChangesCommitted} from "./createChangesCommitted";
 
-let webhookRequestExample = require('../../ports/outbound/types/GitLabPush/webhookRequestExample.json');
+let webhookRequestExample = require('../../ports/outbound/types/GitLabPush/push.webhook.json');
 
 const now = new Date();
 
@@ -34,6 +34,7 @@ const changesCommittedTWO = {
     "changed_files": ["f1", "f3"]
 };
 
+const fakeLog = (...a) => { console.log(...a); return fakeLog; };
 
 describe('convertWebhookToChanges', function () {
 
@@ -50,7 +51,7 @@ describe('convertWebhookToChanges', function () {
     });
 
     it('should consolidate changeset and get repo information', async function () {
-        const changes = await createChangesCommitted(webhookRequestExample);
+        const changes = await createChangesCommitted(webhookRequestExample, fakeLog);
         expect(changes).to.deep.equal(changesCommittedONE);
     });
 
@@ -66,7 +67,7 @@ describe('convertWebhookToChanges', function () {
                 {timestamp: '3', added: [],     removed: ['f2'], modified: ['f1']},
                 {timestamp: '2', added: [],     removed: [],     modified: ['f2']},
             ]
-        } as any);
+        } as any, fakeLog);
         expect(changes).to.deep.equal(changesCommittedTWO);
     });
 

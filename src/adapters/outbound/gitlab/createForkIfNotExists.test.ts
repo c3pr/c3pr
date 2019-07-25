@@ -1,7 +1,8 @@
 import { expect } from 'chai';
 import {createForkIfNotExists} from "./createForkIfNotExists";
-require("node-c3pr-logger").testMode();
+require("node-c3pr-logger/c3prLOG4").default.testMode();
 
+const fakeLog = (...a) => { console.log(...a); return fakeLog; };
 
 /**
  * NOTE: this requires the source project exists. And this CREATES a fork permanently.
@@ -10,7 +11,7 @@ describe('createForkIfNotExists', () => {
 
     it('createForkIfNotExists', async () => {
 
-        let r = await createForkIfNotExists('sample_user/sample-project-java-maven', {lcid: 'test', sha: 'test', euuid: 'test'});
+        let r = await createForkIfNotExists('sample_user/sample-project-java-maven', fakeLog);
 
         expect(r).to.deep.equal({
             "organization":"c3pr-bot",
