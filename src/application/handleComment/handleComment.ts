@@ -15,7 +15,7 @@ export default async function handleComment(gitLabNote: GitLabNote, c3prLOG5) {
         return;
     }
 
-    const sha = extractRevisionFromMrDescription(gitLabNote.merge_request.description);
+    const sha = extractRevisionFromMrDescription(gitLabNote.merge_request.description, gitLabNote.merge_request.source_branch);
     c3prLOG5 = c3prLOG5({sha, euuid: 'note-webhook:'+gitLabNote.object_attributes.id});
 
     c3prLOG5(`Handling comment "${gitLabNote.object_attributes.note}".`, {caller_name: 'handleComment', meta: {noteWebhook: gitLabNote}});
