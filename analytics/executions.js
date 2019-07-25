@@ -1,6 +1,6 @@
 console.log("-----------------");
 
-const events = require('./events.json').filter(e => !e.payload || !e.payload.repository || !e.payload.repository.clone_url_http || !e.payload.repository.clone_url_http.includes("dojos"));
+const events = require(process.env.LOCATION + '/events.json').filter(e => !e.payload || !e.payload.repository || !e.payload.repository.clone_url_http || !e.payload.repository.clone_url_http.includes("dojos"));
 console.log('events:', events.length);
 
 const ev = (uuid) => events.find(e => e.uuid === uuid);
@@ -10,37 +10,45 @@ const prcs = ets(`PullRequestCreated`);
 
 const log = x => console.log(JSON.stringify(x, null, '  '));
 
-console.log(JSON.stringify(prcs[0], null, '  '));
+
+const xprs = require(process.env.LOCATION + '/prs.json').filter(pr => !pr.pr_url.includes("dojos"));
+const xpurl = clone_url_http => xprs.find(xpr => xpr.pr_url.indexOf(clone_url_http.replace(/\.git$/,'')) === 0);
+const xpr = pr_id => xprs.find(xpr => xpr.pr_id === pr_id);
 
 const prcStatus = (prc) => {
     //console.log(prc.payload.repository.clone_url_http)
     //console.log(JSON.stringify(prc, null, ' '));
     //log(events.filter(e => e.event_type === `PullRequestUpdated` && e.payload.pr_id === prc.payload.pr_id))
     let prus = events.filter(e => e.event_type === `PullRequestUpdated` && e.payload.pr_id === prc.payload.pr_id && e.payload.repository.clone_url_http === prc.payload.repository.clone_url_http);
-    if (!prus.length) return "UNKNOWN";
-    return prus[prus.length-1].payload.status;
+    const prStatus = (xpr(prc.payload.pr_id) || {}).status;
+
+    if (!prus.length || prus[prus.length-1].payload.status !== prStatus) {
+        console.log(`{repo: "${prc.payload.repository.full_path}", mr: ${prc.payload.pr_id}},`);
+    }
+
+    return (prus[prus.length-1] || {payload: {status: 'unk'}}).payload.status;
 };
 
 let prs = prcs.map(prc => ({prc_uuid: prc.uuid, prr_uuid: prc.payload.parent.uuid, status: prcStatus(prc) }));
 
-log(prs.slice(0, 55));
+//log(prs.slice(0, 55));
 
 if (Date.now() !== 1) return;
 
 
 
 
-const ticForPr = (pr) => ev(pr.PullRequestRequested).payload.parent.uuid;
-const tirForPr = (pr) => { const tic = ticForPr(pr); return ev(tic).payload.parent.uuid; }
-const toolIdForPr = (pr) => { const tir = tirForPr(pr); return ev(tir).payload.tool_id; }
+const tirEventForPr = (prr_uuid) => { const tir = tirForPr(prr_uuid); return ev(tir); }
+const tirForPr = (prr_uuid) => { const tic = ticForPr(prr_uuid); return ev(tic).payload.parent.uuid; }
+const ticForPr = (prr_uuid) => ev(prr_uuid).payload.parent.uuid;
+const ticEventForPr = (prr_uuid) => { const tic = ticForPr(prr_uuid); return ev(tic); }
 
 const prz = {};
 
-const xprs = require('./prs.json').filter(pr => !pr.pr_url.includes("dojos"));
-xprs.forEach(pr => {
-    const toolId = toolIdForPr(pr);
-    prz[toolId] = prz[toolId] || {merged: 0, closed: 0};
-    prz[toolId][pr.status]++;
+prs.forEach(({prc_uuid, prr_uuid, status}) => {
+    const toolId = tirEventForPr(prr_uuid).payload.tool_id;
+    prz[toolId] = prz[toolId] || {merged: 0, closed: 0, unk: 0};
+    prz[toolId][status] += ticEventForPr(prr_uuid).payload.changed_files.length;
 });
 
 const tirs = events.filter(e => e.event_type === 'ToolInvocationRequested' && !e.payload.repository.full_path.includes("dojos"));
@@ -48,7 +56,7 @@ const tirs = events.filter(e => e.event_type === 'ToolInvocationRequested' && !e
 const executions = {};
 tirs.forEach(tir => {
     executions[tir.payload.tool_id] = executions[tir.payload.tool_id] || 0;
-    executions[tir.payload.tool_id]++;
+    executions[tir.payload.tool_id] += tir.payload.files.length;
 });
 const toolIdsEverExecuted = [... new Set(tirs.map(tir => tir.payload.tool_id))];
 
@@ -61,13 +69,22 @@ function toPercent(value, total) {
 let toolIds = Object.keys(executions);
 toolIds.sort();
 toolIds = toolIds.filter(tid => tid[0] === 'w').concat(toolIds.filter(tid => tid[0] !== 'w'));
-toolIds = toolIds.filter(tid => tid[0] !== 'w');
+// toolIds = toolIds.filter(tid => tid[0] !== 'w');
+
+const namePad = toolIds.reduce((prev, curr) => Math.max(prev, curr.length), 0);
+const pads = {
+    exe: toolIds.reduce((prev, curr) => Math.max(prev, (executions[curr]+'').length), 0),
+    tot: 3,
+    mer: '12 (100\\%)'.length,
+    clo: '12 (100\\%)'.length
+};
+const p = (x, v) => (x+'').padStart(v, ' ');
 
 const totais = {executions: 0, prs: 0, merged: 0, closed: 0};
 const outras = {executions: 0, prs: 0, merged: 0, closed: 0};
 toolIds.forEach(toolId => {
     const prsForTool = prz[toolId] || {merged: 0, closed: 0};
-    const merged = prsForTool.merged, closed = prsForTool.closed, total = merged + closed;
+    const merged = prsForTool.merged, closed = prsForTool.closed, unk = prsForTool.unk, total = merged + closed;
 
     //if (executions[toolId] < 10) {
     if (total < 1 && executions[toolId] < 10) {
@@ -79,7 +96,7 @@ toolIds.forEach(toolId => {
         const mergedVal = toPercent(merged, total);
         const closedVal = toPercent(closed, total);
         console.log(
-            `${toolId} & ${executions[toolId]} & ${total} & ${mergedVal} & ${closedVal} \\\\ \\hline`
+            `${toolId.padEnd(namePad, ' ')} & ${p(executions[toolId], pads.exe)} & ${p(total, pads.tot)} & ${p(mergedVal, pads.mer)} & ${p(closedVal, pads.clo)} & ${p(unk, pads.clo)} \\\\ \\hline`
         );
     }
     totais.executions += Number(executions[toolId]);
