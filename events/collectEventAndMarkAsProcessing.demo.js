@@ -1,4 +1,4 @@
-require("node-c3pr-logger").testMode();
+require("node-c3pr-logger/c3prLOG4").default.testMode();
 const login = require('../login').c3prHubClient.login;
 const collectEventAndMarkAsProcessing = require('./collectEventAndMarkAsProcessing').collectEventAndMarkAsProcessing.collectEventAndMarkAsProcessing;
 
