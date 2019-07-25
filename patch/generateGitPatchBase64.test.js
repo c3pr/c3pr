@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 
 // noinspection JSUnresolvedFunction
-require("node-c3pr-logger").testMode();
+require("node-c3pr-logger/c3prLOG4").default.testMode();
 
 
 const expectedPatchBody = `

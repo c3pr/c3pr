@@ -8,7 +8,7 @@ const cloneRepositoryLocally = require("../src/cloneRepositoryLocally");
 const uuidv4 = require('uuid/v4');
 
 // noinspection JSUnresolvedFunction
-require("node-c3pr-logger").testMode();
+require("node-c3pr-logger/c3prLOG4").default.testMode();
 
 const hexBase64 = 'RnJvbSBkYzEyODkwNWJjYjNiMDZhZDFkZjI2NmEwYWE5OWVlODJlNzJmZTRkIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBjM3ByIDxjM3ByQGV4YW1wbGUuY29tPgpEYXRlOiBXZWQsIDIwIEp1bi' +
     'AyMDE4IDEyOjM2OjU4IC0wMzAwClN1YmplY3Q6IFtQQVRDSCAxLzFdIGNvbW1pdC1tc2cKCi0tLQogZmlsZS10by1hcHBlbmQtc3BhY2VzLW9ubHkudHh0ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgNSArKysrKw' +

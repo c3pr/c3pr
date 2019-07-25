@@ -1,6 +1,6 @@
 const c3prSH3 = require('./c3prSH3').default;
 const expect = require('chai').expect;
-require("node-c3pr-logger").testMode();
+require("node-c3pr-logger/c3prLOG4").default.testMode();
 
 describe('c3prSH3', () => {
 
