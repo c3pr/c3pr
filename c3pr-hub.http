@@ -33,6 +33,23 @@ GET http://127.0.0.1:7300/api/v1/events/ChangesCommitted?payload.project_uuid=60
 Authorization: Bearer {{auth_token}}
 
 ###
+POST http://127.0.0.1:7300/api/v1/events/ProjectPreferencesUpdated
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+    "repository": {
+      "clone_url_http": "http://server.com/my-app-ui.git"
+    },
+    "command": "UPDATE_WEIGHT_PROJECT_WIDE",
+    "args": {
+      "tool_id": "tslint:ordered-imports",
+      "weight_modification": 99999,
+      "reason": "push for last"
+    }
+}
+
+###
 GET http://127.0.0.1:7300/api/v1/logs/euuid/9312e1aa-418a-4424-8dc7-6d3ecbe45cc9
 Authorization: Bearer {{auth_token}}
 
@@ -41,7 +58,7 @@ GET http://127.0.0.1:7300/api/v1/logs/sha/37359043bb3a17114b6c3652bed25e1fed639d
 Authorization: Bearer {{auth_token}}
 ###
 
-GET http://srv-codereview:7300/api/v1/logs?service_name=c3pr-hub
+GET http://127.0.0.1:7300/api/v1/logs?service_name=c3pr-hub
 Authorization: Bearer {{auth_token}}
 ###
 
