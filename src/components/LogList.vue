@@ -15,8 +15,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="log of logs" :class="log.node" :key="log._id">
-          <td>{{ log.date_time.replace(/[TZ]/g, ' ') }}</td>
+        <tr v-for="log of logsWithFormattedDates" :class="log.node" :key="log._id">
+          <td :class="{highlight: log._isToday}" :title="log.date_time">{{ log._dateTimeFromNow }}</td>
           <td>
             <span :title="log.lcid">
               <router-link :to= "{ name: 'logs-lcid', params: { lcid: log.lcid }}">{{ (log.lcid || '').substr(0, 4) }}</router-link>
@@ -53,6 +53,7 @@
 
 <script>
   import DisplayDialog from "./DisplayDialog";
+  import {diasAtras, formatarData, isToday} from "../app/data";
 
   export default {
     name: "LogList",
@@ -68,6 +69,17 @@
         logMessageSize: 100,
         objetctDisplayedAtDialog: null,
       };
+    },
+    computed: {
+      logsWithFormattedDates() {
+        const ls = [...this.logs];
+        return ls.map(log => ({
+          ...log,
+          date_time: formatarData(log.date_time),
+          _dateTimeFromNow: diasAtras(log.date_time),
+          _isToday: isToday(log.date_time)
+        }))
+      }
     }
   }
 </script>

@@ -6,6 +6,7 @@
       <tr>
         <th>sha</th>
         <th>uuid</th>
+        <th>project</th>
         <th>event_type</th>
         <th>status</th>
         <th>created</th>
@@ -15,18 +16,19 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="event of events" :class="clazz(event)">
+      <tr v-for="event of eventsWithDateFormatted" :class="clazz(event)">
         <td>{{ sha(event) }}</td>
         <td>{{ event.uuid.substring(0, 4) }}</td>
+        <td>{{ event._project }}</td>
         <td :class="event.event_type">{{ event.event_type }}</td>
         <td>{{ status(event) }}</td>
-        <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
-        <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
+        <td :class="{highlight: event.meta._isToday}" :title="event.meta.created">{{ event.meta._createdFromNow }}</td>
+        <td :class="{highlight: event.meta._isToday}" :title="event.meta.modified">{{ event.meta._modifiedFromNow }}</td>
         <td>
           [<router-link :to= "{ name: 'logs-euuid', params: { euuid: event.uuid }}">logs</router-link>]
           [<a href="#" @click.prevent.stop="eventDisplayedAtDialog = event">details</a>]
         </td>
-        <td @click="mouseOver(event)">{{ specifics(event) }}</td>
+        <td @click="mouseOver(event)" v-html="event._specifics"></td>
       </tr>
       </tbody>
     </table>
@@ -39,6 +41,15 @@
 <script>
 import DisplayDialog from '../components/DisplayDialog.vue';
 import {sha, status, parent} from "../app/events";
+import {diasAtras, formatarData, isToday} from "../app/data";
+
+
+function truncate(text) {
+  if (text.length > 50)
+    return '...' + text.slice(-50);
+  else
+    return text;
+}
 
 export default {
   name: 'EventList',
@@ -56,7 +67,7 @@ export default {
     specifics(event) {
       switch (event.event_type) {
         case 'ToolInvocationRequested':
-          return {[event.payload.tool_id]: event.payload.files};
+          return `<span style="color: yellow">${event.payload.tool_id}</span><br><span style="color: gray"> - ${event.payload.files.map(truncate).join("<br> - ")}</span>`;
         default:
           return '';
       }
@@ -76,6 +87,23 @@ export default {
     }
   },
   computed: {
+    eventsWithDateFormatted() {
+      const es = [...this.events];
+      es.sort((a, b) => b.meta.created.localeCompare(a.meta.created));
+      return es.map(e => ({
+        ...e,
+        meta: {
+          ...e.meta,
+          created: formatarData(e.meta.created),
+          modified: formatarData(e.meta.modified),
+          _createdFromNow: diasAtras(e.meta.created),
+          _modifiedFromNow: diasAtras(e.meta.modified),
+          _isToday: isToday(e.meta.created)
+        },
+        _specifics: this.specifics(e),
+        _project: ((e.payload.repository || {}).clone_url_http || "").split("/").slice(-1)[0].replace(".git", "")
+      }))
+    },
     parentUuid() {
       return this.parent(this.selected);
     },

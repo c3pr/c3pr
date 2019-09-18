@@ -8,7 +8,14 @@
     <br>
     <span v-if="markingEventAsUnprocessed">Marking as unprocessed...</span>
     <br>
-    {{ ev }}
+    <span v-if="ev && ev.payload.parent && ev.payload.parent.uuid">
+      <router-link :to= "{ name: 'logs-euuid', params: { euuid: ev.payload.parent.uuid }}">GO TO PARENT EVENT LOGS - {{ ev.payload.parent.uuid }}</router-link>
+    </span>
+    <br>
+    <pre style="text-align: left; margin: 10px">{{ ev }}</pre>
+    <br><br>
+    <pre v-if="ev && ev.payload.diff_base64" style="text-align: left; margin: 10px; color: greenyellow">{{ fromBase64(ev.payload.diff_base64) }}</pre>
+
   </div>
 </template>
 
@@ -46,13 +53,18 @@ export default {
 
     async reFetch() {
       await this.fetchLogsForEuuid(this.euuid);
+      this.ev = await eventsApi.findEventByUuid(this.euuid);
     },
 
     async markEventAsUnprocessed() {
       this.markingEventAsUnprocessed = true;
       await eventsApi.markEventAsUnprocessed(this.euuid);
       this.markingEventAsUnprocessed = false;
-      eventsApi.findEventByUuid(this.euuid).then(r => r.data).then(() => this.ev = data);
+      this.reFetch();
+    },
+
+    fromBase64(x) {
+      return atob(x);
     }
   }
 

@@ -23,7 +23,7 @@
         <td>{{ sha(event) }}</td>
         <td>{{ status(event) }}</td>
         <td :class="{highlight: event.meta._isToday}" :title="event.meta.created">{{ event.meta._createdFromNow }}</td>
-        <td :class="{highlight: event.meta._isToday}" :title="event.meta.modified">{{ event.meta._modifiedFromNow }}</span></td>
+        <td :class="{highlight: event.meta._isToday}" :title="event.meta.modified">{{ event.meta._modifiedFromNow }}</td>
         <td :title="webhook(event).commits[0].message">
           {{ webhook(event).commits[0].message.substring(0, 50) }}{{ webhook(event).commits[0].message.length > 50 ? '...' : '' }}
         </td>
