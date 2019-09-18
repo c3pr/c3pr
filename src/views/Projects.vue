@@ -18,10 +18,10 @@
         <tr v-for="project in projects" :key="project._id">
           <td>{{project.name}}</td>
           <td><a :href="project.clone_url_http.replace('.git', '')">{{project.clone_url_http}}</a></td>
-          <td class="centered"><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "open").length }}</a></td>
+          <td class="centered" :class="{highlight: project.prs.filter(({status}) => status === 'open').length}"><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "open").length }}</a></td>
           <td class="centered"><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "merged").length }}</a></td>
           <td class="centered"><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "closed").length }}</a></td>
-          <td>{{ (changesCommittedPerProject.find(ccpp => ccpp._id.project_uuid === project.uuid) || {last_modified: "-"}).last_modified }}</td>
+          <td><span :class="{highlight: lastModifiedToday(project)}">{{ lastModified(project) }}</span></td>
           <td>
             [<router-link :to= "{ name: 'project-details', params: { projectId: project._id, project: project }}">details</router-link>]
             [<router-link :to="{ name: 'events-per-project', params: { project_uuid: project.uuid }}">commit events</router-link>]
@@ -35,6 +35,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import { PROJECTS, FETCH_ALL_PROJECTS, GET_ALL_PROJECTS } from "../store/modules/projects";
 import {EVENTS, FETCH_CHANGES_COMMITTED_PER_PROJECT, GET_CHANGES_COMMITTED_PER_PROJECT} from "../store/modules/events";
+import moment from "moment";
 
 export default {
   name: "Projects",
@@ -69,6 +70,17 @@ export default {
     mergeRequestsLink(project) {
       return project.clone_url_http.replace('.git', '/merge_requests');
     },
+    lastCC(project) {
+        return this.changesCommittedPerProject.find(ccpp => ccpp._id.project_uuid === project.uuid);
+    },
+    lastModified(project) {
+        const lastCC = this.lastCC(project);
+        return lastCC && moment(lastCC.last_modified).format("YYYY-MM-DD HH:mm:SS") || "-";
+    },
+    lastModifiedToday(project) {
+        const lastCC = this.lastCC(project);
+        return lastCC && moment(lastCC.last_modified).isSame(moment(), "day");;
+    },
   }
 
 };
@@ -77,4 +89,9 @@ export default {
 <style scoped>
 td, th { padding: 5px; }
 .centered { text-align: center; }
+.highlight, .highlight a {
+  background-color: yellowgreen;
+  color: #721b01 !important;
+  font-weight: bold;
+}
 </style>
