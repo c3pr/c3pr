@@ -19,11 +19,11 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="event of getEventsForProject()" :class="event.node">
+      <tr v-for="event of eventsForProject" :class="event.node">
         <td>{{ sha(event) }}</td>
         <td>{{ status(event) }}</td>
-        <td>{{ (event.meta.created || "").replace("T", " ") }}</td>
-        <td>{{ (event.meta.modified || "").replace("T", " ") }}</td>
+        <td :class="{highlight: event.meta._isToday}" :title="event.meta.created">{{ event.meta._createdFromNow }}</td>
+        <td :class="{highlight: event.meta._isToday}" :title="event.meta.modified">{{ event.meta._modifiedFromNow }}</span></td>
         <td :title="webhook(event).commits[0].message">
           {{ webhook(event).commits[0].message.substring(0, 50) }}{{ webhook(event).commits[0].message.length > 50 ? '...' : '' }}
         </td>
@@ -44,6 +44,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import { EVENTS, FETCH_EVENTS_FOR_PROJECT, GET_EVENTS_BY_TYPE_FOR_PROJECT } from "../store/modules/events";
 import {sha, status, webhook} from "../app/events";
+import {diasAtras, formatarData, isToday} from "../app/data";
 
 export default {
   name: "Events",
@@ -62,7 +63,22 @@ export default {
   },
 
   computed: {
-    ...mapGetters(EVENTS, {getEventsOfTypeForProject: GET_EVENTS_BY_TYPE_FOR_PROJECT})
+    ...mapGetters(EVENTS, {getEventsOfTypeForProject: GET_EVENTS_BY_TYPE_FOR_PROJECT}),
+    eventsForProject() {
+      const ccsForProject = [...this.getEventsOfTypeForProject(this.project_uuid, this.event_type)];
+      ccsForProject.sort((a, b) => b.meta.created.localeCompare(a.meta.created));
+      return ccsForProject.map(cc => ({
+        ...cc,
+        meta: {
+          ...cc.meta,
+          created: formatarData(cc.meta.created),
+          modified: formatarData(cc.meta.modified),
+          _createdFromNow: diasAtras(cc.meta.created),
+          _modifiedFromNow: diasAtras(cc.meta.modified),
+          _isToday: isToday(cc.meta.created)
+        }
+      }))
+    }
   },
 
   async mounted() {
@@ -71,9 +87,6 @@ export default {
   },
 
   methods: {
-    getEventsForProject() {
-      return this.getEventsOfTypeForProject(this.project_uuid, this.event_type)
-    },
     ...mapActions(EVENTS, {fetchEventsForProject: FETCH_EVENTS_FOR_PROJECT}),
     sha,
     status,

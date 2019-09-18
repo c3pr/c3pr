@@ -7,7 +7,7 @@
           <th rowspan="2">Name</th>
           <th rowspan="2">Clone-Url</th>
           <th colspan="3">Pull/Merge Requests</th>
-          <th rowspan="2">Last Received Commit</th>
+          <th rowspan="2">Last Commit</th>
           <th rowspan="2">-</th>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
           <td class="centered" :class="{highlight: project.prs.filter(({status}) => status === 'open').length}"><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "open").length }}</a></td>
           <td class="centered"><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "merged").length }}</a></td>
           <td class="centered"><a :href="mergeRequestsLink(project)" target="_blank">{{ project.prs.filter(({status}) => status === "closed").length }}</a></td>
-          <td><span :class="{highlight: lastModifiedToday(project)}">{{ lastModified(project) }}</span></td>
+          <td :class="{highlight: lastModifiedToday(project)}">{{ lastModified(project) }}</td>
           <td>
             [<router-link :to= "{ name: 'project-details', params: { projectId: project._id, project: project }}">details</router-link>]
             [<router-link :to="{ name: 'events-per-project', params: { project_uuid: project.uuid }}">commit events</router-link>]
@@ -36,6 +36,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { PROJECTS, FETCH_ALL_PROJECTS, GET_ALL_PROJECTS } from "../store/modules/projects";
 import {EVENTS, FETCH_CHANGES_COMMITTED_PER_PROJECT, GET_CHANGES_COMMITTED_PER_PROJECT} from "../store/modules/events";
 import moment from "moment";
+import {formatarData} from "../app/data";
 
 export default {
   name: "Projects",
@@ -75,11 +76,11 @@ export default {
     },
     lastModified(project) {
         const lastCC = this.lastCC(project);
-        return lastCC && moment(lastCC.last_modified).format("YYYY-MM-DD HH:mm:SS") || "-";
+        return lastCC && formatarData(lastCC.last_modified) || "-";
     },
     lastModifiedToday(project) {
         const lastCC = this.lastCC(project);
-        return lastCC && moment(lastCC.last_modified).isSame(moment(), "day");;
+        return lastCC && moment(lastCC.last_modified).isSame(moment(), "day");
     },
   }
 
@@ -89,9 +90,4 @@ export default {
 <style scoped>
 td, th { padding: 5px; }
 .centered { text-align: center; }
-.highlight, .highlight a {
-  background-color: yellowgreen;
-  color: #721b01 !important;
-  font-weight: bold;
-}
 </style>

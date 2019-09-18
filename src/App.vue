@@ -46,7 +46,7 @@ a:hover {
 }
 
 td, th { border: 1px solid #808080; border-collapse: collapse; padding: 0 5px 0 5px; }
-tr:hover {
+tr:hover, tr:hover * {
   background-color: #000000;
 }
 th { background-color: #2a4847; color: #e8bf6a; font-weight: bold; }
@@ -61,5 +61,13 @@ table { font-family: monospace; font-size: small; border-collapse: collapse; mar
   50% {
     opacity: 0;
   }
+}
+
+.highlight {
+  background-color: yellowgreen;
+  font-weight: bold;
+}
+.highlight, .highlight a {
+  color: #721b01 !important;
 }
 </style>

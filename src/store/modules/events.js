@@ -138,7 +138,9 @@ const mutations = {
     Vue.set(state.eventsPerProject[project_uuid][event.event_type], event.uuid, event);
   },
   [UPDATE_CHANGES_COMMITTED_PER_PROJECT](state, changesCommittedPerProject) {
-    state.changesCommittedPerProject = changesCommittedPerProject;
+    const ccpps = [...changesCommittedPerProject];
+    ccpps.sort((a, b) => b.last_modified.localeCompare(a.last_modified));
+    state.changesCommittedPerProject = ccpps;
   },
   [UPDATE_TOOL_INVOCATIONS_PER_PROJECT](state, toolInvocationRequestedPerProject) {
     state.toolInvocationRequestedPerProject = toolInvocationRequestedPerProject;

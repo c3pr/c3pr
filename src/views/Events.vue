@@ -16,7 +16,7 @@
       <tr v-for="ccpp of changesCommittedPerProject">
         <td>{{ (projects.find(p => p.uuid === ccpp._id.project_uuid) || {}).name }}</td>
         <td>{{ ccpp.count }}</td>
-        <td>{{ ccpp.last_modified }}</td>
+        <td :class="{highlight: isToday(ccpp.last_modified)}">{{ formatarData(ccpp.last_modified) }}</td>
         <td>
           [<router-link :to="{ name: 'events-per-project', params: { project_uuid: ccpp._id.project_uuid }}">commit events</router-link>]
         </td>
@@ -50,6 +50,7 @@
   import {PROJECTS, FETCH_ALL_PROJECTS, GET_ALL_PROJECTS} from "../store/modules/projects";
   import EventDetail from '../components/EventDetail.vue';
   import EventList from '../components/EventList.vue';
+  import {formatarData, isToday} from "../app/data";
 
   export default {
     name: "Events",
@@ -81,7 +82,9 @@
         fetchChangesCommittedPerProject: FETCH_CHANGES_COMMITTED_PER_PROJECT,
         fetchEventsUnprocessedAndProcessing: FETCH_EVENTS_UNPROCESSED_AND_PROCESSING
       }),
-      ...mapActions(PROJECTS, {fetchProjects: FETCH_ALL_PROJECTS})
+      ...mapActions(PROJECTS, {fetchProjects: FETCH_ALL_PROJECTS}),
+      isToday,
+      formatarData
     }
   };
 </script>
