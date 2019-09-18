@@ -40,6 +40,10 @@ export default {
   async findAllProcessingEvents() {
     const { data: events } = await axios.get(`/api/v1/events?meta.status=PROCESSING`);
     return events;
+  },
+
+  markEventAsUnprocessed(uuid) {
+    return axios.patch(`/api/v1/events/eventType/${uuid}/meta/unprocessed`);
   }
 
 }
