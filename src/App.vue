@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app dark style="color: #bababa;">
+    <v-app dark style="color: #bababa; background-color: #3c3f41;">
       <div id="nav">
         <router-link to="/">Dashboard</router-link> |
         <router-link to="/projects">Projects</router-link> |
@@ -15,6 +15,7 @@
 </template>
 
 <style>
+html, body, #app { height: 100%; }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

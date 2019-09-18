@@ -4,6 +4,7 @@
         <thead>
         <tr>
           <th>date</th>
+          <th>lcid</th>
           <th>sha</th>
           <th>euuid</th>
           <th>service</th>
@@ -16,8 +17,21 @@
         <tbody>
         <tr v-for="log of logs" :class="log.node" :key="log._id">
           <td>{{ log.date_time.replace(/[TZ]/g, ' ') }}</td>
-          <td><a href="#" @click.prevent.stop="objetctDisplayedAtDialog = {lcid: log.lcid, sha: log.sha, euuid: log.euuid}">{{ (log.sha || '').substr(0, 4) }}</a></td>
-          <td><a href="#" @click.prevent.stop="objetctDisplayedAtDialog = {lcid: log.lcid, sha: log.sha, euuid: log.euuid}">{{ (log.euuid || '').substr(0, 4) }}</a></td>
+          <td>
+            <span :title="log.lcid">
+              <router-link :to= "{ name: 'logs-lcid', params: { lcid: log.lcid }}">{{ (log.lcid || '').substr(0, 4) }}</router-link>
+            </span>
+          </td>
+          <td>
+            <span :title="log.sha">
+              <router-link :to= "{ name: 'logs-sha', params: { sha: log.sha }}">{{ (log.sha || '').substr(0, 4) }}</router-link>
+            </span>
+          </td>
+          <td>
+            <span :title="log.euuid">
+              <router-link :to= "{ name: 'logs-euuid', params: { euuid: log.euuid }}">{{ (log.euuid || '').substr(0, 4) }}</router-link>
+            </span>
+          </td>
           <td>{{ log.service_name }}</td>
           <td style="font-size: xx-small">{{ log.caller_name }}</td>
           <td :title="log.message" class="message" :class="log.service_name">
@@ -42,14 +56,19 @@
 
   export default {
     name: "LogList",
-    props: ['logs'],
+    props: {
+        logs: {
+            type: Array,
+            required: true
+        }
+    },
     components: {DisplayDialog},
     data() {
       return {
         logMessageSize: 100,
         objetctDisplayedAtDialog: null,
       };
-    },
+    }
   }
 </script>
 

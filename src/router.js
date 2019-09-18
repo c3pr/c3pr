@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Dashboard from './views/Dashboard.vue';
-import LogsForEvent from './views/LogsForEvent.vue';
+import LogsForEuuid from './views/LogsForEuuid.vue';
 import Hub from './views/Hub.vue';
 import Projects from './views/Projects.vue';
 import Events from './views/Events.vue';
@@ -11,6 +11,8 @@ import ProjectDetails from './views/ProjectDetails.vue';
 import EventByUuid from "./views/EventByUuid";
 import LogsForService from "./views/LogsForService";
 import Latex from "./views/Latex";
+import LogsForLcid from "./views/LogsForLcid";
+import LogsForSha from "./views/LogsForSha";
 
 Vue.use(Router);
 
@@ -24,7 +26,19 @@ export default new Router({
     {
       path: '/logs/euuid/:euuid',
       name: 'logs-euuid',
-      component: LogsForEvent,
+      component: LogsForEuuid,
+      props: true
+    },
+    {
+      path: '/logs/lcid/:lcid',
+      name: 'logs-lcid',
+      component: LogsForLcid,
+      props: true
+    },
+    {
+      path: '/logs/sha/:sha',
+      name: 'logs-sha',
+      component: LogsForSha,
       props: true
     },
     {
