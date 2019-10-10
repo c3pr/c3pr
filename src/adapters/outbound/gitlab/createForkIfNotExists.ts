@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../../../config';
+const Sentry = require('@sentry/node');
 
 import c3prLOG4 from "node-c3pr-logger/c3prLOG4";
 import {encodeGroupProjectPath} from "./encodeGroupProjectPath";
@@ -84,7 +85,17 @@ async function createForkIfNotExists(orgNameProjectName, c3prLOG5): Promise<{org
             cloneUrl
         }
     } catch (error) {
-        c3prLOG5(`Error while creating fork.`, {error, meta: {urlEncodedOrgNameProjectName, forkName}});
+        const errorMessage = `Error while creating fork. If it is a 404 when creating, make sure the bot (token) has access to the project.
+         Also, GitLab starts to return 404 when the bot user has reached its "Projects limit"
+          (e.g. if 'c3pr-bot' is the bot, see http://YOURGITLAB/admin/users/c3pr-bot/edit with an admin account).`;
+        Sentry.captureException(new class extends Error {
+            // noinspection JSUnusedGlobalSymbols
+            original = error;
+            constructor() {
+                super(errorMessage);
+            }
+        });
+        c3prLOG5(errorMessage, {error, meta: {urlEncodedOrgNameProjectName, forkName}});
         throw error;
     }
 
