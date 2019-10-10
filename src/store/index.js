@@ -15,6 +15,12 @@ export default new Vuex.Store({
     [PROJECTS]: projects,
     [EVENTS]: events,
     [LOGS]: logs,
+    'GLOBAL': {
+      namespaced: true,
+      state: {
+        dbwebui: localStorage.getItem('c3pr-dbwebui')
+      },
+    }
   }
 
 });

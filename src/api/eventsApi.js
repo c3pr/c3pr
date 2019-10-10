@@ -12,6 +12,11 @@ export default {
     return events;
   },
 
+  async findAllChildren(parent_uuid) {
+    const { data: events } = await axios.get(`/api/v1/events?payload.parent.uuid=${parent_uuid}`);
+    return events;
+  },
+
   async findAllEventsOfTypeForProject(event_type, project_uuid) {
     const { data: events, headers: { etag } } = await axios.get(`/api/v1/events/${event_type}?payload.project_uuid=${project_uuid}`);
     return {etag, events};
@@ -44,6 +49,10 @@ export default {
 
   markEventAsUnprocessed(uuid) {
     return axios.patch(`/api/v1/events/eventType/${uuid}/meta/unprocessed`);
+  },
+
+  markEventAsProcessed(uuid) {
+    return axios.patch(`/api/v1/events/eventType/${uuid}/meta/processing`).then(() => axios.patch(`/api/v1/events/eventType/${uuid}/meta/processed`));
   }
 
 }

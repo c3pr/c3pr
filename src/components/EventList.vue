@@ -25,21 +25,16 @@
         <td :class="{highlight: event.meta._isToday}" :title="event.meta.created">{{ event.meta._createdFromNow }}</td>
         <td :class="{highlight: event.meta._isToday}" :title="event.meta.modified">{{ event.meta._modifiedFromNow }}</td>
         <td>
-          [<router-link :to= "{ name: 'logs-euuid', params: { euuid: event.uuid }}">logs</router-link>]
-          [<a href="#" @click.prevent.stop="eventDisplayedAtDialog = event">details</a>]
+          [<router-link :to= "{ name: 'logs-euuid', params: { euuid: event.uuid }}">details/logs</router-link>]
         </td>
         <td @click="mouseOver(event)" v-html="event._specifics"></td>
       </tr>
       </tbody>
     </table>
-
-    <display-dialog v-model="eventDisplayedAtDialog"></display-dialog>
-
   </div>
 </template>
 
 <script>
-import DisplayDialog from '../components/DisplayDialog.vue';
 import {sha, status, parent} from "../app/events";
 import {diasAtras, formatarData, isToday} from "../app/data";
 
@@ -53,11 +48,9 @@ function truncate(text) {
 
 export default {
   name: 'EventList',
-  components: {DisplayDialog},
   props: ['events'],
   data() {
     return {
-      eventDisplayedAtDialog: null,
       selected: null
     };
   },
