@@ -1,5 +1,9 @@
 import {UpdatePrefsCommand, WEIGHT_MODIFICATION_PER_CLOSED_PR} from "../preferences/ProjectPreferences";
-import {disableToolForAllChangedFiles, modifyWeightOfToolForAllFiles} from "../preferences/updatePrefsCommandMappers";
+import {
+    disableToolForAllFiles,
+    disableToolForProject,
+    modifyWeightOfToolForAllFiles
+} from "../preferences/updatePrefsCommandMappers";
 
 interface Comment {
     matches(text: string): boolean;
@@ -8,13 +12,46 @@ interface Comment {
 }
 const BUG: Comment = {
     matches(text: string): boolean {
-        return text.includes("bug");
+        return text.includes("bug") && !text.includes("keep");
     },
     createCommand(files: string[], tool_id: string, timestamp: string): UpdatePrefsCommand[] {
-        return disableToolForAllChangedFiles(files, tool_id, timestamp);
+        return disableToolForAllFiles(files, tool_id, timestamp);
     },
     createResponse(mention_handle: string): string {
-        return `A bug, ${mention_handle}? I'm sorry. I have disabled that type of transformation for this project!`;
+        return `A bug, ${mention_handle}? I'm sorry. I have disabled that type of transformation for all these files!`;
+    }
+};
+const DISABLE_FOR_FILE: Comment = {
+    matches(text: string): boolean {
+        return text.includes("disable for file");
+    },
+    createCommand(files: string[], tool_id: string, timestamp: string): UpdatePrefsCommand[] {
+        return disableToolForAllFiles(files, tool_id, timestamp);
+    },
+    createResponse(mention_handle: string): string {
+        return `Ok, ${mention_handle}. I have disabled this kind of transformation for this file!`;
+    }
+};
+const DISABLE_FOR_PROJECT: Comment = {
+    matches(text: string): boolean {
+        return text.includes("disable for project");
+    },
+    createCommand(files: string[], tool_id: string, timestamp: string): UpdatePrefsCommand[] {
+        return disableToolForProject(tool_id, timestamp);
+    },
+    createResponse(mention_handle: string): string {
+        return `Ok, ${mention_handle}. I have disabled this kind of transformation for all files of this project!`;
+    }
+};
+const DISAGREE: Comment = {
+    matches(text: string): boolean {
+        return text.includes("disagree");
+    },
+    createCommand(): UpdatePrefsCommand[] {
+        return [];
+    },
+    createResponse(mention_handle: string): string {
+        return `Ok, ${mention_handle}, good to know! This transformation's priority has been reduced for this file.`;
     }
 };
 const MANUAL: Comment = {
@@ -22,10 +59,33 @@ const MANUAL: Comment = {
         return text.includes("manual");
     },
     createCommand(files: string[], tool_id: string, timestamp: string): UpdatePrefsCommand[] {
+        // does not count this PR as bad
         return modifyWeightOfToolForAllFiles(files, tool_id, timestamp, WEIGHT_MODIFICATION_PER_CLOSED_PR * -1);
     },
     createResponse(mention_handle: string): string {
         return `You will handle the issue manually. Got it, ${mention_handle}!`;
+    }
+};
+const HELP: Comment = {
+    matches(text: string): boolean {
+        return text.includes("help");
+    },
+    createCommand(files: string[], tool_id: string, timestamp: string): UpdatePrefsCommand[] {
+        return [];
+    },
+    createResponse(mention_handle: string): string {
+        return `Hey, ${mention_handle}! You can send commands by mentioning me in comments. The ones available are:
+        
+        - \`@c3pr\\-bot manual\`: lets me know you will performed yourself, manually, the change this PR suggested. This means I should not reduce the priority for
+        this kind o transformation when you close this PR.
+        - \`@c3pr\\-bot disable for file\`: disables this transformation for this file.
+        - \`@c3pr\\-bot disable for project\`: disables this transformation for all files of this project.
+        - \`@c3pr\\-bot disagree\`: indicates that you didn't agree with the proposed changes. The priority for this kind of suggestion will be reduced.
+        - \`@c3pr\\-bot bug\`: points out that this transformation generated a bug. I will disable the transformation for the file, and if it happens more times, for the whole project.
+        - \`@c3pr\\-bot help\`: I will reply with this message.
+        
+        Anyway, whenever you mention me, I will let you know if I understood the command or not. :v:
+        `;
     }
 };
 const UNRECOGNIZED_COMMENT: Comment = {
@@ -36,11 +96,12 @@ const UNRECOGNIZED_COMMENT: Comment = {
         return [];
     },
     createResponse(mention_handle: string): string {
-        return `I'm sorry, ${mention_handle}. I didn't understand your last comment.`;
+        return `I'm sorry, ${mention_handle}. I didn't understand your last comment.
+         If you wish to know the available commands, write a comment with \`@c3pr\-bot help\` and I will let you know!`;
     }
 };
 
-const COMMENT_TYPES = [BUG, MANUAL, UNRECOGNIZED_COMMENT];
+const COMMENT_TYPES = [MANUAL, DISABLE_FOR_FILE, DISAGREE, DISABLE_FOR_PROJECT, BUG, HELP, UNRECOGNIZED_COMMENT];
 
 export function generateCommandsFromComment(files: string[], tool_id: string, timestamp: string, text: string): UpdatePrefsCommand[] {
     return COMMENT_TYPES.find(ct => ct.matches(text)).createCommand(files, tool_id, timestamp);

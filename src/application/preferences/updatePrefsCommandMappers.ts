@@ -1,4 +1,4 @@
-import {initPerTool, UpdatePrefsCommand} from "./ProjectPreferences";
+import {initPerProject, initPerTool, UpdatePrefsCommand} from "./ProjectPreferences";
 
 export function modifyWeightOfToolForAllFiles(files: string[], tool_id: string, timestamp: string, weight_modification: number): UpdatePrefsCommand[] {
     return files.map(file => ({
@@ -32,7 +32,16 @@ export function removePrFromOpenPrsForFile(files: string[], pr_id: number, times
 }
 
 
-export function disableToolForAllChangedFiles(files: string[], tool_id: string, timestamp: string) {
+export function disableToolForProject(tool_id: string, timestamp: string) {
+    return [{
+        apply: (projectPreferences) => {
+            initPerProject(projectPreferences, tool_id).enabled = false;
+            return projectPreferences;
+        },
+        timestamp
+    }];
+}
+export function disableToolForAllFiles(files: string[], tool_id: string, timestamp: string) {
     return files.map(file => ({
         apply: (projectPreferences) => {
             initPerTool(projectPreferences, file, tool_id).enabled = false;
