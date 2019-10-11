@@ -77,16 +77,26 @@ async function peekUnprocessed(event_type) {
     return eventsDB.find(first.uuid);
 }
 
+function patchLog(uuid, callerName, logMsg) {
+    eventsDB.find(uuid).then(event => {
+        let sha = event.payload.repository.revision || 'unknown-sha';
+        c3prLOG5({sha, caller_name: callerName, euuid: uuid})(logMsg);
+    });
+}
+
 function patchAsProcessing(event_type, uuid, processor_uuid) {
     assert.ok(event_type && uuid && processor_uuid, "Missing required arguments");
+    patchLog(uuid, 'patchAsProcessing', `Patching event as processing by ${processor_uuid}.`);
     return eventsDB.persistAsProcessing(uuid, processor_uuid);
 }
 
 async function patchAsProcessed(event_type, uuid, processor_uuid) {
+    patchLog(uuid, 'patchAsProcessed', `Patching event as processed by ${processor_uuid}.`);
     return eventsDB.persistAsProcessed(uuid, processor_uuid);
 }
 
-function patchAsUnprocessed(event_type, uuid, processor_uuid) {
+async function patchAsUnprocessed(event_type, uuid, processor_uuid) {
+    patchLog(uuid, 'patchAsUnprocessed', `Patching event as unprocessed by ${processor_uuid}.`);
     return eventsDB.persistAsUnprocessed(uuid, processor_uuid);
 }
 
@@ -114,7 +124,7 @@ async function initializeEventsOnStartup() {
     const previouslyUnprocessedEvents = await eventsDB.findAllOfStatus(Status.UNPROCESSED);
 
     const previouslyProcessingEvents = await eventsDB.findAllOfStatus(Status.PROCESSING);
-    previouslyProcessingEvents.forEach(({event_type, uuid}) => eventsDB.persistAsUnprocessed(uuid));
+    previouslyProcessingEvents.forEach(({uuid}) => eventsDB.persistAsUnprocessed(uuid, 'startup'));
 
     const previouslyUnprocessedEventTypes = Array.from(new Set(previouslyUnprocessedEvents.map(e => e.event_type)));
     _c3prLOG5(
