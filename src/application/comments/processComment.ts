@@ -18,7 +18,7 @@ const BUG: Comment = {
         return disableToolForAllFiles(files, tool_id, timestamp);
     },
     createResponse(mention_handle: string): string {
-        return `A bug, ${mention_handle}? I'm sorry. I have disabled that type of transformation for all these files!`;
+        return `:robot: A bug, ${mention_handle}? I'm sorry. I have disabled that type of transformation for all these files!`;
     }
 };
 const DISABLE_FOR_FILE: Comment = {
@@ -29,7 +29,7 @@ const DISABLE_FOR_FILE: Comment = {
         return disableToolForAllFiles(files, tool_id, timestamp);
     },
     createResponse(mention_handle: string): string {
-        return `Ok, ${mention_handle}. I have disabled this kind of transformation for this file!`;
+        return `:robot: Ok, ${mention_handle}. I have disabled this kind of transformation for this file!`;
     }
 };
 const DISABLE_FOR_PROJECT: Comment = {
@@ -40,7 +40,7 @@ const DISABLE_FOR_PROJECT: Comment = {
         return disableToolForProject(tool_id, timestamp);
     },
     createResponse(mention_handle: string): string {
-        return `Ok, ${mention_handle}. I have disabled this kind of transformation for all files of this project!`;
+        return `:robot: Ok, ${mention_handle}. I have disabled this kind of transformation for all files of this project!`;
     }
 };
 const DISAGREE: Comment = {
@@ -51,7 +51,7 @@ const DISAGREE: Comment = {
         return [];
     },
     createResponse(mention_handle: string): string {
-        return `Ok, ${mention_handle}, good to know! This transformation's priority has been reduced for this file.`;
+        return `:robot: Ok, ${mention_handle}, good to know! This transformation's priority has been reduced for this file.`;
     }
 };
 const MANUAL: Comment = {
@@ -63,7 +63,7 @@ const MANUAL: Comment = {
         return modifyWeightOfToolForAllFiles(files, tool_id, timestamp, WEIGHT_MODIFICATION_PER_CLOSED_PR * -1);
     },
     createResponse(mention_handle: string): string {
-        return `You will handle the issue manually. Got it, ${mention_handle}!`;
+        return `:robot: You will handle the issue manually. Got it, ${mention_handle}!`;
     }
 };
 const HELP: Comment = {
@@ -74,7 +74,7 @@ const HELP: Comment = {
         return [];
     },
     createResponse(mention_handle: string): string {
-        return `Hey, ${mention_handle}! You can send commands by mentioning me in comments. The ones available are:
+        return `:robot: Hey, ${mention_handle}! You can send commands by mentioning me in comments. The ones available are:
         
         - \`@c3pr\\-bot manual\`: lets me know you will performed yourself, manually, the change this PR suggested. This means I should not reduce the priority for
         this kind o transformation when you close this PR.
@@ -96,7 +96,7 @@ const UNRECOGNIZED_COMMENT: Comment = {
         return [];
     },
     createResponse(mention_handle: string): string {
-        return `I'm sorry, ${mention_handle}. I didn't understand your last comment.
+        return `:robot: I'm sorry, ${mention_handle}. I didn't understand your last comment.
          If you wish to know the available commands, write a comment with \`@c3pr\-bot help\` and I will let you know!`;
     }
 };
