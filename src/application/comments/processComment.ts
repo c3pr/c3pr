@@ -101,7 +101,8 @@ const UNRECOGNIZED_COMMENT: Comment = {
     }
 };
 
-const COMMENT_TYPES = [MANUAL, DISABLE_FOR_FILE, DISAGREE, DISABLE_FOR_PROJECT, BUG, HELP, UNRECOGNIZED_COMMENT];
+// the order here is important -- eg "disagree: disable for file" should be processed as "disabled for file" rather than "disagree"
+const COMMENT_TYPES = [DISABLE_FOR_PROJECT, DISABLE_FOR_FILE, DISAGREE, MANUAL, BUG, HELP, UNRECOGNIZED_COMMENT];
 
 export function generateCommandsFromComment(files: string[], tool_id: string, timestamp: string, text: string): UpdatePrefsCommand[] {
     return COMMENT_TYPES.find(ct => ct.matches(text)).createCommand(files, tool_id, timestamp);
