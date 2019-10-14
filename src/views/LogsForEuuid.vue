@@ -71,7 +71,6 @@ import { mapActions } from 'vuex';
 import { LOGS, FETCH_LOGS_FOR_EUUID } from "../store/modules/logs";
 import LogsFor from "../components/LogsFor";
 import eventsApi from "../api/eventsApi";
-import 'treeflex/dist/css/treeflex.css'
 
 export default {
   name: 'LogsForEuuid',
