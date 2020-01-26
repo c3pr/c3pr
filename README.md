@@ -17,20 +17,20 @@ Current nodes:
 
 | Repo Name                      | Type                     | Port | Travis Build          | Docker Hub
 | ------------------------------ | ------------------------ | ---  | --------------------- | ---
-| [c3pr-hub               ][111] | Central Events/Auth registry | 5000 | [![Travis][113]][114] | [![Docker][115]][112]
-| [c3pr-brain             ][121] | PR/Projects Intelligence     | 5001 | [![Travis][123]][124] | [![Docker][115]][122]
-| [c3pr-dashboard         ][131] | Centralized UI               | 5005 | [![Travis][133]][134] | [![Docker][115]][132]
+| [c3pr-hub               ][111] | Central Events/Auth registry | 7300 | [![Travis][153]][154] | [![Docker][115]][112]
+| [c3pr-brain             ][121] | PR/Projects Intelligence     | 7301 | [![Travis][153]][154] | [![Docker][115]][122]
+| [c3pr-dashboard         ][131] | Centralized UI               | 7305 | [![Travis][153]][154] | [![Docker][115]][132]
 |                                |                              |      |                       | 
-| [node-c3pr-hub-client   ][141] | Reusable lib                 | -    | [![Travis][143]][144] | 
+| [node-c3pr-hub-client   ][141] | Reusable lib                 | -    | [![Travis][153]][154] | 
 | [node-c3pr-logger       ][151] | Reusable lib                 | -    | [![Travis][153]][154] | 
-| [node-git-client        ][161] | Reusable lib                 | -    | [![Travis][163]][164] | 
+| [node-git-client        ][161] | Reusable lib                 | -    | [![Travis][153]][154] | 
 |                                |                              |      |                       | 
-| [node-c3pr-repo         ][171] | Reusable lib for repos       | -    | [![Travis][173]][174] | 
-| [c3pr-repo-github       ][181] | Repo implementation          | 5002 | [![Travis][183]][184] | [![Docker][115]][182]
-| [c3pr-repo-gitlab       ][191] | Repo implementation          | 5004 | [![Travis][193]][194] | [![Docker][115]][192]
+| [node-c3pr-repo         ][171] | Reusable lib for repos       | -    | [![Travis][153]][154] | 
+| [c3pr-repo-github       ][181] | Repo implementation          | 7302 | [![Travis][153]][154] | [![Docker][115]][182]
+| [c3pr-repo-gitlab       ][191] | Repo implementation          | 7304 | [![Travis][153]][154] | [![Docker][115]][192]
 |                                |                              |      |                       | 
-| [c3pr-agent             ][201] | Agent for tools              | 5003 | [![Travis][203]][204] | 
-| [c3pr-tool-walkmod-sonar][211] | Tool implementation          | 5003 | -                     | [![Docker][115]][212]
+| [c3pr-agent             ][201] | Agent for tools              | 7303 | [![Travis][153]][154] | 
+| [c3pr-tool-walkmod-sonar][211] | Tool implementation          | 7303 | -                     | [![Docker][115]][212]
 
 
 
