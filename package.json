@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/c3pr/c3pr-repo-gitlab",
   "dependencies": {
-    "axios": "0.19.0",
+    "axios": "0.21.1",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#29.0.0",
