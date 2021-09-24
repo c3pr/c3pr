@@ -24,7 +24,7 @@
   "homepage": "https://github.com/c3pr/c3pr-brain",
   "dependencies": {
     "@sentry/node": "^5.5.0",
-    "axios": "0.21.1",
+    "axios": "0.21.2",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#29.0.0",
