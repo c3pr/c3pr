@@ -1,0 +1,22 @@
+diff --git a/README.md b/README.md
+index 4357574..1e03b49 100644
+--- a/README.md
++++ b/README.md
+@@ -1,3 +1,3 @@
+ # Sample Java+Maven Project
+ 
+-Example Java+Maven project with issues that could be fixed by static analysis tools.
++Example Jaxéíou+Maven project with issues that could be fixed by static analysis tools.
+diff --git a/src/main/java/io/github/c3pr/sample/javamaven/Main.java b/src/main/java/io/github/c3pr/sample/javamaven/Main.java
+index 3888352..d78c2ee 100644
+--- a/src/main/java/io/github/c3pr/sample/javamaven/Main.java
++++ b/src/main/java/io/github/c3pr/sample/javamaven/Main.java
+@@ -6,7 +6,7 @@ public class Main {
+         String someString = args[0];
+         if (someString.equals("a string at the right-hand side")) {
+             System.out.println("Equals...");
+-        } else System.out.println("Else without braces");
++        } else System.out.println("Else without brÃ¡Ã©Ã­aces");
+     }
+ 
+ }

@@ -1,0 +1,254 @@
+{
+  "ref": "refs/heads/master",
+  "before": "e5065cd3c52cc60debf47f1e6cc02e5f2cc3a1f8",
+  "after": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
+  "created": false,
+  "deleted": false,
+  "forced": false,
+  "base_ref": null,
+  "compare": "https://github.com/c3pr/sample-project-java-maven/compare/e5065cd3c52c...13b7eedacc07",
+  "commits": [
+    {
+      "id": "95e48b306c1fd9954f733a8de119d823ad62534b",
+      "tree_id": "da23e87d3e74793637d1459cc018c4cb139b934d",
+      "distinct": true,
+      "message": "test: first commit, adds a file",
+      "timestamp": "2018-02-05T10:37:22-02:00",
+      "url": "https://github.com/c3pr/sample-project-java-maven/commit/95e48b306c1fd9954f733a8de119d823ad62534b",
+      "author": {
+        "name": "Antonio Jr",
+        "email": "acdcjunior@gmail.com",
+        "username": "acdcjunior"
+      },
+      "committer": {
+        "name": "Antonio Jr",
+        "email": "acdcjunior@gmail.com",
+        "username": "acdcjunior"
+      },
+      "added": [
+        "src/main/resources/first.txt"
+      ],
+      "removed": [],
+      "modified": []
+    },
+    {
+      "id": "39bb472a4cc32492a4e87fe9e2a521c22b1f6bd0",
+      "tree_id": "b1c5d9c6268cfdcb46f916b8503a65f712c23bbc",
+      "distinct": true,
+      "message": "test: second commit, adds another file, modifies first",
+      "timestamp": "2018-02-05T10:38:39-02:00",
+      "url": "https://github.com/c3pr/sample-project-java-maven/commit/39bb472a4cc32492a4e87fe9e2a521c22b1f6bd0",
+      "author": {
+        "name": "Antonio Jr",
+        "email": "acdcjunior@gmail.com",
+        "username": "acdcjunior"
+      },
+      "committer": {
+        "name": "Antonio Jr",
+        "email": "acdcjunior@gmail.com",
+        "username": "acdcjunior"
+      },
+      "added": [
+        "src/main/resources/second.txt"
+      ],
+      "removed": [],
+      "modified": [
+        "src/main/resources/first.txt"
+      ]
+    },
+    {
+      "id": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
+      "tree_id": "90d89c30739942bd463d5bb9ec6d83477eef4755",
+      "distinct": true,
+      "message": "test: third commit; removes a file, modifies another, adds some other",
+      "timestamp": "2018-02-05T10:39:49-02:00",
+      "url": "https://github.com/c3pr/sample-project-java-maven/commit/13b7eedacc076e8a16ae565b535fd48edb9a044a",
+      "author": {
+        "name": "Antonio Jr",
+        "email": "acdcjunior@gmail.com",
+        "username": "acdcjunior"
+      },
+      "committer": {
+        "name": "Antonio Jr",
+        "email": "acdcjunior@gmail.com",
+        "username": "acdcjunior"
+      },
+      "added": [
+        "src/main/resources/third.txt"
+      ],
+      "removed": [
+        "src/main/resources/first.txt"
+      ],
+      "modified": [
+        "src/main/resources/second.txt"
+      ]
+    }
+  ],
+  "head_commit": {
+    "id": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
+    "tree_id": "90d89c30739942bd463d5bb9ec6d83477eef4755",
+    "distinct": true,
+    "message": "test: third commit; removes a file, modifies another, adds some other",
+    "timestamp": "2018-02-05T10:39:49-02:00",
+    "url": "https://github.com/c3pr/sample-project-java-maven/commit/13b7eedacc076e8a16ae565b535fd48edb9a044a",
+    "author": {
+      "name": "Antonio Jr",
+      "email": "acdcjunior@gmail.com",
+      "username": "acdcjunior"
+    },
+    "committer": {
+      "name": "Antonio Jr",
+      "email": "acdcjunior@gmail.com",
+      "username": "acdcjunior"
+    },
+    "added": [
+      "src/main/resources/third.txt"
+    ],
+    "removed": [
+      "src/main/resources/first.txt"
+    ],
+    "modified": [
+      "src/main/resources/second.txt"
+    ]
+  },
+  "repository": {
+    "id": 115023553,
+    "name": "sample-project-java-maven",
+    "full_name": "c3pr/sample-project-java-maven",
+    "owner": {
+      "name": "c3pr",
+      "email": "",
+      "login": "c3pr",
+      "id": 31718198,
+      "avatar_url": "https://avatars2.githubusercontent.com/u/31718198?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/c3pr",
+      "html_url": "https://github.com/c3pr",
+      "followers_url": "https://api.github.com/users/c3pr/followers",
+      "following_url": "https://api.github.com/users/c3pr/following{/other_user}",
+      "gists_url": "https://api.github.com/users/c3pr/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/c3pr/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/c3pr/subscriptions",
+      "organizations_url": "https://api.github.com/users/c3pr/orgs",
+      "repos_url": "https://api.github.com/users/c3pr/repos",
+      "events_url": "https://api.github.com/users/c3pr/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/c3pr/received_events",
+      "type": "Organization",
+      "site_admin": false
+    },
+    "private": false,
+    "html_url": "https://github.com/c3pr/sample-project-java-maven",
+    "description": "Example Java+Maven Project",
+    "fork": false,
+    "url": "https://github.com/c3pr/sample-project-java-maven",
+    "forks_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/forks",
+    "keys_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/teams",
+    "hooks_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/hooks",
+    "issue_events_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/events",
+    "assignees_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/tags",
+    "blobs_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/languages",
+    "stargazers_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/stargazers",
+    "contributors_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/contributors",
+    "subscribers_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/subscribers",
+    "subscription_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/subscription",
+    "commits_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/merges",
+    "archive_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/downloads",
+    "issues_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/labels{/name}",
+    "releases_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/c3pr/sample-project-java-maven/deployments",
+    "created_at": 1513872281,
+    "updated_at": "2017-12-21T16:11:56Z",
+    "pushed_at": 1517834427,
+    "git_url": "git://github.com/c3pr/sample-project-java-maven.git",
+    "ssh_url": "git@github.com:c3pr/sample-project-java-maven.git",
+    "clone_url": "https://github.com/c3pr/sample-project-java-maven.git",
+    "svn_url": "https://github.com/c3pr/sample-project-java-maven",
+    "homepage": null,
+    "size": 19,
+    "stargazers_count": 0,
+    "watchers_count": 0,
+    "language": "Java",
+    "has_issues": true,
+    "has_projects": true,
+    "has_downloads": true,
+    "has_wiki": true,
+    "has_pages": false,
+    "forks_count": 1,
+    "mirror_url": null,
+    "archived": false,
+    "open_issues_count": 8,
+    "license": {
+      "key": "gpl-3.0",
+      "name": "GNU General Public License v3.0",
+      "spdx_id": "GPL-3.0",
+      "url": "https://api.github.com/licenses/gpl-3.0"
+    },
+    "forks": 1,
+    "open_issues": 8,
+    "watchers": 0,
+    "default_branch": "master",
+    "stargazers": 0,
+    "master_branch": "master",
+    "organization": "c3pr"
+  },
+  "pusher": {
+    "name": "acdcjunior",
+    "email": "acdcjunior@gmail.com"
+  },
+  "organization": {
+    "login": "c3pr",
+    "id": 31718198,
+    "url": "https://api.github.com/orgs/c3pr",
+    "repos_url": "https://api.github.com/orgs/c3pr/repos",
+    "events_url": "https://api.github.com/orgs/c3pr/events",
+    "hooks_url": "https://api.github.com/orgs/c3pr/hooks",
+    "issues_url": "https://api.github.com/orgs/c3pr/issues",
+    "members_url": "https://api.github.com/orgs/c3pr/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/c3pr/public_members{/member}",
+    "avatar_url": "https://avatars2.githubusercontent.com/u/31718198?v=4",
+    "description": ""
+  },
+  "sender": {
+    "login": "acdcjunior",
+    "id": 5091082,
+    "avatar_url": "https://avatars1.githubusercontent.com/u/5091082?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/acdcjunior",
+    "html_url": "https://github.com/acdcjunior",
+    "followers_url": "https://api.github.com/users/acdcjunior/followers",
+    "following_url": "https://api.github.com/users/acdcjunior/following{/other_user}",
+    "gists_url": "https://api.github.com/users/acdcjunior/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/acdcjunior/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/acdcjunior/subscriptions",
+    "organizations_url": "https://api.github.com/users/acdcjunior/orgs",
+    "repos_url": "https://api.github.com/users/acdcjunior/repos",
+    "events_url": "https://api.github.com/users/acdcjunior/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/acdcjunior/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "installation": {
+    "id": 76227
+  }
+}
