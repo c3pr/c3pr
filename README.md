@@ -1,7 +1,9 @@
 # c3pr
 
 C-3PR is a static analysis bot. It is part of a Software Engineering research project on [UnB](http://ppca.unb.br/).
-You can install the bot in your repo as a GitHub at https://github.com/apps/c3pr101
+
+The work developed here has been published as an article in the [2020 IEEE 27th International Conference on
+Software Analysis, Evolution and Reengineering (SANER)](https://scholar.google.com/citations?view_op=view_citation&hl=pt-BR&user=7_nYmrEAAAAJ&citation_for_view=7_nYmrEAAAAJ:0EnyYjriUFMC).
 
 # About this repo
 
@@ -15,22 +17,22 @@ C-3PR is a distributed system. Many microservices nodes communicate via an event
 Current nodes:
 
 
-| Repo Name                      | Type                     | Port | Travis Build          | Docker Hub
-| ------------------------------ | ------------------------ | ---  | --------------------- | ---
-| [c3pr-hub               ][111] | Central Events/Auth registry | 7300 | [![Travis][153]][154] | [![Docker][115]][112]
-| [c3pr-brain             ][121] | PR/Projects Intelligence     | 7301 | [![Travis][153]][154] | [![Docker][115]][122]
-| [c3pr-dashboard         ][131] | Centralized UI               | 7305 | [![Travis][153]][154] | [![Docker][115]][132]
+| Repo Name                      | Type                         | Port | Travis Build          |
+|--------------------------------|------------------------------|------|-----------------------|
+| [c3pr-hub               ][111] | Central Events/Auth registry | 7300 | [![Travis][153]][154] |
+| [c3pr-brain             ][121] | PR/Projects Intelligence     | 7301 | [![Travis][153]][154] |
+| [c3pr-dashboard         ][131] | Centralized UI               | 7305 | [![Travis][153]][154] |
 |                                |                              |      |                       | 
 | [node-c3pr-hub-client   ][141] | Reusable lib                 | -    | [![Travis][153]][154] | 
 | [node-c3pr-logger       ][151] | Reusable lib                 | -    | [![Travis][153]][154] | 
 | [node-git-client        ][161] | Reusable lib                 | -    | [![Travis][153]][154] | 
 |                                |                              |      |                       | 
 | [node-c3pr-repo         ][171] | Reusable lib for repos       | -    | [![Travis][153]][154] | 
-| [c3pr-repo-github       ][181] | Repo implementation          | 7302 | [![Travis][153]][154] | [![Docker][115]][182]
-| [c3pr-repo-gitlab       ][191] | Repo implementation          | 7304 | [![Travis][153]][154] | [![Docker][115]][192]
+| [c3pr-repo-github       ][181] | Repo implementation          | 7302 | [![Travis][153]][154] |
+| [c3pr-repo-gitlab       ][191] | Repo implementation          | 7304 | [![Travis][153]][154] |
 |                                |                              |      |                       | 
 | [c3pr-agent             ][201] | Agent for tools              | 7303 | [![Travis][153]][154] | 
-| [c3pr-tool-walkmod-sonar][211] | Tool implementation          | 7303 | -                     | [![Docker][115]][212]
+| [c3pr-tool-walkmod-sonar][211] | Tool implementation          | 7303 | -                     |
 
 
 
@@ -40,19 +42,16 @@ Current nodes:
 [112]: https://hub.docker.com/r/c3pr/c3pr-hub/builds/
 [113]: https://travis-ci.org/c3pr/c3pr-hub.svg?branch=master
 [114]: https://travis-ci.org/c3pr/c3pr-hub
-[115]: https://img.shields.io/docker/build/c3pr/c3pr-hub.svg
 
 [121]: https://github.com/c3pr/c3pr-brain
 [122]: https://hub.docker.com/r/c3pr/c3pr-brain/builds/
 [123]: https://travis-ci.org/c3pr/c3pr-brain.svg?branch=master
 [124]: https://travis-ci.org/c3pr/c3pr-brain
-[125]: https://img.shields.io/docker/build/c3pr/c3pr-brain.svg
 
 [131]: https://github.com/c3pr/c3pr-dashboard
 [132]: https://hub.docker.com/r/c3pr/c3pr-dashboard/builds/
 [133]: https://travis-ci.org/c3pr/c3pr-dashboard.svg?branch=master
 [134]: https://travis-ci.org/c3pr/c3pr-dashboard
-[135]: https://img.shields.io/docker/build/c3pr/c3pr-dashboard.svg
 
 [141]: https://github.com/c3pr/node-c3pr-hub-client
 [142]: N.A.
@@ -82,13 +81,11 @@ Current nodes:
 [182]: https://hub.docker.com/r/c3pr/c3pr-repo-github/builds/
 [183]: https://travis-ci.org/c3pr/c3pr-repo-github.svg?branch=master
 [184]: https://travis-ci.org/c3pr/c3pr-repo-github
-[185]: https://img.shields.io/docker/build/c3pr/c3pr-repo-github.svg
 
 [191]: https://github.com/c3pr/c3pr-repo-gitlab
 [192]: https://hub.docker.com/r/c3pr/c3pr-repo-gitlab/builds/
 [193]: https://travis-ci.org/c3pr/c3pr-repo-gitlab.svg?branch=master
 [194]: https://travis-ci.org/c3pr/c3pr-repo-gitlab
-[195]: https://img.shields.io/docker/build/c3pr/c3pr-repo-gitlab.svg
 
 [201]: https://github.com/c3pr/c3pr-agent
 [202]: N.A.
@@ -100,9 +97,3 @@ Current nodes:
 [212]: https://hub.docker.com/r/c3pr/c3pr-tool-walkmod-sonar/builds/
 [213]: N.A.
 [214]: N.A.
-[215]: https://img.shields.io/docker/build/c3pr/c3pr-tool-walkmod-sonar.svg
-
-
-# Notes
-
-At the moment, the assignee (field of the PRR event) is the push user. We may change that in the future.
