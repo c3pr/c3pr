@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+- '8'
+
+# https://docs.travis-ci.com/user/languages/javascript-with-nodejs/#Caching-with-npm
+cache:
+  directories:
+  - node_modules
