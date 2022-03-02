@@ -1,0 +1,18 @@
+{
+  "project_uuid": "proj-ect-uuid-123-123",
+
+  "repository": {
+    "full_path": "c3pr/sample-project-java-maven",
+    "push_user": {"id": 395, "username": "someusername"},
+    "clone_url_http": "https://github.com/c3pr/sample-project-java-maven.git",
+    "branch": "branch-for-clone-tests",
+    "revision": "13b7eedacc076e8a16ae565b535fd48edb9a044a"
+  },
+
+  "changed_files": ["src/main/resources/second.java", "src/main/resources/third.txt"],
+  "renames": [{
+    "from": "src/a.js",
+    "to":  "src/b.js"
+  }],
+  "source_webhook": {}
+}

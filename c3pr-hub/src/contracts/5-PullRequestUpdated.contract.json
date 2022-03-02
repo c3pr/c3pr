@@ -1,0 +1,14 @@
+{
+  "repository": {
+    "clone_url_http": "https://github.com/c3pr/sample-project-java-maven.git"
+  },
+
+  "pr_id": 123,
+  "status": "open",
+  "assignee": {
+    "id": 1,
+    "username": "root"
+  },
+
+  "source_webhook": {"source webhook": "here"}
+}

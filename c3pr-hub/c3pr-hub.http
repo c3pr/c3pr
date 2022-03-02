@@ -1,0 +1,96 @@
+### Authorization by token, part 1. Retrieve and save token.
+POST http://127.0.0.1:7300/api/v1/login
+Content-Type: application/json
+
+{"username": "http-client", "password": "pass"}
+
+> {% client.global.set("auth_token", response.body); %}
+
+###
+GET http://127.0.0.1:7300/api/v1/agents
+Authorization: Bearer {{auth_token}}
+
+
+### REPROCESS EVENT
+
+###
+PATCH http://127.0.0.1:7300/api/v1/events/ChangesCommitted/f365a862-1575-41f4-9847-70d8afa6d9a9/meta/unprocessed
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://127.0.0.1:7300/api/v1/events/broadcast
+Authorization: Bearer {{auth_token}}
+
+
+
+
+
+
+
+
+###
+GET http://127.0.0.1:7300/api/v1/events/ChangesCommitted?payload.project_uuid=6068bb20-6145-4e3c-a9d3-2096fd2db24b
+Authorization: Bearer {{auth_token}}
+
+###
+POST http://127.0.0.1:7300/api/v1/events/ProjectPreferencesUpdated
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+    "repository": {
+      "clone_url_http": "http://server.com/my-app-ui.git"
+    },
+    "command": "UPDATE_WEIGHT_PROJECT_WIDE",
+    "args": {
+      "tool_id": "tslint:ordered-imports",
+      "weight_modification": 99999,
+      "reason": "push for last"
+    }
+}
+
+###
+GET http://127.0.0.1:7300/api/v1/logs/euuid/9312e1aa-418a-4424-8dc7-6d3ecbe45cc9
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://127.0.0.1:7300/api/v1/logs/sha/37359043bb3a17114b6c3652bed25e1fed639dc7
+Authorization: Bearer {{auth_token}}
+###
+
+GET http://127.0.0.1:7300/api/v1/logs?service_name=c3pr-hub
+Authorization: Bearer {{auth_token}}
+###
+
+PATCH http://localhost:7300/api/v1/projects/5b36aa1e6e3cbc0006213b97
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:7300/api/v1/projects
+Authorization: Bearer {{auth_token}}
+###
+
+GET http://localhost:7300/api/v1/projects?uuid=6068bb20-6145-4e3c-a9d3-2096fd2db24b
+Authorization: Bearer {{auth_token}}
+###
+
+PATCH http://localhost:7305/api/hub/api/v1/projects/5b36aa1e6e3cbc0006213b97
+Authorization: Bearer {{auth_token}}
+
+###
+POST http://localhost:7300/api/v1/events/ToolInvocationFailed/reprocess-parents
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:7300/api/v1/events/ChangesCommitted/d1fd8808-9496-44b0-a259-20e6a7115e3d
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:7300/api/v1/events/?uuid=4c3d2741-dd7d-45da-a9b0-25818d7c193e
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:7300/api/v1/events/?payload.project_uuid=1eb106d7-188d-499b-8acc-ffd630c5688a
+Authorization: Bearer {{auth_token}}
+
+###
