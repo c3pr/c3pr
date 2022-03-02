@@ -1,0 +1,40 @@
+{
+  "name": "c3pr-dashboard",
+  "version": "14.0.0",
+  "description": "C-3PR Dashboard and Configuration Management Module",
+  "scripts": {
+    "start": "node src/index.js",
+    "debug": "node %NODE_DEBUG_OPTION% src/index.js",
+    "test": "mocha src/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c3pr/c3pr-dashboard.git"
+  },
+  "keywords": [
+    "c3pr"
+  ],
+  "author": "acdcjunior",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/c3pr/c3pr-dashboard/issues"
+  },
+  "homepage": "https://github.com/c3pr/c3pr-dashboard",
+  "dependencies": {
+    "axios": "0.21.2",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#27.0.0",
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#29.0.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "@types/sinon-chai": "^2.7.33",
+    "axios-mock-adapter": "^1.15.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "sinon": "^4.5.0"
+  }
+}
