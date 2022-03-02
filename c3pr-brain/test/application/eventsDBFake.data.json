@@ -1,0 +1,101 @@
+[
+  {
+    "uuid": "UUID-01",
+    "event_type": "ProjectPreferencesUpdated",
+    "meta": {"created": "2000-01-01T00:01:00.000Z"},
+    "payload":  {
+      "repository": {"clone_url_http": "http://git.foo/bar.git"},
+      "command": "UPDATE_WEIGHT_PER_FILE",
+      "args": {
+        "file_path": "src/fx.js",
+        "tool_id": "tool:weight_modified",
+        "weight_modification": -100,
+        "reason": "someReason1"
+      }
+    }
+  },
+  {
+    "uuid": "UUID-02",
+    "event_type": "ChangesCommitted",
+    "meta": {"created": "2000-01-01T00:02:00.000Z"},
+    "payload": {
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": ["src/f1.js", "src/f2.js", "src/f3.c"],
+      "renames": [{"from": "src/fx.js", "to": "src/f1.js"}]
+    }
+  },
+  {
+    "uuid": "UUID-03",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2000-01-01T00:03:00.000Z"},
+    "payload": {
+      "parent": {"event_type": "ChangesCommitted", "uuid": "UUID-02"},
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool:t1",
+      "files": ["src/f1.js", "src/f2.js"]
+    }
+  },
+  {
+    "uuid": "UUID-04",
+    "event_type": "ToolInvocationRequested",
+    "meta": {"created": "2000-01-01T00:04:00.000Z"},
+    "payload": {
+      "parent": {"event_type": "ChangesCommitted", "uuid": "UUID-02"},
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "tool_id": "tool:t2",
+      "files": ["src/f3.c"]
+    }
+  },
+  {
+    "uuid": "UUID-05",
+    "event_type": "ToolInvocationCompleted",
+    "meta": {"created": "2000-01-01T00:05:00.000Z"},
+    "payload": {
+      "parent": {
+        "event_type": "ToolInvocationRequested",
+        "uuid": "UUID-03"
+      },
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "changed_files": ["src/f1.js"],
+      "unmodified_files": ["src/f2.js"]
+    }
+  },
+  {
+    "uuid": "UUID-06",
+    "event_type": "PullRequestRequested",
+    "meta": {"created": "2000-01-01T00:06:00.000Z"},
+    "payload": {
+      "parent": {"event_type": "ToolInvocationCompleted", "uuid": "UUID-05"},
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "pr_title": "w0",
+      "pr_body": "w1",
+      "diff_base64": "w2"
+    }
+  },
+  {
+    "uuid": "UUID-07",
+    "event_type": "PullRequestCreated",
+    "meta": {"created": "2000-01-01T00:07:00.000Z"},
+    "payload": {
+      "parent": {"event_type": "PullRequestRequested", "uuid": "UUID-06"},
+      "changes_committed_root": "UUID-02",
+      "repository": {"clone_url_http": "http://git.foo/bar.git", "revision": "sha-1"},
+      "pr_id": 1007,
+      "pr_url": "http://git.foo/bar/merge_requests/1007"
+    }
+  },
+  {
+    "uuid": "UUID-08",
+    "event_type": "PullRequestUpdated",
+    "meta": {"created": "2000-01-01T00:08:00.000Z"},
+    "payload": {
+      "repository": {"clone_url_http": "http://git.foo/bar.git"},
+      "pr_id": 1007,
+      "status": "closed"
+    }
+  }
+]
