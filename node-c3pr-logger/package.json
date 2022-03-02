@@ -1,0 +1,36 @@
+{
+  "name": "node-c3pr-logger",
+  "version": "27.0.0",
+  "description": "c3pr's client for remote logging",
+  "scripts": {
+    "test": "mocha --require ts-node/register \"./{,!(node_modules)/**/}*.test.*s\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c3pr/node-c3pr-logger.git"
+  },
+  "keywords": [
+    "logging"
+  ],
+  "author": "acdcjunior",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/c3pr/node-c3pr-logger/issues"
+  },
+  "homepage": "https://github.com/c3pr/node-c3pr-logger#readme",
+  "dependencies": {
+    "mongodb": "3.0.8",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.3.12",
+    "@types/mongodb": "^3.0.8",
+    "@types/node": "^11.13.4",
+    "@types/sinon-chai": "^3.2.2",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "sinon": "^7.3.2",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5"
+  }
+}

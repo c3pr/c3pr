@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "noEmitHelpers": true,
+    "noImplicitUseStrict": true
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts"
+  ],
+  "compileOnSave": true,
+  "buildOnSave": true
+}
