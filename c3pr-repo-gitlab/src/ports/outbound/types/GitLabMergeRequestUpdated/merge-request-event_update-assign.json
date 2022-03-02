@@ -1,0 +1,142 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "name": "Administrator",
+    "username": "root",
+    "avatar_url": "https://www.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=80&d=identicon"
+  },
+  "project": {
+    "id": 1,
+    "name": "sample-project-java-maven",
+    "description": null,
+    "web_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+    "avatar_url": null,
+    "git_ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "git_http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git",
+    "namespace": "sample_user",
+    "visibility_level": 20,
+    "path_with_namespace": "sample_user/sample-project-java-maven",
+    "default_branch": "master",
+    "ci_config_path": null,
+    "homepage": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+    "url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git"
+  },
+  "object_attributes": {
+    "assignee_id": 1,
+    "author_id": 15,
+    "created_at": "2018-06-03 16:22:35 UTC",
+    "description": "Using the equality (`==`) and inequality (`!=`) operators to compare two strings does not check to see if ...```",
+    "head_pipeline_id": null,
+    "id": 14,
+    "iid": 13,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": null
+    },
+    "merge_status": "can_be_merged",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "f9299bbc3a7162113b656281cd33377fe94cae20_785a9196-5ea2-4989-bcd4-2ea38dc44dbc",
+    "source_project_id": 6,
+    "state": "opened",
+    "target_branch": "master",
+    "target_project_id": 1,
+    "time_estimate": 0,
+    "title": "Strings should be compared using equals()",
+    "updated_at": "2018-06-03 16:45:31 UTC",
+    "updated_by_id": 1,
+    "url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven/merge_requests/13",
+    "source": {
+      "id": 6,
+      "name": "sample-project-java-maven",
+      "description": null,
+      "web_url": "http://c3prgitlab:8888/c3pr-bot/sample_user__sample-project-java-maven",
+      "avatar_url": null,
+      "git_ssh_url": "git@c3prgitlab:c3pr-bot/sample_user__sample-project-java-maven.git",
+      "git_http_url": "http://c3prgitlab:8888/c3pr-bot/sample_user__sample-project-java-maven.git",
+      "namespace": "c3pr-bot",
+      "visibility_level": 20,
+      "path_with_namespace": "c3pr-bot/sample_user__sample-project-java-maven",
+      "default_branch": "master",
+      "ci_config_path": null,
+      "homepage": "http://c3prgitlab:8888/c3pr-bot/sample_user__sample-project-java-maven",
+      "url": "git@c3prgitlab:c3pr-bot/sample_user__sample-project-java-maven.git",
+      "ssh_url": "git@c3prgitlab:c3pr-bot/sample_user__sample-project-java-maven.git",
+      "http_url": "http://c3prgitlab:8888/c3pr-bot/sample_user__sample-project-java-maven.git"
+    },
+    "target": {
+      "id": 1,
+      "name": "sample-project-java-maven",
+      "description": null,
+      "web_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+      "avatar_url": null,
+      "git_ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+      "git_http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git",
+      "namespace": "sample_user",
+      "visibility_level": 20,
+      "path_with_namespace": "sample_user/sample-project-java-maven",
+      "default_branch": "master",
+      "ci_config_path": null,
+      "homepage": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+      "url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+      "ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+      "http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git"
+    },
+    "last_commit": {
+      "id": "a06ec68c0f2366cd62e4cd2c1219609c63f9c404",
+      "message": "Strings should be compared using equals()",
+      "timestamp": "2018-06-03T13:22:06-03:00",
+      "url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven/commit/a06ec68c0f2366cd62e4cd2c1219609c63f9c404",
+      "author": {
+        "name": "c3pr-bot",
+        "email": "c3prbot@gmail.com"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "human_total_time_spent": null,
+    "human_time_estimate": null,
+    "action": "update"
+  },
+  "labels": [],
+  "changes": {
+    "assignee_id": {
+      "previous": null,
+      "current": 1
+    },
+    "updated_at": {
+      "previous": "2018-06-03 16:42:46 UTC",
+      "current": "2018-06-03 16:45:31 UTC"
+    },
+    "updated_by_id": {
+      "previous": null,
+      "current": 1
+    },
+    "assignee": {
+      "previous": null,
+      "current": {
+        "name": "Administrator",
+        "username": "root",
+        "avatar_url": "https://www.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=80&d=identicon"
+      }
+    }
+  },
+  "repository": {
+    "name": "sample-project-java-maven",
+    "url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "description": null,
+    "homepage": "http://c3prgitlab:8888/sample_user/sample-project-java-maven"
+  },
+  "assignee": {
+    "name": "Administrator",
+    "username": "root",
+    "avatar_url": "https://www.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=80&d=identicon"
+  }
+}

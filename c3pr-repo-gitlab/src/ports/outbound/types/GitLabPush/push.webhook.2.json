@@ -1,0 +1,60 @@
+{
+  "object_kind": "push",
+  "event_name": "push",
+  "before": "9a59e96248f190e20e74e86fd28d16a920385f0a",
+  "after": "9a59e96248f190e20e74e86fd28d16a920385f0a",
+  "ref": "refs/heads/master",
+  "checkout_sha": "9a59e96248f190e20e74e86fd28d16a920385f0a",
+  "message": null,
+  "user_id": 1,
+  "user_name": "Administrator",
+  "user_username": "root",
+  "user_email": "admin@example.com",
+  "user_avatar": "https://www.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=80&d=identicon",
+  "project_id": 12,
+  "project": {
+    "id": 12,
+    "name": "Xmy-projectzX",
+    "description": "",
+    "web_url": "http://d52b4bc956cd/c3pr/forks/my-projectz",
+    "avatar_url": null,
+    "git_ssh_url": "git@d52b4bc956cd:c3pr/forks/my-projectz.git",
+    "git_http_url": "http://d52b4bc956cd/c3pr/forks/my-projectz.git",
+    "namespace": "XforksX",
+    "visibility_level": 20,
+    "path_with_namespace": "c3pr/forks/my-projectz",
+    "default_branch": "master",
+    "ci_config_path": null,
+    "homepage": "http://d52b4bc956cd/c3pr/forks/my-projectz",
+    "url": "git@d52b4bc956cd:c3pr/forks/my-projectz.git",
+    "ssh_url": "git@d52b4bc956cd:c3pr/forks/my-projectz.git",
+    "http_url": "http://d52b4bc956cd/c3pr/forks/my-projectz.git"
+  },
+  "commits": [
+    {
+      "id": "9a59e96248f190e20e74e86fd28d16a920385f0a",
+      "message": "Add new file",
+      "timestamp": "2018-05-09T16:22:52+00:00",
+      "url": "http://d52b4bc956cd/c3pr/forks/my-projectz/commit/9a59e96248f190e20e74e86fd28d16a920385f0a",
+      "author": {
+        "name": "Administrator",
+        "email": "admin@example.com"
+      },
+      "added": [
+        "README.md"
+      ],
+      "modified": [],
+      "removed": []
+    }
+  ],
+  "total_commits_count": 1,
+  "repository": {
+    "name": "Xmy-projectzX",
+    "url": "git@d52b4bc956cd:c3pr/forks/my-projectz.git",
+    "description": "",
+    "homepage": "http://d52b4bc956cd/c3pr/forks/my-projectz",
+    "git_http_url": "http://d52b4bc956cd/c3pr/forks/my-projectz.git",
+    "git_ssh_url": "git@d52b4bc956cd:c3pr/forks/my-projectz.git",
+    "visibility_level": 20
+  }
+}

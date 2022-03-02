@@ -1,0 +1,25 @@
+{
+  "id": "df84f1765f82bd2e0dadd70a4e072f8ecdc6e33b",
+  "short_id": "df84f176",
+  "title": "Merge branch…",
+  "created_at": "2018-06-03T20:51:43.000+00:00",
+  "parent_ids": [
+    "f9299bbc3a7162113b656281cd33377fe94cae20",
+    "fef6dc81c227eaa3a7f4b6dbeaa251d8b48bb160"
+  ],
+  "message": "Merge branch 'f9299bbc3a7162113b656281cd33377fe94cae20_04f5a727-61ad-4e35-83ae-7c852e3a642a' into 'master'\n\nStrings should be compared using equals()\n\nSee merge request sample_user/sample-project-java-maven!19",
+  "author_name": "Administrator",
+  "author_email": "admin@example.com",
+  "authored_date": "2018-06-03T20:51:43.000+00:00",
+  "committer_name": "Administrator",
+  "committer_email": "admin@example.com",
+  "committed_date": "2018-06-03T20:51:43.000+00:00",
+  "stats": {
+    "additions": 4,
+    "deletions": 4,
+    "total": 8
+  },
+  "status": null,
+  "last_pipeline": null,
+  "project_id": 1
+}

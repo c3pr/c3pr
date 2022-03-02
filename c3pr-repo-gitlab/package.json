@@ -1,0 +1,47 @@
+{
+  "name": "c3pr-repo-gitlab",
+  "version": "32.0.0",
+  "description": "C3PR Repository Adapter for GitLab",
+  "scripts": {
+    "start": "node --require ts-node/register src/index.ts",
+    "debug": "node %NODE_DEBUG_OPTION% --require ts-node/register src/index.ts",
+    "test": "mocha --require ts-node/register src/**/*.test.ts",
+    "ts-node": "ts-node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c3pr/c3pr-repo-gitlab.git"
+  },
+  "keywords": [
+    "c3pr",
+    "gitlab"
+  ],
+  "author": "acdcjunior",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/c3pr/c3pr-repo-gitlab/issues"
+  },
+  "homepage": "https://github.com/c3pr/c3pr-repo-gitlab",
+  "dependencies": {
+    "axios": "0.21.2",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "node-c3pr-hub-client": "github:c3pr/node-c3pr-hub-client#29.0.0",
+    "node-c3pr-logger": "github:c3pr/node-c3pr-logger#27.0.0",
+    "node-c3pr-repo": "github:c3pr/node-c3pr-repo#19.0.0",
+    "node-c3pr-git-client": "github:c3pr/node-c3pr-git-client#19.0.0",
+    "@sentry/node": "^5.5.0",
+    "ts-node": "^6.2.0",
+    "typescript": "^2.9.2",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.5.2",
+    "@types/sinon-chai": "^2.7.33",
+    "axios-mock-adapter": "^1.15.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "sinon": "^4.5.0"
+  }
+}

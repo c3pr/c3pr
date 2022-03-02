@@ -1,0 +1,96 @@
+{
+  "object_kind": "push",
+  "event_name": "push",
+  "before": "95e48b306c1fd9954f733a8de119d823ad62534b",
+  "after": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
+  "ref": "refs/heads/master",
+  "checkout_sha": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
+  "message": null,
+  "user_id": 1,
+  "user_name": "Administrator",
+  "user_username": "root",
+  "user_email": "admin@example.com",
+  "user_avatar": "https://www.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=80&d=identicon",
+  "project_id": 1,
+  "project": {
+    "id": 1,
+    "name": "sample-project-java-maven",
+    "description": null,
+    "web_url": "http://59105d2b76c4/c3pr/sample-project-java-maven",
+    "avatar_url": null,
+    "git_ssh_url": "git@59105d2b76c4:c3pr/sample-project-java-maven.git",
+    "git_http_url": "http://59105d2b76c4/c3pr/sample-project-java-maven.git",
+    "namespace": "c3pr",
+    "visibility_level": 20,
+    "path_with_namespace": "c3pr/sample-project-java-maven",
+    "default_branch": "master",
+    "ci_config_path": null,
+    "homepage": "http://59105d2b76c4/c3pr/sample-project-java-maven",
+    "url": "git@59105d2b76c4:c3pr/sample-project-java-maven.git",
+    "ssh_url": "git@59105d2b76c4:c3pr/sample-project-java-maven.git",
+    "http_url": "http://59105d2b76c4/c3pr/sample-project-java-maven.git"
+  },
+  "commits": [
+    {
+      "id": "13b7eedacc076e8a16ae565b535fd48edb9a044a",
+      "message": "test: third commit; removes a file, modifies another, adds some other\n",
+      "timestamp": "2018-02-05T10:39:49-02:00",
+      "url": "http://59105d2b76c4/c3pr/sample-project-java-maven/commit/13b7eedacc076e8a16ae565b535fd48edb9a044a",
+      "author": {
+        "name": "Antonio Jr",
+        "email": "acdcjunior@gmail.com"
+      },
+      "added": [
+        "src/main/resources/third.txt"
+      ],
+      "modified": [
+        "src/main/resources/second.txt"
+      ],
+      "removed": [
+        "src/main/resources/first.txt"
+      ]
+    },
+    {
+      "id": "39bb472a4cc32492a4e87fe9e2a521c22b1f6bd0",
+      "message": "test: second commit, adds another file, modifies first\n",
+      "timestamp": "2018-02-05T10:38:39-02:00",
+      "url": "http://59105d2b76c4/c3pr/sample-project-java-maven/commit/39bb472a4cc32492a4e87fe9e2a521c22b1f6bd0",
+      "author": {
+        "name": "Antonio Jr",
+        "email": "acdcjunior@gmail.com"
+      },
+      "added": [
+        "src/main/resources/second.txt"
+      ],
+      "modified": [
+        "src/main/resources/first.txt"
+      ],
+      "removed": []
+    },
+    {
+      "id": "95e48b306c1fd9954f733a8de119d823ad62534b",
+      "message": "test: first commit, adds a file\n",
+      "timestamp": "2018-02-05T10:37:22-02:00",
+      "url": "http://59105d2b76c4/c3pr/sample-project-java-maven/commit/95e48b306c1fd9954f733a8de119d823ad62534b",
+      "author": {
+        "name": "Antonio Jr",
+        "email": "acdcjunior@gmail.com"
+      },
+      "added": [
+        "src/main/resources/first.txt"
+      ],
+      "modified": [],
+      "removed": []
+    }
+  ],
+  "total_commits_count": 3,
+  "repository": {
+    "name": "sample-project-java-maven",
+    "url": "git@59105d2b76c4:c3pr/sample-project-java-maven.git",
+    "description": null,
+    "homepage": "http://59105d2b76c4/c3pr/sample-project-java-maven",
+    "git_http_url": "http://59105d2b76c4/c3pr/sample-project-java-maven.git",
+    "git_ssh_url": "git@59105d2b76c4:c3pr/sample-project-java-maven.git",
+    "visibility_level": 20
+  }
+}

@@ -1,0 +1,126 @@
+POST http://127.0.0.1:7304/webhooks
+Content-Type: application/json
+
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "name": "C-3PR Bot",
+    "username": "c3pr-bot",
+    "avatar_url": "https://www.gravatar.com/avatar/d1446ff8fdb21d55620f04a6b29e9abf?s=80&d=identicon"
+  },
+  "project": {
+    "id": 1,
+    "name": "sample-project-java-maven",
+    "description": null,
+    "web_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+    "avatar_url": null,
+    "git_ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "git_http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git",
+    "namespace": "sample_user",
+    "visibility_level": 20,
+    "path_with_namespace": "sample_user/sample-project-java-maven",
+    "default_branch": "master",
+    "ci_config_path": null,
+    "homepage": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+    "url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git"
+  },
+  "object_attributes": {
+    "assignee_id": null,
+    "author_id": 15,
+    "created_at": "2018-05-24 01:14:16 UTC",
+    "description": "RemoveUnusedMethodParameters",
+    "head_pipeline_id": null,
+    "id": 3,
+    "iid": 3,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": null
+    },
+    "merge_status": "unchecked",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "5d296db9a2d2914d648945ae68303323b197de5b_e7fb7417-0a7a-49a8-a2ed-c87a7465dfc0",
+    "source_project_id": 6,
+    "state": "opened",
+    "target_branch": "master",
+    "target_project_id": 1,
+    "time_estimate": 0,
+    "title": "RemoveUnusedMethodParameters",
+    "updated_at": "2018-05-24 01:14:16 UTC",
+    "updated_by_id": null,
+    "url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven/merge_requests/3",
+    "source": {
+      "id": 6,
+      "name": "sample-project-java-maven",
+      "description": null,
+      "web_url": "http://c3prgitlab:8888/c3pr-bot/sample_user__sample-project-java-maven",
+      "avatar_url": null,
+      "git_ssh_url": "git@c3prgitlab:c3pr-bot/sample_user__sample-project-java-maven.git",
+      "git_http_url": "http://c3prgitlab:8888/c3pr-bot/sample_user__sample-project-java-maven.git",
+      "namespace": "c3pr-bot",
+      "visibility_level": 20,
+      "path_with_namespace": "c3pr-bot/sample_user__sample-project-java-maven",
+      "default_branch": "master",
+      "ci_config_path": null,
+      "homepage": "http://c3prgitlab:8888/c3pr-bot/sample_user__sample-project-java-maven",
+      "url": "git@c3prgitlab:c3pr-bot/sample_user__sample-project-java-maven.git",
+      "ssh_url": "git@c3prgitlab:c3pr-bot/sample_user__sample-project-java-maven.git",
+      "http_url": "http://c3prgitlab:8888/c3pr-bot/sample_user__sample-project-java-maven.git"
+    },
+    "target": {
+      "id": 1,
+      "name": "sample-project-java-maven",
+      "description": null,
+      "web_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+      "avatar_url": null,
+      "git_ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+      "git_http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git",
+      "namespace": "sample_user",
+      "visibility_level": 20,
+      "path_with_namespace": "sample_user/sample-project-java-maven",
+      "default_branch": "master",
+      "ci_config_path": null,
+      "homepage": "http://c3prgitlab:8888/sample_user/sample-project-java-maven",
+      "url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+      "ssh_url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+      "http_url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven.git"
+    },
+    "last_commit": {
+      "id": "c722b174a4242785b9c5c0ce932533f1e779af40",
+      "message": "RemoveUnusedMethodParameter",
+      "timestamp": "2018-05-23T22:14:14-03:00",
+      "url": "http://c3prgitlab:8888/sample_user/sample-project-java-maven/commit/c722b174a4242785b9c5c0ce932533f1e779af40",
+      "author": {
+        "name": "c3pr-bot",
+        "email": "c3prbot@gmail.com"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "human_total_time_spent": null,
+    "human_time_estimate": null,
+    "action": "open"
+  },
+  "labels": [],
+  "changes": {
+    "total_time_spent": {
+      "previous": null,
+      "current": 0
+    }
+  },
+  "repository": {
+    "name": "sample-project-java-maven",
+    "url": "git@c3prgitlab:sample_user/sample-project-java-maven.git",
+    "description": null,
+    "homepage": "http://c3prgitlab:8888/sample_user/sample-project-java-maven"
+  }
+}
+
+###
