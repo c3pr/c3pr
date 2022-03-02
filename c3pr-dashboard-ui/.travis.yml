@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - "9"
+
+services:
+  - docker
+
+script:
+  - npm install
+  - npm run build
+  - docker build -t c3pr/c3pr-dashboard-ui .
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push c3pr/c3pr-dashboard-ui

@@ -1,0 +1,18 @@
+###
+POST http://127.0.0.1:7300/api/v1/login
+Content-Type: application/json
+
+{
+    "username": "intellij",
+    "password": "unused"
+}
+
+> {% client.global.set("auth_jwt_token", response.body); %}
+
+###
+#GET http://localhost:7300/api/v1/events?payload.changes_committed_root=f380c935-c825-4cab-b6d9-7b6aeee43fda
+GET http://localhost:7300/api/v1/events?payload.changes_committed_root=32f8df04-b976-4ea5-a101-520012b95091
+Accept: application/json
+Authorization: Bearer {{auth_jwt_token}}
+
+###
