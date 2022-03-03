@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/c3pr/node-c3pr-logger#readme",
   "dependencies": {
-    "mongodb": "3.0.8",
+    "mongodb": "3.1.13",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
