@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "axios": "0.21.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "treeflex": "^2.0.1",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6",
